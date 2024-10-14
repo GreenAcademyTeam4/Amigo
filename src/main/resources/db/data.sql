@@ -1,0 +1,1 @@
+insert into user_tb (name) values ('홍길동');
