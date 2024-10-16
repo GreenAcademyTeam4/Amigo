@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세보기</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <input type="hidden" name="" id="" value="">
+    <h1>{{board.title}}</h1>
+    <p><strong>작성자 ID:</strong> {{board.userId}}</p>
+    <p><strong>학교 ID:</strong> {{board.schoolId}}</p>
+
+    <p><strong>내용:</strong> {{board.contentLocation}} </p>
+
+    <p><strong>조회수:</strong> {{board.viewCount}}</p>
+    <p><strong>좋아요:</strong> {{board.likes}}</p>
+    <p><strong>작성일자:</strong> {{board.createdAt}}</p>
+    <a href="/board/board" class="btn btn-primary mt-3">목록으로 돌아가기</a>
+    <a href="/board/comment?id=" + {{board.id}}>댓글 작성</a>
+</div>
+</body>
+</html>
