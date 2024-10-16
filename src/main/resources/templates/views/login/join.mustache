@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>amigo:회원가입</title>
+    <link rel="stylesheet" href="/css/login/join.css">
+    <link rel="stylesheet" href="/css/font/font.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="register-container">
+
+    <div class="register-box">
+
+
+        <form action="/user/requestAuth" method="post">
+
+            <div class="input-id-password">
+
+                <div class="input-with-icon">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <input type="text" id="userId" name="userId" placeholder="아이디" required class="id-box">
+                </div>
+
+
+                <div class="input-with-icon">
+                    <span class="icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" id="password" name="password" placeholder="비밀번호" required class="password-box">
+                    <span class="icon-eye" id="togglePassword"><i class="fas fa-eye-slash"></i></span>
+                </div>
+                <div class="message-box">
+                <span id="userIdMessage" class="message"></span>
+                <span id="passwordMessage" class="message"></span>
+                </div>
+            </div>
+
+
+
+
+            <div class="input-other">
+                <div class="input-with-icon">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <input type="text" id="name" name="name" placeholder="이름" required class="name-box" >
+                </div>
+
+
+
+                <div class="input-with-icon">
+                    <span class="icon"><i class="fas fa-phone"></i></span>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="휴대폰 번호" required class="phone-box">
+                </div>
+
+
+                    <div class="input-with-icon">
+                        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                        <input type="text" id="birth" name="birth" placeholder="생년월일8 자리"  required class="age-box">
+                    </div>
+
+
+
+            </div>
+
+
+            <div class="gender-options">
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male" class="gender-label">남자</label>
+
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female" class="gender-label">여자</label>
+            </div>
+
+
+            <div class="terms-box">
+                <label><input type="checkbox" name="terms" required> 약관 동의</label>
+            </div>
+
+
+            <button type="submit" class="register-btn">인증요청</button>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/js/login/checkRepetition.js"></script>
+<script type="text/javascript" src="/js/login/authenticationNumber.js"></script>
+<script>
+
+    $("#togglePassword").on("click", function() {
+        const passwordInput = $("#password");
+        const icon = $(this).find("i");
+
+        if (passwordInput.attr("type") === "password") {
+            passwordInput.attr("type", "text");
+            icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        } else {
+            passwordInput.attr("type", "password");
+            icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        }
+    });
+</script>
