@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .image-cell img {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>학교 번호: {{schoolId}} 게시글 목록</h1>
+
+    <td>
+        <a href="/board/list">글쓰기</a>
+    </td>
+
+
+    <table class="table table-bordered mt-4">
+        <thead class="thead-dark">
+        <tr>
+            <th>제목</th>
+            <th>내용</th>
+            <th>조회수</th>
+            <th>좋아요</th>
+            <th>작성일자</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#boardList}}
+        <div>
+            <tr>
+
+                <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
+                <td>{{contentLocation}}</td>
+                <td>{{viewCount}}</td>
+                <td>{{likes}}</td>
+                <td>{{createdAt}}</td>
+            </tr>
+        </div>
+        {{/boardList}}
+        {{^boardList}}
+            <tr>
+                <td colspan="6" class="text-center">게시글이 없습니다.</td>
+            </tr>
+        {{/boardList}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
