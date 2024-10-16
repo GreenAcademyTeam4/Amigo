@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amigo_project.repository.interfaces.BoardRepository">
+
+    <insert id="InsertBoard" parameterType="com.example.amigo_project.dto.BoardDTO">
+        INSERT INTO board_tb (school_id, user_id, title, content_location,  view_count, likes, created_at)
+        VALUES (#{schoolId}, #{userId}, #{title}, #{contentLocation}, #{viewCount}, #{likes}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <!-- 게시글의 이미지 가져오기 -->
+    <select id="findImageByBoardId" parameterType="int" resultType="byte[]">
+        SELECT image_location
+        FROM board_tb
+        WHERE id = #{boardId}
+    </select>
+
+    <!-- 특정 학교의 게시글 조회 -->
+    <select id="findBoardsBySchoolId" parameterType="int" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT id, school_id AS schoolId, user_id AS userId,title, content_location AS contentLocation,
+        view_count AS viewCount, likes, created_at AS createdAt
+        FROM board_tb
+        WHERE school_id = #{schoolId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findImageSearch" parameterType="int" resultType="byte[]">
+        SELECT image_location
+        from board_tb
+        where school_id = #{schoolId}
+    </select>
+
+    <select id="BoardById" parameterType="int" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT id, school_id AS schoolId, user_id AS userId, title, content_location AS contentLocation,
+        view_count AS viewCount, likes, created_at AS createdAt
+        FROM board_tb
+        WHERE id = #{boardId}
+    </select>
+
+
+</mapper>
