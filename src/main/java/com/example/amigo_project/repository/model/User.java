@@ -27,4 +27,5 @@ public class User {
     private Integer activeStatus;
     private Timestamp createdAt;
 
+
 }
