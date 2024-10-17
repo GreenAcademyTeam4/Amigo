@@ -8,5 +8,12 @@
         FROM user_tb
         WHERE user_id = #{userId}
     </select>
+    <insert id="create" parameterType="com.example.amigo_project.dto.UserDTO">
+        INSERT INTO user_tb (
+            user_id, name, password, phone_number, gender, birth
+        ) VALUES (
+            #{userId}, #{name}, #{password}, #{phoneNumber}, #{gender}, #{birth}
+        )
+    </insert>
 
 </mapper>
