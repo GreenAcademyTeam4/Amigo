@@ -15,7 +15,7 @@
     <div class="register-box">
 
 
-        <form action="/user/requestAuth" method="post">
+        <form  id="registerForm">
 
             <div class="input-id-password">
 
@@ -55,7 +55,7 @@
 
                     <div class="input-with-icon">
                         <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-                        <input type="text" id="birth" name="birth" placeholder="생년월일8 자리"  required class="age-box">
+                        <input type="number" id="birth" name="birth" placeholder="생년월일8 자리"  required class="age-box">
                     </div>
 
 
@@ -77,8 +77,19 @@
             </div>
 
 
-            <button type="submit" class="register-btn">인증요청</button>
 
+            <div id="authSection" style="display: none;">
+                <div class="input-with-icon">
+                    <span class="icon"><i class="fas fa-key"></i></span>
+                    <input type="text" id="authCodeInput" placeholder="인증번호 입력" class="auth-code-box">
+                    <button type="button" id="verifyCodeBtn" class="verify-btn">인증확인</button>
+                </div>
+            </div>
+             <span id="timer" style="float: right; font-size: 14px; color: red;"></span>
+             <button type="button" class="register-btn" id="sendSmsBtn">인증요청</button>
+              <div id="joinDone" style="display: none;">
+                <button type="button" id="joinBtn" class="joinBtn">가입하기</button>
+              </div>
         </form>
     </div>
 
@@ -89,7 +100,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/js/login/checkRepetition.js"></script>
-<script type="text/javascript" src="/js/login/authenticationNumber.js"></script>
+<script type="text/javascript" src="/js/login/birth.js"></script>
 <script>
 
     $("#togglePassword").on("click", function() {

@@ -33,3 +33,9 @@ mybatis:
 
       encoding:
         force-response: true
+coolsms:
+  api:
+    key: "NCS6NKQEEJBUSUEK"
+    secret: "HB64VMFSMSOUOZJYCC2J6VERWGSED0YK"
+    number: "01067821019"
+

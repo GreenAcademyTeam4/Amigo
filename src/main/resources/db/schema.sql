@@ -4,7 +4,7 @@ create table user_tb (
   user_id varchar(20) not null,
   name varchar(20) not null,
   password varchar(20) not null,
-  nickname varchar(20) not null,
+  nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
   gender varchar(10) not null,
