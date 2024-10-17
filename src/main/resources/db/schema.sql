@@ -2,12 +2,13 @@
 create table user_tb (
   id int primary key auto_increment,
   user_id varchar(20) not null,
+  name varchar(20) not null,
   password varchar(20) not null,
   nickname varchar(20) not null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
   gender varchar(10) not null,
-  age int not null,
+  birth int not null,
   point int default 0,
   online_status int default 0,
   active_status int default 0,
@@ -27,12 +28,14 @@ create table board_tb (
   id int primary key auto_increment,
   school_id int,
   title varchar(15),
-  content_location blob,
-  Image_location blob,
+  content_location varchar(20),
+--  Image_location blob,
+  user_id int,
   view_count int,
   likes int,
   created_at timestamp default CURRENT_TIMESTAMP,
-  foreign key (school_id) references school_tb(id)
+  foreign key (school_id) references school_tb(id),
+  foreign key (user_id) references user_tb(id)
 );
 
 -- 친구 테이블
