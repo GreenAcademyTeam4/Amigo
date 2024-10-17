@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amigo_project.repository.interfaces.PaymentRepository">
+
+    <insert id="createChargeHistory">
+        INSERT INTO charge_history_tb(user_id, order_Name, order_id, point, total_amount, approved_at, method, payment_key)
+        VALUES (#{userId}, #{orderName}, #{orderId}, #{point}, #{totalAmount}, #{approvedAt}, #{method}, #{paymentKey})
+    </insert>
+
+    <update id="chargePoint">
+        UPDATE user_tb SET point = point + #{point} WHERE id = #{userId}
+    </update>
+
+
+
+</mapper>

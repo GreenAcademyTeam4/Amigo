@@ -30,6 +30,11 @@ mybatis:
   output:
     ansi:
       enabled: always  # ?? ?? ? ANSI ??? ?? ????? ?? (??? ?? ??? ? ?? ?? ??)
-
       encoding:
         force-response: true
+
+payments:
+  toss:
+    test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
+    test_secret_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
+
