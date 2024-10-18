@@ -1,7 +1,9 @@
 package com.example.amigo_project.repository.interfaces;
 
+import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.model.ChargeHistory;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,7 +24,11 @@ public interface PaymentRepository {
 
 
     // 결제 내역 조회(리스트 및 페이징 처리)
-    public List<ChargeHistory> getAllChargeHistory();
+    public List<ChargeHistoryDTO> readChargeHistory(@Param("limit") Integer limit, @Param("offset") Integer offset, @Param("userId") Integer userId);
+
+    // 결제 내역 개수(페이징 처리)
+    public Integer countChargeHistory(@Param("userId") Integer userId);
+
 
     // 환불 내역(리스트 및 페이징 처리)
     
