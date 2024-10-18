@@ -1,0 +1,74 @@
+/* 기본 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa; /* 배경색 */
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo img {
+    height: 50px; /* 로고 이미지 크기 */
+}
+
+/* 학교 선택 섹션 */
+.school-select {
+    position: relative;
+}
+
+.current-school {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* 다른 학교 목록 숨기기 */
+.other-school {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    width: 150px;
+    z-index: 10;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* current-school에 마우스를 올리면 other-school이 나타남 */
+.current-school:hover + .other-school {
+    display: block;
+}
+
+/* other-school에 마우스를 올렸을 때 유지 */
+.other-school:hover {
+    display: block;
+}
+
+/* 친구, 매점, 공지, 알람, 쪽지 스타일 */
+.friends, .store, .notice, .alarm, .message {
+    font-size: 14px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.friends:hover, .store:hover, .notice:hover, .alarm:hover, .message:hover {
+    color: #007bff; /* hover시 색상 변경 */
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .friends, .store, .notice, .alarm, .message {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

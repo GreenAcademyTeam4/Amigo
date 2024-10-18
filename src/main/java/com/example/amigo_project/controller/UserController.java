@@ -1,9 +1,11 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.UserDTO;
+import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.UserService;
 import java.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,28 +25,63 @@ public class UserController {
     private final UserService userService;
 
 
+
+    /**
+     * 로그인 
+     * TODO 로그인 구현 다시 확인 
+     * @param 
+     * @return
+     */
+    @PostMapping("/login")
+    public String login(HttpSession session, UserDTO.loginDTO dto){
+        
+        User principal = userService.findUserByIdAndPassword(dto);
+        if(principal != null){
+            session.setAttribute("principal", principal);
+            return "views/login/schoolSelect";
+        } else{
+            return "redirect:/";
+        }
+       
+    }
+
+    
+    
+
+    /**
+     * 회원 가입 페이지 호출 메서드
+     * @return
+     */
     @GetMapping("/join")
     public String joinForm() {
         return "views/login/join";
     }
 
+
+    
+    /**
+     * 중복확인 , 회원가입 페이지 에서 사용
+     * @param dto
+     * @return
+     */
     @PostMapping("/checkUserId")
     public ResponseEntity<Map<String, String>> checkUserId(@RequestBody UserDTO.joinDTO dto) {
-
         Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
-  
+
+    /**
+     * 회원가입 
+     * @param dto
+     * @return
+     */
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
         int result = userService.joinUser(dto);
-        System.out.println("@@@@@@@@@컨트롤까지 도달:" + result);
-
         if (result > 0) {
             return "views/login/login";
         } else {
-            System.out.println("실패애애애ㅐ애애ㅐㅇ");
-            return "views/login/login";  // 실패 시 다시 회원가입 페이지로 이동
+            return "views/login/login";  
         }
 
     }
