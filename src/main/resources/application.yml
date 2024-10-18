@@ -23,8 +23,9 @@ spring:
     init:
       schema-locations: classpath:db/schema.sql  # ??? ?? SQL ?? ??
       data-locations: classpath:db/data.sql      # ??? ?? SQL ?? ??
-
 mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
   mapper-locations: classpath:/mapper/**/*.xml  # MyBatis ?? XML ?? ??
 
   output:
