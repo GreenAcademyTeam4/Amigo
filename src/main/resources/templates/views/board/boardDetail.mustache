@@ -7,19 +7,140 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
+
+<div>
+    <form action="/board/delete/{{board.id}}" method="post">
+        <button type="submit">게시글 삭제</button>
+    </form>
+</div>
+
+<div>
+    <form action="/board/update/{{board.id}}" method="get">
+        <button type="submit">게시글 수정하기</button>
+    </form>
+</div>
+
 <div class="container mt-5">
     <input type="hidden" name="" id="" value="">
+
     <h1>{{board.title}}</h1>
     <p><strong>작성자 ID:</strong> {{board.userId}}</p>
     <p><strong>학교 ID:</strong> {{board.schoolId}}</p>
+    <p><strong>닉네임 :</strong> {{board.nickname}}</p>
 
     <p><strong>내용:</strong> {{board.contentLocation}} </p>
 
     <p><strong>조회수:</strong> {{board.viewCount}}</p>
     <p><strong>좋아요:</strong> {{board.likes}}</p>
-    <p><strong>작성일자:</strong> {{board.createdAt}}</p>
-    <a href="/board/board" class="btn btn-primary mt-3">목록으로 돌아가기</a>
-    <a href="/board/comment?id=" + {{board.id}}>댓글 작성</a>
+    <p><strong>작성일자:</strong> {{board.createdAtFormat}}</p>
+    <a href="/board/list" class="btn btn-primary mt-3">목록으로 돌아가기</a>
+
+
+    <hr>
+
+    <!-- 댓글 목록 -->
+    <div class="comments mt-5">
+        <h3>댓글 목록</h3>
+        {{#comment}}
+            <div class="comment" id="comment-{{id}}">
+                <p><strong>작성자 :</strong> {{nickname}}</p>
+                <p id="content-{{id}}">{{content}}</p>
+                <p><small>작성일자: {{createdAtFormat}}</small></p>
+
+                    <button onclick="deleteComment({{id}})" class="btn btn-danger">🗑</button>
+
+                <button onclick="showEditForm({{id}})" class="btn btn-link">수정</button>
+
+                <!-- 댓글 수정 폼 (기본적으로 숨김 처리) -->
+                <div id="edit-form-{{id}}" style="display: none; margin-top: 10px;">
+                    <textarea id="edit-content-{{id}}" rows="3" class="form-control">{{content}}</textarea>
+                    <button onclick="updateComment({{id}})" class="btn btn-success mt-2">수정 완료</button>
+                </div>
+            </div>
+            <hr>
+        {{/comment}}
+        {{^comment}}
+            <p>댓글이 없습니다.</p>
+        {{/comment}}
+    </div>
+
+    <!-- 댓글 작성 폼 -->
+    <div class="comment-form mt-5">
+        <h3>댓글 달기</h3>
+        <form action="/board/comment" method="post">
+            <input type="hidden" name="boardId" value="{{board.id}}">
+            <div class="form-group">
+                <label for="commentContent">댓글 내용</label>
+                <textarea class="form-control" id="commentContent" name="content" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">댓글 등록</button>
+        </form>
+    </div>
+
+
 </div>
+
+<script>
+    <!-- 수정 버튼 클릭시 함수 시작 (댓글Id, ) -->
+    function showEditForm(commentId) {
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        const contentElement = document.getElementById(`content-${commentId}`);
+
+        if (editForm && contentElement) {
+            editForm.style.display = 'block';
+            contentElement.style.display = 'none';
+        } else {
+            console.error("Edit form or content element not found for comment ID:", commentId);
+        }
+    }
+
+    function updateComment(commentId) {
+        const updatedContent = document.getElementById(`edit-content-${commentId}`).value;
+
+        fetch(`/board/reply/update/${commentId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: updatedContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('댓글이 성공적으로 수정되었습니다.');
+                document.getElementById(`content-${commentId}`).innerText = updatedContent;
+                document.getElementById(`edit-form-${commentId}`).style.display = 'none';
+                document.getElementById(`content-${commentId}`).style.display = 'block';
+            } else {
+                alert('댓글 수정에 실패했습니다.');
+            }
+        });
+    }
+
+
+    function deleteComment(commentId) {
+        fetch(`/board/reply/delete/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('댓글이 성공적으로 삭제되었습니다.');
+                const commentElement = document.getElementById(`comment-${commentId}`);
+                if (commentElement) {
+                    commentElement.remove();
+                }
+            } else {
+                alert('댓글 삭제에 실패했습니다.');
+            }
+        });
+    }
+
+</script>
+
+
 </body>
 </html>
