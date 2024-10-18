@@ -148,5 +148,14 @@
     </select>
 
 
+    <!-- 유저가 쓴 개수 조회 -->
+    <select id="countBoardByUserId" resultType="Integer">
+        SELECT COUNT(*) FROM board_tb WHERE user_id = #{id}
+    </select>
+
+    <!-- 유저가 쓴 댓글 조회 -->
+    <select id="countCommentByUserId" resultType="Integer">
+        SELECT COUNT(*) FROM comment_tb WHERE user_id = #{id}
+    </select>
 
 </mapper>
