@@ -17,7 +17,7 @@
     <h1>학교 번호: {{schoolId}} 게시글 목록</h1>
 
     <td>
-        <a href="/board/list">글쓰기</a>
+        <a href="/board/form">글쓰기</a>
     </td>
 
 
@@ -26,6 +26,7 @@
         <tr>
             <th>제목</th>
             <th>내용</th>
+            <th>작성자</th>
             <th>조회수</th>
             <th>좋아요</th>
             <th>작성일자</th>
@@ -38,9 +39,10 @@
 
                 <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
                 <td>{{contentLocation}}</td>
+                <td>{{nickname}}</td>
                 <td>{{viewCount}}</td>
                 <td>{{likes}}</td>
-                <td>{{createdAt}}</td>
+                <td>{{createdAtFormat}}</td>
             </tr>
         </div>
         {{/boardList}}
