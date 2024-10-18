@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amigo_project.repository.interfaces.BoardRepository">
+
+    <insert id="InsertBoard" parameterType="com.example.amigo_project.dto.BoardDTO">
+        INSERT INTO board_tb (school_id, user_id, title, content_location,view_count,likes)
+        VALUES (#{schoolId}, #{userId}, #{title}, #{contentLocation}, #{viewCount}, #{likes})
+    </insert>
+
+    <!-- 게시글의 이미지 가져오기 -->
+    <select id="findImageByBoardId" resultType="byte[]">
+        SELECT image_location
+        FROM board_tb
+        WHERE id = #{boardId}
+    </select>
+
+    <!-- 특정 학교의 게시글 조회 -->
+    <select id="findBoardsBySchoolId" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname as nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb as b
+        join user_tb as u
+        on b.user_id = u.id
+        WHERE school_id = #{schoolId}
+        ORDER BY b.created_at DESC
+    </select>
+
+    <select id="findImageSearch" resultType="byte[]">
+        SELECT image_location
+        from board_tb
+        where school_id = #{schoolId}
+    </select>
+
+    <select id="BoardById" parameterType="int" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT
+        b.id,
+        b.school_id AS schoolId,
+        b.user_id AS userId,
+        b.title,
+        b.content_location AS contentLocation,
+        b.view_count AS viewCount,
+        b.likes,
+        b.created_at AS createdAt,
+        u.nickname AS nickname
+        FROM
+        board_tb b
+        LEFT JOIN
+        user_tb u ON b.user_id = u.id
+        WHERE
+        b.id = #{boardId};
+
+    </select>
+
+    <!--    댓글 입력 -->
+    <insert id="insertComment" parameterType="com.example.amigo_project.repository.model.Comment">
+        INSERT INTO comment_tb (board_id, user_id, content_location)
+        VALUES (#{boardId}, #{userId}, #{contentLocation})
+    </insert>
+
+    <!--     새로운 댓글이 포함된 상태로 보이게 됩니다.-->
+    <select id="findCommentsByBoardId" resultType="com.example.amigo_project.dto.CommentDTO">
+        SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at as createdAt
+        FROM comment_tb as c
+        join  user_tb as u
+        on c.user_id = u.id
+        WHERE board_id = #{boardId}
+        ORDER BY c.created_at ASC
+    </select>
+
+    <delete id="deleteBoard">
+        DELETE FROM board_tb WHERE id = #{boardId}
+    </delete>
+
+    <select id="findBoardId" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT *
+        FROM board_tb
+    </select>
+
+    <update id="updateBoard" parameterType="com.example.amigo_project.dto.BoardDTO" >
+        UPDATE board_tb
+        SET school_id = #{schoolId},
+        title = #{title},
+        content_location = #{contentLocation},
+        user_id = #{userId}
+        WHERE id = #{boardId}
+    </update>
+
+    <delete id="deleteCommentById" parameterType="int">
+        DELETE FROM comment_tb WHERE id = #{id}
+    </delete>
+
+    <update id="updateComment" parameterType="map">
+        UPDATE comment_tb
+        SET content_location = #{content}
+        WHERE id = #{commentId}
+    </update>
+
+</mapper>

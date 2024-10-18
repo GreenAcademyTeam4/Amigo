@@ -2,6 +2,18 @@
 <!-- mapper DTD 선언 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="UserRepository">
+<mapper namespace="com.example.amigo_project.repository.interfaces.UserRepository">
+    <select id="checkUserId" resultType="boolean" parameterType="String">
+        SELECT COUNT(*)
+        FROM user_tb
+        WHERE user_id = #{userId}
+    </select>
+    <insert id="create" parameterType="com.example.amigo_project.dto.UserDTO">
+        INSERT INTO user_tb (
+            user_id, name, password, phone_number, gender, birth
+        ) VALUES (
+            #{userId}, #{name}, #{password}, #{phoneNumber}, #{gender}, #{birth}
+        )
+    </insert>
 
 </mapper>
