@@ -2,12 +2,13 @@
 create table user_tb (
   id int primary key auto_increment,
   user_id varchar(20) not null,
+  name varchar(20) not null,
   password varchar(20) not null,
-  nickname varchar(20) not null,
+  nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
   gender varchar(10) not null,
-  age int not null,
+  birth int not null,
   point int default 0,
   online_status int default 0,
   active_status int default 0,
@@ -26,13 +27,15 @@ create table school_tb (
 create table board_tb (
   id int primary key auto_increment,
   school_id int,
-  title varchar(15),
-  content_location blob,
-  Image_location blob,
+  title varchar(50),
+  content_location varchar(255),
+--  Image_location blob,
+  user_id int,
   view_count int,
   likes int,
   created_at timestamp default CURRENT_TIMESTAMP,
-  foreign key (school_id) references school_tb(id)
+  foreign key (school_id) references school_tb(id),
+  foreign key (user_id) references user_tb(id)
 );
 
 -- 친구 테이블
@@ -145,9 +148,9 @@ create table comment_tb (
   id int primary key auto_increment,
   board_id int,
   user_id int,
-  content_location blob,
+  content_location varchar(255),
   created_at timestamp default CURRENT_TIMESTAMP,
-  foreign key (board_id) references board_tb(id),
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE,
   foreign key (user_id) references user_tb(id)
 );
 
@@ -199,4 +202,17 @@ create table now_avatar_tb (
   foreign key (top) references avatar_tb(id),
   foreign key (bottom) references avatar_tb(id),
   foreign key (shoes) references avatar_tb(id)
+);
+
+create table charge_history_tb (
+    id int primary key auto_increment,
+    user_id int,
+    order_name varchar(100),
+    order_id varchar(100),
+    point int,
+    total_amount int,
+    approved_at timestamp default CURRENT_TIMESTAMP,
+    method varchar(20),
+    payment_key varchar(100),
+    foreign key (user_id) references user_tb(id)
 );
