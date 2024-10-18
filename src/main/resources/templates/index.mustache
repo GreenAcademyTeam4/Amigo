@@ -1,4 +1,30 @@
-<h1>안녕하세요</h1>
-<script>
-    console.log("안녕바보들");
-</script>
+{{>layout/header}}
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<div class="main-layout">
+    <div class="screen-area">
+
+    </div>
+    <div class="remote-controller">
+        <div class="profile">
+            <img src=""> {{!유저 프로필이미지}}
+        </div>
+        <div class="nickname">
+            유저 이름
+        </div>
+        <div class="my-page">
+            마이페이지
+        </div>
+        <div class="enter">
+            등교하기
+        </div>
+        <div class="post">
+            게시판
+        </div>
+        <div class="logout">
+            로그아웃
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/js/screen.js"></script>
