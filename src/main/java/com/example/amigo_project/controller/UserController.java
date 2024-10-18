@@ -34,7 +34,7 @@ public class UserController {
         Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
-    
+  
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
         int result = userService.joinUser(dto);
@@ -46,6 +46,7 @@ public class UserController {
             System.out.println("실패애애애ㅐ애애ㅐㅇ");
             return "views/login/login";  // 실패 시 다시 회원가입 페이지로 이동
         }
+
     }
 
 }

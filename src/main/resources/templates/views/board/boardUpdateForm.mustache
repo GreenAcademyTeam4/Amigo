@@ -7,21 +7,27 @@
 <body>
 
 <h3>Naver SmartEditor</h3>
-<form id="boardForm" action="/board/insert" method="post">
+<form id="boardForm" action="/board/update/{{board.id}}" method="post">
     <div>
         <h3>제목</h3>
-        <input type="text" name="title" id="title" required>
+        <input type="text" name="title" id="title" value="{{board.title}}" required>
         <input type="hidden" name="school_id" id="school_id" value="{{schoolId}}">
         <input type="hidden" name="user_id" id="user_id" value="{{userId}}">
     </div>
     <div id="smarteditor">
-        <textarea name="content_location" id="editorText" rows="20" cols="10" placeholder="내용을 입력해주세요" style="width: 500px"></textarea>
+        <textarea name="content_location" id="editorText" rows="20" cols="10" placeholder="내용을 입력해주세요" style="width: 500px">
+            {{board.contentLocation}}
+        </textarea>
     </div>
 
     <div>
         <button type="button" onclick="submitPost()">작성하기</button>
     </div>
 </form>
+
+    <div>
+        <a href="/board/list">돌아가기</a>
+    </div>
 
 <script>
     let oEditors = [];
