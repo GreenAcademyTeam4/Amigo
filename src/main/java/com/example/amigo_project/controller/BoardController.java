@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -123,9 +124,21 @@ public class BoardController {
     @GetMapping("/detail/{id}")
     public String getBoardDetail(@PathVariable("id") int boardId, Model model) {
 
+        int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
+
+        // 아직 게시글 상세 보기 다 못만듬 (조회수 이거 아직 안됨) !@#!@#@!#!@!@#!@#!@#!@#@!#@!#!@
+        int boardViewCount = boardService.boardViewCount(boardId, userId);
+        System.out.println("boardViewCount : " + boardViewCount);
+
+
+        // 조회수 증가 +1
+        boardService.incrementViewCount(boardId);
+
+        // 게시글 id를 기준으로 정보 가져오기
         BoardDTO board = boardService.getBoardById(boardId);
         board.getFormattedCreatedAt();
 
+        // 게시글 id를 기준으로 댓글 전부 가져오기
         List<CommentDTO> comment = boardService.findCommentsByBoardId(boardId);
         // timestamp 전부 포맷시켜주기
         for(CommentDTO a : comment) {
@@ -134,12 +147,12 @@ public class BoardController {
         
         model.addAttribute("board", board);
         model.addAttribute("comment", comment);
+
         System.out.println("sangsasebogi : " + board);
         System.out.println("comment : " + comment);
 
         return "views/board/boardDetail";
     }
-
 
     /**
      * 댓글 전송
@@ -149,8 +162,6 @@ public class BoardController {
             @RequestParam(name = "boardId") int boardId,
             @RequestParam(name = "content") String content,
             RedirectAttributes redirectAttributes) {
-
-
 
         int userId = 1; // 나중에 유저 세션에서 가져옴
         Comment dto = Comment
@@ -177,9 +188,6 @@ public class BoardController {
     @PostMapping("/delete/{boardId}")
     public String deleteBoard(@PathVariable(name = "boardId") int boardId) {
 
-        // 먼저 연결된 댓글 삭제
-      //  boardService.deleteCommentsByBoardId(boardId);
-
         // 게시글 삭제
         boardService.deleteBoard(boardId);
         return "redirect:/board/list";
@@ -194,6 +202,8 @@ public class BoardController {
     @GetMapping("/update/{boardId}")
     public String updateBoard(@PathVariable(name = "boardId") int boardId, Model model) {
         System.out.println("@@@@@@@@@ boardId : " + boardId);
+
+
 
         BoardDTO boardDTO = boardService.findBoardId(boardId);
         System.out.println("updateDTO : " + boardDTO);
@@ -284,6 +294,54 @@ public class BoardController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"success\": false}");
         }
+    }
+
+    /**
+     * 게시판 여러개 띄우기
+     * @return
+     */
+    @GetMapping("/multiBoard")
+    public String multiBoard(Model model) {
+
+        int schoolId = 1; // 나중에 세션에서 학교 아이디를 가져온다.
+
+        List<BoardDTO> Heart = boardService.findHeartBoard(schoolId);
+        List<BoardDTO> Recomend = boardService.findRecomendBoard(schoolId);
+        List<BoardDTO> Search = boardService.findSearchBoard(schoolId);
+        List<BoardDTO> createdAt = boardService.findSearchCreatedAt(schoolId);
+
+        // timestamp 전부 포맷시켜주기
+        for(BoardDTO a : Heart) {
+            a.getFormattedCreatedAt();
+        }
+
+        // timestamp 전부 포맷시켜주기
+        for(BoardDTO a : Recomend) {
+            a.getFormattedCreatedAt();
+        }
+
+        // timestamp 전부 포맷시켜주기
+        for(BoardDTO a : Search) {
+            a.getFormattedCreatedAt();
+        }
+
+        // timestamp 전부 포맷시켜주기
+        for(BoardDTO a : createdAt) {
+            a.getFormattedCreatedAt();
+        }
+
+        System.out.println("Heart : " + Heart);
+        System.out.println("Recomend : " + Recomend);
+        System.out.println("Search : " + Search);
+        System.out.println("createdAt : " + createdAt);
+
+        model.addAttribute("Heart", Heart);
+        model.addAttribute("Recomend", Recomend);
+        model.addAttribute("Search", Search);
+        model.addAttribute("createdAt", createdAt);
+
+        return "views/board/boardMultiList";
+
     }
 
 
