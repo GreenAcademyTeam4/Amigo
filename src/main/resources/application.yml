@@ -26,13 +26,16 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:/mapper/*.xml  # MyBatis ?? XML ?? ??
-
   output:
     ansi:
       enabled: always  # ?? ?? ? ANSI ??? ?? ????? ?? (??? ?? ??? ? ?? ?? ??)
       encoding:
         force-response: true
-
+coolsms:
+  api:
+    key:  NCSWNHM46QT8PKNY
+    secret: 9TQSQY7CTAHIM8X592GCT6M6TCFNUUZF
+    number: 01025134159
 payments:
   toss:
     test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
