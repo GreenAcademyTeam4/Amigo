@@ -23,9 +23,11 @@ public class User {
     private String gender;
     private Integer birth;
     private Integer point;
-    private Integer onlineStatus;
-    private Integer activeStatus;
+    private boolean onlineStatus;
+    private String activeStatus;
     private Timestamp createdAt;
 
+    // temp
+    private boolean isOnline1 = false;
 
 }
