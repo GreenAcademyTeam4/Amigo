@@ -7,12 +7,18 @@ create table user_tb (
   nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
+  user_role varchar(20) null,
+  elementary_school varchar(20) null,
+  midle_school varchar(20) null,
+  high_school varchar(20) null, 
   gender varchar(10) not null,
   birth int not null,
   point int default 0,
-  online_status int default 0,
-  active_status int default 0,
+  online_status boolean default false,
+  active_status varchar(7) default '활동중',
   created_at timestamp default CURRENT_TIMESTAMP
+  -- 임시 데이터
+--  role varchar(20) default 'USER' comment 'user, admin'
 );
 
 -- 학교 테이블

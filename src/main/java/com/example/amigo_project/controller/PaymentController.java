@@ -2,6 +2,7 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.payment.ApproveDTO;
 import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
+import com.example.amigo_project.dto.payment.HistoryPageDTO;
 import com.example.amigo_project.repository.model.ChargeHistory;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.PaymentService;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/pay")
@@ -53,7 +55,7 @@ public class PaymentController {
 
         // 구매내역(포인트 충전) update
         paymentService.chargePoint(result);
-        
+
         User user = (User) session.getAttribute("principal");
 
         // ChargeHistory에 담긴 값을 ChargeHistoryDTO에 담음
@@ -68,6 +70,7 @@ public class PaymentController {
 
         // 결제 내역 보여주기 위해 model에 값 담기
         model.addAttribute("payment", dto);
+        model.addAttribute("user", user);
         return "/payment/success";
     }
 
@@ -75,9 +78,44 @@ public class PaymentController {
      * 토스 실패 페이지
      */
     @GetMapping("/fail")
-    public String getFailPage(){
+    public String getFailPage() {
         return "/payment/fail";
     }
 
+    /**
+     * 결제 내역 조회 페이지
+     */
+    @GetMapping("/paymentList")
+    public String readChargeHistoryPage() {
+        return "payment/paymentlist";
+    }
+
+
+    /**
+     * 결제 내역 조회(사용자 기준)
+     */
+    @PostMapping("/paymentList")
+    @ResponseBody
+    public HistoryPageDTO readChargeHistory(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
+            User user = (User) session.getAttribute("principal");
+
+            List<ChargeHistoryDTO> paymentList = paymentService.readChargeHistory(page, size, 1);
+            int totalCount = paymentService.countChargeHistory(1); // userId에 해당하는 결제 내역 개수
+
+            int totalPages = (int) Math.ceil((double) totalCount / (double) size);
+
+            HistoryPageDTO historyPageDTO = new HistoryPageDTO();
+            historyPageDTO.setTotalCount(totalCount);
+            historyPageDTO.setTotalPage(totalPages);
+            historyPageDTO.setChargeHistoryDTO(paymentList);
+            historyPageDTO.setPageSize(size);
+            historyPageDTO.setCurrentPage(page);
+
+            System.out.println("historyPageDTO : " + historyPageDTO);
+            return historyPageDTO;
+    }
 
 }
