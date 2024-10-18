@@ -2,16 +2,15 @@ package com.example.amigo_project.service;
 
 import com.example.amigo_project.repository.interfaces.AdminRepository;
 import com.example.amigo_project.repository.model.User;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
 
 
     private final AdminRepository adminRepository;
@@ -26,7 +25,12 @@ public class AdminService {
         
         return userList;
     }
-    
+
+    public User findById(int id){
+        User user = adminRepository.findById(id);
+
+        return user;
+    }
     
 
 }

@@ -10,23 +10,16 @@
     <title>회원관리</title>
 
     <!-- Custom fonts for this template-->
-    <link href="css/admin/fontawesome-free/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/admin/fontawesome-free/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/admin/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/admin/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for table -->
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
-
-    <style>
-        .status-icon {
-            width: 24px;
-            height: 24px;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -36,7 +29,7 @@
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -65,7 +58,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="/user">회원 조회</a>
-                    <a class="collapse-item" href="cards.html">탈퇴 회원 조회</a>
+                    <a class="collapse-item" href="#">탈퇴 회원 조회</a>
                 </div>
             </div>
         </li>
@@ -132,49 +125,59 @@
         <div id="content">
             <!-- Main Content -->
             <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">회원 조회</h1><br>
+                <h1 class="h3 mb-2 text-gray-800">회원 상세보기</h1><br><br>
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">회원 목록</h6>
+                        <h6 class="m-0 font-weight-bold text-primary"> 회원 정보</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>온라인 상태</th>
-                                    <th>활성상태</th>
-                                    <th>상세보기</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{#userList}}
-                                    <tr>
-                                        <td>{{nickname}}</td>
-                                        <td>{{userId}}</td>
-                                        <td>
-                                            {{#onlineStatus}}
-                                                <img src="/image/admin/free-icon-checkmark.png" class="status-icon" alt="온라인 상태">
-                                            {{/onlineStatus}}
-                                            {{^onlineStatus}}
-                                                <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
-                                            {{/onlineStatus}}
-                                        </td>
-                                        <td>
-                                            {{activeStatus}}
+                        <div class="row">
 
-                                        </td>
-                                        </td>
-                                        <td><a href="/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
+                            <!-- 회원 정보 영역 -->
+                            <div class="col-lg-8">
+                                <h5 class="font-weight-bold">{{user.nickname}} : 회원 정보</h5><br>
+                                <table class="table table-borderless">
+                                    <tbody>
+                                    <tr>
+                                        <th>아이디</th>
+                                        <td>{{user.userId}}</td>
                                     </tr>
-                                {{/userList}}
-                                </tbody>
-                            </table>
+                                    <tr>
+                                        <th>비밀번호</th>
+                                        <td>********</td> <!--TODO 암호화 하기-->
+                                    </tr>
+                                    <tr>
+                                        <th>이름</th>
+                                        <td>{{user.nickname}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>휴대폰 번호</th>
+                                        <td>{{user.phoneNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>성별</th>
+                                        <td>{{user.gender}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>나이</th>
+                                        <td>{{user.birth}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>포인트</th>
+                                        <td>{{user.point}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>가입일</th>
+                                        <td>{{user.createdAt}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                <a href="/user" class="btn btn-secondary btn-sm">뒤로가기</a>
             </div>
             <!-- End of Main Content -->
         </div>
@@ -183,14 +186,17 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="vendor/js/sb-admin-2.min.js"></script>
+<script src="/vendor/js/sb-admin-2.min.js"></script>
+
 
 <!-- DataTables JavaScript -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
