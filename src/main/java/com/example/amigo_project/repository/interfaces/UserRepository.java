@@ -14,7 +14,7 @@ public interface UserRepository {
     // 닉네임 중복확인
     public  boolean checkUserNickname(String nickname);
     // 로그인
-    public User loginByUserIdandPassword(UserDTO.joinDTO dto);
+    public User loginByUserIdandPassword(UserDTO.loginDTO dto);
 
 
 
