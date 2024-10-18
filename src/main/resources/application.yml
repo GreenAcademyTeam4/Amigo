@@ -30,3 +30,15 @@ mybatis:
   output:
     ansi:
       enabled: always  # ?? ?? ? ANSI ??? ?? ????? ?? (??? ?? ??? ? ?? ?? ??)
+      encoding:
+        force-response: true
+coolsms:
+  api:
+    key: "NCS6NKQEEJBUSUEK"
+    secret: "HB64VMFSMSOUOZJYCC2J6VERWGSED0YK"
+    number: "01067821019"
+payments:
+  toss:
+    test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
+    test_secret_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
+
