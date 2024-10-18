@@ -13,6 +13,18 @@
         UPDATE user_tb SET point = point + #{point} WHERE id = #{userId}
     </update>
 
+    <select id="readChargeHistory" resultType="com.example.amigo_project.dto.payment.ChargeHistoryDTO">
+        SELECT order_name, total_amount, approved_at, method
+        FROM charge_history_tb
+        WHERE user_id = #{userId}
+        ORDER BY id DESC limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countChargeHistory" parameterType="Integer">
+        SELECT COUNT(*) AS count FROM charge_history_tb WHERE user_id = #{userId}
+    </select>
+
+
 
 
 </mapper>
