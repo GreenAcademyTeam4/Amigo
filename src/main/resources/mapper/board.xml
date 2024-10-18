@@ -4,17 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.amigo_project.repository.interfaces.BoardRepository">
 
+    <!-- 게시글을 작성하는 쿼리   -->
     <insert id="InsertBoard" parameterType="com.example.amigo_project.dto.BoardDTO">
         INSERT INTO board_tb (school_id, user_id, title, content_location,view_count,likes)
         VALUES (#{schoolId}, #{userId}, #{title}, #{contentLocation}, #{viewCount}, #{likes})
     </insert>
-
-    <!-- 게시글의 이미지 가져오기 -->
-    <select id="findImageByBoardId" resultType="byte[]">
-        SELECT image_location
-        FROM board_tb
-        WHERE id = #{boardId}
-    </select>
 
     <!-- 특정 학교의 게시글 조회 -->
     <select id="findBoardsBySchoolId" resultType="com.example.amigo_project.dto.BoardDTO">
@@ -27,12 +21,7 @@
         ORDER BY b.created_at DESC
     </select>
 
-    <select id="findImageSearch" resultType="byte[]">
-        SELECT image_location
-        from board_tb
-        where school_id = #{schoolId}
-    </select>
-
+    <!-- 게시글에 대한 상세내용을 가져오면서 user_tb에 있는 nickname도 같이 들고오는 쿼리  -->
     <select id="BoardById" parameterType="int" resultType="com.example.amigo_project.dto.BoardDTO">
         SELECT
         b.id,
@@ -50,16 +39,15 @@
         user_tb u ON b.user_id = u.id
         WHERE
         b.id = #{boardId};
-
     </select>
 
-    <!--    댓글 입력 -->
+    <!-- 댓글을 입력하는 쿼리 -->
     <insert id="insertComment" parameterType="com.example.amigo_project.repository.model.Comment">
         INSERT INTO comment_tb (board_id, user_id, content_location)
         VALUES (#{boardId}, #{userId}, #{contentLocation})
     </insert>
 
-    <!--     새로운 댓글이 포함된 상태로 보이게 됩니다.-->
+    <!-- 게시글 상세보기 에서 게시글Id에 속한 모든 댓글을 보여주는 쿼리 -->
     <select id="findCommentsByBoardId" resultType="com.example.amigo_project.dto.CommentDTO">
         SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at as createdAt
         FROM comment_tb as c
@@ -69,15 +57,19 @@
         ORDER BY c.created_at ASC
     </select>
 
+    <!-- 게시판Id를 기준으로 게시글을 삭제하는 쿼리   -->
     <delete id="deleteBoard">
         DELETE FROM board_tb WHERE id = #{boardId}
     </delete>
 
+    <!-- 게시판Id를 기준으로 게시글을 찾는 쿼리   -->
     <select id="findBoardId" resultType="com.example.amigo_project.dto.BoardDTO">
         SELECT *
         FROM board_tb
+        WHERE id = #{boardId}
     </select>
 
+    <!-- 게시글 수정하기 버튼 클릭 후 수정하면 작동하는 쿼리   -->
     <update id="updateBoard" parameterType="com.example.amigo_project.dto.BoardDTO" >
         UPDATE board_tb
         SET school_id = #{schoolId},
@@ -87,15 +79,74 @@
         WHERE id = #{boardId}
     </update>
 
+    <!-- 댓글을 삭제하면 작동하는 쿼리  -->
     <delete id="deleteCommentById" parameterType="int">
         DELETE FROM comment_tb WHERE id = #{id}
     </delete>
 
+    <!-- 댓글을 수정하면 작동하는 쿼리 -->
     <update id="updateComment" parameterType="map">
         UPDATE comment_tb
         SET content_location = #{content}
         WHERE id = #{commentId}
     </update>
+
+    <!-- 게시글 상세보기 클릭 시 조회수가 +1 증가하는 쿼리 -->
+    <update id="incrementViewCount">
+        UPDATE board_tb
+        SET view_count = view_count + 1
+        WHERE id = #{boardId}
+    </update>
+
+    <!-- 게시글 하트가 제일 많은 게시글 3개 올리기 -->
+    <select id="findHeartBoard" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.*, u.nickname
+        FROM board_tb b
+        LEFT JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId}
+        ORDER BY b.likes DESC
+        LIMIT 3;
+    </select>
+
+    <!-- 게시글 댓글이 제일 많은 게시글 3개 올리기 -->
+    <select id="findRecomendBoard" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id, b.user_id, b.title, u.nickname, b.created_at, COUNT(c.id) AS commentCount, b.view_count
+        FROM board_tb b
+        LEFT JOIN comment_tb c ON b.id = c.board_id
+        LEFT JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId}
+        GROUP BY b.id, b.school_id, b.user_id, b.title, u.nickname, b.created_at, b.view_count
+        ORDER BY commentCount DESC
+        LIMIT 3;
+    </select>
+
+    <!--게시글 조회가 많은 게시글 3개 올리기 -->
+    <select id="findSearchBoard" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.*, u.nickname
+        FROM board_tb b
+        LEFT JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId}
+        ORDER BY b.view_count DESC
+        LIMIT 3;
+    </select>
+
+    <!-- 최신순으로 만든 게시글 3개    -->
+    <select id="findSearchCreatedAt" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.*, u.nickname
+        FROM board_tb b
+        LEFT JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId}
+        ORDER BY b.created_at DESC
+        LIMIT 3;
+    </select>
+
+    <!-- board_view 테이블에서 유저Id 와 게시판id를 검색한다. -->
+    <select id="boardViewCount" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT COUNT(*)
+        FROM board_view_tb
+        WHERE user_id = #{userId} AND board_id = #{boardId};
+    </select>
+
 
     <!-- 유저가 쓴 개수 조회 -->
     <select id="countBoardByUserId" resultType="Integer">

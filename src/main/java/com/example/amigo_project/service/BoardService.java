@@ -120,4 +120,57 @@ public class BoardService {
     public void updateComment(int commentId, String content) {
         boardRepository.updateComment(commentId, content);
     }
+
+    /**
+     * 게시글 상세보기 클릭 시 조회수 +1 한다.
+     * @param boardId
+     */
+    public void incrementViewCount(int boardId) {
+        boardRepository.incrementViewCount(boardId);
+    }
+
+    /**
+     * 게시글 하트가 제일 많은 게시글 3개 올리기
+     * @param schoolId
+     * @return
+     */
+    public List<BoardDTO> findHeartBoard(int schoolId) {
+       return boardRepository.findHeartBoard(schoolId);
+    }
+
+    /**
+     * 게시글 댓글이 제일 많은 게시글 3개 올리기
+     * @param schoolId
+     * @return
+     */
+    public List<BoardDTO> findRecomendBoard(int schoolId) {
+       return boardRepository.findRecomendBoard(schoolId);
+    }
+
+    /**
+     * 게시글 조회가 많은 게시글 3개 올리기
+     * @param schoolId
+     * @return
+     */
+    public List<BoardDTO> findSearchBoard(int schoolId) {
+        return boardRepository.findSearchBoard(schoolId);
+    }
+
+    /**
+     * 최신순으로 만든 게시글 3개
+     * @param schoolId
+     * @return
+     */
+    public List<BoardDTO> findSearchCreatedAt(int schoolId) {
+        return boardRepository.findSearchCreatedAt(schoolId);
+    }
+
+    /**
+     * board_view 테이블에서 유저Id 와 게시판id를 검색한다.
+     * @param boardId
+     * @return
+     */
+    public int boardViewCount(int boardId, int userId) {
+        return boardRepository.boardViewCount(boardId, userId);
+    }
 }
