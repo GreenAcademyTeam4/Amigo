@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세보기</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div>
+    <form action="/board/delete/{{board.id}}" method="post">
+        <button type="submit">게시글 삭제</button>
+    </form>
+</div>
+
+<div>
+    <form action="/board/update/{{board.id}}" method="get">
+        <button type="submit">게시글 수정하기</button>
+    </form>
+</div>
+
+<div class="container mt-5">
+    <input type="hidden" name="" id="" value="">
+
+    <h1>{{board.title}}</h1>
+    <p><strong>작성자 ID:</strong> {{board.userId}}</p>
+    <p><strong>학교 ID:</strong> {{board.schoolId}}</p>
+
+    <p><strong>내용:</strong> {{board.contentLocation}} </p>
+
+    <p><strong>조회수:</strong> {{board.viewCount}}</p>
+    <p><strong>좋아요:</strong> {{board.likes}}</p>
+    <p><strong>작성일자:</strong> {{board.createdAtFormat}}</p>
+    <a href="/board/list" class="btn btn-primary mt-3">목록으로 돌아가기</a>
+    <a href="/board/comment?id=" + {{board.id}}>댓글 작성</a>
+<!-- <a href="/board/comment?id={{board.id}}">댓글 작성</a> -->
+
+    <hr>
+
+    <!-- 댓글 목록 -->
+    <div class="comments mt-5">
+        <h3>댓글 목록</h3>
+        {{#comment}}
+            <div class="comment">
+                <p><strong>작성자 :</strong> {{nickname}}</p>
+                <p>{{content}}</p>
+                <p><small>작성일자: {{createdAtFormat}}</small></p>
+
+
+                <form action="/board/reply/delete/{{board.id}}" method="post">
+                    <button type="submit" class="btn">🗑</button>
+                </form>
+
+                <form action="/board/reply/update/{{board.id}}" method="get">
+                    <button type="submit">수정</button>
+                </form>
+
+            </div>
+            <hr>
+        {{/comment}}
+        {{^comment}}
+            <p>댓글이 없습니다.</p>
+        {{/comment}}
+    </div>
+
+    <!-- 댓글 작성 폼 -->
+    <div class="comment-form mt-5">
+        <h3>댓글 달기</h3>
+        <form action="/board/comment" method="post">
+            <input type="hidden" name="boardId" value="{{board.id}}">
+            <div class="form-group">
+                <label for="commentContent">댓글 내용</label>
+                <textarea class="form-control" id="commentContent" name="content" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">댓글 등록</button>
+        </form>
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -34,6 +34,6 @@ public class UserController {
 
     @PostMapping("/requestAuth")
     public ResponseEntity<UserDTO> requestAuth(@RequestBody UserDTO userDTO) {
-
+        return null;
     }
 }
