@@ -70,6 +70,10 @@ public class UserController {
         return ResponseEntity.ok(repetitionResult);
     }
 
+//    @PostMapping("/requestAuth")
+//    public ResponseEntity<UserDTO> requestAuth(@RequestBody UserDTO userDTO) {
+//
+//    }
     /**
      * 회원가입 
      * @param dto
@@ -85,5 +89,4 @@ public class UserController {
         }
 
     }
-
 }
