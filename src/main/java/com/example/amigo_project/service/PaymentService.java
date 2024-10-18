@@ -1,6 +1,7 @@
 package com.example.amigo_project.service;
 
 import com.example.amigo_project.dto.payment.ApproveDTO;
+import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.interfaces.PaymentRepository;
 import com.example.amigo_project.repository.model.ChargeHistory;
 import com.example.amigo_project.repository.model.User;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +57,7 @@ public class PaymentService {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
         
-        // JSON으로 온 결제 요청 승인 후 받은 값을 모델에 담음
+        // 결제 요청 승인 후 받은 JSON으로 온 데이터를 모델에 담음
         ObjectMapper objectMapper = new ObjectMapper();
         ChargeHistory chargeHistory = objectMapper.readValue(response.body(), ChargeHistory.class);
 
@@ -84,10 +86,22 @@ public class PaymentService {
     }
 
     /**
-     * 결제 내역 조회
+     * 결제 내역 조회(페이징 처리)
      */
-    public List<ChargeHistory> getAllChargeHistory() {
-        return paymentRepository.getAllChargeHistory();
+    public List<ChargeHistoryDTO> readChargeHistory(int page, int size, int userId) {
+        List<ChargeHistoryDTO> list = new ArrayList<>();
+        int limit = size;
+        int offset = (page -1) * size;
+        list = paymentRepository.readChargeHistory(limit, offset, userId);
+        System.out.println("list: " + list); // TODO - 삭제 예정
+        return list;
+    }
+
+    /**
+     * 결제 내역 개수(페이징 처리)
+     */
+    public Integer countChargeHistory(int userId) {
+        return paymentRepository.countChargeHistory(userId);
     }
 
 
