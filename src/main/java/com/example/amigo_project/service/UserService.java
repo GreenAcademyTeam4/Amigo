@@ -29,7 +29,6 @@ public class UserService {
             if(repetition == true){
                 result.put("repetition", "repetition");
             }
-
        }
         if(dto.getUserId().length()< 6 || dto.getUserId().length() > 21 ) {
             result.put("repetition", "iderror");
@@ -40,13 +39,24 @@ public class UserService {
         return result;
     }
 
-
+    /**
+     * 회원가입 
+     * 
+     * @param dto // joinDTO 사용
+     * @return
+     */
     public int joinUser(UserDTO.joinDTO dto){
       int result = 0;
     result =  userRepository.create(dto);
-      System.out.println("@@@@@@@@@서비스까지 도달:" +result);
      return result;
     } 
+
+    public User findUserByIdAndPassword(UserDTO.loginDTO dto){
+
+        return userRepository.loginByUserIdandPassword(dto);
+    }
+
+
 
 }
 
