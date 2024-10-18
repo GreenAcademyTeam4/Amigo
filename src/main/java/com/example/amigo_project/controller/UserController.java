@@ -69,8 +69,6 @@ public class UserController {
         Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
-    
-
 
     /**
      * 회원가입 
@@ -85,6 +83,7 @@ public class UserController {
         } else {
             return "views/login/login";  
         }
+
     }
 
 }

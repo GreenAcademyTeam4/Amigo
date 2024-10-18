@@ -31,8 +31,8 @@ create table school_tb (
 create table board_tb (
   id int primary key auto_increment,
   school_id int,
-  title varchar(15),
-  content_location varchar(20),
+  title varchar(50),
+  content_location varchar(255),
 --  Image_location blob,
   user_id int,
   view_count int,
@@ -152,9 +152,9 @@ create table comment_tb (
   id int primary key auto_increment,
   board_id int,
   user_id int,
-  content_location blob,
+  content_location varchar(255),
   created_at timestamp default CURRENT_TIMESTAMP,
-  foreign key (board_id) references board_tb(id),
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE,
   foreign key (user_id) references user_tb(id)
 );
 
