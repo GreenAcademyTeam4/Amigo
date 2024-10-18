@@ -28,7 +28,6 @@ public class UserDTO {
 
         private String userId;
         private String password;
-        private String nickname;
         private String name;
         private String phoneNumber;
         private String gender;

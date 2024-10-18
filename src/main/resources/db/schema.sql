@@ -4,7 +4,7 @@ create table user_tb (
   user_id varchar(20) not null,
   name varchar(20) not null,
   password varchar(20) not null,
-  nickname varchar(20) not null,
+  nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
   gender varchar(10) not null,
@@ -202,4 +202,17 @@ create table now_avatar_tb (
   foreign key (top) references avatar_tb(id),
   foreign key (bottom) references avatar_tb(id),
   foreign key (shoes) references avatar_tb(id)
+);
+
+create table charge_history_tb (
+    id int primary key auto_increment,
+    user_id int,
+    order_name varchar(100),
+    order_id varchar(100),
+    point int,
+    total_amount int,
+    approved_at timestamp default CURRENT_TIMESTAMP,
+    method varchar(20),
+    payment_key varchar(100),
+    foreign key (user_id) references user_tb(id)
 );

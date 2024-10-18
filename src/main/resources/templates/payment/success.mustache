@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 성공</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        td {
+            background-color: #fafafa;
+        }
+        .confirm-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .confirm-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+<h1>님, 결제가 완료되었어요.</h1>
+
+<table>
+    <tr>
+        <th>구매상품</th>
+        <td>{{payment.orderName}}</td>
+    </tr>
+    <tr>
+        <th>결제금액</th>
+        <td>{{payment.totalAmount}}원</td>
+    </tr>
+    <tr>
+        <th>결제일시</th>
+        <td>{{payment.approvedAt}}</td>
+    </tr>
+    <tr>
+        <th>주문번호</th>
+        <td>{{payment.orderId}}</td>
+    </tr>
+    <tr>
+        <th>결제방식</th>
+        <td>{{payment.method}}</td>
+    </tr>
+</table>
+<!--  확인 버튼 누르면 메인 화면으로 넘어가도록, 나중에 경로 수정하기  -->
+    <a href="/main" class="confirm-btn">확인</a>
+</div>
+</body>
+</html>

@@ -143,6 +143,7 @@ form {
 .gender-options {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 10px;
 }
 
 button.register-btn {
@@ -218,4 +219,65 @@ font-size: 13px;
 }
 .success{
     color: green;
+}
+
+.auth-code-box {
+    width: 70%; /* 인증 확인 버튼과 균형을 맞추기 위해 필드의 폭을 설정 */
+    padding: 12px;
+    padding-left: 40px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-right: none; /* 버튼과 연결되는 부분을 매끄럽게 하기 위해 오른쪽 테두리 제거 */
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    box-sizing: border-box;
+    height: 48px; /* 버튼과 동일한 높이 설정 */
+}
+
+.verify-btn {
+    width: 30%; /* 인증번호 입력 필드와 균형을 맞추기 위한 너비 설정 */
+    background-color: #ce9178;
+    color: white;
+    border: 1px solid #ddd;
+    border-left: none; /* 입력 필드와 연결되기 위해 왼쪽 테두리 제거 */
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 14px;
+    height: 48px; /* 입력 필드와 동일한 높이 설정 */
+    box-sizing: border-box;
+}
+
+.verify-btn:hover {
+    background-color: #c05720;
+}
+
+.input-with-icon {
+    display: flex; /* 입력 필드와 버튼을 나란히 정렬하기 위해 flex 사용 */
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%; /* 전체 가로 크기를 차지하도록 설정 */
+}
+
+.input-with-icon .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bbb;
+}
+button.joinBtn{
+    background-color: #ff3c00;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;    
+    margin-top: 20px;
+    width: 100%;
+}
+#joinDone{
+    width: 100%;
+}
+button.joinBtn:hover{
+    background-color: #e0aa0b;
 }
