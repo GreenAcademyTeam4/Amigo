@@ -25,6 +25,10 @@ public class User {
     private Integer point;
     private Integer onlineStatus;
     private Integer activeStatus;
+    private String userRole;
+    private String elementarySchool; // 초등학교
+    private String midleSchool;
+    private String highSchool; 
     private Timestamp createdAt;
 
 
