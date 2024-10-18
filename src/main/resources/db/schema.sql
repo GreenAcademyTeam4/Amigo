@@ -11,7 +11,7 @@ create table user_tb (
   birth int not null,
   point int default 0,
   online_status int default 0,
-  active_status int default 0,
+  active_status int default 0, -- 휴면,정지,활동
   created_at timestamp default CURRENT_TIMESTAMP
 );
 
