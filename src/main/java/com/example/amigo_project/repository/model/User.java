@@ -25,9 +25,10 @@ public class User {
     private Integer point;
     private boolean onlineStatus;
     private String activeStatus;
+    private String userRole;
+    private String elementarySchool; // 초등학교
+    private String midleSchool;
+    private String highSchool; 
     private Timestamp createdAt;
-
-    // temp
-    private boolean isOnline1 = false;
 
 }
