@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+h5 {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#payment-method {
+    margin-bottom: 20px;
+}
+
+.button2 {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button2:hover {
+    background-color: #e0e0e0;
+}
+
+.button2:active {
+    background-color: #d0d0d0;
+}
+
+#payment-method button.selected {
+    background-color: rgb(229, 239, 255);
+}
+
+#chargeButton-1000, #chargeButton-3000, #chargeButton-5000, #chargeButton-10000, #chargeButton-30000, #chargeButton-50000, #chargeButton-100000 {
+    padding: 5px 15px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#chargeButton-1000:hover, #chargeButton-3000:hover, #chargeButton-5000:hover, #chargeButton-10000:hover, #chargeButton-30000:hover, #chargeButton-50000:hover, #chargeButton-100000:hover {
+    background-color: #e0e0e0;
+}
+
+#chargeButton-1000:active, #chargeButton-3000:active, #chargeButton-5000:active, #chargeButton-10000:active, #chargeButton-30000:active, #chargeButton-50000:active, #chargeButton-100000:active {
+    background-color: #d0d0d0;
+}
+
+#chargeButton-1000.selected, #chargeButton-3000.selected, #chargeButton-5000.selected, #chargeButton-10000.selected, #chargeButton-30000.selected, #chargeButton-50000.selected, #chargeButton-100000.selected {
+    background-color: rgb(229, 239, 255);
+}
+
+span {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+button:focus {
+    outline: none;
+}
+
+
+#point-1000, #point-3000, #point-5000, #point-10000, #point-30000, #point-50000, #point-100000 {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+
+}
+
+
+point-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+point-list {
+    display: flex;
+    flex-direction: column;
+}
