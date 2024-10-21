@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
     @GetMapping("/")
-    public String logincontroller() {
+    public String firstPage() {
 
+        return "first";
+    }
+
+    @GetMapping("/login")
+    public String logincontroller() {
         return "views/login/login";
     }
 
@@ -23,7 +28,6 @@ public class MainController {
 
         return "views/classroom/classroom";
     }
-
 
 
 }
