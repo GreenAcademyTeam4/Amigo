@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/font/font.css">
 </head>
 <body>
-<img src="">
+<img src="/image/logo3.png">
 
 <div class="login-container">
 
@@ -30,20 +30,20 @@
                 </div>
             </div>
 
-            <button type="submit" class="login-btn">로그인</button>
+            <button type="submit" id="login-btn" class="links">로그인</button>
         </form>
         <div class="login-option">   
             다른계정 로그인
         </div>
         <div class="login-other">
             <a href="/kakao/login">
-                <img src="/image/login/kakaologin.png" >
+                <img src="/image/kakaologin.png" >
             </a>
             <a href="/naver/login">
-                <img src="/image/login/naverlogin.png" >
+                <img src="/image/naverlogin.png" >
             </a>
             <a href="/google/login">
-                <img src="/image/login/googlelogin.png" >
+                <img src="/image/googlelogin.png" >
             </a>
         </div>
     </div>
@@ -51,3 +51,43 @@
 </div>
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+       $(document).ready(function() {
+      
+        $('body').css('opacity', '1');
+
+       
+        $('.links a').on('click', function(e) {
+            var linkUrl = $(this).attr('href');
+
+            
+           
+                e.preventDefault(); 
+
+                
+                $('body').animate({ opacity: 0 }, 500, function() {
+                    window.location.href = linkUrl; 
+                });
+           
+        });
+
+       
+        $('#login-btn').on('click', function(e) {
+            e.preventDefault(); 
+
+           
+            $('body').animate({ opacity: 0 }, 500, function() {
+                
+                $('form').submit(); 
+            });
+        });
+
+       
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+                $('body').css('opacity', '1');
+            }
+        });
+    });
+</script>

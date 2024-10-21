@@ -23,7 +23,8 @@ img{
 }
 
 body {
-    background-image: url("/image/도토리.png");
+    background-color:#f0dcd5 ;
+
     background-position: center;
     height: 100vh;
     display: flex;
@@ -32,16 +33,7 @@ body {
     flex-direction: column;
 
 }
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.9); 
-    z-index: -1;
-}
+
 
 .login-container {
     display: flex;
@@ -115,7 +107,7 @@ label {
     text-decoration: underline;
 }
 
-button.login-btn {
+button#login-btn {
     padding: 12px;
     background-color: #ce9178;
     color: white;
@@ -126,7 +118,7 @@ button.login-btn {
     margin-bottom: 10px;
 }
 
-button.login-btn:hover {
+button#login-btn:hover {
     background-color: #c05720;
 }
 
@@ -165,4 +157,34 @@ button.login-btn:hover {
     width: 40px;
     height: auto;
     margin: 15px;
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-in-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.5s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
 }
