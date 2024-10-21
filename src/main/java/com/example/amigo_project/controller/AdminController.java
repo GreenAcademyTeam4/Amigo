@@ -1,19 +1,19 @@
 package com.example.amigo_project.controller;
 
-import com.example.amigo_project.repository.interfaces.AdminRepository;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/admin")
+@RequestMapping("/")
 public class AdminController {
 
     private final AdminService adminService;
@@ -31,9 +31,24 @@ public class AdminController {
     public String userPage(Model model){
 
         List<User> userList = adminService.getUserList();
+        userList.get(0).setOnlineStatus(true);
+        System.out.println(userList.toString());
+
+
         model.addAttribute("userList", userList);
         return "views/admins/user"; // 임시
     }
+
+    @GetMapping("/user/detail/{id}")
+    public String userDetail(Model model, @PathVariable(name = "id") int id){
+        User user = adminService.findById(id);
+        System.out.println(user);
+        model.addAttribute("user", user);
+        return "views/admins/userDetail"; // 임시
+
+    }
+
+
 
 
 
