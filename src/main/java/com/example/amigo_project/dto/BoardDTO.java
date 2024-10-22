@@ -1,9 +1,7 @@
 package com.example.amigo_project.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.sql.Blob;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -40,4 +38,6 @@ public class BoardDTO {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.createdAtFormat = formatter.format(createdAt);
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.amigo_project.repository.interfaces;
 
+import com.example.amigo_project.dto.AdminDTO;
+import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,5 +21,11 @@ public interface AdminRepository {
 
     // 유저 수
     public int countUser();
+
+    // 게시글 개수 조회 (userId)
+    public AdminDTO findBoardCount(int userId);
+
+    // 댓글 개수 조회 (userId)
+    public CommentDTO findCommentCount(int userId);
 
 }
