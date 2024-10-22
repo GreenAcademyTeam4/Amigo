@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 레이아웃</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+}
+
+.board-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.board {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.board h3 {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.board ul {
+  list-style: none;
+}
+
+.board ul li {
+  margin-bottom: 12px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;  /* 세로 정렬 */
+}
+
+.board ul li span {
+  color: #888888;
+  font-size: 12px;
+  margin-top: 5px;  /* 제목과 시간 사이의 간격 */
+}
+
+    </style>
+
+</head>
+<body>
+<div class="board-container">
+    <div class="board">
+        <h3>조회가 많은 게시글</h3>
+        <ul>
+            {{#Search}}
+                <div class="board-item">
+                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
+                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
+                </div>
+            {{/Search}}
+
+            {{^Search}}
+                <p>게시글이 없습니다.</p>
+            {{/Search}}
+        </ul>
+    </div>
+
+    <div class="board">
+        <h3>추천이 많은 게시글</h3>
+        <ul>
+            {{#Recomend}}
+                <div class="board-item">
+                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
+                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
+                </div>
+            {{/Recomend}}
+
+            {{^Recomend}}
+                <p>게시글이 없습니다.</p>
+            {{/Recomend}}
+        </ul>
+    </div>
+
+    <div class="board">
+        <h3>최신글</h3>
+        <ul>
+            {{#createdAt}}
+                <div class="board-item">
+                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
+                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
+                </div>
+            {{/createdAt}}
+
+            {{^createdAt}}
+                <p>게시글이 없습니다.</p>
+            {{/createdAt}}
+        </ul>
+    </div>
+
+    <div class="board">
+        <h3>공감이 많은 게시글</h3>
+        <ul>
+            {{#Heart}}
+                <div class="board-item">
+                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
+                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
+                </div>
+            {{/Heart}}
+
+            {{^Heart}}
+                <p>게시글이 없습니다.</p>
+            {{/Heart}}
+        </ul>
+    </div>
+
+<!--    <div class="board">-->
+<!--        <h3>이거 뭐임</h3>-->
+<!--        <ul>-->
+<!--            <li> <span>10/10 20:17</span></li>-->
+<!--            <li>ㄱㄱㄹㄷㄱㄷㄺㄷㄺㄹㄷㄱㄹ <span>10/10 20:17</span></li>-->
+<!--            <li>ㅈㅂㅈㅇㅂㅁㅈㅇㅂㅈㅇㅂ <span>10/06 10:50</span></li>-->
+<!--            <li>ㄹㄷㄱㅈㄴㄹㄷㄱㅈㄹㄷㄱㅈㄴㄹㄷㅈㄱㄴ <span>10/06 10:50</span></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+<!--    <div class="board">-->
+<!--        <h3>살려줘요</h3>-->
+<!--        <ul>-->
+<!--            <li>ㄷㅇㅈㄷㅈㅇㄹ <span>8분 전</span></li>-->
+<!--            <li>ㄷㅈㅇㄹㄴㅁㅈㄷㄹㅇㅁ <span>10/17 17:39</span></li>-->
+<!--            <li>ㄺㄷㄺㅊㄷㅇㄴㄹ <span>10/17 17:39</span></li>-->
+<!--            <li>ㄷㅈㄹㅇㄷㄹㅈㅇㄴㅁㄷㅇㄹㅊㅈㄴ<span>10/17 17:39</span></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+</div>
+</body>
+</html>
