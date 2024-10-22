@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>회원관리</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/css/admin/fontawesome-free/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/admin/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for table -->
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+
+    <!-- Custom styles for comments -->
+    <style>
+        .comment-box {
+            background-color: #ffecec;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .comment-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .comment-content {
+            margin-bottom: 10px;
+        }
+
+        .comment-delete-btn {
+            background-color: #f5c6cb;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .comment-delete-btn:hover {
+            background-color: #e57373;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+{{>layout/admin/adminSidebar}}
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">게시글 관리</h1><br><br>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-secondary">게시글 정보</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <th>작성자</th>
+                                <td>{{board.nickname}}</td>
+                                <th>등록일시</th>
+                                <td>{{board.createdAtFormat}}</td>
+                                <th>조회수</th>
+                                <td>{{board.viewCount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="mt-4">
+                            <div class="form-group">
+                                <label for="title">제목</label>
+                                <input type="text" id="title" class="form-control" value="{{board.title}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="contentLocation">내용</label>
+                                <textarea id="contentLocation" class="form-control" rows="10" readonly>{{board.contentLocation}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 댓글 관리 -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-secondary">댓글 관리</h6>
+                    </div>
+                    <div class="comment-body">
+                        {{#commentList}}
+                        <div class="comment-box">
+                            <div class="comment-header">
+                                {{nickname}} ({{createdAtFormat}})
+                                <button class="comment-delete-btn" onclick="deleteComment({{id}})">삭제</button>
+                            </div>
+                            <div class="comment-content">
+                                {{content}}
+                            </div>
+                        </div>
+                        {{/commentList}}
+                        {{^commentList}}
+                            <p>댓글이 없습니다.</p>
+                        {{/commentList}}
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-secondary" onclick="deletePost({{board.id}})">삭제하기</button>
+                <a href="/board-list" class="btn btn-secondary">리스트</a>
+            </div>
+
+        </div>
+        <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/vendor/js/sb-admin-2.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#commentTable').DataTable();
+    });
+
+    function deletePost(postId) {
+        if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+            $.ajax({
+                url: '/deleteBoard/' + postId,
+                type: 'POST',
+                success: function (result) {
+                    alert('게시글이 삭제되었습니다.');
+                    window.location.href = '/board-list';  // 삭제 성공 후 게시글 목록으로 이동
+                },
+                error: function (err) {
+                    alert('삭제에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+        }
+    }
+
+    function deleteComment(commentId) {
+    if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+        fetch('/deleteComment/' + commentId, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('댓글이 삭제되었습니다.');
+                 $(".comment-body").empty();
+            }
+        });
+    }
+}
+</script>
+</body>
+
+</html>
