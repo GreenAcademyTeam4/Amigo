@@ -18,5 +18,16 @@
         SELECT * FROM user_tb WHERE id = #{id}
     </select>
 
+    <!-- 유저 게시글수 받아오기 -->
+    <select id="findBoardCount" resultType="com.example.amigo_project.dto.AdminDTO">
+    SELECT u.*, COUNT(b.id) AS board_count
+    FROM user_tb u LEFT JOIN
+    board_tb b ON u.id = b.user_id WHERE
+    u.id = #{id}
+    </select>
 
+    <select id="findCommentCount" resultType="com.example.amigo_project.dto.CommentDTO">
+        SELECT  COUNT(*) AS comment_count  FROM
+        comment_tb  WHERE  user_id = #{id}
+    </select>
 </mapper>

@@ -1,22 +1,19 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.BoardDTO;
-
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.model.Comment;
 import com.example.amigo_project.service.BoardService;
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -258,16 +255,20 @@ public class BoardController {
      */
     @DeleteMapping("/reply/delete/{commentId}")
     @ResponseBody
-    public ResponseEntity<?> deleteComment(@PathVariable("commentId") int commentId) {
+    public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable("commentId") int commentId) {
+        Map<String, Object> response = new HashMap<>();
         try {
             // 댓글 삭제 처리
             boardService.deleteCommentById(commentId);
-            return ResponseEntity.ok().body("{\"success\": true}");
+            response.put("success", true);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"success\": false}");
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
 
     /**
