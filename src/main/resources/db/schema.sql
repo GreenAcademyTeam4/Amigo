@@ -46,8 +46,10 @@ create table board_tb (
 
 -- 친구 테이블
 create table friend_tb (
-  user_id int primary key,
+  user_id int,
   friend_id int,
+  primary key(user_id, friend_id)
+  foreign key (user_id) references user_tb(id)
   foreign key (friend_id) references user_tb(id)
 );
 
@@ -176,11 +178,7 @@ create table notice_view_tb (
   foreign key (notice_id) references notice_tb(id)
 );
 
--- 아바타 타입 테이블
-create table avatar_type_tb (
-  id int primary key auto_increment,
-  name varchar(10)
-);
+
 
 -- 아바타 테이블
 create table avatar_tb (
@@ -192,9 +190,11 @@ create table avatar_tb (
 
 -- 유저 아이템 인벤토리 테이블
 create table inventory_tb (
-  user_id int primary key,
+  user_id int,
   avatar_id int,
   foreign key (avatar_id) references avatar_tb(id)
+  foreign key (user_id) references user_tb(id)
+  primary key(user_id, avatar_id)
 );
 
 -- 현재 아바타 정보 테이블
@@ -204,6 +204,7 @@ create table now_avatar_tb (
   top int,
   bottom int,
   shoes int,
+  foreign key (user_id) references user_tb(id),
   foreign key (head) references avatar_tb(id),
   foreign key (top) references avatar_tb(id),
   foreign key (bottom) references avatar_tb(id),
