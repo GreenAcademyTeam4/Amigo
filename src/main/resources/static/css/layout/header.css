@@ -1,0 +1,80 @@
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    z-index: 1000; 
+    margin: 0 auto;
+}
+.logo img{
+    height: auto;
+    width: 180px;
+}
+#login-btn{
+    background-color: #ce9178;
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+#login-btn a{
+    color: #f0dcd5;
+    text-decoration: none; 
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bolder;
+    padding: 15px;
+    
+}
+.nav-area{
+    padding: 15px;
+}
+.nav-area a{
+    padding-left: 15px;
+    color: #ce9178;
+    text-decoration: none; 
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bolder;
+}
+a:hover {
+    color: #ce9178; 
+    text-decoration: underline; 
+}
+
+
+.slide-in {
+    animation: slideIn 0.5s ease-in-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.5s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}

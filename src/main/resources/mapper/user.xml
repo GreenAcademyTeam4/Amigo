@@ -15,5 +15,18 @@
             #{userId}, #{name}, #{password}, #{phoneNumber}, #{gender}, #{birth}
         )
     </insert>
+    
+    <select id="loginByUserIdAndPassword"  parameterType="com.example.amigo_project.dto.UserDTO">
+        SELECT *
+        FROM user_tb
+        WHERE user_id = #{userId} 
+        AND password = #{password}
+    </select>
+
+    <select id="findPasswordByUserId" resultType="String">
+        select password
+        from user_tb
+        where id = #{userId}
+    </select>
 
 </mapper>
