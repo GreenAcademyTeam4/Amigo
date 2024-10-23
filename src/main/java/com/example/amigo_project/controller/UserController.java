@@ -142,7 +142,6 @@ public class UserController {
                     }
                 }
             }
-
             return schoolList;  // 학교 이름 리스트 반환
         });
     }
