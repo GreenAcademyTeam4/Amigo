@@ -29,18 +29,15 @@ public class AdminController {
 
 
 
-
     // 메인 화면
     @GetMapping("/admin")
     public String home() {
-
         return "views/admins/admin"; // index.mustache 파일을 반환 (임시)
     }
 
     // 회원 관리 - 유저 관리 페이지
     @GetMapping("/user")
     public String userPage(Model model){
-
         List<User> userList = adminService.getUserList();
 
         model.addAttribute("userList", userList);
