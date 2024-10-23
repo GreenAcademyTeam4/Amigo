@@ -23,9 +23,9 @@ public class User {
     private String gender;
     private Integer birth;
     private Integer point;
+    private Integer userRole;
     private Integer onlineStatus;
     private Integer activeStatus;
     private Timestamp createdAt;
-
 
 }

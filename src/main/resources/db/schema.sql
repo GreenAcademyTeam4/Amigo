@@ -10,6 +10,7 @@ create table user_tb (
   gender varchar(10) not null,
   birth int not null,
   point int default 0,
+  user_role int default 0,
   online_status int default 0,
   active_status int default 0, -- 휴면,정지,활동
   created_at timestamp default CURRENT_TIMESTAMP
