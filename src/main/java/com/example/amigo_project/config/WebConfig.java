@@ -1,26 +1,20 @@
-package com.example.amigo_project.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.amigo_project.handler.ChatHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+@RequiredArgsConstructor
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+@EnableWebSocket
+public class WebConfig implements WebSocketConfigurer {
 
-    @Autowired
-    private LoginInterceptor loginInterceptor;
-
-    @Autowired
-    private AdminInterceptor adminInterceptor;
+    private final ChatHandler chatHandler;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/public/**","/join","/test","/");
-
-        registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/admin/**");
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(chatHandler, "/chat").setAllowedOrigins("*");
     }
 }

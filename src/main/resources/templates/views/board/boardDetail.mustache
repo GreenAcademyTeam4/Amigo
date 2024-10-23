@@ -32,6 +32,9 @@
 
     <p><strong>조회수:</strong> {{board.viewCount}}</p>
     <p><strong>좋아요:</strong> {{board.likes}}</p>
+
+</div>
+
     <p><strong>작성일자:</strong> {{board.createdAtFormat}}</p>
     <a href="/board/list" class="btn btn-primary mt-3">목록으로 돌아가기</a>
 
@@ -81,7 +84,7 @@
 </div>
 
 <script>
-    <!-- 수정 버튼 클릭시 함수 시작 (댓글Id, ) -->
+    <!-- 댓글 "수정" 버튼 클릭 시 작동하는 css -->
     function showEditForm(commentId) {
         const editForm = document.getElementById(`edit-form-${commentId}`);
         const contentElement = document.getElementById(`content-${commentId}`);
@@ -94,6 +97,7 @@
         }
     }
 
+    <!-- 댓글 "수정완료" 기능 클릭 시 작동하는 비동기 처리 -->
     function updateComment(commentId) {
         const updatedContent = document.getElementById(`edit-content-${commentId}`).value;
 
@@ -117,7 +121,7 @@
         });
     }
 
-
+    <!-- 댓글 삭제 아이콘 클릭 시 비동기 처리    -->
     function deleteComment(commentId) {
         fetch(`/board/reply/delete/${commentId}`, {
             method: 'DELETE',
@@ -140,7 +144,6 @@
     }
 
 </script>
-
 
 </body>
 </html>

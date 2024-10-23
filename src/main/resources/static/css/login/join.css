@@ -7,12 +7,21 @@
 input{
     cursor: pointer;
 }
+img{
+    margin-left: 22px;
+    height: auto;
+    width: 70px;
+    opacity: 0.9;
+    margin-bottom: 90px;
+}
 
 body {
+    background-color:#f0dcd5 ;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
 }
 
@@ -22,8 +31,9 @@ body {
     align-items: center;
     width: 100%;
     max-width: 500px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 40px;
+    border-radius: 10px;
 
 }
 
