@@ -16,10 +16,10 @@
         )
     </insert>
     
-    <select id="loginByUserIdAndPassword"  parameterType="com.example.amigo_project.dto.UserDTO">
+    <select id="loginByUserIdAndPassword" resultType="com.example.amigo_project.repository.model.User">
         SELECT *
         FROM user_tb
-        WHERE user_id = #{userId} 
+        WHERE user_id = #{userId}
         AND password = #{password}
     </select>
 
