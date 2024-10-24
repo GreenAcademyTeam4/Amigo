@@ -3,7 +3,7 @@ create table user_tb (
   id int primary key auto_increment,
   user_id varchar(20) not null,
   name varchar(20) not null,
-  password varchar(20) not null,
+  password varchar(100) not null,
   nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20) not null,
@@ -14,8 +14,6 @@ create table user_tb (
   birth int not null,
   point int default 0,
   user_role int default 0,
-  online_status int default 0,
-  active_status int default 0, -- 휴면,정지,활동
   online_status boolean default false,
   active_status varchar(7) default '활동중',
   created_at timestamp default CURRENT_TIMESTAMP
@@ -48,9 +46,9 @@ create table board_tb (
 create table friend_tb (
   user_id int,
   friend_id int,
-  primary key(user_id, friend_id)
-  foreign key (user_id) references user_tb(id)
-  foreign key (friend_id) references user_tb(id)
+  primary key(user_id, friend_id),
+  foreign key (user_id) references user_tb(id) ON DELETE CASCADE,
+  foreign key (friend_id) references user_tb(id) ON DELETE CASCADE
 );
 
 -- 친구 요청 테이블
@@ -87,7 +85,7 @@ create table message_tb (
   receiver_user int,
   sender_user int,
   title varchar(15) not null,
-  content varchar(15) not null,
+  content varchar(255) not null,
   status int default 0,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (sender_user) references user_tb(id),
@@ -129,15 +127,17 @@ create table ad_tb (
 
 -- 광고 조회수 테이블
 create table ad_view_tb (
-  user_id int primary key auto_increment,
+  user_id int,
   ad_id int,
+  primary key(user_id, ad_id),
   foreign key (ad_id) references ad_tb(id)
 );
 
 -- 게시글 조회수 테이블
 create table board_view_tb (
-  user_id int primary key auto_increment,
+  user_id int,
   board_id int,
+  primary key(user_id, board_id),
   foreign key (board_id) references board_tb(id)
 );
 
@@ -183,17 +183,17 @@ create table notice_view_tb (
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
-  name varchar(255),
-  type int,
-  foreign key (type) references avatar_type_tb(id)
+  name varchar(255)
+--  type int,
+--  foreign key (type) references avatar_type_tb(id)
 );
 
 -- 유저 아이템 인벤토리 테이블
 create table inventory_tb (
   user_id int,
   avatar_id int,
-  foreign key (avatar_id) references avatar_tb(id)
-  foreign key (user_id) references user_tb(id)
+  foreign key (avatar_id) references avatar_tb(id),
+  foreign key (user_id) references user_tb(id),
   primary key(user_id, avatar_id)
 );
 
