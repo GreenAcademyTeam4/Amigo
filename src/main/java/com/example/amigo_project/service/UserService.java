@@ -54,7 +54,7 @@ public class UserService {
 
     public User findUserByIdAndPassword(UserDTO.loginDTO dto){
 
-        return userRepository.loginByUserIdandPassword(dto);
+        return userRepository.loginByUserIdAndPassword(dto);
     }
 
     /**
