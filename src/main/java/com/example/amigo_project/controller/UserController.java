@@ -30,10 +30,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-
-
-
     /**
      * 로그인 
      * TODO 로그인 구현 다시 확인 
@@ -42,13 +38,14 @@ public class UserController {
      */
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto){
-        
+
+        System.out.println(dto);
         User principal = userService.findUserByIdAndPassword(dto);
+        System.out.println(principal);
         if(principal != null){
             session.setAttribute("principal", principal);
             return "views/login/schoolSelect";
         } else{
-
             return "redirect:/";
         }
        
