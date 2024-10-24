@@ -18,7 +18,7 @@ create table user_tb (
   active_status varchar(7) default '활동중',
   created_at timestamp default CURRENT_TIMESTAMP
   -- 임시 데이터
---  role varchar(20) default 'USER' comment 'user, admin'
+  --role varchar(20) default 'USER' comment 'user, admin'
 );
 
 -- 학교 테이블
