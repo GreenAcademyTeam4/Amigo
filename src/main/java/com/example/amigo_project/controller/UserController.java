@@ -3,6 +3,7 @@ package com.example.amigo_project.controller;
 import com.example.amigo_project.dto.SchoolDTO;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.service.MypageService;
 import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class UserController {
 
 
 
+
+
     /**
      * 로그인 
      * TODO 로그인 구현 다시 확인 
@@ -45,6 +48,7 @@ public class UserController {
             session.setAttribute("principal", principal);
             return "views/login/schoolSelect";
         } else{
+
             return "redirect:/";
         }
        
@@ -138,7 +142,6 @@ public class UserController {
                     }
                 }
             }
-
             return schoolList;  // 학교 이름 리스트 반환
         });
     }
