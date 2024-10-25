@@ -3,42 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 목록</title>
+    <title>검색 결과</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .image-cell img {
-            max-width: 150px;
-            max-height: 150px;
-        }
-    </style>
 </head>
 <body>
+<div class="container mt-5">
+    <h1>학교 번호: {{schoolId}} 게시글 검색 결과</h1>
 
-<!-- 글쓰기 버튼과 검색창 -->
-<div class="mb-4">
-    <form action="/board/search" method="get" class="form-inline float-right">
-        <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="검색어 입력" aria-label="Search">
+    <form action="/board/search" method="GET" class="form-inline mb-4">
+        <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="검색어 입력" value="{{keyword}}" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
     </form>
-</div>
-
-<div class="container mt-5">
-    <h1>학교 번호: {{schoolId}} 게시글 목록</h1>
-
-    <td>
-        <a href="/board/form">글쓰기</a>
-    </td>
-
-    <td>
-        <a href="/board/multiBoard">게시판 여러개 띄우기</a>
-    </td>
-
 
     <table class="table table-bordered mt-4">
         <thead class="thead-dark">
         <tr>
             <th>제목</th>
-<!--            <th>내용</th>-->
             <th>작성자</th>
             <th>조회수</th>
             <th>좋아요</th>
@@ -47,21 +27,17 @@
         </thead>
         <tbody>
         {{#boardList}}
-        <div>
             <tr>
-
                 <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
-<!--                <td>{{contentLocation}}</td>-->
                 <td>{{nickname}}</td>
                 <td>{{viewCount}}</td>
                 <td>{{likes}}</td>
                 <td>{{createdAtFormat}}</td>
             </tr>
-        </div>
         {{/boardList}}
         {{^boardList}}
             <tr>
-                <td colspan="6" class="text-center">게시글이 없습니다.</td>
+                <td colspan="5" class="text-center">검색된 게시글이 없습니다.</td>
             </tr>
         {{/boardList}}
         </tbody>
@@ -81,8 +57,7 @@
         // totalPages는 서버에서 Mustache로 전달된 변수
         const totalPages = {{totalPages}};
         const paginationContainer = document.getElementById('pagination');
-        const urlParams = new URLSearchParams(window.location.search);
-        const currentPage = parseInt(urlParams.get('offset') / 4) + 1 || 1; // 현재 페이지 계산
+        const currentPage = {{currentPage}} + 1; // 현재 페이지는 서버에서 전달받은 값 사용
 
         for (let i = 1; i <= totalPages; i++) {
             let li = document.createElement('li');
@@ -95,25 +70,8 @@
 
             let a = document.createElement('a');
             a.className = 'page-link';
-            a.href = `?offset=${(i - 1) * 4}&size=4`;  // offset을 계산하여 링크를 만듭니다.
+            a.href = `?page=${i - 1}&size=4&keyword=${encodeURIComponent('{{keyword}}')}`;
             a.textContent = i;
-
-            // 페이지 버튼 클릭 이벤트
-            a.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                // 모든 페이지 아이템에서 active 클래스 제거
-                const allPageItems = document.querySelectorAll('.page-item');
-                allPageItems.forEach(function (item) {
-                    item.classList.remove('active');
-                });
-
-                // 현재 클릭한 아이템에 active 클래스 추가
-                li.classList.add('active');
-
-                // 페이지를 이동
-                window.location.href = a.href;
-            });
 
             li.appendChild(a);
             paginationContainer.appendChild(li);
@@ -121,9 +79,5 @@
     });
 </script>
 
-
-
-
-</div>
 </body>
 </html>

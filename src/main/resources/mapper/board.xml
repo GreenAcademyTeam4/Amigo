@@ -21,6 +21,26 @@
         ORDER BY b.created_at DESC
     </select>
 
+    <!-- 특정 학교의 게시글 조회 (페이징 처리 할려고)-->
+    <select id="findBoardsBySchoolId2" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname as nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb as b
+        join user_tb as u
+        on b.user_id = u.id
+        WHERE school_id = #{schoolId}
+        ORDER BY b.created_at DESC
+        LIMIT #{size}
+        OFFSET #{offset}
+    </select>
+
+    <!-- 특정 학교의 게시글 갯수 조회 (페이징 처리 할려고)-->
+    <select id="countBoardsBySchoolId" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb
+        WHERE school_id = #{schoolId}
+    </select>
+
     <!-- 게시글에 대한 상세내용을 가져오면서 user_tb에 있는 nickname도 같이 들고오는 쿼리  -->
     <select id="BoardById" parameterType="int" resultType="com.example.amigo_project.dto.BoardDTO">
         SELECT
@@ -158,4 +178,21 @@
         SELECT COUNT(*) FROM comment_tb WHERE user_id = #{id}
     </select>
 
+    <!-- 검색어로 게시글 찾기 (페이징) -->
+    <select id="searchBoardsByKeyword" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb b
+        JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId} AND b.title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY b.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 검색된 게시글 총 개수 -->
+    <select id="countSearchBoardsByKeyword" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb b
+        WHERE b.school_id = #{schoolId} AND b.title LIKE CONCAT('%', #{keyword}, '%')
+    </select>
 </mapper>
