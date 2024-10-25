@@ -76,7 +76,6 @@ public class UserService {
         } else {
             return null; 
         }
-        return userRepository.loginByUserIdAndPassword(dto);
     }
 
     /**
