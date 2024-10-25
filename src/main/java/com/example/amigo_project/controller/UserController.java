@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
+    private final HttpSession session;
     private final UserService userService;
 
 
@@ -35,7 +37,8 @@ public class UserController {
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto){
         
-        User principal = userService.findUserByIdAndPassword(dto);
+        User principal = userService.findUserById(dto);
+       
         if(principal != null){
             session.setAttribute("principal", principal);
             return "views/login/schoolSelect";
@@ -44,7 +47,15 @@ public class UserController {
         }
        
     }
-
+    /**
+     *   로그아웃
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(){
+    session.invalidate();
+    return "redirect:/";
+    }
     
     
 
@@ -83,6 +94,7 @@ public class UserController {
         } else {
             return "views/login/login";  
         }
+
 
     }
 
