@@ -20,15 +20,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
-    private final WebClient webClient;
-
+    private final HttpSession session;
     private final UserService userService;
+    private final WebClient webClient;
 
     /**
      * 로그인 
@@ -38,6 +39,9 @@ public class UserController {
      */
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto){
+
+        User principal = userService.findUserById(dto);
+   
 
         System.out.println(dto);
         User principal = userService.findUserByIdAndPassword(dto);
@@ -50,7 +54,15 @@ public class UserController {
         }
        
     }
-
+    /**
+     *   로그아웃
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(){
+    session.invalidate();
+    return "redirect:/";
+    }
     
     
 
@@ -94,6 +106,7 @@ public class UserController {
         } else {
             return "views/login/login";  
         }
+
 
     }
   
