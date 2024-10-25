@@ -1,20 +1,23 @@
 package com.example.amigo_project.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
 import com.example.amigo_project.repository.model.User;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
+    // 비밀번호 엄호
+	private final PasswordEncoder passwordEncoder;
     /**
      * 중복확인
      * Map 활용하여 필요한 재사용 가능한 메서드
@@ -36,6 +39,7 @@ public class UserService {
         if(dto.getUserId().matches(".*[^a-zA-Z0-9-_].*")){
             result.put("repetition", "iderror");
         }
+
         return result;
     }
 
@@ -47,13 +51,27 @@ public class UserService {
      */
     public int joinUser(UserDTO.joinDTO dto){
       int result = 0;
+      String hashPwd = passwordEncoder.encode(dto.getPassword());
+        dto.setPassword(hashPwd);
     result =  userRepository.create(dto);
      return result;
     } 
 
-    public User findUserByIdAndPassword(UserDTO.loginDTO dto){
+    /**
+     * 로그인 로직
+     * @param dto
+     * @return
+     */
+    public User findUserById(UserDTO.loginDTO dto){
+     
+        User user = userRepository.findByUserId(dto.getUserId());
 
-        return userRepository.loginByUserIdandPassword(dto);
+        
+        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return user; 
+        } else {
+            return null; 
+        }
     }
 
 

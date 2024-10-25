@@ -41,3 +41,11 @@ payments:
     test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
     test_secret_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
 
+kakao:
+  api_key: d675147f2e675ca15a3e02405e9da076
+  redirect_uri: http://localhost:8080/kakao/callback
+
+naver:
+  client_id: lZxhgx1vwL0HzDkJcGB5
+  redirect_uri : http://localhost:8080/naver/callback
+  client_secret: Q5ZnyJVQFI
