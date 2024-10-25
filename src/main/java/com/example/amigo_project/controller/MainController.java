@@ -10,6 +10,7 @@ import com.example.amigo_project.service.KakaoApiService;
 import com.example.amigo_project.service.NaverApiService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
