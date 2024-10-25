@@ -1,40 +1,40 @@
 let localStream;
-let remoteStream;
-// 시그널링을 위한 웹소켓 서버 연결
-const socket = new WebSocket("ws://localhost:8080/chat");
-// ice 후보를 받아올 STUN서버 연결
+let remoteStream = new MediaStream();  // 초기화
+const socket = new WebSocket("ws://localhost:8080/signaling");
+
 const servers = {
-    iceServers:[
-        {
-            urls:['stun:112.218.52.156:3478']
-        }
+    iceServers: [
+        { urls: ['stun:192.168.0.129:3478'] }  // STUN 서버 설정
     ]
-}
-peerConnection = new RTCPeerConnection(servers);
+};
+
+const peerConnection = new RTCPeerConnection(servers);
+
+// 로컬 미디어 스트림을 가져와서 화면에 표시하고, peerConnection에 추가
 let init = async () => {
-    localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:true});
+    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
     $(".user-video").srcObject = localStream;
-}
 
+    localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+    });
+};
+
+// Offer 생성 및 전송
 let createOffer = async () => {
-    // 대화할 상대들에게 sdp와 ice후보를 전달해줄
-
-
-    remoteStream = new MediaStream();
-
     let offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
 
-    console.log("offer : " + offer)
+    console.log("Offer:", offer);
     socket.send(JSON.stringify({
         type: 'offer',
         sdp: peerConnection.localDescription
     }));
-}
-// ICE 후보가 생성될 때마다 호출
+};
+
+// ICE 후보가 생성될 때마다 WebSocket을 통해 서버로 전송
 peerConnection.onicecandidate = (event) => {
     if (event.candidate) {
-        // ICE 후보를 서버로 전송
         socket.send(JSON.stringify({
             type: 'candidate',
             candidate: event.candidate
@@ -42,32 +42,37 @@ peerConnection.onicecandidate = (event) => {
     }
 };
 
+// 상대방으로부터 수신한 미디어 스트림을 처리
+peerConnection.ontrack = (event) => {
+    remoteStream.addTrack(event.track);
+    $(".remote-video").srcObject = remoteStream;
+};
+
+// WebSocket을 통한 시그널링 메시지 처리
 socket.onmessage = async (message) => {
     let data = JSON.parse(message.data);
-
+    console.log(data);
     if (data.type == 'answer') {
-        // 상대방의 SDP Answer 수신 후 설정
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
-        peerConnection.ontrack = (event) => {
-            remoteStream.addTrack(event.track);
-            $(".remote-video").srcObject = remoteStream;
-        }
     } else if (data.type == 'candidate') {
-        // 상대방의 ICE 후보를 추가
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
     } else if (data.type == 'offer') {
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
 
-        // Answer 생성
         let answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
 
-        // Answer를 WebSocket을 통해 상대방에게 전송
         socket.send(JSON.stringify({
             type: 'answer',
             sdp: peerConnection.localDescription
         }));
     }
-}
+};
 
-init ();
+// WebSocket 연결이 완료된 후 Offer 생성
+socket.onopen = () => {
+    createOffer();
+};
+
+// 초기화
+init();
