@@ -44,6 +44,23 @@ public class BoardService {
     }
 
     /**
+     * 학교 번호를 기준으로 게시글 리스트를 불러온다. (페이징 처리)
+     * @param schoolId
+     * @return
+     */
+    public List<BoardDTO> getBoardsBySchoolId2(int schoolId, Integer page, Integer size) {
+        return boardRepository.findBoardsBySchoolId2(schoolId, page, size);
+    }
+
+    /**
+     * 학교 번호를 기준으로 게시글의 총 갯수를 불러온다. (페이징 처리)
+     */
+    public int getBoardBySchoolCount(int schoolId) {
+        int totalCount = boardRepository.countBoardsBySchoolId(schoolId);
+        return totalCount;
+    }
+
+    /**
      * 게시글을 가져오기 위해 게시글의 id를 기준으로 찾는다.
      * @param boardId
      * @return
@@ -173,4 +190,28 @@ public class BoardService {
     public int boardViewCount(int boardId, int userId) {
         return boardRepository.boardViewCount(boardId, userId);
     }
+
+    /**
+     * 게시판에서 검색 시 작동하는 기능
+     * // 검색어로 게시글 찾기 (페이징)
+     * @param schoolId
+     * @param keyword
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> searchBoardsByKeyword(int schoolId, String keyword, int offset, int size) {
+        return boardRepository.searchBoardsByKeyword(schoolId, keyword, offset, size);
+    }
+
+    /**
+     * 게시판에서 검색 시 작동하는 기능
+     * 검색된 게시글 총 개수
+     * @param schoolId
+     * @param keyword
+     * @return
+     */
+    public int countSearchBoardsByKeyword(int schoolId, String keyword) {
+        return boardRepository.countSearchBoardsByKeyword(schoolId, keyword);
+    }
+
 }
