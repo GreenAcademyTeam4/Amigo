@@ -8,6 +8,9 @@ server:
     whitelabel:
       enabled: true
 spring:
+  web:
+    resources:
+      static-locations: classpath:/static/
   mustache:
     servlet:
       expose-session-attributes: true  # Mustache ????? ?? ??? ??? ? ??? ??
