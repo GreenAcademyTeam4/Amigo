@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amigo_project.repository.interfaces.AdRepository">
+
+    <!-- 광고 생성 -->
+    <insert id="insertAd" >
+        INSERT INTO ad_tb (title, Image_location)
+        VALUES (#{title}, #{ImageLocation})
+    </insert>
+
+    <!-- 광고 조회 -->
+    <select id="getAdById"  >
+        SELECT * FROM ad_tb WHERE id = #{id}
+    </select>
+
+    <!-- 전체 광고 목록 조회 -->
+    <select id="getAllAds" >
+        SELECT * FROM ad_tb
+    </select>
+
+    <!-- 광고 수정 -->
+    <update id="updateAd">
+        UPDATE ad_tb
+        SET title = #{title},
+        Image_location = #{ImageLocation},
+        WHERE id = #{id}
+    </update>
+
+    <!-- 광고 삭제 -->
+    <delete id="deleteAd" parameterType="int">
+        DELETE FROM ad_tb
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 광고 상세보기 클릭 시 조회수 증가 -->
+    <update id="viewCount">
+        UPDATE ad_tb
+        SET view_tb = view_tb + 1
+        WHERE id = #{adId}
+    </update>
+</mapper>

@@ -3,6 +3,7 @@ package com.example.amigo_project.repository.model;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * onlineStatus 접속상태 default 0
@@ -23,13 +24,17 @@ public class User {
     private String gender;
     private Integer birth;
     private Integer point;
-    private Integer onlineStatus;
-    private Integer activeStatus;
-    private String userRole;
+    private Integer userRole;
+    private boolean onlineStatus;
+    private String activeStatus;
     private String elementarySchool; // 초등학교
-    private String midleSchool;
+    private String middleSchool;
     private String highSchool; 
     private Timestamp createdAt;
+    private String createdAtFormat;
 
-
+    public void getFormattedCreatedAt() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.createdAtFormat = formatter.format(createdAt);
+    }
 }

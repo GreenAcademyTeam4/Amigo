@@ -1,12 +1,13 @@
 package com.example.amigo_project.service;
 
+import com.example.amigo_project.dto.AdminDTO;
+import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.interfaces.AdminRepository;
+import com.example.amigo_project.repository.interfaces.NoticeRepository;
 import com.example.amigo_project.repository.model.User;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,7 +15,9 @@ import java.util.List;
 public class AdminService {
 
 
+
     private final AdminRepository adminRepository;
+    private final NoticeRepository noticeRepository;
 
     
     public List<User> getUserList(){
@@ -26,7 +29,22 @@ public class AdminService {
         
         return userList;
     }
-    
-    
+
+    public User findById(int id){
+        User user = adminRepository.findById(id);
+
+        return user;
+    }
+
+   public AdminDTO findBoardCount(int id) {
+        AdminDTO adminDTO = adminRepository.findBoardCount(id);
+        return adminDTO;
+   }
+
+   public CommentDTO findCommentCount(int id){
+        CommentDTO commentDTO = adminRepository.findCommentCount(id);
+        return commentDTO;
+   }
+
 
 }
