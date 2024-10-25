@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="/css/schoolFind.css">
+<div class="container">
+    <h1>학교 정보 받아오기</h1>
+
+    <select class="region-select">
+        {{#schoolList}}
+            <option value="{{regionCode}}">{{regionName}}</option>
+        {{/schoolList}}
+    </select>
+
+    <input type="text" class="name" placeholder="학교 이름 입력">
+    <button onclick="send()">전송</button>
+    <br>
+
+    <div class="list"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    function send() {
+        const region = $(".region-select").val();
+        const name = $(".name").val();
+        const list = $(".list");
+        list.empty();
+        fetch("/user/schoolData?region=" + region + "&name=" + name)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    data.forEach(school => {
+                        list.append(`<p>${school}</p>`);
+                    });
+                });
+    }
+
+</script>
