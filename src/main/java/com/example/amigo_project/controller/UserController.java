@@ -44,7 +44,6 @@ public class UserController {
    
 
         System.out.println(dto);
-        User principal = userService.findUserByIdAndPassword(dto);
         System.out.println(principal);
         if(principal != null){
             session.setAttribute("principal", principal);

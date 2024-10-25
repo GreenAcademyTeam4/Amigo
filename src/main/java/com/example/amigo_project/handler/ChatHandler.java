@@ -8,8 +8,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.Map;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -24,7 +22,6 @@ public class ChatHandler extends TextWebSocketHandler {
         String msg = message.getPayload();
         String send = msg + " 서버에서 보냄";
         session.sendMessage(new TextMessage(send));
-        super.handleTextMessage(session, message);
     }
     
     // 입장 시 처리하는 메서드
