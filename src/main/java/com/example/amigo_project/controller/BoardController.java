@@ -99,13 +99,19 @@ public class BoardController {
         ) {
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+
         List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
 
 
         for(BoardDTO a : boardList) {
+            // 날짜 formatter
             a.getFormattedCreatedAt();
+
+            // 각 게시글에 대한 좋아요 개수를 최신으로 가져옵니다.
+            int likeCount = boardService.getLikeCount(a.getId());
+            a.setLikes(likeCount);
         }
 
         model.addAttribute("boardList", boardList);
@@ -124,24 +130,42 @@ public class BoardController {
      * @return
      */
     @GetMapping("/detail/{id}")
-    public String getBoardDetail(@PathVariable("id") int boardId, Model model) {
+    public String getBoardDetail(@PathVariable("id") int boardId, Model model,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "size", defaultValue = "5") int size) {
 
         int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
 
-        // 아직 게시글 상세 보기 다 못만듬 (조회수 이거 아직 안됨) !@#!@#@!#!@!@#!@#!@#!@#@!#@!#!@ (잠시 잠굼)
-//        int boardViewCount = boardService.boardViewCount(boardId, userId);
-//        System.out.println("boardViewCount : " + boardViewCount);
+        // 사용자가 해당 게시글을 조회한 적이 있는지 확인
+        if (!boardService.hasViewed(userId, boardId)) {
+            System.out.println("방문한적 없음 조회수 증가 쿼리 사용 !!!!");
+            // 조회수 증가 +1
+            boardService.incrementViewCount(boardId);
+            // 조회 기록 추가 (board_view_tb)
+            boardService.addViewRecord(userId, boardId);
+        }
+
+        // 좋아요 상태 확인
+        boolean hasLiked = boardService.existsLike(userId, boardId);
+        model.addAttribute("hasLiked", hasLiked);
+
+        // 좋아요 개수 가져오기
+        int likeCount = boardService.getLikeCount(boardId);
+        model.addAttribute("likeCount", likeCount);
 
 
-        // 조회수 증가 +1
-        boardService.incrementViewCount(boardId);
 
         // 게시글 id를 기준으로 정보 가져오기
         BoardDTO board = boardService.getBoardById(boardId);
         board.getFormattedCreatedAt();
 
+
         // 게시글 id를 기준으로 댓글 전부 가져오기
-        List<CommentDTO> comment = boardService.findCommentsByBoardId(boardId);
+        int offset = page * size;
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
+        int totalComments = boardService.getTotalCommentsByBoardId(boardId);
+        int totalPages = (int) Math.ceil((double) totalComments / size);
+
         // timestamp 전부 포맷시켜주기
         for(CommentDTO a : comment) {
             a.getFormattedCreatedAt();
@@ -149,6 +173,9 @@ public class BoardController {
         
         model.addAttribute("board", board);
         model.addAttribute("comment", comment);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
 
         System.out.println("sangsasebogi : " + board);
         System.out.println("comment : " + comment);
@@ -275,7 +302,6 @@ public class BoardController {
     }
 
 
-
     /**
      * 댓글 수정
      * @param commentId
@@ -354,10 +380,16 @@ public class BoardController {
      * 게시판에서 검색했을 시 작동하는 기능
      */
     @GetMapping("/search")
-    public String searchBoard(@RequestParam("keyword") String keyword,
+    public String searchBoard(@RequestParam("keyword") String keyword ,
+                              @RequestParam("searchType") String searchType,
                               @RequestParam(name = "page", defaultValue = "0") Integer page,
                               @RequestParam(name = "size", defaultValue = "4") Integer size,
                               Model model) {
+
+        int totalCount = 0;
+        List<BoardDTO> searchResults = new ArrayList<>();
+        int schoolId = 1; // 예시로 유저 세션에서 학교 번호를 가져오는 것처럼 설정
+
         try {
             if (page < 0) {
                 page = 0;  // page가 음수인 경우 0으로 설정
@@ -368,12 +400,28 @@ public class BoardController {
                 offset = 0;
             }
 
-            int schoolId = 1; // 예시로 유저 세션에서 학교 번호를 가져오는 것처럼 설정
-            List<BoardDTO> searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, offset, size);
-            int totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
-            int totalPages = (int) Math.ceil((double) totalCount / size);
+            // option 에서 선택된 것이 있다면
+            switch (searchType) {
+                case "nickname": // "닉네임" 검색
+                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, offset, size);
+                    totalCount = boardService.countSearchBoardsByNickname(schoolId, keyword);
+                    break;
 
-            for(BoardDTO a : searchResults) {
+                case "titleContent": // "제목 + 내용" 검색
+                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, offset, size);
+                    totalCount = boardService.countSearchBoardsByTitleContent(schoolId, keyword);
+                    break;
+
+                case "title": // "제목" 검색
+                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, offset, size);
+                    totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
+                    break;
+               
+            }
+
+            int totalPages = (int) Math.ceil((double) totalCount / size); // 검색 했을 시 나오는 게시글 리스트 개수
+
+            for(BoardDTO a : searchResults) { // 게시글 리스트의 생성일자를 Formatter로 변경한다.
                 a.getFormattedCreatedAt();
             }
 
@@ -382,6 +430,7 @@ public class BoardController {
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("currentPage", page);
             model.addAttribute("keyword", keyword.trim()); // 추가: 검색어를 모델에 추가
+            model.addAttribute("searchType", searchType);
 
             return "views/board/boardSearch";
 
@@ -391,6 +440,48 @@ public class BoardController {
             return "views/board/error";
         }
     }
+
+
+    /**
+     * 좋아요 추가 하기
+     * @param boardId
+     * @return
+     */
+    @PostMapping("/like/{boardId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> addLike(@PathVariable int boardId) {
+        int userId = 1; // 세션에서 가져올 예정
+        boardService.addLike(userId, boardId);
+
+        int likeCount = boardService.getLikeCount(boardId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("likeCount", likeCount);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 좋아요 삭제 하기
+     * @param boardId
+     * @return
+     */
+    @DeleteMapping("/like/{boardId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> removeLike(@PathVariable int boardId) {
+        int userId = 1; // 세션에서 가져올 예정
+        boardService.removeLike(userId, boardId);
+
+        int likeCount = boardService.getLikeCount(boardId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("likeCount", likeCount);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
 
 
 

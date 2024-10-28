@@ -35,8 +35,8 @@ create table board_tb (
   content_location varchar(255),
 --  Image_location blob,
   user_id int,
-  view_count int,
-  likes int,
+  view_count int default 0,
+  likes int default 0,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (school_id) references school_tb(id),
   foreign key (user_id) references user_tb(id)
