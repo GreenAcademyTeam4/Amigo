@@ -3,6 +3,7 @@ package com.example.amigo_project.service;
 
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.repository.interfaces.MypageRepository;
+import com.example.amigo_project.repository.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +109,10 @@ public class MypageService {
         mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
     }
 
-    
+    public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
+        Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
+        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
+    }
 
 
 

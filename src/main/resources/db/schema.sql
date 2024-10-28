@@ -185,6 +185,7 @@ create table avatar_tb (
   id int primary key auto_increment,
   name varchar(255),
   type int,
+  price int,
   foreign key (type) references avatar_type_tb(id)
 );
 

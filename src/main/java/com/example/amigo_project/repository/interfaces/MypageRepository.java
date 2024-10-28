@@ -47,4 +47,6 @@ public interface MypageRepository {
     // 친구요청 수락 part3 친구요청 테이블의 수락한 기존 요청 정보 삭제
     public void deleteFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId, @Param("receiverId") Integer receiverId);
 
+    // 추천 친구 조회
+    public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(@Param("elementarySchool") String elementarySchool, @Param("middleSchool") String middleSchool, @Param("highSchool")String highSchool , @Param("year")Integer year);
 }
