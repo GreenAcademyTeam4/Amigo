@@ -215,8 +215,11 @@ public class MypageController {
             return "alert";
         } else {
             List<MypageDTO.friendReqDTO> friendReqList = mypageService.findFriendReqByUserId(principal.getId());
-            // 받은 친구 요청이 없을 때 뷰 측에서 받은 친구 요청이 없습니다 출력
-            model.addAttribute("friendReqList", friendReqList);
+            List<MypageDTO.reccomendFriendDTO> recFriendList = mypageService.findRecommendFriendListByBirthAndSchool(principal);
+
+            // 받은 친구 요청이 없을 때 / 추천 친구가 없을 때 뷰 측에서 받은 친구 요청이 없습니다 출력
+            model.addAttribute("recFriendList", recFriendList); // 추천 친구(나이가 같고 학교가 같은 적이 있는 유저) 목록
+            model.addAttribute("friendReqList", friendReqList); // 받은 친구요청 목록
             model.addAttribute("user", principal);
             return ""; // TODO - 뷰 mustache 파일 명 넣기
         }
@@ -275,9 +278,10 @@ public class MypageController {
 
 
     /**
-     * 결제 내역 조회 (결제 측 기능 재활용)
+     * 포인트 충전 내역 조회 (결제 측 기능 재활용)
+     * TODO 포인트 결제 내역 조회
      * @param session - userId 추출
-     * @return 결제 내역 정보 + 페이징
+     * @return 포인트 충전 내역 정보 + 페이징
      */
     @PostMapping("/charge-history")
     public String findChargeHistory(HttpSession session, Model model){
@@ -295,7 +299,9 @@ public class MypageController {
             return ""; // TODO - view 주소 달기
         }
 
+
     }
+
 
 
 }
