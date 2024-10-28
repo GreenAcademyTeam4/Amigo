@@ -50,10 +50,6 @@ public interface BoardRepository {
     // 댓글을 수정
     public void updateComment(@Param("commentId") int commentId, @Param("content") String content);
 
-    // 게시글 상세보기 클릭 시 조회수 +1 증가
-    public void incrementViewCount(@Param("boardId") int boardId);
-
-
     boolean isLikedByUser(@Param("boardId") int boardId, @Param("userId") int userId);
 
     void addLike(@Param("boardId") int boardId, @Param("userId") int userId);
@@ -72,8 +68,6 @@ public interface BoardRepository {
     // 게시글 조회가 많은 게시글 올리기
     List<BoardDTO> findSearchCreatedAt(@Param("schoolId") int schoolId);
 
-    // 게시글id와 유저id를 board_view에 있는지 검사한다. (중복으로 조회수 오르는 거 방지)
-    int boardViewCount(@Param("userId")int userId, @Param("boardId") int boardId);
 
     // 검색어로 게시글 찾기 (페이징)
     List<BoardDTO> searchBoardsByKeyword(@Param("schoolId") int schoolId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("size") int size);
@@ -81,6 +75,46 @@ public interface BoardRepository {
     // 검색된 게시글 총 개수
     int countSearchBoardsByKeyword(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
 
+    //  게시판에서 닉네임으로 검색
+    List<BoardDTO> searchBoardsByNickname(int schoolId, String keyword, int offset, Integer size);
+
+    // 게시판에서 "닉네임"으로 검색된 게시글 총 개수
+    int countSearchBoardsByNickname(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
+
+    // "제목" + "내용"으로 검색
+    List<BoardDTO> searchBoardsByTitleContent(@Param("schoolId") int schoolId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("size") int size);
+    
+    // 게시판에서 "제목"으로 검색된 게시글 총 개수
+    int countSearchBoardsByTitleContent(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
+
+    // 게시글 상세보기 클릭 시 기존 댓글 불러오기 메서드 (페이징 처리)
+    List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int offset, int size);
+
+    // 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수
+    int countCommentsByBoardId(int boardId);
+
+    // 사용자가 해당 게시글을 조회했는지 확인하는 쿼리 (조회수)
+    int existsInBoardView(@Param("userId") int userId, @Param("boardId") int boardId);
+
+    // 조회 기록을 추가하는 쿼리 (조회수)
+    void insertBoardView(@Param("userId") int userId, @Param("boardId") int boardId);
+
+    // 게시글 상세보기 클릭 시 조회수가 +1 증가 (조회수)
+    void incrementViewCount(@Param("boardId") int boardId);
 
 
+    void insertLike(@Param("userId") int userId, @Param("boardId") int boardId);
+
+    void deleteLike(@Param("userId") int userId, @Param("boardId") int boardId);
+
+    boolean existsLike(@Param("userId") int userId, @Param("boardId") int boardId);
+
+    int countLikes(@Param("boardId") int boardId);
+
+
+    // 좋아요 삭제 기능
+    void decrementLikeCount(@Param("boardId") int boardId);
+
+    // 좋아요 추가 기능
+    void incrementLikeCount(@Param("boardId") int boardId);
 }
