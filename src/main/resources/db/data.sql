@@ -63,10 +63,125 @@ values (1, '비가온다주륵주륵주륵주륵주륵', '주르르르르르르�
 insert into board_tb (school_id, title, content_location, user_id)
 values (1, '오늘의 테스트', '얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍', 1);
 
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테1', '테스트1271527', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테2', '테스트1427127', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테3', '테스트1278127', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테4', '테스트1271278', 3);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테5', '테스트1271727', 3);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테1', '테스트1276127', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테12', '테스트1271527', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테13', '테스트1274127', 2);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테14', '테스트1273127', 3);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테15', '테스트1271272', 3);
+
 -- 댓글 테이블에 임시 데이터 삽입
 INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
 VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.', now());
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다111111111111111111.', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다22222222222222222222.', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다3333333333333.', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.444444444444444', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.555555555555', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.66666666666666', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.7777777777777777', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.88888888888888888', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.999999999999999999', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.10101010100101', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.11 11 11 11 11 11 11', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.12 12 12 12 12 12 12', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다. 13 13 13 13 13 13', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.14 14 14 14 14 14', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.15 15 15 15 15 15', now());
+
+-- 댓글 테이블에 임시 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.16 16 16 16 16', now());
 
 ---- 공지 임시 데이터
 INSERT INTO notice_tb (title, content, view_count)

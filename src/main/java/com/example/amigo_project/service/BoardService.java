@@ -48,6 +48,7 @@ public class BoardService {
      * @param schoolId
      * @return
      */
+    @Transactional
     public List<BoardDTO> getBoardsBySchoolId2(int schoolId, Integer page, Integer size) {
         return boardRepository.findBoardsBySchoolId2(schoolId, page, size);
     }
@@ -138,13 +139,7 @@ public class BoardService {
         boardRepository.updateComment(commentId, content);
     }
 
-    /**
-     * 게시글 상세보기 클릭 시 조회수 +1 한다.
-     * @param boardId
-     */
-    public void incrementViewCount(int boardId) {
-        boardRepository.incrementViewCount(boardId);
-    }
+
 
     /**
      * 게시글 하트가 제일 많은 게시글 3개 올리기
@@ -182,17 +177,9 @@ public class BoardService {
         return boardRepository.findSearchCreatedAt(schoolId);
     }
 
-    /**
-     * board_view 테이블에서 유저Id 와 게시판id를 검색한다.
-     * @param boardId
-     * @return
-     */
-    public int boardViewCount(int boardId, int userId) {
-        return boardRepository.boardViewCount(boardId, userId);
-    }
 
     /**
-     * 게시판에서 검색 시 작동하는 기능
+     * 게시판에서 '제목' 검색 시 작동하는 기능
      * // 검색어로 게시글 찾기 (페이징)
      * @param schoolId
      * @param keyword
@@ -204,7 +191,7 @@ public class BoardService {
     }
 
     /**
-     * 게시판에서 검색 시 작동하는 기능
+     * 게시판에서 '제목' 검색 시 작동하는 기능
      * 검색된 게시글 총 개수
      * @param schoolId
      * @param keyword
@@ -214,4 +201,141 @@ public class BoardService {
         return boardRepository.countSearchBoardsByKeyword(schoolId, keyword);
     }
 
+    /**
+     * 게시판에서 '닉네임'으로 검색 시 기능
+     * 닉네임으로 게시글 찾기 (페이징)
+     * @param schoolId
+     * @param keyword
+     * @param offset
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> searchBoardsByNickname(int schoolId, String keyword, int offset, Integer size) {
+        return boardRepository.searchBoardsByNickname(schoolId, keyword, offset, size);
+    }
+
+    /**
+     * 게시판에서 '닉네임'으로 검색된 게시글 총 개수
+     * @param schoolId
+     * @param keyword
+     * @return
+     */
+    public int countSearchBoardsByNickname(int schoolId, String keyword) {
+        return boardRepository.countSearchBoardsByNickname(schoolId, keyword);
+    }
+
+
+    /**
+     * 게시판에서 '제목 + 내용'으로 검색 시 기능
+     * @param schoolId
+     * @param keyword
+     * @param offset
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> searchBoardsByTitleContent(int schoolId, String keyword, int offset, int size) {
+        return boardRepository.searchBoardsByTitleContent(schoolId, keyword, offset, size);
+    }
+
+    /**
+     * 게시판에서 '제목 + 내용'으로 검색된 게시글 총 개수
+     * @param schoolId
+     * @param keyword
+     * @return
+     */
+    public int countSearchBoardsByTitleContent(int schoolId, String keyword) {
+        return boardRepository.countSearchBoardsByTitleContent(schoolId, keyword);
+    }
+
+    /**
+     *
+     * @param boardId
+     * @param offset
+     * @param size
+     * @return
+     */
+    public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int offset, int size) {
+        return boardRepository.findCommentsByBoardIdWithPaging(boardId, offset, size);
+    }
+
+    /**
+     * 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수 구하는 메서드 추가
+     * @param boardId
+     * @return
+     */
+    public int getTotalCommentsByBoardId(int boardId) {
+        return boardRepository.countCommentsByBoardId(boardId);
+    }
+
+
+    /**
+     * 조회수 +1을 하기 위해서 true/ false 로 board_view_tb에 값이 들어가 있는지 확인한다.
+     * @param userId
+     * @param boardId
+     * @return
+     */
+    public boolean hasViewed(int userId, int boardId) {
+        return boardRepository.existsInBoardView(userId, boardId) > 0;
+    }
+
+    /**
+     * 게시글 상세보기 첫 방문시 조회수 증가 +1
+     * @param boardId
+     */
+    public void incrementViewCount(int boardId) {
+        boardRepository.incrementViewCount(boardId);
+    }
+
+    /**
+     * 게시글 상세보기 첫 방문시 조회 기록 추가 (board_view_tb)
+     * @param userId
+     * @param boardId
+     */
+    public void addViewRecord(int userId, int boardId) {
+        boardRepository.insertBoardView(userId, boardId);
+    }
+
+
+
+    /**
+     * 좋아요 기능 (+ 증가)
+     * @param userId
+     * @param boardId
+     */
+    @Transactional(readOnly = true)
+    public void addLike(int userId, int boardId) {
+        if (!boardRepository.existsLike(userId, boardId)) {
+            boardRepository.insertLike(userId, boardId);
+            boardRepository.incrementLikeCount(boardId); // 좋아요 수 증가
+        }
+    }
+
+    /**
+     * 좋아요 기능 (- 기능)
+     * @param userId
+     * @param boardId
+     */
+    @Transactional
+    public void removeLike(int userId, int boardId) {
+        if (boardRepository.existsLike(userId, boardId)) {
+            boardRepository.deleteLike(userId, boardId);
+            boardRepository.decrementLikeCount(boardId); // 좋아요 수 감소
+        }
+    }
+
+    /**
+     * 좋아요 기능 (몇개인지 개수)
+     * @param boardId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getLikeCount(int boardId) {
+        return boardRepository.countLikes(boardId);
+    }
+
+
+    @Transactional(readOnly = true)
+    public boolean existsLike(int userId, int boardId) {
+        return boardRepository.existsLike(userId, boardId);
+    }
 }
