@@ -1,0 +1,115 @@
+
+<!-- Custom styles for comments -->
+<style>
+    .comment-box {
+        background-color: #ffecec;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #f5c6cb;
+    }
+
+    .comment-header {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .comment-content {
+        margin-bottom: 10px;
+    }
+
+    .comment-delete-btn {
+        background-color: #f5c6cb;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .comment-delete-btn:hover {
+        background-color: #e57373;
+    }
+</style>
+</head>
+
+<body id="page-top">
+{{>layout/admin/adminSidebar}}
+
+
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <!-- Main Content -->
+        <div class="container-fluid">
+            <h1 class="h3 mb-2 text-gray-800">공지 관리</h1><br><br>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-secondary">공지 상세보기</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mt-4">
+                        <div class="form-group">
+                            <label for="title">제목</label>
+                            <input type="text" id="title" class="form-control" value="{{noticeDTO.title}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="contentLocation">내용</label>
+                            <textarea id="contentLocation" class="form-control" rows="10" readonly>{{noticeDTO.content}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="text-center mt-4">
+            <a type="button" href="/admin/updateNotice/{{noticeDTO.id}}" class="btn btn-primary">수정하기</a>
+            <button class="btn btn-danger" onclick="deletePost({{noticeDTO.id}})">삭제하기</button>
+            <a type="button" href="/admin/notice" class="btn btn-secondary">돌아가기</a>
+
+        </div>
+
+    </div>
+    <!-- End of Main Content -->
+</div>
+<!-- End of Content Wrapper -->
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/vendor/js/sb-admin-2.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#commentTable').DataTable();
+    });
+
+    function deletePost(id) {
+        if (confirm('정말로 이 공지를 삭제하시겠습니까?')) {
+            $.ajax({
+                url: '/admin/deleteNotice/' + id,
+                type: 'POST',
+                success: function (result) {
+                    alert('게시글이 삭제되었습니다.');
+                    window.location.href = '/admin/notice';  // 삭제 성공 후 게시글 목록으로 이동
+                },
+                error: function (err) {
+                    alert('삭제에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+        }
+    }
+
+
+</script>
+</body>
+
+</html>

@@ -17,6 +17,12 @@ public interface BoardRepository {
     // 특정 학교의 게시글을 리스트로 가져온다.
     List<BoardDTO> findBoardsBySchoolId(int schoolId);
 
+    // 특정 학교의 게시글을 리스트로 가져온다. (페이징 처리)
+    List<BoardDTO> findBoardsBySchoolId2(@Param("schoolId") int schoolId, @Param("offset") int offset, @Param("size") int size);
+
+    // 특정 학교의 게시글의 리스트의 갯수를 가져온다. (페이징 처리)
+    int countBoardsBySchoolId(int schoolId);
+
     //  학교id를 기준으로 게시글을 리스트로 가져온다.
     public List<byte[]> findImageSearch(int schoolId);
 
@@ -68,4 +74,13 @@ public interface BoardRepository {
 
     // 게시글id와 유저id를 board_view에 있는지 검사한다. (중복으로 조회수 오르는 거 방지)
     int boardViewCount(@Param("userId")int userId, @Param("boardId") int boardId);
+
+    // 검색어로 게시글 찾기 (페이징)
+    List<BoardDTO> searchBoardsByKeyword(@Param("schoolId") int schoolId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("size") int size);
+
+    // 검색된 게시글 총 개수
+    int countSearchBoardsByKeyword(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
+
+
+
 }

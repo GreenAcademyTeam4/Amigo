@@ -5,9 +5,9 @@
 <mapper namespace="com.example.amigo_project.repository.interfaces.NoticeRepository">
 
     <!-- 공지 생성 -->
-    <insert id="insertNotice" parameterType="com.example.amigo_project.repository.model.Notice">
-        INSERT INTO notice_tb (title, content, view_count)
-        VALUES (#{title}, #{content}, #{viewCount})
+    <insert id="insertNotice" parameterType="com.example.amigo_project.dto.NoticeDTO">
+        INSERT INTO notice_tb (title, content)
+        VALUES (#{title}, #{content})
     </insert>
 
     <!-- 공지 조회 -->
@@ -23,10 +23,24 @@
     </delete>
 
     <!-- 공지 수정 -->
-    <update id="updateNotice" parameterType="com.example.amigo_project.repository.model.Notice">
+    <update id="updateNotice" parameterType="com.example.amigo_project.dto.NoticeDTO">
         UPDATE notice_tb
-        SET title = #{title}, content = #{content}, view_count = #{viewCount}
+        SET title = #{title}, content = #{content}
         WHERE id = #{id}
     </update>
+
+    <!-- 공지사항 상세 정보 조회 쿼리 -->
+    <select id="findByIdNotice" resultType="com.example.amigo_project.dto.NoticeDTO">
+    SELECT id, title, content, view_count, created_at
+    FROM notice_tb WHERE id = #{id}
+    </select>
+
+    <!-- 공지사항 상세보기 클릭 시 조회수 증가 -->
+    <update id="viewCount">
+        UPDATE notice_tb
+        SET view_count = view_count + 1
+        WHERE id = #{noticeId}
+    </update>
+
 
 </mapper>

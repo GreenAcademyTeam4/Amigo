@@ -46,4 +46,17 @@ public class UserDTO {
 
     }
 
+    @Data
+    public class KakaoDTO {
+        private long number;
+        private String kakaoId;
+        private String name;
+        private String kakaoPassword;
+        public KakaoDTO(String kakaoId, String kakaoPassword){
+            this.kakaoId = kakaoId;
+            this.kakaoPassword = kakaoPassword;
+
+        }
+    }
+
 }

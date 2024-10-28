@@ -13,9 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -91,23 +93,26 @@ public class BoardController {
      */
     // 특정 학교의 게시글 목록 조회
     @GetMapping("/list")
-    public String getBoardListBySchool(/*@PathVariable("schoolId") int schoolId */ Model model) {
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
-        List<BoardDTO> boardList = boardService.getBoardsBySchoolId(schoolId);
+    public String getBoardListBySchool(/*@PathVariable("schoolId") int schoolId */ Model model,
+     @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지 
+     @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
+        ) {
 
-        System.out.println("boardList : " + boardList);
+        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
+        int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
+
 
         for(BoardDTO a : boardList) {
             a.getFormattedCreatedAt();
         }
 
-
         model.addAttribute("boardList", boardList);
         model.addAttribute("schoolId", schoolId);
 
-
-
-        System.out.println(boardList.toString());
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
 
         return "views/board/boardList";  // boardList.mustache를 반환
     }
@@ -123,9 +128,9 @@ public class BoardController {
 
         int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
 
-        // 아직 게시글 상세 보기 다 못만듬 (조회수 이거 아직 안됨) !@#!@#@!#!@!@#!@#!@#!@#@!#@!#!@
-        int boardViewCount = boardService.boardViewCount(boardId, userId);
-        System.out.println("boardViewCount : " + boardViewCount);
+        // 아직 게시글 상세 보기 다 못만듬 (조회수 이거 아직 안됨) !@#!@#@!#!@!@#!@#!@#!@#@!#@!#!@ (잠시 잠굼)
+//        int boardViewCount = boardService.boardViewCount(boardId, userId);
+//        System.out.println("boardViewCount : " + boardViewCount);
 
 
         // 조회수 증가 +1
@@ -344,6 +349,49 @@ public class BoardController {
         return "views/board/boardMultiList";
 
     }
+
+    /**
+     * 게시판에서 검색했을 시 작동하는 기능
+     */
+    @GetMapping("/search")
+    public String searchBoard(@RequestParam("keyword") String keyword,
+                              @RequestParam(name = "page", defaultValue = "0") Integer page,
+                              @RequestParam(name = "size", defaultValue = "4") Integer size,
+                              Model model) {
+        try {
+            if (page < 0) {
+                page = 0;  // page가 음수인 경우 0으로 설정
+            }
+
+            int offset = page * size;
+            if (offset < 0) {
+                offset = 0;
+            }
+
+            int schoolId = 1; // 예시로 유저 세션에서 학교 번호를 가져오는 것처럼 설정
+            List<BoardDTO> searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, offset, size);
+            int totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
+            int totalPages = (int) Math.ceil((double) totalCount / size);
+
+            for(BoardDTO a : searchResults) {
+                a.getFormattedCreatedAt();
+            }
+
+            model.addAttribute("boardList", searchResults);
+            model.addAttribute("schoolId", schoolId);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("keyword", keyword.trim()); // 추가: 검색어를 모델에 추가
+
+            return "views/board/boardSearch";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "검색 중 오류가 발생했습니다. 다시 시도해주세요.");
+            return "views/board/error";
+        }
+    }
+
 
 
 
