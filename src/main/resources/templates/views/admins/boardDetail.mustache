@@ -1,26 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>회원관리</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/css/admin/fontawesome-free/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="/css/admin/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for table -->
-    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
 
     <!-- Custom styles for comments -->
     <style>
@@ -120,7 +97,7 @@
             </div>
             <div class="text-center mt-4">
                 <button class="btn btn-secondary" onclick="deletePost({{board.id}})">삭제하기</button>
-                <a href="/board-list" class="btn btn-secondary">리스트</a>
+                <a href="/admin/board-list" class="btn btn-secondary">리스트</a>
             </div>
 
         </div>
@@ -150,11 +127,11 @@
     function deletePost(postId) {
         if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
             $.ajax({
-                url: '/deleteBoard/' + postId,
+                url: '/admin/deleteBoard/' + postId,
                 type: 'POST',
                 success: function (result) {
                     alert('게시글이 삭제되었습니다.');
-                    window.location.href = '/board-list';  // 삭제 성공 후 게시글 목록으로 이동
+                    window.location.href = '/admin/board-list';  // 삭제 성공 후 게시글 목록으로 이동
                 },
                 error: function (err) {
                     alert('삭제에 실패했습니다. 다시 시도해주세요.');

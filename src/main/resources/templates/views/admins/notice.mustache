@@ -1,61 +1,55 @@
 {{>layout/admin/adminSidebar}}
 
 <div class="container-fluid">
-    <!-- Page Heading -->
+    <!-- 페이지 제목 -->
     <h1 class="h3 mb-4 text-gray-800">공지사항 관리</h1>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">공지사항 목록</h6>
-            <button class="btn btn-primary btn-sm" onclick="location.href='/notice/add'">게시물 등록</button>
+            <button class="btn btn-primary btn-sm" onclick="location.href='/admin/notice/create'">게시물 등록</button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-light">
                     <tr>
-                        <th><input type="checkbox" onclick="toggleAll(this)"></th>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>본문</th>
-                        <th>작성일시</th>
+                        <th class="text-center" style="width: 5%;"><input type="checkbox" onclick="toggleAll(this)"></th>
+                        <th class="text-center" style="width: 10%;">번호</th>
+                        <th class="text-center" style="width: 50%;">제목</th>
+                        <th class="text-center" style="width: 25%;">작성일시</th>
+                        <th class="text-center" style="width: 10%;">상세보기</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#noticeList}}
                         <tr>
-                            <td><input type="checkbox" name="selectNotice" value="{{id}}"></td>
-                            <td>{{id}}</td>
-                            <td>{{title}}</td>
-                            <td>{{content}}</td>
-                            <td>{{createdAt}}</td>
+                            <td class="text-center align-middle"><input type="checkbox" name="selectNotice" value="{{id}}"></td>
+                            <td class="text-center align-middle">{{id}}</td>
+                            <td class="align-middle"><a href="/admin/notice/detail/{{id}}" class="text-dark font-weight-bold">{{title}}</a></td>
+                            <td class="text-center align-middle">{{createdAt}}</td>
+                            <td class="text-center align-middle"><a href="/admin/notice/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
                         </tr>
                     {{/noticeList}}
                     {{^noticeList}}
                         <tr>
-                            <td colspan="5">공지사항이 없습니다.</td>
+                            <td colspan="5" class="text-center">공지사항이 없습니다.</td>
                         </tr>
                     {{/noticeList}}
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-between mt-3">
-                    <div>
-                        <button class="btn btn-sm btn-danger">선택삭제</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- DataTables JavaScript dependencies -->
+<!-- DataTables JavaScript 의존성 -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
     });
-
 
     function toggleAll(source) {
         const checkboxes = document.querySelectorAll('input[name="selectNotice"]');

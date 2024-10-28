@@ -1,5 +1,5 @@
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('thdddnjstjr',1234,'고죠','고죠','010-1234-5678','male','27');
+values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test',1234,'가을','정훈','010-1234-5678','male','27');
@@ -17,11 +17,43 @@ INSERT INTO school_tb (id, school, name, region) VALUES
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트', '테스트123123', 1);
+values (1, '테스트1', '테스트123123', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테', '테스트123123', 1);
+values (1, '테스트2', '테스트124124', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트3', '테스트125125', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트4', '테스트126126', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트5', '테스트127127', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트6', '테스트128128', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트7', '테스트129129', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트8', '테스트120120', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테스트9', '테스트12121212', 1);
+
+---- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (1, '테테테테텥테', '테스트127127', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
