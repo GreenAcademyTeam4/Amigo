@@ -183,9 +183,9 @@ create table notice_view_tb (
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
+  type int,
+  price int,
   name varchar(255)
---  type int,
---  foreign key (type) references avatar_type_tb(id)
 );
 
 -- 유저 아이템 인벤토리 테이블

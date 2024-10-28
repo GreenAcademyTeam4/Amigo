@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amigo_project.repository.interfaces.StoreRepository">
+
+    <!-- 기본 값, 전체 아바타 조회 -->
+    <select id="readAllAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        FROM avatar_tb a
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+    </select>
+
+
+    <!-- 머리 아바타 조회 -->
+    <select id="readHairAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        FROM avatar_tb a
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+        WHERE a.type = 1;
+    </select>
+
+    <!-- 상의 아바타 조회 -->
+    <select id="readTopAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        FROM avatar_tb a
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+        WHERE a.type = 2;
+    </select>
+
+    <!-- 하의 아바타 조회 -->
+    <select id="readBottomAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        FROM avatar_tb a
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+        WHERE a.type = 3;
+    </select>
+
+    <!-- 신발 아바타 조회 -->
+    <select id="readShoesAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        FROM avatar_tb a
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+        WHERE a.type = 4;
+    </select>
+
+    <!-- -->
+    <!-- -->
+    <!-- -->
+
+
+</mapper>
