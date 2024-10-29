@@ -1,18 +1,19 @@
 
 header {
+    background-color: #f0dcd5;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     position: sticky;
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 1200px;
     padding: 10px 20px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+
     z-index: 1000; 
     margin: 0 auto;
+    border-bottom: 1px solid #d4b7aa; 
+    margin-bottom: 10px;
 }
 .logo img{
     height: auto;

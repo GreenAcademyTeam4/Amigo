@@ -22,11 +22,30 @@
         WHERE user_id = #{userId}
         AND password = #{password}
     </select>
+    <select id="findByUserId"  parameterType="com.example.amigo_project.dto.UserDTO">
+        SELECT *
+        FROM user_tb
+        WHERE user_id = #{userId} 
+    </select>
+    
+  
+    <insert id="kakaoInsert" parameterType="java.util.HashMap">
+		insert into user_tb(user_id, password)
+			values(#{kakaoId}, #{kakaoPassword})
+	</insert> 
+    <insert id="googleInsert" parameterType="java.util.HashMap">
+		insert into user_tb(user_id, password)
+			values(#{email}, #{googlePassword})
+	</insert> 
 
     <select id="findPasswordByUserId" resultType="String">
         select password
         from user_tb
         where id = #{userId}
     </select>
+    <insert id="naverInsert" parameterType="java.util.HashMap">
+    INSERT INTO user_tb (user_id, password)
+    VALUES (#{naverId}, #{naverPassword})
+</insert>
 
 </mapper>

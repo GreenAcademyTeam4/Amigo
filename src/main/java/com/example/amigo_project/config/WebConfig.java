@@ -1,3 +1,4 @@
+package com.example.amigo_project.config;
 
 import com.example.amigo_project.handler.ChatHandler;
 import lombok.RequiredArgsConstructor;

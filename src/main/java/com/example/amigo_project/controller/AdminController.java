@@ -1,5 +1,19 @@
 package com.example.amigo_project.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.example.amigo_project.dto.AdminDTO;
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
@@ -9,14 +23,8 @@ import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.AdminService;
 import com.example.amigo_project.service.BoardService;
 import com.example.amigo_project.service.NoticeService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -197,11 +205,6 @@ public class AdminController {
         return "redirect:/notice/detail/" + id;
     }
 
-    // 문의 관리
-
-    // 신고 관리
-
-    // 통계
 
 
 
