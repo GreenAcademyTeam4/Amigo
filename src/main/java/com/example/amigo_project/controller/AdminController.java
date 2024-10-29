@@ -4,6 +4,7 @@ import com.example.amigo_project.dto.AdminDTO;
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.dto.NoticeDTO;
+import com.example.amigo_project.repository.model.Board;
 import com.example.amigo_project.repository.model.Notice;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.AdminService;
