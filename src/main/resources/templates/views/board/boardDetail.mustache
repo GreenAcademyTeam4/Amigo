@@ -8,52 +8,206 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1;
+        color: #333;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .board-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .top-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .board-header {
+        text-align: center;
+    }
+
+    .like-section {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    #like-icon {
+        cursor: pointer;
+        width: 30px;
+        margin-right: 10px;
+    }
+
+    .comments {
+        margin-top: 40px;
+    }
+
+    .comments .comment {
+       display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-header {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .comment-body {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .comment-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .comment-actions button {
+        padding: 5px 10px;
+    }
+
+    .comments .comment p {
+        margin-bottom: 5px;
+    }
+
+    .comment-form {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .form-footer {
+        text-align: right;
+    }
+
+    .btn {
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-link {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .pagination .page-item .page-link {
+        color: #007bff;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+</style>
+
+
 <body>
+<div class="container">
+    <!-- 상단 버튼 섹션 -->
+    <div class="top-buttons d-flex justify-content-between mb-3">
+        <a href="/board/list" class="btn btn-primary">목록으로 돌아가기</a>
+        <div>
+            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger">게시글 삭제</button>
+            </form>
+            <form action="/board/update/{{board.id}}" method="get" class="d-inline">
+                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>
+            </form>
+        </div>
+    </div>
 
-<div>
-    <form action="/board/delete/{{board.id}}" method="post">
-        <button type="submit">게시글 삭제</button>
-    </form>
-</div>
+    <!-- 게시글 본문 -->
+    <div class="board-card board-header text-center">
+        <h1>{{board.title}}</h1>
+        <p class="board-info"><strong>작성자 ID:</strong> {{board.userId}} | <strong>학교 ID:</strong> {{board.schoolId}} | <strong>닉네임:</strong> {{board.nickname}} | <strong>작성일자:</strong> {{board.createdAtFormat}}</p>
+        <div class="board-content">
 
-<div>
-    <form action="/board/update/{{board.id}}" method="get">
-        <button type="submit">게시글 수정하기</button>
-    </form>
-</div>
+            {{#board.image}}
+                <img src="data:image/jpeg;base64,{{board.image}}" style="width: 300px; height: auto; object-fit: contain;"  alt="Board Image">
+            {{/board.image}}
 
-<div class="container mt-5">
+            {{^board.image}}
+            {{/board.image}}
 
-    <h1>{{board.title}}</h1>
-    <p><strong>작성자 ID:</strong> {{board.userId}}</p>
-    <p><strong>학교 ID:</strong> {{board.schoolId}}</p>
-    <p><strong>닉네임 :</strong> {{board.nickname}}</p>
+            <p><strong>내용:</strong> {{board.contentLocation}}</p>
 
-    <p><strong>내용:</strong> {{board.contentLocation}} </p>
+        </div>
+    </div>
 
-    <p><strong>조회수:</strong> {{board.viewCount}}</p>
-    <p><strong>좋아요:</strong> <span id="like-count">{{likeCount}}</span></p>
-
-    <p><strong>작성일자:</strong> {{board.createdAtFormat}}</p>
-    <a href="/board/list" class="btn btn-primary mt-3">목록으로 돌아가기</a>
-
-    <img id="like-icon" class="like-icon {{#hasLiked}}liked{{/hasLiked}}" src="{{#hasLiked}}/image/board/full.png{{/hasLiked}}{{^hasLiked}}/image/board/empty.png{{/hasLiked}}"
-         alt="좋아요 아이콘" style="cursor: pointer; width: 30px;" onclick="toggleLike()">
-
-    <hr>
+    <!-- 좋아요 섹션 -->
+    <div class="like-section text-center mt-3">
+        <img id="like-icon" class="like-icon {{#hasLiked}}liked{{/hasLiked}}" src="{{#hasLiked}}/image/board/full.png{{/hasLiked}}{{^hasLiked}}/image/board/empty.png{{/hasLiked}}"
+             alt="좋아요 아이콘" onclick="toggleLike()">
+        <span><strong>좋아요:</strong> <span id="like-count">{{likeCount}}</span></span>
+    </div>
 
     <!-- 댓글 목록 -->
     <div class="comments mt-5">
         <h3>댓글 목록</h3>
         {{#comment}}
             <div class="comment" id="comment-{{id}}">
-                <p><strong>작성자 :</strong> {{nickname}}</p>
-                <p id="content-{{id}}">{{content}}</p>
-                <p><small>작성일자: {{createdAtFormat}}</small></p>
-
-                <button onclick="deleteComment({{id}})" class="btn btn-danger">🗑</button>
-                <button onclick="showEditForm({{id}})" class="btn btn-link">수정</button>
-
+                <div class="comment-header">
+                    <p><strong>작성자:</strong> {{nickname}}</p>
+                    <p><small>작성일자: {{createdAtFormat}}</small></p>
+                </div>
+                <div class="comment-body">
+                    <p id="content-{{id}}">{{content}}</p>
+                </div>
+                <div class="comment-actions">
+                    <button onclick="deleteComment({{id}})" class="btn btn-danger btn-sm">🗑</button>
+                    <button onclick="showEditForm({{id}})" class="btn btn-link btn-sm">수정</button>
+                </div>
                 <!-- 댓글 수정 폼 (기본적으로 숨김 처리) -->
                 <div id="edit-form-{{id}}" style="display: none; margin-top: 10px;">
                     <textarea id="edit-content-{{id}}" rows="3" class="form-control">{{content}}</textarea>
@@ -68,14 +222,14 @@
     </div>
 
     <!-- 댓글 페이지 네비게이션 -->
-    <nav aria-label="Page navigation example" class="mt-4">
+    <nav aria-label="Page navigation example" class="mt-5">
         <ul class="pagination justify-content-center" id="pagination">
             <!-- JavaScript로 페이지 번호 생성 -->
         </ul>
     </nav>
 
     <!-- 댓글 작성 폼 -->
-    <div class="comment-form mt-5">
+    <div class="comment-form">
         <h3>댓글 달기</h3>
         <form action="/board/comment" method="post">
             <input type="hidden" name="boardId" value="{{board.id}}">
@@ -83,11 +237,14 @@
                 <label for="commentContent">댓글 내용</label>
                 <textarea class="form-control" id="commentContent" name="content" rows="3" required></textarea>
             </div>
-            <button type="submit" class="btn btn-success mt-3">댓글 등록</button>
+            <div class="form-footer text-right">
+                <button type="submit" class="btn btn-success">댓글 등록</button>
+            </div>
         </form>
     </div>
-
 </div>
+</body>
+</html>
 
 <script>
     // 좋아요 버튼 클릭 시 작동하는 스크립트
@@ -212,6 +369,5 @@
         });
 </script>
 
-</body>
 
-</html>
+

@@ -7,10 +7,16 @@ server:
   error:
     whitelabel:
       enabled: true
+logging:
+  file:
+    encoding: UTF-8
 spring:
+  profiles:
+    active: secret
   web:
     resources:
       static-locations: classpath:/static/
+
   mustache:
     servlet:
       expose-session-attributes: true  # Mustache ????? ?? ??? ??? ? ??? ??
@@ -27,30 +33,15 @@ spring:
     init:
       schema-locations: classpath:db/schema.sql  # ??? ?? SQL ?? ??
       data-locations: classpath:db/data.sql      # ??? ?? SQL ?? ??
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mapper/*.xml  # MyBatis ?? XML ?? ??
   output:
     ansi:
       enabled: always  # ?? ?? ? ANSI ??? ?? ????? ?? (??? ?? ??? ? ?? ?? ??)
       encoding:
         force-response: true
-coolsms:
-  api:
-    key:  NCSWNHM46QT8PKNY
-    secret: 9TQSQY7CTAHIM8X592GCT6M6TCFNUUZF
-    number: 01025134159
-payments:
-  toss:
-    test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
-    test_secret_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
 
-kakao:
-  api_key: d675147f2e675ca15a3e02405e9da076
-  redirect_uri: http://localhost:8080/kakao/callback
-
-naver:
-  client_id: lZxhgx1vwL0HzDkJcGB5
-  redirect_uri : http://localhost:8080/naver/callback
-  client_secret: Q5ZnyJVQFI
