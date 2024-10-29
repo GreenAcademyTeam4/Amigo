@@ -1,0 +1,11 @@
+.board-container{
+    
+}
+.head-title{
+    display: flex;
+    align-items: center;
+    background-color: rgb(179, 163, 157);
+    min-height: 25px;
+    border-bottom: 1px solid #d4b7aa;
+    font-size: 25px;
+}
