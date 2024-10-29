@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="/css/classroom2.css">
+<div class="background">
+</div>
+
+<!-- 채팅 입력 박스 -->
+<div class="chat-box">
+    <button class="emoticon-btn" onclick="toggleEmoticonBox()">😊</button>
+    <input type="text" class="chat-input" placeholder="메시지를 입력하세요...">
+    <button class="chat-send" onclick="send()">전송</button>
+
+    <!-- 이모티콘 박스 (기본적으로 숨김) -->
+    <div class="emoticon-box">
+        {{#emoticonList}}
+            <div class="emoticon" onclick="sendEmoticon('{{url}}')">
+                <img src="{{url}}">
+            </div>
+        {{/emoticonList}}
+    </div>
+</div>
+
+<script>let userId = {{user}}</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/classroom2.js"></script>

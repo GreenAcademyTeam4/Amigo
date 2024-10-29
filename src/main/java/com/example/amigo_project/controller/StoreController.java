@@ -1,6 +1,7 @@
 package com.example.amigo_project.controller;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.amigo_project.dto.StoreDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.StoreService;
@@ -32,6 +33,7 @@ public class StoreController {
     public String getAllAvatarInfo(Model model,
                                    @RequestParam(name = "type", defaultValue = "0") Integer type){
         User principal = (User) session.getAttribute("principal");
+        System.out.println(principal);
         if (principal == null) {
             model.addAttribute("msg", "로그인 후 이용 가능합니다. 먼저 로그인 해 주세요");
             model.addAttribute("url", "redirect:/user/login");
@@ -41,27 +43,27 @@ public class StoreController {
                 List<StoreDTO.avatarListDTO> avatarList = storeService.readAllAvatarList(principal.getId());
                 model.addAttribute("avatarList", avatarList);
                 model.addAttribute("user", principal);
-                return "/store/shop";
+                return "/views/store/main";
             }else if(type == 1){
                 List<StoreDTO.avatarListDTO> avatarList = storeService.readHairAvatarList(principal.getId());
                 model.addAttribute("avatarList", avatarList);
                 model.addAttribute("user", principal);
-                return "/store/shop";
+                return "views/store/main";
             }else if(type == 2) {
                 List<StoreDTO.avatarListDTO> avatarList = storeService.readTopAvatarList(principal.getId());
                 model.addAttribute("avatarList", avatarList);
                 model.addAttribute("user", principal);
-                return "/store/shop";
+                return "views/store/main";
             }else if(type == 3) {
                 List<StoreDTO.avatarListDTO> avatarList = storeService.readBottomAvatarList(principal.getId());
                 model.addAttribute("avatarList", avatarList);
                 model.addAttribute("user", principal);
-                return "/store/shop";
+                return "views/store/main";
             }else if(type == 4) {
                 List<StoreDTO.avatarListDTO> avatarList = storeService.readShoesAvatarList(principal.getId());
                 model.addAttribute("avatarList", avatarList);
                 model.addAttribute("user", principal);
-                return "/store/shop";
+                return "views/store/main";
             }else{
                 model.addAttribute("msg", "알 수 없는 오류 다시 시도해 주세요");
                 model.addAttribute("url", "redirect:/user/login");

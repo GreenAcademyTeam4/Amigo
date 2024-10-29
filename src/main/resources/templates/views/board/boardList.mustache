@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 목록</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .image-cell img {
-            max-width: 150px;
-            max-height: 150px;
-        }
-    </style>
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="/css/board/board.css">
+    <title>게시글 목록</title>  
+
+<div class="board-container">
+    <div class="head-title">
+         학교 번호: {{schoolId}} 게시글 목록
+    </div>
+  
 
 <div class="container mt-5">
     <h1>학교 번호: {{schoolId}} 게시글 목록</h1>
+
 
     <!-- 글쓰기 버튼과 검색창 -->
     <div class="mb-4">
@@ -84,6 +83,7 @@
 
 </div>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // totalPages는 서버에서 Mustache로 전달된 변수
@@ -131,3 +131,4 @@
 
 </body>
 </html>
+

@@ -1,8 +1,9 @@
 {{>layout/header}}
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-<div class="main-layout">
-    <div class="screen-area">
+<main>
 
+    <div id="screen-area" class="screen-area">
+      
     </div>
     <div class="remote-controller">
         <div class="profile">
@@ -11,20 +12,28 @@
         <div class="nickname">
             유저 이름
         </div>
-        <div class="my-page">
-            마이페이지
-        </div>
-        <div class="enter">
-            등교하기
-        </div>
-        <div class="post">
+    
+            <div class="bt-controller" id="my-page">
+                마이페이지
+            </div>
+     
+        <a href="">
+            <div class="bt-controller" id="enter">
+                등교하기
+            </div>
+        </a>
+   
+        <div class="bt-controller" id="post">
             게시판
         </div>
-        <div class="logout">
-            로그아웃
+ 
+        <div class="friend-box">
         </div>
     </div>
-</div>
 
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/static/js/screen.js"></script>
+<script src="/js/screen.js"></script>
+
+{{>layout/footer}}

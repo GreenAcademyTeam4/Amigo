@@ -15,9 +15,7 @@ const clientKey = "test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E";
 const tossPayments = TossPayments(clientKey); // API 개별 연동 키
 const customerKey = generateRandomString();
 const payment = tossPayments.payment({customerKey});
-//let phoneNumber = "{{phoneNumber}}";
-//console.log(phoneNumber);
-
+let phoneNumber = "{{phoneNumber}}";
 
 async function requestPayment(point){
     let amount = {
@@ -48,7 +46,7 @@ async function requestPayment(point){
                 amount,
                 orderId: generateRandomString(),
                 orderName: "포인트 충전 " + point + "원",
-                //customerMobilePhone: phoneNumber,
+                customerMobilePhone: phoneNumber,
                 successUrl: 'http://localhost:8080/pay/success',
                 failUrl: 'http://localhost:8080/pay/fail',
                 transfer: {
