@@ -229,6 +229,11 @@ public class AdminController {
     // 신고 관리
 
     // 통계
+    @GetMapping("/statistic")
+    public String statisticForm(){
+        return "views/admins/statistic";
+    }
+
 
 
 
