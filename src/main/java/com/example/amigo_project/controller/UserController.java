@@ -1,34 +1,40 @@
 package com.example.amigo_project.controller;
 
-import com.example.amigo_project.dto.SchoolDTO;
-import com.example.amigo_project.dto.UserDTO;
-import com.example.amigo_project.repository.model.User;
-import com.example.amigo_project.service.MypageService;
-import com.example.amigo_project.service.UserService;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.example.amigo_project.dto.SchoolDTO;
+import com.example.amigo_project.dto.UserDTO;
+import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.service.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
+
+
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
-    private final WebClient webClient;
-
+    private final HttpSession session;
     private final UserService userService;
+    private final WebClient webClient;
 
     /**
      * 로그인 
@@ -39,8 +45,11 @@ public class UserController {
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto){
 
+        User principal = userService.findUserById(dto);
+   
+
         System.out.println(dto);
-        User principal = userService.findUserByIdAndPassword(dto);
+    
         System.out.println(principal);
         if(principal != null){
             session.setAttribute("principal", principal);
@@ -50,7 +59,15 @@ public class UserController {
         }
        
     }
-
+    /**
+     *   로그아웃
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(){
+    session.invalidate();
+    return "redirect:/";
+    }
     
     
 
@@ -94,6 +111,7 @@ public class UserController {
         } else {
             return "views/login/login";  
         }
+
 
     }
   
