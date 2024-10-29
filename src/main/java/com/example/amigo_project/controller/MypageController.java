@@ -9,11 +9,11 @@ import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -201,6 +201,28 @@ public class MypageController {
 
 
     /**
+     * 내 친구 목록 중 이름으로 친구 검색 기능
+     * 비동기 방식으로 검색 내용을 전달받아 결과 리턴
+     * @param search
+     * @param session
+     * @return
+     */
+    @GetMapping("/search")
+    @ResponseBody
+    public ResponseEntity<?> searchFriend(@RequestParam("search") String search, HttpSession session) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            List<MypageDTO.myFriendListDTO> friendList = mypageService.searchFriend(principal.getId(), search);
+            if (friendList.isEmpty()) {
+                return ResponseEntity.ok("검색 결과가 없습니다.");
+            }
+            return ResponseEntity.ok(friendList);
+        }
+    }
+
+    /**
      * 받은 친구 요청 출력
      * @param session
      * @param model
@@ -301,6 +323,9 @@ public class MypageController {
 
 
     }
+
+
+
 
 
 

@@ -6,11 +6,11 @@ import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.StoreService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class StoreController {
 
     /**
      * 뷰에 표시할 아바타 리스트
-     * @param type(아바타 부위) = 0 -> 모든 아바타 , 1 -> 머리 , 2 -> 상의 ... 필터링
+     * @param type(아바타 부위) = 0 -> 모든 아바타 , 1 -> 머리 , 2 -> 상의 ...
      * @return 아바타의 id, 이름, 부위, 가격, 보유중 여부  등을 model에 "avatarList" 키값으로 담아 뷰에 유저정보와 함께 전달
      */
     @GetMapping("/shop")
@@ -68,7 +68,57 @@ public class StoreController {
                 return "alert"; 
             }
         }
+
+
     }
+
+    /**
+     * 비동기적으로 검색 내용을 전달받아 결과값 리턴
+     * @param search
+     * @param session
+     * @return
+     */
+    @GetMapping("/search")
+
+    public ResponseEntity<?> searchAvatarList(@RequestParam("search") String search, HttpSession session) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용 가능합니다. 먼저 로그인 해 주세요");
+        } else {
+            List<StoreDTO.avatarListDTO> avatarList = storeService.searchAvatarListByName(principal.getId(), search);
+            if (avatarList.isEmpty()) {
+                return ResponseEntity.ok("등록된 아바타가 없습니다.");
+            }
+            return ResponseEntity.ok(avatarList);
+        }
+    }
+
+
+
+
+    /**
+     * fetch 비동기 방식으로 장바구니에 있는 물건 구매 로직 전달
+     * @param dto
+     * @param model
+     * @return
+     */
+    @PostMapping("/buy")
+
+    public ResponseEntity<String> buyBasket(@RequestBody StoreDTO.basketDTO dto, Model model) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.ok("UnAuthorized");
+        } else {
+            if(principal.getPoint() < dto.getTotalPrice()){
+                return ResponseEntity.ok("LackOfPoint");
+            }else{
+                storeService.butBasket(new StoreDTO.pointHistoryDTO(principal.getId(), dto.getTotalPrice(), principal.getPoint(), dto.getProdNameList(), dto.getProdIdList()));
+            }
+        }
+        return ResponseEntity.ok("Success");
+    }
+
+
 
 
 
