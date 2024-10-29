@@ -1,26 +1,21 @@
 package com.example.amigo_project.controller;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
-import com.example.amigo_project.dto.chat.RoomDataDTO;
-import com.example.amigo_project.repository.model.Emoticon;
-import com.example.amigo_project.repository.model.User;
-import com.example.amigo_project.service.ChatService;
-import com.example.amigo_project.service.KakaoApiService;
-import com.example.amigo_project.service.NaverApiService;
-import com.example.amigo_project.service.UserService;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
-
+import com.example.amigo_project.dto.chat.RoomDataDTO;
+import com.example.amigo_project.repository.model.Emoticon;
+import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.service.ChatService;
 import com.example.amigo_project.service.GoogleService;
 import com.example.amigo_project.service.KakaoApiService;
 import com.example.amigo_project.service.NaverApiService;
+import com.example.amigo_project.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -76,16 +71,7 @@ return "views/login/login";
 
    
 }
-    @GetMapping("/login")
-    public String logincontroller(Model model) {
-        String kakaolocation ="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+kakao.getKakaoApiKey() +"&redirect_uri="+kakao.getKakaoRedirectUri();
-        model.addAttribute("kakaolocation", kakaolocation);
-        
-        String naverlocation ="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="+naver.getNaverClientId()+"&client_secret="+naver
-        .getNaverSecret()+"&redirect_uri="+ naver.getNaverRedirectUri();
-        model.addAttribute("naverlocation", naverlocation);
-        return "views/login/login";
-    }
+  
 
     @GetMapping("/test")
     public String test(Model model, HttpSession session){

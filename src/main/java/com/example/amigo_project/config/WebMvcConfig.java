@@ -34,4 +34,3 @@
 //                .addPathPatterns("/admin/**")
 //                .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
 //    }
-}
