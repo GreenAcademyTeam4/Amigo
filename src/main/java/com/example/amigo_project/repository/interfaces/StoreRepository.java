@@ -1,12 +1,14 @@
 package com.example.amigo_project.repository.interfaces;
 
 import com.example.amigo_project.dto.StoreDTO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
+@Mapper
 public interface StoreRepository {
     
     // 상점 방문시 모든 아바타 정보 조회(아바타 id , 아바타 이름 , 아바타 가격, 아바타 타입, 보유중 여부)
