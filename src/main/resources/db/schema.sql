@@ -223,3 +223,15 @@ create table charge_history_tb (
     payment_key varchar(100),
     foreign key (user_id) references user_tb(id)
 );
+
+-- 포인트 사용내역 테이블
+create table point_history_tb(
+    id int primary key auto_increment,
+    user_id int, -- 유저id
+    order_head varchar(30), -- 포인트 사용 간단 내용 ex) : 아프로 헤어 외 n건..
+    order_body varchar(255), -- 포인트 사용 상세 내용 ex) : 아프로 헤어 , 양머리 두건, 배기팬츠 구입
+    use_point int, -- 사용 포인트
+    less_point int, -- 잔여 포인트
+    created_at timestamp default CURRENT_TIMESTAMP,
+    foreign key (user_id) references user_tb(id)
+);

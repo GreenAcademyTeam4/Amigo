@@ -76,6 +76,12 @@ public class MypageService {
         return mypageRepository.findMyFriendListByUserId(userId);
     }
 
+    public List<MypageDTO.myFriendListDTO> searchFriend(Integer userId, String search){
+        return mypageRepository.searchFriend(userId, search);
+    }
+
+
+
 
     /**
      * 마이페이지 -> 친구 관리 -> 받은 친구 요청 목록 조회 기능
