@@ -6,8 +6,8 @@
 
     <!-- 게시글을 작성하는 쿼리   -->
     <insert id="InsertBoard" parameterType="com.example.amigo_project.dto.BoardDTO">
-        INSERT INTO board_tb (school_id, user_id, title, content_location,view_count,likes)
-        VALUES (#{schoolId}, #{userId}, #{title}, #{contentLocation}, #{viewCount}, #{likes})
+        INSERT INTO board_tb (school_id, user_id, title, content_location, image_location,view_count,likes)
+        VALUES (#{schoolId}, #{userId}, #{title}, #{contentLocation}, #{imageLocation, jdbcType=BLOB}, #{viewCount}, #{likes})
     </insert>
 
     <!-- 특정 학교의 게시글 조회 -->
@@ -49,6 +49,7 @@
         b.user_id AS userId,
         b.title,
         b.content_location AS contentLocation,
+        b.image_location AS imageLocation,
         b.view_count AS viewCount,
         b.likes,
         b.created_at AS createdAt,

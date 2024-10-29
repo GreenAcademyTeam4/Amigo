@@ -2,6 +2,7 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
+import com.example.amigo_project.repository.model.Board;
 import com.example.amigo_project.repository.model.Comment;
 import com.example.amigo_project.service.BoardService;
 import jakarta.servlet.http.HttpSession;
@@ -11,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,8 +68,8 @@ public class BoardController {
             @RequestParam(name = "school_id") int schoolId,
             @RequestParam(name = "user_id") int userId,
             @RequestParam(name = "content_location") String contentLocation,
-//            @RequestParam("image_location") MultipartFile imageFile,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam("imageLocation") MultipartFile imageLocation,
+            RedirectAttributes redirectAttributes) throws IOException {
 
         // DTO 생성 및 데이터 설정
         BoardDTO dto = new BoardDTO();
@@ -73,7 +77,7 @@ public class BoardController {
         dto.setSchoolId(schoolId);
         dto.setUserId(userId);
         dto.setContentLocation(contentLocation);  // 텍스트를 그대로 저장
-//            dto.setImageLocation(imageFile.getBytes());  // 파일을 BLOB 데이터로 변환
+        dto.setImageLocation(imageLocation.getBytes());  // 파일을 BLOB 데이터로 변환
         dto.setViewCount(0);
         dto.setLikes(0);
         System.out.println("콘텐츠는 : " + contentLocation);
@@ -158,7 +162,7 @@ public class BoardController {
         // 게시글 id를 기준으로 정보 가져오기
         BoardDTO board = boardService.getBoardById(boardId);
         board.getFormattedCreatedAt();
-
+        board.getFormattedImage();
 
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
