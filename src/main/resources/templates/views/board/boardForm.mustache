@@ -4,28 +4,133 @@
     <!-- jQuery 라이브러리 추가 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    #boardForm {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #boardForm h3 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    #boardForm input[type="text"],
+    #boardForm textarea,
+    #boardForm input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    #boardForm button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #boardForm button:hover {
+        background-color: #0056b3;
+    }
+
+    #uploadedImage {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    #uploadedImage img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    #cancelButton, #submitButton {
+        width: 48%;
+        padding: 10px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #cancelButton {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    #cancelButton:hover {
+        background-color: #5a6268;
+    }
+
+    #submitButton {
+        background-color: #28a745;
+        color: white;
+    }
+
+    #submitButton:hover {
+        background-color: #218838;
+    }
+
+    .form-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+</style>
+
+
 <body>
 
-<h3>Naver SmartEditor</h3>
-<form id="boardForm" action="/board/insert" method="post">
+<form id="boardForm" action="/board/insert" method="post" enctype="multipart/form-data">
+
     <div>
-        <h3>제목</h3>
-        <input type="text" name="title" id="title" required>
+        <label for="title">제목</label>
+        <input type="text" name="title" id="title" required placeholder="제목을 입력해주세요.">
         <input type="hidden" name="school_id" id="school_id" value="{{schoolId}}">
         <input type="hidden" name="user_id" id="user_id" value="{{userId}}">
     </div>
-    <div id="smarteditor">
-        <textarea name="content_location" id="editorText" rows="20" cols="10" placeholder="내용을 입력해주세요" style="width: 500px"></textarea>
+
+    <div>
+        <label for="editorText">내용</label>
+        <textarea name="content_location" id="editorText" rows="10" placeholder="내용을 입력해주세요."></textarea>
     </div>
 
     <div>
-        <button type="button" onclick="submitPost()">작성하기</button>
+        <label for="fileInput">이미지 첨부</label>
+        <input type="file" id="fileInput" name="imageLocation" accept="image/*">
+    </div>
+
+    <div id="uploadedImage"></div>
+
+    <div class="form-footer">
+        <button type="button" id="submitButton" onclick="submitPost()">작성 완료</button>
+        <button type="button" id="cancelButton" onclick="window.location.href='/board/list'">취소</button>
     </div>
 </form>
 
-    <div>
-        <a href="/board/list">돌아가기</a>
-    </div>
+<!--    <div>-->
+<!--        <a href="/board/list">돌아가기</a>-->
+<!--    </div>-->
 
 <script>
     let oEditors = [];
@@ -44,6 +149,8 @@
     $(document).ready(function() {
         smartEditor();
     });
+
+
 
     // 폼 제출 함수
     function submitPost() {

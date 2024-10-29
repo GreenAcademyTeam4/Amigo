@@ -2,6 +2,7 @@ package com.example.amigo_project.repository.interfaces;
 
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
+import com.example.amigo_project.repository.model.Board;
 import com.example.amigo_project.repository.model.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
