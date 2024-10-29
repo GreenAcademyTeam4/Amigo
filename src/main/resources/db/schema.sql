@@ -33,7 +33,7 @@ create table board_tb (
   school_id int,
   title varchar(50),
   content_location varchar(255),
---  Image_location blob,
+  image_location blob,
   user_id int,
   view_count int default 0,
   likes int default 0,

@@ -10,4 +10,5 @@ public class AmigoProjectApplication {
         SpringApplication.run(AmigoProjectApplication.class, args);
     }
 
+
 }
