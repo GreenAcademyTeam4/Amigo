@@ -29,6 +29,7 @@ public interface UserRepository {
     // 비밀번호 변경하기
     public void updatePasswordByUserId(@Param("userId") Integer userId, @Param("password")String password);
 
-
+    // id로 유저 정보 가져오기
+    public User findUserById(int id);
 }
 

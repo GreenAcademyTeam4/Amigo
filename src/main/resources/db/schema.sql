@@ -223,3 +223,9 @@ create table charge_history_tb (
     payment_key varchar(100),
     foreign key (user_id) references user_tb(id)
 );
+
+create table emoticon_tb (
+     id int primary key auto_increment,
+     url varchar(255),
+     name varchar(15)
+);

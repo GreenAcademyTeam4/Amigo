@@ -1,0 +1,159 @@
+/* 전체 배경 스타일 */
+.background {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+/* 좌석 스타일 */
+.user-seat {
+    position: relative;
+    width: 100px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* 닉네임 스타일 */
+.user-nickname {
+    position: absolute;
+    top: -20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 3px 6px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 아바타 이미지 스타일 */
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 채팅 말풍선 스타일 */
+.user-bubble {
+    position: absolute;
+    top: -70px; /* 닉네임 위로 위치 조정 */
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 12px;
+    white-space: nowrap;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* 채팅 입력 박스 스타일 */
+.chat-box {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* 채팅 입력 필드 */
+.chat-input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    margin-right: 10px;
+}
+
+/* 전송 버튼 */
+.chat-send {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chat-send:hover {
+    background-color: #45a049;
+}
+
+/* 이모티콘 버튼 */
+.emoticon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* 이모티콘 박스 (말풍선 스타일) */
+.emoticon-box {
+    position: absolute;
+    bottom: 60px; /* 이모티콘 버튼 위에 위치 */
+    left: 15px;
+    display: none; /* 기본적으로 숨김 */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 150px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 20;
+}
+
+/* 이모티콘 이미지 */
+.emoticon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.emoticon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 이모티콘 이미지 스타일 */
+.bubble-emoticon {
+    width: 40px; /* 기존의 절반 크기 */
+    height: 40px; /* 기존의 절반 크기 */
+    object-fit: contain;
+    vertical-align: middle;
+}
