@@ -25,8 +25,9 @@ public class MypageDTO {
 
         private Integer userId;
         private Integer avatarId;
-        private Integer type;
         private String avatarName;
+        private Integer type;
+
 
     }
 
@@ -57,7 +58,7 @@ public class MypageDTO {
     @Data
     @Builder
     public static class friendReqDTO{
-        private Integer senderId;
+        private Integer id;
         private String name;
     }
 

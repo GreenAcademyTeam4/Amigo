@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>친구 관리</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>친구 관리</h1>
+<div>
+    <h2>친구 목록</h2>
+    <ul>
+        {{#friendList}}
+            <li>{{friendName}} ({{gender}})</li>
+        {{/friendList}}
+    </ul>
+
+    <h2>받은 친구 요청</h2>
+    <ul>
+        {{#friendReqList}}
+            <li>{{name}} <button onclick="acceptFriend({{id}})">수락</button> <button onclick="rejectFriend({{id}})">거부</button></li>
+        {{/friendReqList}}
+    </ul>
+
+    <h2>보낸 친구 요청</h2>
+    <ul>
+        {{#myFriendReq}}
+            <li>{{name}}</li>
+        {{/myFriendReq}}
+    </ul>
+
+    <h2>친구 검색</h2>
+    <input type="text" id="search" placeholder="친구 이름 입력">
+    <button onclick="searchFriend()">검색</button>
+
+    <ul id="searchResult"></ul>
+</div>
+<script>
+    function searchFriend() {
+        const search = $("#search").val();
+        $.get("/my-page/search", { search: search }, function(data) {
+            $("#searchResult").empty();
+            if (typeof data === 'string') {
+                $("#searchResult").append(`<li>${data}</li>`);
+            } else {
+                $.each(data, function(index, friend) {
+                    $("#searchResult").append(`<li>${friend.friendName} (${friend.gender})</li>`);
+                });
+            }
+        });
+    }
+
+    function acceptFriend(id) {
+        $.post("/my-page/accept-friend-req", { receiverId: id }, function() {
+            alert("친구 요청이 수락되었습니다.");
+            location.reload();
+        });
+    }
+
+    function rejectFriend(id) {
+        $.get("/my-page/reject", { senderId: id }, function(response) {
+            alert(response);
+            location.reload();
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인벤토리</title>
+</head>
+<body>
+<h1>인벤토리</h1>
+<div>
+    <h2>현재 착용중인 아바타</h2>
+    <p>헤드: {{#nowAvatar.head}}{{.}}{{/nowAvatar.head}}{{^nowAvatar.head}}N/A{{/nowAvatar.head}}</p>
+    <p>상의: {{#nowAvatar.top}}{{.}}{{/nowAvatar.top}}{{^nowAvatar.top}}N/A{{/nowAvatar.top}}</p>
+    <p>하의: {{#nowAvatar.bottom}}{{.}}{{/nowAvatar.bottom}}{{^nowAvatar.bottom}}N/A{{/nowAvatar.bottom}}</p>
+    <p>신발: {{#nowAvatar.shoes}}{{.}}{{/nowAvatar.shoes}}{{^nowAvatar.shoes}}N/A{{/nowAvatar.shoes}}</p>
+
+    <h2>내가 보유중인 아바타</h2>
+    <ul>
+        {{#inventoryList}}
+            <li>{{avatarName}} (타입: {{type}})</li>
+        {{/inventoryList}}
+    </ul>
+
+    <form action="/my-page/inventory/change" method="post">
+        <label for="head">헤드:</label>
+        <input type="number" id="head" name="head">
+        <label for="top">상의:</label>
+        <input type="number" id="top" name="top">
+        <label for="bottom">하의:</label>
+        <input type="number" id="bottom" name="bottom">
+        <label for="shoes">신발:</label>
+        <input type="number" id="shoes" name="shoes">
+        <button type="submit">아바타 변경</button>
+    </form>
+</div>
+</body>
+</html>
