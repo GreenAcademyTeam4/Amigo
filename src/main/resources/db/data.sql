@@ -42,3 +42,5 @@ VALUES ('공지사항 1', '첫 번째 공지사항 내용입니다.', 0);
 INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
+INSERT INTO emoticon_tb (url,name)
+VALUES ('/image/emoticon/smile.jpg','smile');
