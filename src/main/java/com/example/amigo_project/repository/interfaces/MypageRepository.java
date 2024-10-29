@@ -32,6 +32,9 @@ public interface MypageRepository {
     // 내 친구 목록 조회
     public List<MypageDTO.myFriendListDTO> findMyFriendListByUserId(Integer userId);
 
+    // 내 친구 목록에서 검색기능 적용
+    public List<MypageDTO.myFriendListDTO> searchFriend(@Param("userId") Integer userId, @Param("search") String search);
+
     //유저 id로 나한테 온 친구 요청 목록 조회
     public List<MypageDTO.friendReqDTO> findFriendReqByUserId(Integer userId);
 
