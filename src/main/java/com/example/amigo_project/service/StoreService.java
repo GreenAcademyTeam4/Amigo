@@ -4,6 +4,7 @@ import com.example.amigo_project.dto.StoreDTO;
 import com.example.amigo_project.repository.interfaces.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,30 @@ public class StoreService {
     // 신발 아바타만 조회
     public List<StoreDTO.avatarListDTO> readShoesAvatarList (Integer userId){
         return storeRepository.readShoesAvatarList(userId);
+    }
+
+    // 아바타 이름으로 아바타 검색
+    public List<StoreDTO.avatarListDTO> searchAvatarListByName(Integer userId, String search){
+        return storeRepository.searchAvatarListByName(userId, search);
+    }
+
+
+
+    /**
+     * 아바타 구매 로직
+     * TODO 개별 예외처리
+     */
+    @Transactional
+    public void butBasket(StoreDTO.pointHistoryDTO dto){
+        // 유저 포인트 차감
+        storeRepository.updateUserPointByUserId(dto.getUserId());
+        // 유저 인벤토리에 구매한 아바타 정보 입력
+        for(int i = 0; i<dto.getProdIdList().length; i++){
+            storeRepository.insertAvatarInventoryByAvatarIdAndUserId(dto.getUserId(), dto.getProdIdList()[i]);
+        }
+        // 포인트 히스토리 입력
+        storeRepository.insertPointHistory(dto.getUserId(), dto.getOrderHead(), dto.getOrderBody(), dto.getUsePoint(), dto.getLessPoint());
+
     }
 
 
