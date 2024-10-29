@@ -1,74 +1,41 @@
-$(document).ready(function () {
-    const enter = $('#enter');
+$(document).ready(function() {
+    const enter = $('.enter');
     const post = $('#post');
     const screen = $('#screen-area');
-    const school = $('#other-school');
+    const mypage = $('#my-page');
+    const school = $('.other-school');
+    const friends = $('.friends');
 
-    // Mustache 템플릿 가져오기
-    const template = $('#template').html();
-
-    // 학교 바꾸기 기능 추가
-    school.each(function (index, element) {
-        $(element).on('click', function () {
-            const schoolId = $(this).data('id');
-            fetch("http://localhost:8080/main/changeSchool?id=" + schoolId)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const rendered = Mustache.render(template, { content: data });
-                    screen.html(rendered);
-                })
-                .catch(error => console.error('Error:', error));
+    // 페이지 로드 시 게시판 콘텐츠 먼저 로드
+    fetch("/board/list")
+        .then(response => response.text())
+        .then(data => {
+            screen.html(data);
+        })
+        .catch(error => {
+            console.error('게시판 로딩 중 오류 발생:', error);
         });
-    });
-
-    // 학교로 들어가는 이벤트 추가
-    enter.on('click', function () {
-        fetch("http://localhost:8080/main/school")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                const rendered = Mustache.render(template, { content: data });
-                screen.html(rendered);
-            })
-            .catch(error => console.error('Error:', error));
-    });
 
     // 게시판으로 들어가는 이벤트 추가
-    post.on('click', function () {
+    post.on('click', function() {
         fetch("/board/list")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
+            .then(response => response.text())
             .then(data => {
-                const rendered = Mustache.render(template, { content: data });
-                screen.html(rendered);
+                screen.html(data);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('게시판 로딩 중 오류 발생:', error);
+            });
     });
 
-    // 처음에는 게시판을 띄우도록 설정
-    fetch("/board/list")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            const rendered = Mustache.render(template, { content: data });
-            screen.html(rendered);
-        })
-        .catch(error => console.error('Error:', error));
+    mypage.on('click', function() {
+        fetch("/my-page/")
+            .then(response => response.text())
+            .then(data => {
+                screen.html(data);
+            })
+            .catch(error => {
+                console.error('마이 페이지 로딩 중 오류 발생:', error);
+            });
+    });
 });
