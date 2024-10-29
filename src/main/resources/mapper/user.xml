@@ -33,6 +33,7 @@
 		insert into user_tb(user_id, password)
 			values(#{kakaoId}, #{kakaoPassword})
 	</insert> 
+  
     <insert id="googleInsert" parameterType="java.util.HashMap">
 		insert into user_tb(user_id, password)
 			values(#{email}, #{googlePassword})
@@ -48,4 +49,8 @@
     VALUES (#{naverId}, #{naverPassword})
 </insert>
 
+    <select id="findUserById" resultType="com.example.amigo_project.repository.model.User">
+        select * from user_tb
+        where id = #{id}
+    </select>
 </mapper>

@@ -3,27 +3,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.amigo_project.repository.interfaces.PaymentRepository">
-
     <insert id="createChargeHistory">
-        INSERT INTO charge_history_tb(user_id, order_Name, order_id, point, total_amount, approved_at, method, payment_key)
-        VALUES (#{userId}, #{orderName}, #{orderId}, #{point}, #{totalAmount}, #{approvedAt}, #{method}, #{paymentKey})
+        INSERT INTO charge_history_tb(user_id, order_Name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (#{userId}, #{orderName}, #{orderId}, #{point}, #{totalAmount}, #{approvedAt}, #{method}, #{paymentKey}, 'none')
     </insert>
 
     <update id="chargePoint">
         UPDATE user_tb SET point = point + #{point} WHERE id = #{userId}
     </update>
 
+    <update id="deductPoint">
+        UPDATE user_tb SET point = point - #{point} WHERE id = #{userId}
+    </update>
+
     <select id="readChargeHistory" resultType="com.example.amigo_project.dto.payment.ChargeHistoryDTO">
-        SELECT order_name, total_amount, approved_at, method
+        SELECT id, order_name, order_id, total_amount, approved_at, method, refund_status
         FROM charge_history_tb
         WHERE user_id = #{userId}
-        ORDER BY id DESC limit #{limit} offset #{offset}
+        ORDER BY id DESC LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <select id="countChargeHistory" parameterType="Integer">
         SELECT COUNT(*) AS count FROM charge_history_tb WHERE user_id = #{userId}
     </select>
 
+    <insert id="createRefund">
+        INSERT INTO refund_tb(charge_history_id, order_Name, order_id, payment_key, cancel_amount, cancel_reason, request_at, canceled_at, cancel_status)
+        VALUES (#{chargeHistoryId}, #{orderName}, #{orderId}, #{paymentKey}, #{cancelAmount}, #{cancelReaseon}, #{requestAt}, #{canceledAt}, #{cancelStatus})
+    </insert>
+
+    <update id="modifyRefundStatus">
+        UPDATE charge_history_tb SET refund_status = #{refundStatus} where id = #{id}
+    </update>
+
+    <insert id="createRequestRefund">
+        INSERT INTO request_refund_tb(charge_history_id, cancel_reason)
+        VALUES (#{chargeHistoryId}, #{cancelReason})
+    </insert>
+
+    <select id="readChargeHistoryById" resultType="com.example.amigo_project.repository.model.ChargeHistory">
+        SELECT * FROM charge_history_tb WHERE id = #{id}
+    </select>
+
+    <select id="readAllRequestRefund" resultType="com.example.amigo_project.dto.payment.RequestRefundListDTO">
+        SELECT r.id AS id, c.id AS chargeHistoryId, c.order_name AS orderName, c.order_id AS orderId, c.total_amount AS cancelAmount,
+               r.cancel_reason AS cancelReason, r.request_at AS requestAt, c.refund_status AS refundStatus FROM request_refund_tb AS r
+        JOIN charge_history_tb AS c ON r.charge_history_id = c.id
+        ORDER BY r.id DESC LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countRequestRefundHistory" parameterType="Integer">
+        SELECT COUNT(*) AS count FROM request_refund_tb
+    </select>
+
+    <select id="readRequestRefundById" resultType="com.example.amigo_project.repository.model.RequestRefund">
+        SELECT * FROM request_refund_tb WHERE id = #{id}
+    </select>
+
+    <delete id="removeRequestRefund">
+        DELETE FROM request_refund_tb  WHERE charge_history_id = #{chargeHistoryId}
+    </delete>
+
+    <insert id="createRefuseReason">
+        INSERT INTO refund_refuse_tb(charge_history_id, refund_refuse_reason, created_at)
+        VALUES (#{chargeHistoryId}, #{refundRefuseReason}, #{createdAt})
+    </insert>
+    
+    <select id="readRefuseReasonDetail" resultType="com.example.amigo_project.dto.payment.RefundRefuseDTO">
+        SELECT id, charge_history_id, refund_refuse_reason, created_at
+        FROM refund_refuse_tb
+        WHERE charge_history_id = #{chargeHistoryId}
+    </select>
 
 
 

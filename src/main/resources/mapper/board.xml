@@ -15,10 +15,30 @@
         SELECT b.id, b.school_id AS schoolId, u.nickname as nickname, b.title, b.content_location AS contentLocation,
         b.view_count AS viewCount, b.likes, b.created_at AS createdAt
         FROM board_tb as b
-        join user_tb as u
-        on b.user_id = u.id
+        JOIN user_tb as u
+        ON b.user_id = u.id
         WHERE school_id = #{schoolId}
-        ORDER BY b.created_at DESC
+        ORDER BY b.created_at DESC, b.id DESC
+    </select>
+
+    <!-- 특정 학교의 게시글 조회 (페이징 처리 할려고)-->
+    <select id="findBoardsBySchoolId2" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname as nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb as b
+        JOIN user_tb as u
+        ON b.user_id = u.id
+        WHERE school_id = #{schoolId}
+        ORDER BY b.created_at DESC, b.id DESC
+        LIMIT #{size}
+        OFFSET #{offset}
+    </select>
+
+    <!-- 특정 학교의 게시글 갯수 조회 (페이징 처리 할려고)-->
+    <select id="countBoardsBySchoolId" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb
+        WHERE school_id = #{schoolId}
     </select>
 
     <!-- 게시글에 대한 상세내용을 가져오면서 user_tb에 있는 nickname도 같이 들고오는 쿼리  -->
@@ -54,7 +74,7 @@
         join  user_tb as u
         on c.user_id = u.id
         WHERE board_id = #{boardId}
-        ORDER BY c.created_at ASC
+        ORDER BY c.created_at DESC
     </select>
 
     <!-- 게시판Id를 기준으로 게시글을 삭제하는 쿼리   -->
@@ -91,12 +111,7 @@
         WHERE id = #{commentId}
     </update>
 
-    <!-- 게시글 상세보기 클릭 시 조회수가 +1 증가하는 쿼리 -->
-    <update id="incrementViewCount">
-        UPDATE board_tb
-        SET view_count = view_count + 1
-        WHERE id = #{boardId}
-    </update>
+
 
     <!-- 게시글 하트가 제일 많은 게시글 3개 올리기 -->
     <select id="findHeartBoard" resultType="com.example.amigo_project.dto.BoardDTO">
@@ -140,22 +155,152 @@
         LIMIT 3;
     </select>
 
-    <!-- board_view 테이블에서 유저Id 와 게시판id를 검색한다. -->
-    <select id="boardViewCount" resultType="com.example.amigo_project.dto.BoardDTO">
-        SELECT COUNT(*)
-        FROM board_view_tb
-        WHERE user_id = #{userId} AND board_id = #{boardId};
-    </select>
-
-
-    <!-- 유저가 쓴 개수 조회 -->
+    <!-- 유저가 쓴 개수 조회 (게시글)-->
     <select id="countBoardByUserId" resultType="Integer">
         SELECT COUNT(*) FROM board_tb WHERE user_id = #{id}
     </select>
 
-    <!-- 유저가 쓴 댓글 조회 -->
+    <!-- 유저가 쓴 댓글 조회 (댓글)-->
     <select id="countCommentByUserId" resultType="Integer">
         SELECT COUNT(*) FROM comment_tb WHERE user_id = #{id}
     </select>
+
+    <!-- 검색어로 게시글 찾기 (검색) (페이징) -->
+    <select id="searchBoardsByKeyword" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb b
+        JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId} AND b.title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY b.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 검색된 게시글 총 개수 (검색 )-->
+    <select id="countSearchBoardsByKeyword" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb b
+        WHERE b.school_id = #{schoolId} AND b.title LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 닉네임으로 게시글 찾기 (검색) (페이징) -->
+    <select id="searchBoardsByNickname" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb b
+        JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId} AND u.nickname LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY b.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 제목 + 내용으로 게시글 찾기 (검색) (페이징) -->
+    <select id="searchBoardsByTitleContent" resultType="com.example.amigo_project.dto.BoardDTO">
+        SELECT b.id, b.school_id AS schoolId, u.nickname, b.title, b.content_location AS contentLocation,
+        b.view_count AS viewCount, b.likes, b.created_at AS createdAt
+        FROM board_tb b
+        JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId} AND (b.title LIKE CONCAT('%', #{keyword}, '%') OR b.content_location LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY b.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 닉네임으로 게시글 총 개수 (검색)-->
+    <select id="countSearchBoardsByNickname" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb b
+        JOIN user_tb u ON b.user_id = u.id
+        WHERE b.school_id = #{schoolId} AND u.nickname LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 제목 + 내용으로 게시글 총 개수 (검색) -->
+    <select id="countSearchBoardsByTitleContent" resultType="int">
+        SELECT COUNT(*)
+        FROM board_tb b
+        WHERE b.school_id = #{schoolId} AND (b.title LIKE CONCAT('%', #{keyword}, '%') OR b.content_location LIKE CONCAT('%', #{keyword}, '%'))
+    </select>
+
+    <!-- 게시글 상세보기 클릭 시 기존 댓글 불러오기 메서드 (댓글) (페이징 처리) -->
+    <select id="findCommentsByBoardIdWithPaging" resultType="com.example.amigo_project.dto.CommentDTO">
+        SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at AS createdAt
+        FROM comment_tb c
+        JOIN user_tb u ON c.user_id = u.id
+        WHERE board_id = #{boardId}
+        ORDER BY c.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수 (댓글) -->
+    <select id="countCommentsByBoardId" resultType="int">
+        SELECT COUNT(*)
+        FROM comment_tb
+        WHERE board_id = #{boardId}
+    </select>
+
+    <!-- 사용자가 해당 게시글을 조회했는지 확인하는 쿼리 (조회수) -->
+    <select id="existsInBoardView" resultType="int">
+        SELECT COUNT(*)
+        FROM board_view_tb
+        WHERE user_id = #{userId}
+        AND board_id = #{boardId}
+    </select>
+
+    <!-- 게시글 상세보기 클릭 시 조회수가 +1 증가하는 쿼리 -->
+    <update id="incrementViewCount">
+        UPDATE board_tb
+        SET view_count = view_count + 1
+        WHERE id = #{boardId}
+    </update>
+
+    <!-- 조회 기록을 추가하는 쿼리 (조회수) -->
+    <insert id="insertBoardView" parameterType="com.example.amigo_project.dto.BoardDTO">
+        INSERT INTO board_view_tb (user_id, board_id)
+        VALUES (#{userId}, #{boardId})
+    </insert>
+
+
+
+    <!-- 좋아요 추가 -->
+    <insert id="insertLike">
+        INSERT INTO like_tb (user_id, board_id, created_at)
+        VALUES (#{userId}, #{boardId}, NOW())
+    </insert>
+
+    <!-- 좋아요 삭제 -->
+    <delete id="deleteLike">
+        DELETE FROM like_tb
+        WHERE user_id = #{userId} AND board_id = #{boardId}
+    </delete>
+
+    <!-- 특정 사용자가 특정 게시글에 좋아요를 눌렀는지 확인 -->
+    <select id="existsLike" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM like_tb
+        WHERE user_id = #{userId} AND board_id = #{boardId}
+    </select>
+
+    <!-- 게시글의 총 좋아요 개수 가져오기 -->
+    <select id="countLikes" resultType="int">
+        SELECT COUNT(*) FROM like_tb WHERE board_id = #{boardId}
+    </select>
+
+
+    <!-- 좋아요 수 증가 -->
+    <update id="incrementLikeCount">
+        UPDATE board_tb
+        SET likes = likes + 1
+        WHERE id = #{boardId}
+    </update>
+
+    <!-- 좋아요 수 감소 -->
+    <update id="decrementLikeCount">
+        UPDATE board_tb
+        SET likes = likes - 1
+        WHERE id = #{boardId}
+    </update>
+
+
+
+
+
 
 </mapper>
