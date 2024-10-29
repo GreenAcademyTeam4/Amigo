@@ -88,6 +88,5 @@ public class UserDTO {
             this.email = email;
             this.googlePassword = googlePassword;
         }
-
 }
 }

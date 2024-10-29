@@ -19,7 +19,7 @@ import com.example.amigo_project.repository.model.User;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
+import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -75,7 +75,8 @@ public class KakaoApiService {
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
 
-           
+            System.out.println("access_token : " + access_Token);
+            System.out.println("refresh_token : " + refresh_Token);
 
             br.close();
             bw.close();

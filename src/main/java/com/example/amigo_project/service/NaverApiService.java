@@ -1,7 +1,5 @@
 package com.example.amigo_project.service;
 
-
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -20,12 +18,16 @@ import com.example.amigo_project.repository.model.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import com.example.amigo_project.repository.interfaces.UserRepository;
+import org.springframework.stereotype.Service;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 @Service
 @RequiredArgsConstructor
 public class NaverApiService {
-
     private final UserRepository userRepository;
 
     @Value("${naver.client_id}")
@@ -138,4 +140,6 @@ public class NaverApiService {
 
         return principal;
     }
+}
+
 }

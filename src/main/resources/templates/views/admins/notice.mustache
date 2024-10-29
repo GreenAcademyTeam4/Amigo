@@ -7,7 +7,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">공지사항 목록</h6>
-            <button class="btn btn-primary btn-sm" onclick="location.href='/notice/create'">게시물 등록</button>
+            <button class="btn btn-primary btn-sm" onclick="location.href='/admin/notice/create'">게시물 등록</button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -26,9 +26,9 @@
                         <tr>
                             <td class="text-center align-middle"><input type="checkbox" name="selectNotice" value="{{id}}"></td>
                             <td class="text-center align-middle">{{id}}</td>
-                            <td class="align-middle"><a href="/notice/detail/{{id}}" class="text-dark font-weight-bold">{{title}}</a></td>
+                            <td class="align-middle"><a href="/admin/notice/detail/{{id}}" class="text-dark font-weight-bold">{{title}}</a></td>
                             <td class="text-center align-middle">{{createdAt}}</td>
-                            <td class="text-center align-middle"><a href="/notice/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
+                            <td class="text-center align-middle"><a href="/admin/notice/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
                         </tr>
                     {{/noticeList}}
                     {{^noticeList}}
