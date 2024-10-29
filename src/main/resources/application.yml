@@ -13,6 +13,10 @@ logging:
 spring:
   profiles:
     active: secret
+  web:
+    resources:
+      static-locations: classpath:/static/
+
   mustache:
     servlet:
       expose-session-attributes: true  # Mustache ????? ?? ??? ??? ? ??? ??
@@ -33,9 +37,11 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mapper/*.xml  # MyBatis ?? XML ?? ??
   output:
     ansi:
       enabled: always  # ?? ?? ? ANSI ??? ?? ????? ?? (??? ?? ??? ? ?? ?? ??)
       encoding:
         force-response: true
+

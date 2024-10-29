@@ -1,6 +1,5 @@
 package com.example.amigo_project.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,4 +54,3 @@ public class NaverController {
             return "redirect:/"; // 로그인 실패 시 리다이렉트할 페이지
         }
     }
-}
