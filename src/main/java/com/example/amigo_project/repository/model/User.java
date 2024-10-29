@@ -17,6 +17,7 @@ public class User {
 
     private Integer id; // (pk) auto_increment
     private String userId;
+    private String name;
     private String password;
     private String nickname;
     private String phoneNumber;

@@ -1,5 +1,8 @@
 package com.example.amigo_project.controller;
 
+import com.example.amigo_project.dto.ChatRoomDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +23,15 @@ public class MainController {
     }
 
     @GetMapping("/test")
-    public String test(HttpSession session, @RequestParam(name="grade") int grade,
-                       @RequestParam(name="class") int classNum, Model model){
-        // school ID 세션에서 가져오기
-        int schoolId = (Integer) session.getAttribute("schoolId");
+    public String test(HttpSession session, Model model) throws JsonProcessingException {
+
+
+        ChatRoomDTO dto = new ChatRoomDTO();
+        dto.setSchool("삼정고등학교");
+        dto.setGrade(3);
+        dto.setClassroom(10);
+        // 세션에 방 번호 등록
+        session.setAttribute("chatRoomDTO",dto);
 
 
         return "views/classroom/classroom";
