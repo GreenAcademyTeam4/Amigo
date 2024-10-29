@@ -1,5 +1,6 @@
 package com.example.amigo_project.handler;
 
+import com.example.amigo_project.dto.ChatRoomDTO;
 import com.example.amigo_project.dto.chat.ChatMessageDTO;
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.dto.chat.RoomDataDTO;
@@ -25,13 +26,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ChatHandler extends TextWebSocketHandler {
 
+    // 방 넘버 번호
+    Map<WebSocketSession, ChatRoomDTO> school = new ConcurrentHashMap<>();
     // 유저 관리 매니저
     private Map<WebSocketSession,RoomDataDTO> userManage = new ConcurrentHashMap<>();
     // 좌석 관리 매니저
     private Map<RoomDataDTO,List<SeatDataDTO>> seatManage = new ConcurrentHashMap<>();
     // 현재 좌석 기록
     private Map<Integer,Integer> currentSeat = new ConcurrentHashMap<>();
-
 
     // 메시지 처리하는 메서드
     @Override
@@ -109,7 +111,9 @@ public class ChatHandler extends TextWebSocketHandler {
             }
         }
     }
-    
+
+
+
     // 입장 시 처리하는 메서드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
