@@ -1,0 +1,59 @@
+{{> header}}
+
+<div class="container">
+    <h1>Avatar Shop</h1>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search avatars by name...">
+        <button id="searchBtn">Search</button>
+    </div>
+
+    <div id="avatarList">
+        {{#avatarList}}
+            <div class="avatar-item">
+                <h3>{{avatarName}}</h3>
+                <p>Type: {{type}}</p>
+                <p>Price: {{price}} points</p>
+                {{#owned}}
+                    <button class="owned" disabled>Owned</button>
+                {{/owned}}
+                {{^owned}}
+                    <button class="buy-btn" data-id="{{avatarId}}">Buy</button>
+                {{/owned}}
+            </div>
+        {{/avatarList}}
+    </div>
+
+    <div id="noResults" style="display: none;">
+        <p>No avatars found.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchBtn").addEventListener("click", function() {
+      const searchValue = document.getElementById("searchInput").value;
+      fetch(`/shop?search=${encodeURIComponent(searchValue)}`)
+        .then(response => response.json())
+        .then(data => {
+          const avatarListContainer = document.getElementById("avatarList");
+          avatarListContainer.innerHTML = "";
+          if (data.length === 0) {
+            document.getElementById("noResults").style.display = "block";
+          } else {
+            document.getElementById("noResults").style.display = "none";
+            data.forEach(avatar => {
+              const avatarItem = document.createElement("div");
+              avatarItem.classList.add("avatar-item");
+              avatarItem.innerHTML = `
+                <h3>${avatar.avatarName}</h3>
+                <p>Type: ${avatar.type}</p>
+                <p>Price: ${avatar.price} points</p>
+                ${avatar.owned ? '<button class="owned" disabled>Owned</button>' : `<button class="buy-btn" data-id="${avatar.avatarId}">Buy</button>`}
+              `;
+              avatarListContainer.appendChild(avatarItem);
+            });
+          }
+        });
+    });
+</script>
+
+{{> footer}}
