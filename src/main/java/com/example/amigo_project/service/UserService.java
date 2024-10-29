@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
 import com.example.amigo_project.repository.model.User;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +77,11 @@ public class UserService {
             return null; 
         }
   
+//        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return user;
+//        } else {
+//            return null;
+//        }
     }
 
     /**
@@ -110,6 +115,8 @@ public class UserService {
         userRepository.updatePasswordByUserId(userId, password);
     }
 
-
+    public User findUser(int id) {
+        return userRepository.findUserById(id);
+    }
 }
 

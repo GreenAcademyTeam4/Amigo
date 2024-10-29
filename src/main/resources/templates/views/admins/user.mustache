@@ -1,86 +1,116 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
-    <style>
-        .status-icon {
-            width: 24px;
-            height: 24px;
-        }
-    </style>
+<style>
+    .status-icon {
+        width: 24px;
+        height: 24px;
+    }
+</style>
 
 <body id="page-top">
 
-    {{>layout/admin/adminSidebar}}
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
-            <!-- Main Content -->
-            <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">회원 조회</h1><br>
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-secondary">회원 목록</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
-                                <thead>
+{{>layout/admin/adminSidebar}}
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <!-- Main Content -->
+        <div class="container-fluid">
+            <h1 class="h3 mb-2 text-gray-800">회원 조회</h1><br>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-secondary">회원 목록</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>아이디</th>
+                                <th>온라인 상태</th>
+                                <th>활성상태</th>
+                                <th>상세보기</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#userList}}
                                 <tr>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>온라인 상태</th>
-                                    <th>활성상태</th>
-                                    <th>상세보기</th>
+                                    <td>{{nickname}}</td>
+                                    <td>{{userId}}</td>
+                                    <td>
+                                        {{#onlineStatus}}
+                                            <img src="/image/admin/free-icon-checkmark.png" class="status-icon" alt="온라인 상태">
+                                        {{/onlineStatus}}
+                                        {{^onlineStatus}}
+                                            <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
+                                        {{/onlineStatus}}
+                                    </td>
+                                    <td>
+                                        {{activeStatus}}
+                                    </td>
+                                    <td><a href="/admin/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {{#userList}}
-                                    <tr>
-                                        <td>{{nickname}}</td>
-                                        <td>{{userId}}</td>
-                                        <td>
-                                            {{#onlineStatus}}
-                                                <img src="/image/admin/free-icon-checkmark.png" class="status-icon" alt="온라인 상태">
-                                            {{/onlineStatus}}
-                                            {{^onlineStatus}}
-                                                <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
-                                            {{/onlineStatus}}
-                                        </td>
-                                        <td>
-                                            {{activeStatus}}
-
-                                        </td>
-                                        </td>
-                                        <td><a href="/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
-                                    </tr>
-                                {{/userList}}
-                                </tbody>
-                            </table>
-                        </div>
+                            {{/userList}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- End of Main Content -->
         </div>
+        <!-- End of Main Content -->
     </div>
-    <!-- End of Content Wrapper -->
 </div>
+<!-- End of Content Wrapper -->
 
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript Files Load -->
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap JS CDN -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
 <!-- Custom scripts for all pages-->
 <script src="vendor/js/sb-admin-2.min.js"></script>
 
-<!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#userTable').DataTable();
+        var table = $('#userTable').DataTable({
+            "language": {
+                "search": "검색:",
+                "lengthMenu": "_MENU_ 개씩 보기",
+                "info": "총 _TOTAL_명의 회원 중 _START_에서 _END_까지 표시",
+                "paginate": {
+                    "previous": "이전",
+                    "next": "다음"
+                }
+            }
+        });
+
+        // 전체 검색 필드를 특정 열로만 제한하는 커스텀 검색 기능 추가
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var searchTerm = $('#userTable_filter input').val().toLowerCase();
+                var name = data[0].toLowerCase();  // 이름 열
+                var userId = data[1].toLowerCase();  // 아이디 열
+
+                // 이름이나 아이디 열에 검색어가 포함되어 있는 경우에만 결과로 포함
+                if (name.includes(searchTerm) || userId.includes(searchTerm)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        // 검색 필드에 입력될 때마다 테이블 다시 그리기
+        $('#userTable_filter input').on('keyup change', function() {
+            table.draw();
+        });
     });
 </script>
+
 
 </body>
 

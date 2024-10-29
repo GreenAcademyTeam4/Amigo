@@ -1,0 +1,59 @@
+<head>
+    <title>Document</title>
+</head>
+<style>
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: #fff;
+      border-radius: 30px;
+      border: none;
+      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease 0s;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #1976d2;
+    }
+</style>
+
+<body>
+<div style="width: 400px" style="height: 400px">
+    <canvas id="myChart"></canvas>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
+
+<script>
+
+    const ctx = document.querySelector('#myChart');
+
+    var myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Red', 'Blue'],
+        datasets: [
+          {
+            label: '남녀 성별 비율',
+            data: [200, 300],
+            borderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+</script>
+
+</body>

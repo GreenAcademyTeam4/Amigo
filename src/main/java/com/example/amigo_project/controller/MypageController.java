@@ -1,17 +1,19 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.MypageDTO;
+import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.MypageService;
+import com.example.amigo_project.service.PaymentService;
 import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
 public class MypageController {
 
     private final MypageService mypageService;
-
+    private final PaymentService paymentService;
     private final UserService userService;
 
 
@@ -43,7 +45,7 @@ public class MypageController {
         } else {
             MypageDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
             model.addAttribute("dto", dto);
-
+            model.addAttribute("user", principal);
             return "views/mypage/info";
         }
     }
@@ -65,6 +67,7 @@ public class MypageController {
             MypageDTO.nowAvatarDTO nowAvatarDTO = mypageService.findNowAvatarByUserId(principal.getId());
             model.addAttribute("inventoryList", inventorydto);
             model.addAttribute("nowAvatar", nowAvatarDTO);
+            model.addAttribute("user", principal);
             return "views/mypage/inventory";
         }
 
@@ -139,6 +142,7 @@ public class MypageController {
             int result = userService.checkPasswordValid(principal.getId(), password);
             if(result == 1){
                 // TODO - 뷰에서 비동기로 처리
+                model.addAttribute("user", principal);
                 return "";
             }else{
                 model.addAttribute("msg", "비밀번호가 일치하지 않습니다. 확인 후 다시 시도해 주세요");
@@ -190,10 +194,33 @@ public class MypageController {
             List<MypageDTO.myFriendListDTO> friendList = mypageService.findMyFriendListByUserId(principal.getId());
             // 뷰 측에서 친구가 0명일때 등록된 친구가 없습니다. 띄우기
             model.addAttribute("friendList" ,friendList);
+            model.addAttribute("user", principal);
             return "";  // TODO - 뷰 mustache 파일 명 넣기
         }
     }
 
+
+    /**
+     * 내 친구 목록 중 이름으로 친구 검색 기능
+     * 비동기 방식으로 검색 내용을 전달받아 결과 리턴
+     * @param search
+     * @param session
+     * @return
+     */
+    @GetMapping("/search")
+    @ResponseBody
+    public ResponseEntity<?> searchFriend(@RequestParam("search") String search, HttpSession session) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            List<MypageDTO.myFriendListDTO> friendList = mypageService.searchFriend(principal.getId(), search);
+            if (friendList.isEmpty()) {
+                return ResponseEntity.ok("검색 결과가 없습니다.");
+            }
+            return ResponseEntity.ok(friendList);
+        }
+    }
 
     /**
      * 받은 친구 요청 출력
@@ -210,8 +237,12 @@ public class MypageController {
             return "alert";
         } else {
             List<MypageDTO.friendReqDTO> friendReqList = mypageService.findFriendReqByUserId(principal.getId());
-            // 받은 친구 요청이 없을 때 뷰 측에서 받은 친구 요청이 없습니다 출력
-            model.addAttribute("friendReqList", friendReqList);
+            List<MypageDTO.reccomendFriendDTO> recFriendList = mypageService.findRecommendFriendListByBirthAndSchool(principal);
+
+            // 받은 친구 요청이 없을 때 / 추천 친구가 없을 때 뷰 측에서 받은 친구 요청이 없습니다 출력
+            model.addAttribute("recFriendList", recFriendList); // 추천 친구(나이가 같고 학교가 같은 적이 있는 유저) 목록
+            model.addAttribute("friendReqList", friendReqList); // 받은 친구요청 목록
+            model.addAttribute("user", principal);
             return ""; // TODO - 뷰 mustache 파일 명 넣기
         }
     }
@@ -266,6 +297,35 @@ public class MypageController {
             return "alert";
         }
     }
+
+
+    /**
+     * 포인트 충전 내역 조회 (결제 측 기능 재활용)
+     * TODO 포인트 결제 내역 조회
+     * @param session - userId 추출
+     * @return 포인트 충전 내역 정보 + 페이징
+     */
+    @PostMapping("/charge-history")
+    public String findChargeHistory(HttpSession session, Model model){
+        int page = 1;
+        int size = 10;
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+            model.addAttribute("url", "redirect:/user/login");
+            return "alert";
+        } else {
+            List<ChargeHistoryDTO> list = paymentService.readChargeHistory(page, size, principal.getId());
+            model.addAttribute("paylist", list);
+            model.addAttribute("user", principal);
+            return ""; // TODO - view 주소 달기
+        }
+
+
+    }
+
+
+
 
 
 

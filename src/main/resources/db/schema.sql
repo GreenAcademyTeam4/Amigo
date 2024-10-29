@@ -35,8 +35,8 @@ create table board_tb (
   content_location varchar(255),
 --  Image_location blob,
   user_id int,
-  view_count int,
-  likes int,
+  view_count int default 0,
+  likes int default 0,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (school_id) references school_tb(id),
   foreign key (user_id) references user_tb(id)
@@ -183,9 +183,9 @@ create table notice_view_tb (
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
+  type int,
+  price int,
   name varchar(255)
---  type int,
---  foreign key (type) references avatar_type_tb(id)
 );
 
 -- 유저 아이템 인벤토리 테이블
@@ -211,15 +211,69 @@ create table now_avatar_tb (
   foreign key (shoes) references avatar_tb(id)
 );
 
+-- 결제 내역 테이블
 create table charge_history_tb (
     id int primary key auto_increment,
     user_id int,
     order_name varchar(100),
-    order_id varchar(100),
+    order_id varchar(64),
+    payment_key varchar(200) not null,
     point int,
     total_amount int,
     approved_at timestamp default CURRENT_TIMESTAMP,
-    method varchar(20),
-    payment_key varchar(100),
+    method varchar(30),
+    refund_status varchar(30),
+    foreign key (user_id) references user_tb(id)
+);
+
+-- 환불 내역 테이블
+create table refund_tb (
+    id int primary key auto_increment,
+    charge_history_id int,
+    order_name varchar(100),
+    order_id varchar(64),
+    payment_key varchar(200) not null,
+    cancel_amount int,
+    cancel_reason varchar(200) not null,
+    request_at timestamp default CURRENT_TIMESTAMP,
+    canceled_at timeStamp default CURRENT_TIMESTAMP,
+    cancel_status varchar(100),
+    foreign key (charge_history_id) references charge_history_tb(id)
+);
+
+-- 환불 신청 테이블
+create table request_refund_tb (
+    id int primary key auto_increment,
+    charge_history_id int,
+    cancel_reason varchar(200) not null,
+    request_at timeStamp default CURRENT_TIMESTAMP,
+    foreign key (charge_history_id) references charge_history_tb(id)
+);
+
+-- 환불 반려 사유 테이블
+create table refund_refuse_tb(
+    id int primary key auto_increment,
+    charge_history_id int,
+    refund_refuse_reason varchar(200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    foreign key (charge_history_id) references charge_history_tb(id)
+);
+
+-- 이모티콘 테이블
+create table emoticon_tb (
+     id int primary key auto_increment,
+     url varchar(255),
+     name varchar(15)
+);
+
+-- 포인트 사용내역 테이블
+create table point_history_tb(
+    id int primary key auto_increment,
+    user_id int, -- 유저id
+    order_head varchar(30), -- 포인트 사용 간단 내용 ex) : 아프로 헤어 외 n건..
+    order_body varchar(255), -- 포인트 사용 상세 내용 ex) : 아프로 헤어 , 양머리 두건, 배기팬츠 구입
+    use_point int, -- 사용 포인트
+    less_point int, -- 잔여 포인트
+    created_at timestamp default CURRENT_TIMESTAMP,
     foreign key (user_id) references user_tb(id)
 );
