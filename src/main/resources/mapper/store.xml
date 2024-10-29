@@ -5,7 +5,7 @@
 <mapper namespace="com.example.amigo_project.repository.interfaces.StoreRepository">
 
     <!-- 기본 값, 전체 아바타 조회 -->
-    <select id="readAllAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="readAllAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
@@ -14,7 +14,7 @@
 
 
     <!-- 머리 아바타 조회 -->
-    <select id="readHairAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="readHairAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
@@ -23,7 +23,7 @@
     </select>
 
     <!-- 상의 아바타 조회 -->
-    <select id="readTopAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="readTopAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
@@ -32,7 +32,7 @@
     </select>
 
     <!-- 하의 아바타 조회 -->
-    <select id="readBottomAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="readBottomAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
@@ -41,7 +41,7 @@
     </select>
 
     <!-- 신발 아바타 조회 -->
-    <select id="readShoesAvatarList" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="readShoesAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
@@ -50,7 +50,7 @@
     </select>
 
     <!-- 아바타 이름으로 검색 -->
-    <select id="searchAvatarListByName" resultType="com.example.amigo_project.dto.StoreDTO.avatarListDTO">
+    <select id="searchAvatarListByName" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
         CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
         FROM avatar_tb a
