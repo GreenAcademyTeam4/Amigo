@@ -1,7 +1,7 @@
 -- 유저 테이블
 create table user_tb (
   id int primary key auto_increment,
-  user_id varchar(20) not null,
+  user_id varchar(50) not null,
   name varchar(20)  null,
   password varchar(1000) not null,
   nickname varchar(20) null,

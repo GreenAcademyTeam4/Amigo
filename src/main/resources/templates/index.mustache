@@ -1,8 +1,9 @@
 {{>layout/header}}
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-<div class="main-layout">
-    <div class="screen-area">
+<main>
 
+    <div class="screen-area">
+    
     </div>
     <div class="remote-controller">
         <div class="profile">
@@ -11,20 +12,32 @@
         <div class="nickname">
             유저 이름
         </div>
-        <div class="my-page">
+        <a href="/my-page/">
+        <div class="bt-controller" id="">
             마이페이지
         </div>
-        <div class="enter">
+        </a>
+        <a href="">
+        <div class="bt-controller" id="">
             등교하기
         </div>
-        <div class="post">
+        </a>
+       {{!   <a href="/board/list"> }}
+        <div class="bt-controller" id="post">
             게시판
         </div>
-        <div class="logout">
-            로그아웃
+     {{!    </a> }}
+        <div class="friend-box">
+            
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/static/js/screen.js"></script>
+</main>
+<script id="template" type="x-tmpl-mustache">
+    <div class="content">
+        {{{content}}}
+    </div>
+</script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/screen.js"></script>
+{{>layout/footer}}
