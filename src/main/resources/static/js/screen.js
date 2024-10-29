@@ -7,7 +7,7 @@ $(document).ready(function() {
     const friends = $('.friends');
 
     // 페이지 로드 시 게시판 콘텐츠 먼저 로드
-    fetch("/board/list")
+    fetch("/board/multiBoard")
         .then(response => response.text())
         .then(data => {
             screen.html(data);

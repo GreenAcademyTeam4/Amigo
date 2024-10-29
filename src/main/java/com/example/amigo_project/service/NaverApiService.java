@@ -18,11 +18,6 @@ import com.example.amigo_project.repository.model.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.example.amigo_project.repository.interfaces.UserRepository;
-import org.springframework.stereotype.Service;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 @Service
@@ -142,4 +137,4 @@ public class NaverApiService {
     }
 }
 
-}
+
