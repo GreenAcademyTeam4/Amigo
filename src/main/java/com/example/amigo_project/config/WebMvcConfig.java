@@ -14,14 +14,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private AdminInterceptor adminInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login","/user/login","/user/join","/test","/css/**","/image/**", "/admin/**", "/js/**", "/vendor/**", "/board/**","/smarteditor/**");
-
-        registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(loginInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/login","/user/login","/user/join","/test","/css/**","/image/**", "/admin/**", "/js/**", "/vendor/**", "/board/**","/smarteditor/**");
+//
+//        registry.addInterceptor(adminInterceptor)
+//                .addPathPatterns("/admin/**")
+//                .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
+//    }
 }
