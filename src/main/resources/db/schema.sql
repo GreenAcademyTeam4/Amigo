@@ -224,6 +224,12 @@ create table charge_history_tb (
     foreign key (user_id) references user_tb(id)
 );
 
+create table emoticon_tb (
+     id int primary key auto_increment,
+     url varchar(255),
+     name varchar(15)
+);
+
 -- 포인트 사용내역 테이블
 create table point_history_tb(
     id int primary key auto_increment,
