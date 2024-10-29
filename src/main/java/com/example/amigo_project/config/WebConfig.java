@@ -13,9 +13,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebConfig implements WebSocketConfigurer {
 
     private final ChatHandler chatHandler;
+    private final WebHandShakeInterceptor webHandShakeIntercepter;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler, "/chat").setAllowedOrigins("*");
+        registry.addHandler(chatHandler, "/chat").addInterceptors(webHandShakeIntercepter).setAllowedOrigins("*");
     }
 }

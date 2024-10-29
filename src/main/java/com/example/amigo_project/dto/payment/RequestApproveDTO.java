@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApproveDTO {
+public class RequestApproveDTO {
 
     // 결제 승인 요청 시 사용하는 DTO
     private String orderName; // 주문 이름

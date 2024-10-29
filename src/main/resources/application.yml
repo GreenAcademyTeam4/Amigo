@@ -25,6 +25,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mapper/*.xml  # MyBatis ?? XML ?? ??
   output:
     ansi:
@@ -39,5 +40,5 @@ coolsms:
 payments:
   toss:
     test_client_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
-    test_secret_api_key : test_ck_DnyRpQWGrNqpzLg1DZKOVKwv1M9E
+    test_secret_api_key : test_sk_4yKeq5bgrpP7eWgWzq4xrGX0lzW6
 
