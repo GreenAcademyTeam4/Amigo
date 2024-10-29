@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 결과</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>학교 번호: {{schoolId}} 게시글 검색 결과</h1>
+
+    <!-- 글쓰기 버튼과 검색창 -->
+    <div class="mb-4">
+        <form action="/board/search" method="get" class="input-group" style="max-width: 600px;">
+            <!-- 검색 기준 선택 -->
+            <select name="searchType" class="form-select" style="max-width: 100px;" required>
+                <option value="title" {{#isTitleSelected}}selected{{/isTitleSelected}}>제목</option>
+                <option value="nickname" {{#isNicknameSelected}}selected{{/isNicknameSelected}}>닉네임</option>
+                <option value="titleContent" {{#isTitleContentSelected}}selected{{/isTitleContentSelected}}>제목 + 내용</option>
+            </select>
+            <!-- 검색어 입력 필드 -->
+            <input type="search" name="keyword" class="form-control" placeholder="검색어 입력" value="{{keyword}}" aria-label="Search">
+            <!-- 검색 버튼 -->
+            <button class="btn btn-outline-secondary" type="submit">
+                <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="검색 아이콘" style="width: 20px;">
+            </button>
+            <!-- 닫기 버튼 -->
+            <button class="btn btn-outline-secondary ml-2" type="button" onclick="window.location.href='/board/list';">닫기</button>
+        </form>
+    </div>
+
+    <table class="table table-bordered mt-4">
+        <thead class="thead-dark">
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>조회수</th>
+            <th>좋아요</th>
+            <th>작성일자</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#boardList}}
+            <tr>
+                <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
+                <td>{{nickname}}</td>
+                <td>{{viewCount}}</td>
+                <td>{{likes}}</td>
+                <td>{{createdAtFormat}}</td>
+            </tr>
+        {{/boardList}}
+        {{^boardList}}
+            <tr>
+                <td colspan="5" class="text-center">검색된 게시글이 없습니다.</td>
+            </tr>
+        {{/boardList}}
+        </tbody>
+    </table>
+
+    <!-- 페이지 네비게이션 -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" id="pagination">
+            <!-- JavaScript로 페이지 번호 생성 -->
+        </ul>
+    </nav>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const totalPages = {{totalPages}};
+    const paginationContainer = document.getElementById('pagination');
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPage = parseInt(urlParams.get('page')) || 0; // 현재 페이지를 계산
+    const keyword = encodeURIComponent('{{keyword}}');
+    const searchType = encodeURIComponent('{{searchType}}');
+
+    for (let i = 0; i < totalPages; i++) {
+        let li = document.createElement('li');
+        li.className = 'page-item';
+
+        // 현재 페이지를 활성화 상태로 표시
+        if (i === currentPage) {
+            li.classList.add('active');
+        }
+
+        let a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = `?page=${i}&size=4&keyword=${keyword}&searchType=${searchType}`;
+        a.textContent = i + 1;
+
+        li.appendChild(a);
+        paginationContainer.appendChild(li);
+    }
+});
+</script>
+
+</body>
+</html>

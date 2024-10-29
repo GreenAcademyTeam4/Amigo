@@ -35,8 +35,8 @@ create table board_tb (
   content_location varchar(255),
 --  Image_location blob,
   user_id int,
-  view_count int,
-  likes int,
+  view_count int default 0,
+  likes int default 0,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (school_id) references school_tb(id),
   foreign key (user_id) references user_tb(id)
@@ -183,9 +183,9 @@ create table notice_view_tb (
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
+  type int,
+  price int,
   name varchar(255)
---  type int,
---  foreign key (type) references avatar_type_tb(id)
 );
 
 -- 유저 아이템 인벤토리 테이블
@@ -228,4 +228,16 @@ create table emoticon_tb (
      id int primary key auto_increment,
      url varchar(255),
      name varchar(15)
+);
+
+-- 포인트 사용내역 테이블
+create table point_history_tb(
+    id int primary key auto_increment,
+    user_id int, -- 유저id
+    order_head varchar(30), -- 포인트 사용 간단 내용 ex) : 아프로 헤어 외 n건..
+    order_body varchar(255), -- 포인트 사용 상세 내용 ex) : 아프로 헤어 , 양머리 두건, 배기팬츠 구입
+    use_point int, -- 사용 포인트
+    less_point int, -- 잔여 포인트
+    created_at timestamp default CURRENT_TIMESTAMP,
+    foreign key (user_id) references user_tb(id)
 );
