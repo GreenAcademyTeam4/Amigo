@@ -237,3 +237,10 @@ INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_p
 (2, '양머리 외 2건', '양머리, 배기팬츠, 운동화 구입', 1400, 400),
 (3, '롱 헤어 외 1건', '롱 헤어, 정장 바지 구입', 1400, 1000),
 (4, '정장 바지 외 0건', '정장 바지 구입', 800, 500);
+
+-- 포인트충전 샘플데이터
+insert into charge_history_tb (user_id, order_name, order_id, point, total_amount, method, payment_key)
+values
+    (1, 'Order 001', 'ORD123456', 100, 5000, 'credit_card', 'PAYKEY001'),
+    (1, 'Order 002', 'ORD123457', 200, 10000, 'kakao_pay', 'PAYKEY002'),
+    (1, 'Order 003', 'ORD123458', 150, 7500, 'naver_pay', 'PAYKEY003');
