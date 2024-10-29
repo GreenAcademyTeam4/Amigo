@@ -103,6 +103,8 @@ public class UserService {
         userRepository.updatePasswordByUserId(userId, password);
     }
 
-
+    public User findUser(int id) {
+        return userRepository.findUserById(id);
+    }
 }
 
