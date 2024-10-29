@@ -15,6 +15,23 @@ INSERT INTO school_tb (id, school, name, region) VALUES
 (1, 'ABC School', 'ABC', 'Seoul'),
 (2, 'XYZ School', 'XYZ', 'Busan');
 
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC4yMjkyMzc5MTMyMDA3', 1000, 1000, '2024-10-21 12:50:31', '휴대폰', 'tviva20241021124957fLyI0', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC4yNTM2NTY3NjQzODc3', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182058fESt7', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC4yNjcxMTU1ODY1NTIw', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182937rTWv7', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC4xNzQ5NzM4MTQwMDE0', 1000, 1000, '2024-10-28 18:21:23', '휴대폰', 'tviva20241028093632rKXj1', 'none');
+
+        insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC4wMzY5MTA2MDk5MTIy', 1000, 1000, '2024-10-28 14:39:01', '휴대폰', 'tviva20241028143745iHv15', 'none');
+
+        insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
 values (1, '테스트1', '테스트123123', 1);
@@ -237,3 +254,6 @@ INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_p
 (2, '양머리 외 2건', '양머리, 배기팬츠, 운동화 구입', 1400, 400),
 (3, '롱 헤어 외 1건', '롱 헤어, 정장 바지 구입', 1400, 1000),
 (4, '정장 바지 외 0건', '정장 바지 구입', 800, 500);
+
+INSERT INTO emoticon_tb (url,name)
+VALUES ('/image/emoticon/smile.jpg','smile');

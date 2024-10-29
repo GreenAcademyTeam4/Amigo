@@ -6,10 +6,10 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChargeHistory {
 
@@ -18,10 +18,11 @@ public class ChargeHistory {
     private int userId; // user_tb의 PK
     private String orderName;
     private String orderId;
-    private int point; // 포인트
+    private int point; // 충전/ 차감한 포인트
     private int totalAmount; // 최종 결제 금액(현금)
     private Timestamp approvedAt; // 결제 승인 시간
     private String method;
     private String paymentKey;
+    private String refundStatus;
 
 }

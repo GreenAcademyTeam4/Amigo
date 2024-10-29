@@ -17,6 +17,7 @@ public class SignalingHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
+        System.out.println("메세지!!!!! : " + message.getPayload());
         for(WebSocketSession s : sessions.keySet()){
             if(s != session) {
                 s.sendMessage(new TextMessage(message.getPayload()));
