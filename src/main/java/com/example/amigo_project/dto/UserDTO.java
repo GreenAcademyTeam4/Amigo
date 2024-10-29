@@ -3,6 +3,7 @@ package com.example.amigo_project.dto;
 import lombok.Data;
 
 import java.sql.Timestamp;
+
 @Data
 
 public class UserDTO {
@@ -19,6 +20,7 @@ public class UserDTO {
     private boolean onlineStatus;
     private String activeStatus;
     private Timestamp createdAt;
+
 
     /**
      * 회원가입 DTO
@@ -42,6 +44,19 @@ public class UserDTO {
         private String userId;
         private String password;
 
+    }
+
+    @Data
+    public class KakaoDTO {
+        private long number;
+        private String kakaoId;
+        private String name;
+        private String kakaoPassword;
+        public KakaoDTO(String kakaoId, String kakaoPassword){
+            this.kakaoId = kakaoId;
+            this.kakaoPassword = kakaoPassword;
+
+        }
     }
 
 }

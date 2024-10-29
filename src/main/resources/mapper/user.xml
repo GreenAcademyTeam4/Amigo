@@ -16,11 +16,32 @@
         )
     </insert>
     
-    <select id="loginByUserIdandPassword"  parameterType="com.example.amigo_project.dto.UserDTO">
+    <select id="loginByUserIdAndPassword" resultType="com.example.amigo_project.repository.model.User">
+        SELECT *
+        FROM user_tb
+        WHERE user_id = #{userId}
+        AND password = #{password}
+    </select>
+    <select id="findByUserId"  parameterType="com.example.amigo_project.dto.UserDTO">
         SELECT *
         FROM user_tb
         WHERE user_id = #{userId} 
-        AND password = #{password}
+    </select>
+    
+  
+    <insert id="kakaoInsert" parameterType="java.util.HashMap">
+		insert into user_tb(user_id, password)
+			values(#{kakaoId}, #{kakaoPassword})
+	</insert> 
+
+    <select id="findPasswordByUserId" resultType="String">
+        select password
+        from user_tb
+        where id = #{userId}
     </select>
 
+    <select id="findUserById" resultType="com.example.amigo_project.repository.model.User">
+        select * from user_tb
+        where id = #{id}
+    </select>
 </mapper>
