@@ -56,8 +56,8 @@ create table friend_wait_tb (
   id int primary key auto_increment,
   sender_id int,
   receiver_id int,
-  foreign key (sender_id) references user_tb(id),
-  foreign key (receiver_id) references user_tb(id)
+  foreign key (sender_id) references user_tb(id) ON DELETE CASCADE,
+  foreign key (receiver_id) references user_tb(id) ON DELETE CASCADE
 );
 
 -- 알람 테마 테이블
