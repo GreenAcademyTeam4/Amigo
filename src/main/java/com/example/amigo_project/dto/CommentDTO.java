@@ -19,6 +19,8 @@ public class CommentDTO {
     private Timestamp createdAt;
     private String createdAtFormat;
 
+    private Integer CommentCount;
+
     public void getFormattedCreatedAt() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.createdAtFormat = formatter.format(createdAt);

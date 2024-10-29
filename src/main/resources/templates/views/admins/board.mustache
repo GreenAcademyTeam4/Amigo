@@ -1,0 +1,106 @@
+
+<body id="page-top">
+    {{>layout/admin/adminSidebar}}
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">게시글 관리</h1><br><br>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-secondary">게시글 목록</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="boardTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>게시글 번호</th>
+                                    <th>게시글 제목</th>
+                                    <th>게시글 내용</th>
+                                    <th>게시글 작성자</th>
+                                    <th>게시글 작성일</th>
+                                    <th>게시글 상세보기</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#boardList}}
+                                    <tr>
+                                        <td>{{id}}</td>
+                                        <td><a href="/admin/board-list/detail/{{id}}">{{title}}</a></td>
+                                        <td class="truncate-content">{{contentLocation}}</td>
+                                        <td>{{nickname}}</td>
+                                        <td>{{createdAtFormat}}</td>
+                                        </td>
+                                        <td><a href="/admin/board-list/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
+                                    </tr>
+                                    </tr>
+                                {{/boardList}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Main Content -->
+        </div>
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/vendor/js/sb-admin-2.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function () {
+    $('#boardTable').DataTable({
+        "language": {
+            "search": "검색:",
+            "lengthMenu": "_MENU_ 개씩 보기",
+            "info": "총 _TOTAL_개의 게시글",
+            "paginate": {
+                "previous": "이전",
+                "next": "다음"
+            }
+        }
+    });
+});
+
+
+// 내용 10글자만 보이게 하기
+document.addEventListener('DOMContentLoaded', function () {
+    const elements = document.querySelectorAll('.truncate-content');
+    elements.forEach(function (el) {
+        const content = el.textContent;
+        if (content.length > 10) {
+            el.textContent = content.substring(0, 10) + '...';
+        }
+    });
+
+    // 제목 8글자만 보이게 하기
+    const titleElements = document.querySelectorAll('td a');
+    titleElements.forEach(function (el) {
+        const title = el.textContent;
+        if (title.length > 8) {
+            el.textContent = title.substring(0, 8) + '...';
+        }
+    });
+});
+
+
+</script>
+
+</body>
+
+</html>
