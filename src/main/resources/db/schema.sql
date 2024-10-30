@@ -229,16 +229,14 @@ create table charge_history_tb (
 -- 환불 내역 테이블
 create table refund_tb (
     id int primary key auto_increment,
-    charge_history_id int,
+    payment_key varchar(200) not null,
     order_name varchar(100),
     order_id varchar(64),
-    payment_key varchar(200) not null,
     cancel_amount int,
     cancel_reason varchar(200) not null,
-    request_at timestamp default CURRENT_TIMESTAMP,
+    requested_at timestamp default CURRENT_TIMESTAMP,
     canceled_at timeStamp default CURRENT_TIMESTAMP,
-    cancel_status varchar(100),
-    foreign key (charge_history_id) references charge_history_tb(id)
+    cancel_status varchar(100)
 );
 
 -- 환불 신청 테이블
@@ -277,3 +275,32 @@ create table point_history_tb(
     created_at timestamp default CURRENT_TIMESTAMP,
     foreign key (user_id) references user_tb(id)
 );
+
+-- 채팅 테이블(친구 1 : 1)
+create table friend_chat_tb(
+    id int primary key auto_increment -- 방 번호처럼 사용
+);
+
+-- 채팅에 참가한 유저 리스트
+create table chat_room_tb (
+    id int primary key auto_increment, -- roomId(PK)
+    user_id int,
+    friend_id int,
+    unique(user_id, friend_id),
+    last_message_date DATE,
+    foreign key (user_id) references user_tb(id),
+    foreign key (friend_id) references user_tb(id)
+);
+
+-- 채팅 내역 저장 테이블
+create table chat_log_tb (
+    id int primary key auto_increment, -- pk
+    room_id int not null,
+    user_id int not null,
+    type varchar (10),
+    message varchar(255),
+    created_at timestamp default CURRENT_TIMESTAMP,
+    foreign key (room_id) references friend_chat_tb(id),
+    foreign key (user_id) references user_tb(id)
+);
+

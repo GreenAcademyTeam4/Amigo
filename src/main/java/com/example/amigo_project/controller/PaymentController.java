@@ -2,6 +2,10 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.payment.*;
 import com.example.amigo_project.repository.model.*;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
+import com.example.amigo_project.repository.model.payment.Refund;
+import com.example.amigo_project.repository.model.payment.RefundRefuse;
+import com.example.amigo_project.repository.model.payment.RequestRefund;
 import com.example.amigo_project.service.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -245,7 +249,7 @@ public class PaymentController {
     public ResponseEntity<String> checkPoint(@RequestParam(name = "id") int id) {
         User user = (User) session.getAttribute("principal");
         //int userPoint = user.getPoint(); // TODO - 주석 해제
-        int userPoint = 1000;
+        int userPoint = 3000;
 
         // 결제 내역 조회
         ChargeHistory chargeHistory = paymentService.readChargeHistoryById(id);
@@ -407,6 +411,13 @@ public class PaymentController {
         return "/payment/refuseReasonDetail";
     }
 
+    /**
+     * 전체 수익(통계)
+     */
+    @GetMapping("/readAllRevenue")
+    public Integer readAllRevenue() {
+        return paymentService.readAllRevenue();
+    }
 
 
 }
