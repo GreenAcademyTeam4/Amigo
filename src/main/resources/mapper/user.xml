@@ -22,7 +22,7 @@
         WHERE user_id = #{userId}
         AND password = #{password}
     </select>
-    <select id="findByUserId"  parameterType="com.example.amigo_project.dto.UserDTO">
+    <select id="findByUserId"  parameterType="com.example.amigo_project.dto.UserDTO$loginDTO">
         SELECT *
         FROM user_tb
         WHERE user_id = #{userId} 
