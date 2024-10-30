@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/board/board.css">
     <title>게시글 목록</title>
-
+</head>
+<body>
 <div class="board-container">
     <div class="head-title">
-         학교 번호: {{schoolId}} 게시글 목록
+        학교 번호: {{schoolId}} 게시글 목록
     </div>
-
+</div>
 
 <div class="container mt-5">
     <h1>학교 번호: {{schoolId}} 게시글 목록</h1>
-
 
     <!-- 글쓰기 버튼과 검색창 -->
     <div class="mb-4">
@@ -37,13 +37,10 @@
     </div>
 
     <!-- 글쓰기 버튼 -->
-    <td>
-        <a onclick="screenChanger('/board/form')">글쓰기</a>
-    </td>
-
-    <td>
-        <a  class="btn btn-secondary ml-2" onclick="screenChanger('/board/multiBoard')">게시판 여러개 띄우기</a>
-    </td>
+    <div>
+        <a class="btn btn-primary" onclick="screenChanger('/board/form')">글쓰기</a>
+        <a class="btn btn-secondary ml-2" onclick="screenChanger('/board/multiBoard')" >게시판 여러개 띄우기</a>
+    </div>
 
     <!-- 게시글 목록 테이블 -->
     <table class="table table-bordered mt-4">
@@ -59,7 +56,7 @@
         <tbody>
         {{#boardList}}
             <tr>
-                <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
+                <td><a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></td>
                 <td>{{nickname}}</td>
                 <td>{{viewCount}}</td>
                 <td>{{likes}}</td>
@@ -80,14 +77,18 @@
             <!-- JavaScript로 페이지 번호 생성 -->
         </ul>
     </nav>
-
 </div>
-</div>
-    <script>const totalPages = {{totalPages}};</script>
-<script src="/js/board/boardList.js"></script>
 
+<script>
+    const totalPages = {{totalPages}};
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="/js/board/boardMulti.js"></script>
+
+<!-- 지금 이거 작동 안됨 페이징 처리 작동 X -->
+<script src="/js/board/boardCommentList.js"></script>
 
 </body>
-</head>
 </html>
-

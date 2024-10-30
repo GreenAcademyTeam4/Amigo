@@ -55,6 +55,7 @@ public class UserController {
     
         System.out.println(principal);
         if(principal != null){
+            System.out.println("principal!!!!!!!!");
             session.setAttribute("principal", principal);
             return "views/login/schoolSelect";
         } else{

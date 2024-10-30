@@ -61,11 +61,11 @@ body {
 <body>
 <div class="board-container">
     <div class="board">
-        <h3>조회가 많은 게시글</h3>
+        <h3> <a onclick="screenChanger('/board/bestview')">조회가 많은 게시글</a></h3>
         <ul>
             {{#Search}}
                 <div class="board-item">
-                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
                     <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
                     <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
                 </div>
@@ -78,11 +78,11 @@ body {
     </div>
 
     <div class="board">
-        <h3>댓글이 많은 게시글</h3>
+        <h3> <a onclick="screenChanger('/board/bestcomment')">댓글이 많은 게시글</a></h3>
         <ul>
             {{#Recomend}}
                 <div class="board-item">
-                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
                     <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
                     <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
                 </div>
@@ -95,11 +95,11 @@ body {
     </div>
 
     <div class="board">
-        <h3>최신글</h3>
+        <h3> <a onclick="screenChanger('/board/newBoard')">최신글</a></h3>
         <ul>
             {{#createdAt}}
                 <div class="board-item">
-                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
                     <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
                     <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
                 </div>
@@ -112,11 +112,11 @@ body {
     </div>
 
     <div class="board">
-        <h3>하트가 많은 게시글</h3>
+        <h3> <a onclick="screenChanger('/board/newHeart')">하트가 많은 게시글</a></h3>
         <ul>
             {{#Heart}}
                 <div class="board-item">
-                    <p><strong>제목:</strong> <a href="/board/detail/{{id}}">{{title}}</a></p>
+                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
                     <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
                     <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
                 </div>
@@ -127,27 +127,8 @@ body {
             {{/Heart}}
         </ul>
     </div>
-
-<!--    <div class="board">-->
-<!--        <h3>이거 뭐임</h3>-->
-<!--        <ul>-->
-<!--            <li> <span>10/10 20:17</span></li>-->
-<!--            <li>ㄱㄱㄹㄷㄱㄷㄺㄷㄺㄹㄷㄱㄹ <span>10/10 20:17</span></li>-->
-<!--            <li>ㅈㅂㅈㅇㅂㅁㅈㅇㅂㅈㅇㅂ <span>10/06 10:50</span></li>-->
-<!--            <li>ㄹㄷㄱㅈㄴㄹㄷㄱㅈㄹㄷㄱㅈㄴㄹㄷㅈㄱㄴ <span>10/06 10:50</span></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-
-<!--    <div class="board">-->
-<!--        <h3>살려줘요</h3>-->
-<!--        <ul>-->
-<!--            <li>ㄷㅇㅈㄷㅈㅇㄹ <span>8분 전</span></li>-->
-<!--            <li>ㄷㅈㅇㄹㄴㅁㅈㄷㄹㅇㅁ <span>10/17 17:39</span></li>-->
-<!--            <li>ㄺㄷㄺㅊㄷㅇㄴㄹ <span>10/17 17:39</span></li>-->
-<!--            <li>ㄷㅈㄹㅇㄷㄹㅈㅇㄴㅁㄷㅇㄹㅊㅈㄴ<span>10/17 17:39</span></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"></script>
 </div>
 </body>
 </html>

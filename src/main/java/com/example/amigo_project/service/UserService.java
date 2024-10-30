@@ -76,6 +76,11 @@ public class UserService {
             return null; 
         }
   
+//        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+//            return user;
+//        } else {
+//            return null;
+//        }
     }
 
     /**
