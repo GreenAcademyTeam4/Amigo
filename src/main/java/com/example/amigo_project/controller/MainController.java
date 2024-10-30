@@ -20,6 +20,7 @@ import com.example.amigo_project.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
@@ -89,9 +90,9 @@ return "views/login/login";
         return "index";
     }
 
-    @GetMapping("/test")
-    public String test(Model model, HttpSession session){
-        User user = userService.findUser(1);
+    @GetMapping("/test/{id}")
+    public String test(@PathVariable(name = "id")int friendId, Model model, HttpSession session){
+        User user = (User)session.getAttribute("principal");
         List<Emoticon>emoticonList = chatService.findEmoticonList();
         RoomDataDTO roomDataDTO = new RoomDataDTO();
         roomDataDTO.setClassRoom("1");
@@ -101,6 +102,7 @@ return "views/login/login";
         session.setAttribute("principal",user);
         // school ID 세션에서 가져오기
         System.out.println(emoticonList);
+        model.addAttribute("friendId", friendId);
         model.addAttribute("user",user.getId());
         model.addAttribute("emoticonList",emoticonList);
         return "views/chat/voiceChat";
