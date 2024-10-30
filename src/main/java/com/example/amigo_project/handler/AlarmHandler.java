@@ -1,40 +1,38 @@
 package com.example.amigo_project.handler;
 
+import com.example.amigo_project.repository.model.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
+@RequiredArgsConstructor
 @Component
-public class SignalingHandler extends TextWebSocketHandler {
+public class AlarmHandler extends TextWebSocketHandler {
 
-    private final Map<WebSocketSession, String> sessions = new ConcurrentHashMap<>();
+    // 알람 소켓에 온 유저 관리
+    private Map<Integer, WebSocketSession> userManage = new ConcurrentHashMap<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
-        System.out.println("메세지!!!!! : " + message.getPayload());
-        for(WebSocketSession s : sessions.keySet()){
-            if(s != session) {
-                s.sendMessage(new TextMessage(message.getPayload()));
-            }
-        }
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("손님 입장!!!!!!");
-        sessions.put(session, session.getId());
+        User user = (User)session.getAttributes().get("principal");
+        
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("손님 퇴장!!!!!!");
-        sessions.remove(session);
+
     }
 }
