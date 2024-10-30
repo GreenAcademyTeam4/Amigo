@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -81,19 +82,18 @@ public class StoreController {
      * @return
      */
     @GetMapping("/search")
-
     public ResponseEntity<?> searchAvatarList(@RequestParam("search") String search, HttpSession session) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용 가능합니다. 먼저 로그인 해 주세요");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", "로그인 후 이용 가능합니다. 먼저 로그인 해 주세요"));
         } else {
             List<StoreDTO.avatarListDTO> avatarList = storeService.searchAvatarListByName(principal.getId(), search);
-            if (avatarList.isEmpty()) {
-                return ResponseEntity.ok("등록된 아바타가 없습니다.");
-            }
             return ResponseEntity.ok(avatarList);
         }
     }
+
+
 
 
 
@@ -105,19 +105,26 @@ public class StoreController {
      * @return
      */
     @PostMapping("/buy")
-
-    public ResponseEntity<String> buyBasket(@RequestBody StoreDTO.basketDTO dto, Model model) {
+    public ResponseEntity<String> buyBasket(@RequestBody StoreDTO.basketDTO dto) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             return ResponseEntity.ok("UnAuthorized");
         } else {
-            if(principal.getPoint() < dto.getTotalPrice()){
+            if (principal.getPoint() < dto.getTotalPrice()) {
                 return ResponseEntity.ok("LackOfPoint");
-            }else{
-                storeService.butBasket(new StoreDTO.pointHistoryDTO(principal.getId(), dto.getTotalPrice(), principal.getPoint(), dto.getProdNameList(), dto.getProdIdList()));
+            } else {
+                // 포인트 차감 및 구매 처리 로직 수행
+                User user = storeService.buyBasket(new StoreDTO.pointHistoryDTO(
+                        principal.getId(),
+                        dto.getTotalPrice(),
+                        principal.getPoint(),
+                        dto.getProdNameList(),
+                        dto.getProdIdList()
+                ));
+                session.setAttribute("principal", user);
+                return ResponseEntity.ok("Success");
             }
         }
-        return ResponseEntity.ok("Success");
     }
 
 
@@ -131,7 +138,8 @@ public class StoreController {
 
 
 
-    
-    
-    
+
+
+
+
 }

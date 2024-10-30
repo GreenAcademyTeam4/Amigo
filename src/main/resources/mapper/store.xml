@@ -6,58 +6,66 @@
 
     <!-- 기본 값, 전체 아바타 조회 -->
     <select id="readAllAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
-        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        SELECT a.id AS avatarId, a.type, a.name AS avatarName, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
     </select>
 
 
     <!-- 머리 아바타 조회 -->
     <select id="readHairAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
-        WHERE a.type = 1;
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
+        WHERE a.type = 1
     </select>
 
     <!-- 상의 아바타 조회 -->
     <select id="readTopAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
-        WHERE a.type = 2;
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
+        WHERE a.type = 2
     </select>
 
     <!-- 하의 아바타 조회 -->
     <select id="readBottomAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
-        WHERE a.type = 3;
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
+        WHERE a.type = 3
     </select>
 
     <!-- 신발 아바타 조회 -->
     <select id="readShoesAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
         SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
-        WHERE a.type = 4;
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
+        WHERE a.type = 4
     </select>
 
     <!-- 아바타 이름으로 검색 -->
     <select id="searchAvatarListByName" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
-        SELECT a.id AS avatar_id, a.type , a.name AS avatar_name, a.price,
-        CASE WHEN i.avatar_id IS NOT NULL THEN 1 ELSE 0 END AS owned
+        SELECT a.id AS avatar_id, a.type, a.name AS avatar_name, a.price,
+        CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
-        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId};
-        where a.name LIKE CONCAT('%', #{search}, '%')
+        LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}
+        WHERE a.name LIKE CONCAT('%', #{search}, '%')
     </select>
 
+    <!-- 맵핑 에러 해결용 리절트맵 -->
+    <resultMap id="avatarListResultMap" type="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
+        <result property="avatarId" column="avatar_id"/>
+        <result property="type" column="type"/>
+        <result property="avatarName" column="avatar_name"/>
+        <result property="price" column="price"/>
+        <result property="owned" column="owned"/>
+    </resultMap>
 
 
     <!-- 아바타 구매 시 유저 포인트 차감 쿼리 -->
@@ -75,7 +83,7 @@
 
     <!-- 포인트 히스토리 테이블에 입력하기 -->
     <insert id="insertPointHistory">
-        insert into inventory_tb(user_id, order_head, order_body, use_point, less_point)
+        insert into point_history_tb(user_id, order_head, order_body, use_point, less_point)
         values(#{userId}, #{orderHead}, #{orderBody}, #{usePoint}, #{lessPoint})
     </insert>
 

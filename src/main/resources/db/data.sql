@@ -1,5 +1,5 @@
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point)
+values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27', 50000);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test',1234,'가을','정훈','010-1234-5678','male','27');
@@ -10,16 +10,23 @@ values('test1',1234,'겨울','짱구','010-1234-5678','male','27');
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');
 
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27');
 
--- USER_TB에 누락된 유저 데이터 삽입
-INSERT INTO user_tb (id, user_id, password, name, nickname, phone_number, gender, birth)
-VALUES
-(5, 'test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27'),
-(6, 'test3', '1234', '겨울1', '짱구3', '010-1234-5678', 'male', '27'),
-(7, 'test4', '1234', '봄3', '테스트얍12', '010-1234-5678', 'male', '27'),
-(8, 'test5', '1234', '여름4', '테스터4', '010-1234-5678', 'male', '27'),
-(9, 'test6', '1234', '가을5', '테스트6', '010-1234-5678', 'male', '27'),
-(10, 'test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test3', '1234', '겨울1', '짱구3', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test4', '1234', '봄3', '테스트얍12', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test5', '1234', '여름4', '테스터4', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test6', '1234', '가을5', '테스트6', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
 
 -- 임시 데이터 학교
 INSERT INTO school_tb (id, school, name, region) VALUES
@@ -307,11 +314,15 @@ INSERT INTO friend_wait_tb (sender_id, receiver_id) VALUES
 -- 아바타 테이블에 샘플 데이터 삽입
 INSERT INTO avatar_tb (id, type, price, name) VALUES
 (1, 1, 500, '아프로 헤어'),
-(2, 2, 300, '양머리'),
+(2, 1, 300, '양머리'),
 (3, 3, 700, '배기팬츠'),
 (4, 4, 400, '운동화'),
 (5, 1, 600, '롱 헤어'),
-(6, 3, 800, '정장 바지');
+(6, 3, 800, '정장 바지'),
+(7, 1, 400, '폭풍간지컷'),
+(8, 2, 700, '탱크톱'),
+(9, 3, 1200, '돌핀팬츠'),
+(10, 4, 600, '캔버스화');
 
 -- 유저 아이템 인벤토리 테이블에 샘플 데이터 삽입
 INSERT INTO inventory_tb (user_id, avatar_id) VALUES

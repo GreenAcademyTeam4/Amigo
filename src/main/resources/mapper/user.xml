@@ -53,4 +53,10 @@
         select * from user_tb
         where id = #{id}
     </select>
+
+    <update id="updatePasswordByUserId">
+        update user_tb
+        set password = #{password}
+        where id = #{userId}
+    </update>
 </mapper>

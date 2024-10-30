@@ -165,7 +165,6 @@ public class MypageController {
 
     /**
      * 비밀번호 변경 기능
-     * @param password 변경할 비밀번호
      * @param session 에서 userId 추출
      * @return alert창 출력 후 mypage 초기 페이지로 이동
      */
@@ -240,46 +239,38 @@ public class MypageController {
         }
     }
 
-//    /**
-//     * 받은 친구 요청 출력
-//     * @param session
-//     * @param model
-//     * @return
-//     */
-//    @GetMapping("/friend-req-list")
-//    public String friendReqList(HttpSession session, Model model) {
-//        User principal = (User) session.getAttribute("principal");
-//        if (principal == null) {
-//            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-//            model.addAttribute("url", "redirect:/user/login");
-//            return "alert";
-//        } else {
-//
-//            return ""; //TODO 뷰 주소 적기
-//        }
-//    }
 
+    /**
+     * 학교 또는 이름을 입력받아서 해당 정보로 사용자 검색
+     */
+    @GetMapping("/find")
+    @ResponseBody
+    public ResponseEntity<?> findFriendBySchoolOrName(@RequestParam("search") String search, HttpSession session) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            List<MypageDTO.myFriendListDTO> friendList = mypageService.findFriendBySchoolOrName(principal.getId(), search);
+            if (friendList.isEmpty()) {
+                return ResponseEntity.ok("검색 결과가 없습니다.");
+            }
+            return ResponseEntity.ok(friendList);
+        }
+    }
 
 
     /**
      * 친구요청 보내기 기능
-     * @param session
-     * @param model
-     * @return
      */
-    @PostMapping("/send-friend-req")
-    public String sendFriendReq(HttpSession session, Model model, HttpServletRequest request){
+    @ResponseBody
+    @GetMapping("/send-friend-req")
+    public ResponseEntity<?> sendFriendReq(HttpSession session, Model model,@RequestParam("receiverId")Integer receiverId){
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-            model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
         } else {
-            Integer receiverId = Integer.parseInt(request.getParameter("receiverId"));
             mypageService.reqFriend(principal.getId(), receiverId);
-            model.addAttribute("msg", "친구 요청 보내기 완료");
-            model.addAttribute("url", "/my-page/friend-list");
-            return "alert";
+            return ResponseEntity.ok("친구 요청 보냄.");
         }
     }
 
@@ -289,26 +280,33 @@ public class MypageController {
 
     /**
      * 친구요청 수락 기능
-     * @param session - 유저 id 추출
-     * @param model
-     * @param request - 요청 보낸 이 id 추출
-     * @return 내 친구 리스트 재호출
      */
+    @ResponseBody
     @PostMapping("/accept-friend-req")
-    public String acceptFriendReq(HttpSession session, Model model, HttpServletRequest request){
+    public ResponseEntity<?> acceptFriendReq(HttpSession session, Model model, @RequestParam("receiverId")Integer receiverId){
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-            model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
         } else {
-            Integer receiverId = Integer.parseInt(request.getParameter("receiverId"));
             mypageService.acceptFriendReq(principal.getId(), receiverId);
-            model.addAttribute("msg", "친구 요청이 수락되었습니다.");
-            model.addAttribute("url", "/my-page/friend-list");
-            return "alert";
+            return ResponseEntity.ok("친구 요청 수락됨.");
         }
     }
+
+    // 친구요청 취소 기능
+    @ResponseBody
+    @PostMapping("/cancel-friend-req")
+    public ResponseEntity<?> cancleFriendReq(HttpSession session, Model model, @RequestParam("receiverId")Integer receiverId){
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.cancelfriendreq(principal.getId(), receiverId);
+            return ResponseEntity.ok("친구 요청 취소됨.");
+        }
+    }
+
+
 
 
     /**
