@@ -26,6 +26,7 @@ public class User {
     private Integer birth;
     private Integer point;
     private Integer userRole;
+    private byte[] profile;
     private boolean onlineStatus;
     private String activeStatus;
     private String elementarySchool; // 초등학교

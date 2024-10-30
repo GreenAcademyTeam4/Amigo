@@ -1,5 +1,10 @@
 package com.example.amigo_project.service;
 
+import java.util.*;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
 import com.example.amigo_project.repository.model.User;
@@ -65,11 +70,12 @@ public class UserService {
      
         User user = userRepository.findByUserId(dto.getUserId());
 
-//        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return user;
-//        } else {
-//            return null;
-//        }
+        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return user; 
+        } else {
+            return null; 
+        }
+  
     }
 
     /**
@@ -105,6 +111,16 @@ public class UserService {
 
     public User findUser(int id) {
         return userRepository.findUserById(id);
+    }
+
+    // 온라인인 친구 찾기
+    public List<User> findOnlineFriends(int id) {
+        return userRepository.findOnlineFriends(id);
+    }
+
+    // 오프라인인 친구 찾기
+    public List<User> findOfflineFriends(int id) {
+        return userRepository.findOfflineFriends(id);
     }
 }
 

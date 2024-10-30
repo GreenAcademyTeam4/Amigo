@@ -1,8 +1,10 @@
 package com.example.amigo_project.dto;
 
-import lombok.Data;
-
 import java.sql.Timestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 
@@ -58,5 +60,33 @@ public class UserDTO {
 
         }
     }
+    
+    @Data
+    public static class   NaverDTO {
+        private long number;
+        private String naverId;
+        private String name;
+        private String naverPassword;
+        public NaverDTO(String naverId, String naverPassword){
+            this.naverId = naverId;
+            this.naverPassword = naverPassword;
 
+        }
+
+        
+    }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GoogleDTO {
+        private String id;
+        private String name;
+        private String email;
+        private String googlePassword;
+
+        public GoogleDTO(String email, String googlePassword) {
+            this.email = email;
+            this.googlePassword = googlePassword;
+        }
+}
 }

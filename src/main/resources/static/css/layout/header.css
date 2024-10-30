@@ -1,81 +1,241 @@
-
+/* Header 스타일 */
 header {
-    background-color: #f0dcd5;
+    background-color: #e1baad;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     position: sticky;
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 1200px;
     padding: 10px 20px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    z-index: 1000; 
+    z-index: 1000;
     margin: 0 auto;
+    border-bottom: 1px solid #d4b7aa;
+    margin-bottom: 10px;
 }
-.logo img{
+
+/* 로고 스타일 */
+.logo img {
     height: auto;
     width: 180px;
 }
-#login-btn{
+
+/* 로그인 버튼 스타일 */
+#login-btn {
     background-color: #ce9178;
     border-radius: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-
 }
-#login-btn a{
+
+#login-btn a {
     color: #f0dcd5;
-    text-decoration: none; 
+    text-decoration: none;
     font-family: 'Quicksand', sans-serif;
     font-weight: bolder;
     padding: 15px;
-    
 }
-.nav-area{
+
+/* 네비게이션 영역 스타일 */
+.nav-area {
     padding: 15px;
+    display: flex;
+    align-items: center;
 }
-.nav-area a{
+
+.nav-area a {
     padding-left: 15px;
     color: #ce9178;
-    text-decoration: none; 
+    text-decoration: none;
     font-family: 'Quicksand', sans-serif;
     font-weight: bolder;
 }
+
 a:hover {
-    color: #ce9178; 
-    text-decoration: underline; 
+    color: #ce9178;
+    text-decoration: underline;
 }
 
-
-.slide-in {
-    animation: slideIn 0.5s ease-in-out forwards;
+/* alarm-container 스타일 */
+.alarm-container {
+    position: relative; /* .alarm-box의 절대 위치 기준 설정 */
+    display: inline-block; /* 필요한 경우 */
 }
 
-.slide-out {
-    animation: slideOut 0.5s ease-in-out forwards;
+/* 알림 아이콘 스타일 */
+#alarm-icon {
+    position: relative; /* alarm-box 위치를 alarm-icon 기준으로 조정 */
+    width: 20px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 5px;
+    transition: transform 0.3s ease, filter 0.3s ease; /* 애니메이션 효과 */
+    cursor: pointer;
+}
+
+#alarm-icon:hover {
+    transform: scale(1.1); /* 살짝 확대 */
+    filter: hue-rotate(180deg) brightness(1.2); /* 색상 변화 */
+}
+
+/* alarm-box 스타일 수정 */
+.alarm-box {
+    position: absolute;
+    top: 75%; /* alarm-icon 바로 아래 */
+    left: 68%;
+    transform: translateX(-50%);
+    width: 250px;
+    background-color: #f4e6e0; /* 알림창 배경색 */
+    border: 1px solid #d4b7aa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* 초기에는 숨김 */
+    z-index: 1001;
+    padding: 15px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.alarm-box::before {
+    content: "";
+    position: absolute;
+    top: -10px; /* 화살표 위치 */
+    left: 5%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #f4e6e0 transparent;
+}
+
+/* alarm-list 스타일 */
+.alarm-list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sender-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #ce9178; /* 프로필 영역 색상 */
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sender-nickname {
+    font-weight: bold;
+    color: #333;
+}
+
+.alarm-content {
+    color: #666;
+}
+
+/* 슬라이드 애니메이션 */
+.show-slide-in {
+    animation: slideIn 0.4s ease-in-out forwards;
+    display: block;
+}
+
+.hide-slide-out {
+    animation: slideOut 0.4s ease-in-out forwards;
 }
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
         opacity: 0;
+        transform: translateY(-10px);
     }
     to {
-        transform: translateX(0);
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
 @keyframes slideOut {
     from {
-        transform: translateX(0);
         opacity: 1;
+        transform: translateY(0);
     }
     to {
-        transform: translateX(-100%);
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Voice Chat 영역 */
+.voice-chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f4e6e0;
+    border: 1px solid #d4b7aa;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* 초기 상태 숨김 */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1001;
+}
+
+.voice-chat.slide-in {
+    opacity: 1;
+    visibility: visible;
+    animation: slideInVoice 0.5s ease forwards;
+}
+
+.voice-chat.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Voice Chat 애니메이션 */
+@keyframes slideInVoice {
+    from {
+        transform: translateY(20px);
         opacity: 0;
     }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 통화 수락 및 거절 버튼 */
+.accept-btn, .refuse-btn {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    background-size: 60%; /* 아이콘 크기 */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.accept-btn {
+    background-color: #4caf50; /* 연두색 */
+}
+
+.refuse-btn {
+    background-color: #f44336; /* 빨간색 */
+}
+
+/* 추가된 요소에 대한 위치 조정 및 디자인 */
+.sender-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ce9178;
+    margin-right: 10px;
+}
+
+.sender-nickname {
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
 }
