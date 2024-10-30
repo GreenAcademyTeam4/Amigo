@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/css/voiceChatRoom.css">
-
 <div class="background">
     <!-- 캠 영역 컨테이너 -->
     <div class="cam-area">
@@ -7,14 +6,14 @@
         <div class="video-container user">
             <video class="user-video" autoplay playsinline></video>
             <div class="loading-indicator user-loading">● ● ●</div>
-            <img src="/images/profile-user.jpg" alt="User Profile" class="user-profile" style="display: none;">
+            <img src="" alt="User Profile" class="user-profile" style="display: none;">
         </div>
 
         <!-- 상대방 비디오 -->
         <div class="video-container remote">
             <video class="remote-video" autoplay playsinline></video>
             <div class="loading-indicator remote-loading">● ● ●</div>
-            <img src="/images/profile-remote.jpg" alt="Remote Profile" class="remote-profile" style="display: none;">
+            <img src="" alt="Remote Profile" class="remote-profile" style="display: none;">
         </div>
     </div>
 </div>
@@ -23,8 +22,8 @@
 <div class="controls">
     <button id="toggle-camera" onclick="toggleCamera()">📷 Camera</button>
     <button id="toggle-microphone" onclick="toggleMicrophone()">🎤 Mic</button>
-    <button id="end-call" onclick="endCall()">End Call</button>
+    <button id="end-call" onclick="endCall()">통화 종료</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/voiceChat.js"></script>
+<script src="/js/chat/voiceChat.js"></script>

@@ -4,13 +4,15 @@ let peerConnection;
 let cameraEnabled = true;
 let microphoneEnabled = true;
 
+console.log("보이스 채팅 들어옴!!!!");
+
 const servers = {
     iceServers: [
         { urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'] }
     ]
 };
 
-const socket = new WebSocket("ws://192.168.0.113:8080/signaling");
+const socket = new WebSocket("ws://localhost:8080/signaling");
 
 socket.onmessage = async (event) => {
     let data = JSON.parse(event.data);
@@ -28,7 +30,12 @@ let init = async () => {
     try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.querySelector(".user-video").srcObject = localStream;
-        document.querySelector(".user-profile").style.display = "none"; // 캠이 켜지면 프로필 숨김
+
+        // 사용자 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".user-loading").style.opacity = 0;
+        document.querySelector(".user-loading").style.display = "none";
+        document.querySelector(".user-profile").style.display = "none";
+
         createOffer();
     } catch (error) {
         console.error("Error accessing media devices.", error);
@@ -48,8 +55,11 @@ let createOffer = async () => {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
         });
-        document.querySelector(".remote-loading").style.opacity = 0; // 상대방 들어오면 로딩 제거
-        document.querySelector(".remote-profile").style.display = "none"; // 상대방 캠 켜지면 프로필 숨김
+
+        // 상대방 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".remote-loading").style.opacity = 0;
+        document.querySelector(".remote-loading").style.display = "none";
+        document.querySelector(".remote-profile").style.display = "none";
     };
 
     peerConnection.onicecandidate = async (event) => {
@@ -76,8 +86,11 @@ let handleOffer = async (offer) => {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
         });
-        document.querySelector(".remote-loading").style.opacity = 0; // 상대방 들어오면 로딩 제거
-        document.querySelector(".remote-profile").style.display = "none"; // 상대방 캠 켜지면 프로필 숨김
+
+        // 상대방 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".remote-loading").style.opacity = 0;
+        document.querySelector(".remote-loading").style.display = "none";
+        document.querySelector(".remote-profile").style.display = "none";
     };
 
     peerConnection.onicecandidate = async (event) => {
