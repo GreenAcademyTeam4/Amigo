@@ -36,6 +36,9 @@ public interface MypageRepository {
     public List<MypageDTO.myFriendListDTO> searchFriend(@Param("userId") Integer userId,
                                                         @Param("search") String search);
 
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName (@Param("userId") Integer userId,
+                                                                     @Param("search") String search);
+
     //유저 id로 나한테 온 친구 요청 목록 조회
     public List<MypageDTO.friendReqDTO> findFriendReqByUserId(Integer userId);
     
@@ -68,7 +71,10 @@ public interface MypageRepository {
                                                                                       @Param("middleSchool") String middleSchool,
                                                                                       @Param("highSchool")String highSchool ,
                                                                                       @Param("year")Integer year);
-
+    // 친구 삭제 기능
     public void deleteFriendByUserIdAndFriendId(@Param("userId") Integer userId,
                                                 @Param("friendId") Integer friendId);
+
+
+
 }

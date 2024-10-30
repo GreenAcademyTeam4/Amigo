@@ -55,6 +55,12 @@
         where id = #{id}
     </select>
 
+    <update id="updatePasswordByUserId">
+        update user_tb
+        set password = #{password}
+        where id = #{userId}
+    </update>
+  
     <select id="findOnlineFriends" resultType="com.example.amigo_project.repository.model.User">
         select u.id, u.nickname, u.profile from friend_tb as f
         join user_tb as u
