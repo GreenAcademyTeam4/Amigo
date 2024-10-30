@@ -32,6 +32,9 @@ public class MainController {
     private final ChatService chatService;
 
     @GetMapping("/")
+    public String firstPage() {
+        return "index";
+    }
 public String firstPage(Model model) {
     // 필요한 변수를 모델에 추가
     model.addAttribute("content", "Welcome to the first page!");

@@ -1,6 +1,7 @@
 package com.example.amigo_project.config;
 
 import com.example.amigo_project.dto.chat.RoomDataDTO;
+import com.example.amigo_project.errors.Exception401;
 import com.example.amigo_project.repository.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +30,11 @@ public class SocketInterceptor implements HandshakeInterceptor {
                 attributes.put("principal", user);
                 System.out.println("넣은 데이터 !! : " + data);
             } else {
-                System.out.println("roomData가 세션에 없습니다.");
+                attributes.put("principal", user);
+                System.out.println("넣은 데이터 !! : " + user);
             }
         } else {
-            System.out.println("HttpSession이 존재하지 않습니다.");
+            throw new Exception401("로그인이 필요합니다");
         }
         return true;
     }
