@@ -92,6 +92,11 @@ public class MypageService {
         return mypageRepository.findFriendReqByUserId(userId);
     }
 
+    // 이름 or 학교 입력값으로 친구 찾기
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName(Integer userId, String search){
+        return mypageRepository.findFriendBySchoolOrName(userId, search);
+    }
+
     /**
      * 친구 요청 기능
      * @param senderId 보내는 쪽 id
@@ -101,6 +106,13 @@ public class MypageService {
     public void reqFriend(Integer senderId, Integer receiverId){
         mypageRepository.insertFriendReqBySenderIdAndReceiverId(senderId, receiverId);
     }
+
+    // 보낸 친구 요청 취소 기능
+    @Transactional
+    public void cancelfriendreq(Integer senderId, Integer receiverId){
+        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
 
 
     /**
