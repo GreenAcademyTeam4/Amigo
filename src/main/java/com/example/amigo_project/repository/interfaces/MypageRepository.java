@@ -33,23 +33,48 @@ public interface MypageRepository {
     public List<MypageDTO.myFriendListDTO> findMyFriendListByUserId(Integer userId);
 
     // 내 친구 목록에서 검색기능 적용
-    public List<MypageDTO.myFriendListDTO> searchFriend(@Param("userId") Integer userId, @Param("search") String search);
+    public List<MypageDTO.myFriendListDTO> searchFriend(@Param("userId") Integer userId,
+                                                        @Param("search") String search);
+
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName (@Param("userId") Integer userId,
+                                                                     @Param("search") String search);
 
     //유저 id로 나한테 온 친구 요청 목록 조회
     public List<MypageDTO.friendReqDTO> findFriendReqByUserId(Integer userId);
+    
+    // 센더 id와 리시버 id로 친구 요청 존재 여부 조회
+    public Integer findCountFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId,
+                                                                       @Param("receiverId") Integer receiverId);
+
+    // 유저 id로 내가 보낸 친구 요청 리스트 조회
+    public List<MypageDTO.friendReqDTO> findMyFriendReqByUserId(Integer userId);
 
     // 친구요청 보내는 사람 id와 받는 사람 id로 친구추가 요청 정보 삽입
-    public void insertFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId, @Param("receiverId") Integer receiverId);
+    public void insertFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId,
+                                                       @Param("receiverId") Integer receiverId);
 
     // 친구요청 수락 part1 친구 테이블에 정보 삽입(수락한 쪽)
-    public void insertFriendBySenderIdAndReceiverIdToSender(@Param("senderId") Integer senderId, @Param("receiverId") Integer receiverId);
+    public void insertFriendBySenderIdAndReceiverIdToSender(@Param("senderId") Integer senderId,
+                                                            @Param("receiverId") Integer receiverId);
 
     // 친구요청 수락 part2 친구 테이블에 정보 삽입(요청한 쪽)
-    public void insertFriendBySenderIdAndReceiverIdToReceiver(@Param("senderId") Integer senderId, @Param("receiverId") Integer receiverId);
+    public void insertFriendBySenderIdAndReceiverIdToReceiver(@Param("senderId") Integer senderId,
+                                                              @Param("receiverId") Integer receiverId);
 
     // 친구요청 수락 part3 친구요청 테이블의 수락한 기존 요청 정보 삭제
-    public void deleteFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId, @Param("receiverId") Integer receiverId);
+    public void deleteFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId,
+                                                       @Param("receiverId") Integer receiverId);
 
     // 추천 친구 조회
-    public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(@Param("elementarySchool") String elementarySchool, @Param("middleSchool") String middleSchool, @Param("highSchool")String highSchool , @Param("year")Integer year);
+    public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(@Param("userId")Integer userId,
+                                                                                      @Param("elementarySchool") String elementarySchool,
+                                                                                      @Param("middleSchool") String middleSchool,
+                                                                                      @Param("highSchool")String highSchool ,
+                                                                                      @Param("year")Integer year);
+    // 친구 삭제 기능
+    public void deleteFriendByUserIdAndFriendId(@Param("userId") Integer userId,
+                                                @Param("friendId") Integer friendId);
+
+
+
 }
