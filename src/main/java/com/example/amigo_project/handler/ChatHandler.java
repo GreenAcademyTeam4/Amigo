@@ -1,6 +1,6 @@
 package com.example.amigo_project.handler;
 
-import com.example.amigo_project.dto.ChatRoomDTO;
+import com.example.amigo_project.dto.chat.ChatRoomDTO;
 import com.example.amigo_project.dto.chat.ChatMessageDTO;
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.dto.chat.RoomDataDTO;

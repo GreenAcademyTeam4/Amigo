@@ -1,7 +1,11 @@
 {{>layout/header}}
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <main>
-
+    <div class="info-box">
+        <div class="info-profile">프로필 보기</div>
+        <div class="chat">1:1 채팅</div>
+        <div class="voice-chat-btn">화상 채팅</div>
+    </div>
     <div id="screen-area" class="screen-area">
       
     </div>
@@ -28,6 +32,27 @@
         </div>
  
         <div class="friend-box">
+            <div class="online-friends">
+                <h3>온라인 친구</h3>
+                {{#onlineFriendList}}
+                    <div class="online-friend layer" id="{{id}}">
+                        <div class="friend-profile">
+
+                        </div>
+                        <span class="friend-nickname">{{nickname}}</span>
+                    </div>
+                {{/onlineFriendList}}
+            </div>
+            <div class="offline-friends">
+                <h3>오프라인 친구</h3>
+                {{#offlineFriendList}}
+                    <div class="offline-friend layer" id="{{id}}">
+                        <div class="friend-profile">
+                        </div>
+                        <span class="friend-nickname">{{nickname}}</span>
+                    </div>
+                {{/offlineFriendList}}
+            </div>
         </div>
     </div>
 
