@@ -1,7 +1,7 @@
 -- 유저 테이블
 create table user_tb (
   id int primary key auto_increment,
-  user_id varchar(20) not null,
+  user_id varchar(50) not null,
   name varchar(20)  null,
   password varchar(1000) not null,
   nickname varchar(20) null,
@@ -33,7 +33,7 @@ create table board_tb (
   school_id int,
   title varchar(50),
   content_location varchar(255),
---  Image_location blob,
+  image_location blob,
   user_id int,
   view_count int default 0,
   likes int default 0,
@@ -56,8 +56,8 @@ create table friend_wait_tb (
   id int primary key auto_increment,
   sender_id int,
   receiver_id int,
-  foreign key (sender_id) references user_tb(id),
-  foreign key (receiver_id) references user_tb(id)
+  foreign key (sender_id) references user_tb(id) ON DELETE CASCADE,
+  foreign key (receiver_id) references user_tb(id) ON DELETE CASCADE
 );
 
 -- 알람 테마 테이블

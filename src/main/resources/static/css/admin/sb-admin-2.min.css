@@ -148,7 +148,7 @@ sup {
 }
 
 a {
-    color: #FFB6C1;
+    color: #CE9178;
     text-decoration: none;
     background-color: transparent
 }
@@ -187,6 +187,11 @@ figure {
 img {
     vertical-align: middle;
     border-style: none
+}
+
+.sidebar-logo {
+    width: 90px;  /* 원하는 크기로 너비 설정 */
+    height: auto; /* 자동으로 높이 비율 유지 */
 }
 
 svg {
@@ -332,6 +337,7 @@ template {
     margin-bottom: .5rem;
     font-weight: 400;
     line-height: 1.2
+
 }
 
 .h1, h1 {
@@ -2428,8 +2434,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-primary {
     color: #fff;
-    background-color: #FFB6C1;
-    border-color: #FFB6C1
+    background-color:#CE9178;
+    border-color:#CE9178
 }
 
 .btn-primary:hover {
@@ -2447,8 +2453,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-primary.disabled, .btn-primary:disabled {
     color: #fff;
-    background-color: #FFB6C1;
-    border-color: #FFB6C1
+    background-color: #CE9178;
+    border-color: #CE9178
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
@@ -2713,7 +2719,7 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-outline-primary:hover {
     color: #fff;
-    background-color: #FFB6C1;
+    background-color: #CE9178;
     border-color: #4e73df
 }
 
@@ -2728,7 +2734,7 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show > .btn-outline-primary.dropdown-toggle {
     color: #fff;
-    background-color: #FFB6C1;
+    background-color: #CE9178;
     border-color: #4e73df
 }
 
@@ -3245,7 +3251,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 .dropdown-item.active, .dropdown-item:active {
     color: #fff;
     text-decoration: none;
-    background-color: #FFB6C1
+    background-color: #C05720
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -5646,12 +5652,13 @@ a.close.disabled {
     position: relative;
     width: auto;
     margin: .5rem;
+    margin-top: 5px;
     pointer-events: none
 }
 
+/** 관리자 드롭 창 액션 **/
 .modal.fade .modal-dialog {
-    transition: transform .3s ease-out;
-    transform: translate(0, -50px)
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -10038,9 +10045,10 @@ a:focus {
     animation-timing-function: opacity cubic-bezier(0, 1, .4, 1)
 }
 
+
 .bg-gradient-primary {
-    background-color: #FFB6C1;
-    background-image: linear-gradient(180deg, #FFB6C1 10%, #224abe 100%);
+    background-color:#CE9178;
+    background-image: linear-gradient(180deg, #b36f4b 5%,#C05720 90%);
     background-size: cover
 }
 
@@ -10311,11 +10319,11 @@ a:focus {
 }
 
 .topbar #sidebarToggleTop:hover {
-    background-color: #FFB6C1
+    background-color: #CE9178
 }
 
 .topbar #sidebarToggleTop:active {
-    background-color: #FFB6C1
+    background-color: #CE9178
 }
 
 .topbar .navbar-search {
@@ -10533,11 +10541,11 @@ a:focus {
 }
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item:active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:active {
-    background-color: #dddfeb
+    background-color: #C05720
 }
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item.active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active {
-    color: #FFB6C1;
+    color:#CE9178;
     font-weight: 700
 }
 
@@ -11407,7 +11415,7 @@ form.user .btn-user {
     content: attr(data-text);
     position: absolute;
     left: -2px;
-    text-shadow: 1px 0 #FFB6C1;
+    text-shadow: 1px 0 #C05720;
     top: 0;
     color: #5a5c69;
     background: #f8f9fc;

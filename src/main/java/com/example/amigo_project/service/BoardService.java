@@ -3,6 +3,7 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.interfaces.BoardRepository;
+import com.example.amigo_project.repository.model.Board;
 import com.example.amigo_project.repository.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
