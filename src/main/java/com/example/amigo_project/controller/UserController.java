@@ -50,7 +50,6 @@ public class UserController {
     public String login(HttpSession session, UserDTO.loginDTO dto){
 
         User principal = userService.findUserById(dto);
-   
 
         System.out.println(dto);
     

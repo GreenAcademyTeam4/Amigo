@@ -1,7 +1,6 @@
 package com.example.amigo_project.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,7 +69,7 @@ public class UserService {
     public User findUserById(UserDTO.loginDTO dto){
      
         User user = userRepository.findByUserId(dto.getUserId());
-
+        
         if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             return user; 
         } else {
@@ -94,7 +93,7 @@ public class UserService {
      */
     public int checkPasswordValid(Integer userId, String password){
         String hashpwd = userRepository.findPasswordByUserId(userId);
-        // 비밀번호 해싱 도입 시  if(passwordEncoder.matches(hashpwd, password)){
+        // TODO - 배포 시 변경, 개발 단계에선 해싱 처리 생략 if(passwordEncoder.matches(hashpwd, password)){
         if(hashpwd.equals(password)){
             return 1;
         }else{
@@ -117,6 +116,16 @@ public class UserService {
 
     public User findUser(int id) {
         return userRepository.findUserById(id);
+    }
+
+    // 온라인인 친구 찾기
+    public List<User> findOnlineFriends(int id) {
+        return userRepository.findOnlineFriends(id);
+    }
+
+    // 오프라인인 친구 찾기
+    public List<User> findOfflineFriends(int id) {
+        return userRepository.findOfflineFriends(id);
     }
 }
 
