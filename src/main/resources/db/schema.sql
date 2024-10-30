@@ -139,7 +139,7 @@ create table board_view_tb (
   user_id int,
   board_id int,
   primary key(user_id, board_id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 좋아요 테이블
@@ -149,7 +149,7 @@ create table like_tb (
   board_id int,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (user_id) references user_tb(id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 댓글 테이블
