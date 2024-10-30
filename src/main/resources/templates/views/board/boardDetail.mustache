@@ -156,21 +156,39 @@
 <div class="container">
     <!-- 상단 버튼 섹션 -->
     <div class="top-buttons d-flex justify-content-between mb-3">
-        <a href="/board/list" class="btn btn-primary">목록으로 돌아가기</a>
+        <a class="btn btn-primary" onclick="screenChanger('/board/list')" >목록으로 돌아가기</a>
         <div>
-            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-danger">게시글 삭제</button>
-            </form>
-            <form action="/board/update/{{board.id}}" method="get" class="d-inline">
-                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>
-            </form>
+
+            <button type="button" class="btn btn-danger" onclick="screenDelete('/board/delete/{{board.id}}')">게시글 삭제</button>
+
+<!--            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">-->
+<!--                <button type="submit" class="btn btn-danger">게시글 삭제</button>-->
+<!--            </form>-->
+
+           <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
+
+<!--            <form onclick = "screenChanger('/board/update/{{board.id}}')" method="get" >-->
+<!--                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>-->
+<!--            </form>-->
+
+            <!-- 게시글 본문 아래 신고 버튼 추가 -->
+            <div class="report-section text-center mt-3">
+                <button id="report-button" class="btn btn-warning" onclick="reportPost({{board.id}})">신고하기</button>
+            </div>
+
         </div>
     </div>
 
     <!-- 게시글 본문 -->
     <div class="board-card board-header text-center">
         <h1>{{board.title}}</h1>
-        <p class="board-info"><strong>작성자 ID:</strong> {{board.userId}} | <strong>학교 ID:</strong> {{board.schoolId}} | <strong>닉네임:</strong> {{board.nickname}} | <strong>작성일자:</strong> {{board.createdAtFormat}}</p>
+        <p class="board-info">
+            <strong>작성자 ID:</strong> {{board.userId}} |
+            <strong>학교 ID:</strong> {{board.schoolId}} |
+            <strong>닉네임:</strong> {{board.nickname}} |
+            <strong>작성일자:</strong> {{board.createdAtFormat}}
+        </p>
+
         <div class="board-content">
 
             {{#board.image}}
@@ -189,7 +207,8 @@
     <div class="like-section text-center mt-3">
         <img id="like-icon" class="like-icon {{#hasLiked}}liked{{/hasLiked}}" src="{{#hasLiked}}/image/board/full.png{{/hasLiked}}{{^hasLiked}}/image/board/empty.png{{/hasLiked}}"
              alt="좋아요 아이콘" onclick="toggleLike()">
-        <span><strong>좋아요:</strong> <span id="like-count">{{likeCount}}</span></span>
+        <!--        <span><strong>좋아요:</strong> <span id="like-count">{{likeCount}}</span></span>-->
+        <span><strong>좋아요:</strong> <span id="like-count">{{board.likes}}</span></span>
     </div>
 
     <!-- 댓글 목록 -->
@@ -201,6 +220,8 @@
                     <p><strong>작성자:</strong> {{nickname}}</p>
                     <p><small>작성일자: {{createdAtFormat}}</small></p>
                 </div>
+
+
                 <div class="comment-body">
                     <p id="content-{{id}}">{{content}}</p>
                 </div>
@@ -214,6 +235,7 @@
                     <button onclick="updateComment({{id}})" class="btn btn-success mt-2">수정 완료</button>
                 </div>
             </div>
+
             <hr>
         {{/comment}}
         {{^comment}}
@@ -245,6 +267,8 @@
 </div>
 </body>
 </html>
+
+<script src="/js/board/boardMulti.js"></script>
 
 <script>
     // 좋아요 버튼 클릭 시 작동하는 스크립트
