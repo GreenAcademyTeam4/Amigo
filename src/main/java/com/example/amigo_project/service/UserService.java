@@ -1,7 +1,6 @@
 package com.example.amigo_project.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -77,11 +76,6 @@ public class UserService {
             return null; 
         }
   
-//        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return user;
-//        } else {
-//            return null;
-//        }
     }
 
     /**
@@ -117,6 +111,16 @@ public class UserService {
 
     public User findUser(int id) {
         return userRepository.findUserById(id);
+    }
+
+    // 온라인인 친구 찾기
+    public List<User> findOnlineFriends(int id) {
+        return userRepository.findOnlineFriends(id);
+    }
+
+    // 오프라인인 친구 찾기
+    public List<User> findOfflineFriends(int id) {
+        return userRepository.findOfflineFriends(id);
     }
 }
 
