@@ -1,4 +1,4 @@
-package com.example.amigo_project.dto;
+package com.example.amigo_project.dto.chat;
 
 import lombok.Data;
 

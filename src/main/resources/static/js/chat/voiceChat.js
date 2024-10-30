@@ -4,13 +4,15 @@ let peerConnection;
 let cameraEnabled = true;
 let microphoneEnabled = true;
 
+console.log("보이스 채팅 들어옴!!!!");
+
 const servers = {
     iceServers: [
         { urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'] }
     ]
 };
 
-const socket = new WebSocket("ws://192.168.0.113:8080/signaling");
+const socket = new WebSocket("ws://localhost:8080/signaling");
 
 socket.onmessage = async (event) => {
     let data = JSON.parse(event.data);

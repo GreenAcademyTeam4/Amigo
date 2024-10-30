@@ -11,6 +11,7 @@ create table user_tb (
   middle_school varchar(20) null,
   high_school varchar(20) null, 
   gender varchar(10)  null,
+  profile Blob,
   birth int  null,
   point int default 0,
   user_role int default 0,
