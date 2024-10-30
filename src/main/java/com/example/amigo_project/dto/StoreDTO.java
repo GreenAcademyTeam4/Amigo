@@ -10,14 +10,21 @@ import java.sql.Timestamp;
 public class StoreDTO {
 
 
-
+    @Data
+    public static class nowAvatarDTO{
+        private Integer userId;
+        private Integer head;
+        private Integer top;
+        private Integer bottom;
+        private Integer shoes;
+    }
 
     @Data
     public static class avatarListDTO{
         private Integer avatarId;
         private Integer type;
         private String avatarName;
-        private Integer owned;
+        private boolean owned;
         private Integer price;
     }
 
@@ -47,6 +54,7 @@ public class StoreDTO {
                 result += " ";
             }
             orderBody = result;
+            System.out.println("사용 포인트 : " + this.usePoint +"남은 포인트 : " + lessPoint);
         }
     }
 
