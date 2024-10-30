@@ -1,8 +1,8 @@
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point)
 values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27', 50000);
 
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('test',1234,'가을','정훈','010-1234-5678','male','27');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
+values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test1',1234,'겨울','짱구','010-1234-5678','male','27');
@@ -359,5 +359,8 @@ values
     (1, 'Order 001', 'ORD123456', 100, 5000, 'credit_card', 'PAYKEY001'),
     (1, 'Order 002', 'ORD123457', 200, 10000, 'kakao_pay', 'PAYKEY002'),
     (1, 'Order 003', 'ORD123458', 150, 7500, 'naver_pay', 'PAYKEY003');
+
+-- 샘플 이모티콘
 INSERT INTO emoticon_tb (url,name)
 VALUES ('/image/emoticon/smile.jpg','smile');
+

@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.amigo_project.repository.interfaces.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,12 @@ public class MainController {
     private final GoogleService google;
     private final UserService userService;
     private final ChatService chatService;
+    private final UserRepository userRepository;
 
     @GetMapping("/")
+    public String firstPage() {
+        return "index";
+    }
 public String firstPage(Model model) {
     // 필요한 변수를 모델에 추가
     model.addAttribute("content", "Welcome to the first page!");
@@ -71,7 +76,18 @@ return "views/login/login";
 
    
 }
-  
+    @GetMapping("/test2")
+    public String test2(Model model, HttpSession session){
+        User user = userService.findUser(1);
+        session.setAttribute("principal", user);
+        List<User>onlineFriends = userRepository.findOnlineFriends(user.getId());
+        List<User>offlineFriends = userRepository.findOfflineFriends(user.getId());
+        System.out.println(onlineFriends);
+        System.out.println(offlineFriends);
+        model.addAttribute("onlineFriendList", onlineFriends);
+        model.addAttribute("offlineFriendList", offlineFriends);
+        return "index";
+    }
 
     @GetMapping("/test")
     public String test(Model model, HttpSession session){
