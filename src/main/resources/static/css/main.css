@@ -1,62 +1,221 @@
-/* 헤더 고정 (layout/header가 상단에 위치하도록 설정) */
-.header {
+main {
     width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    background-color: #f8f9fa; /* 배경색을 헤더에 지정 */
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* 전체 레이아웃에서 메인 콘텐츠를 헤더 아래로 밀어냄 */
-.main-layout {
+    max-width: 1200px;
     display: flex;
-    padding-top: 60px; /* 헤더 높이만큼 공간을 확보 */
-    height: calc(100vh - 60px); /* 헤더를 제외한 화면 전체 높이 */
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    justify-content: space-between;
+    border-radius: 20px;
+    min-height: 100vh;
+    border: 1px solid #d4b7aa;
 }
 
-/* 왼쪽 screen-area 고정 */
 .screen-area {
-    flex: 1; /* 남은 공간을 모두 차지 */
-    background-color: #f5f5f5; /* 배경색 */
-    padding: 20px;
-    overflow-y: auto; /* 내용이 길어질 경우 스크롤 */
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    max-width: 1100px;
+    flex: 3;
+    overflow-y: auto;
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
 }
 
-/* 오른쪽 remote-controller 사이드바 */
 .remote-controller {
-    width: 300px; /* 사이드바 너비 */
-    background-color: #343a40; /* 배경색 */
+    flex: 0.5;
+    background-color: #ce9178;
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
     color: white;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    right: 0;
-    top: 60px; /* 헤더 아래로 배치 */
-    bottom: 0;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    margin: 10px 10px 10px 0;
+    box-sizing: border-box;
 }
 
-/* 반응형 */
+.profile {
+    border: 1px solid #d4b7aa;
+    background-color: #fcf8f7;
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* 리모컨 내부 스타일 */
+.remote-controller a {
+    text-decoration: none;
+    color: white;
+}
+
+.bt-controller {
+    height: 25px;
+    display: flex;
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: #e1baad;
+    min-width: 200px;
+    justify-content: center;
+    align-content: center;
+    border: 1px solid #d4b7aa;
+    cursor: pointer;
+}
+
+.bt-controller:hover {
+    background-color: #d98264;
+}
+
 @media (max-width: 768px) {
     .remote-controller {
-        width: 100px; /* 작은 화면에서는 사이드바 너비를 줄임 */
+        width: 100px;
+        min-width: none;
     }
 
     .remote-controller .my-page,
     .remote-controller .enter,
     .remote-controller .post,
     .remote-controller .logout {
-        font-size: 12px; /* 버튼 글씨 크기 축소 */
+        font-size: 12px;
         padding: 5px;
     }
 
     .remote-controller .nickname {
         font-size: 14px;
     }
+}
+
+.friend-box {
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: #fcf8f7;
+    border: 1px solid #d4b7aa;
+    min-width: 200px;
+    min-height: 400px; /* 최대 높이 설정 */
+    overflow-y: auto;  /* 내용이 많을 경우 세로 스크롤 생성 */
+    padding: 10px;
+}
+
+/* 스크롤바 스타일 (옵션) */
+.friend-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.friend-box::-webkit-scrollbar-thumb {
+    background-color: #d4b7aa; /* 스크롤바 색상 */
+    border-radius: 4px;
+}
+
+.friend-box::-webkit-scrollbar-track {
+    background: #fcf8f7;
+}
+
+/* 온라인 친구 리스트 스타일 */
+.online-friends {
+    margin-bottom: 15px;
+}
+
+.online-friend {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #e0f7e9;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #a3d9a5;
+}
+
+.online-friend:hover {
+    background-color: #c6eec9;
+}
+
+.online-friend .friend-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #91c788;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.online-friend .friend-nickname {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 오프라인 친구 리스트 스타일 */
+.offline-friends {
+    margin-top: 10px;
+}
+
+.offline-friend {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #d4d4d4;
+}
+
+.offline-friend:hover {
+    background-color: #e2e2e2;
+}
+
+.offline-friend .friend-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #cccccc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.offline-friend .friend-nickname {
+    font-weight: bold;
+    color: #666;
+}
+
+/* info-box 초기 숨김 상태 및 스타일 */
+.info-box {
+    display: none;
+    position: absolute;
+    background-color: #fcf8f7;
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.info-box .info-profile,
+.info-box .chat,
+.info-box .voice-chat-btn {
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.info-box .info-profile {
+    background-color: #91c788;
+}
+
+.info-box .chat {
+    background-color: #8dc6ff;
+}
+
+.info-box .voice-chat-btn {
+    background-color: #ffaeae;
+}
+
+.info-box div:hover {
+    background-color: #e0e0e0;
+}
+
+h3 {
+    color: black;
+    margin-bottom: 3px;
 }

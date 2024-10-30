@@ -1,14 +1,25 @@
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27');
 
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('test',1234,'가을','정훈','010-1234-5678','male','27');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
+values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test1',1234,'겨울','짱구','010-1234-5678','male','27');
 
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,elementary_school, middle_school, high_school)
-values('diqdiq',1234,'봄','테스트얍','010-1234-5678','male','27', '가초등학교', '나중학교', '다대학교');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');
+
+
+-- USER_TB에 누락된 유저 데이터 삽입
+INSERT INTO user_tb (id, user_id, password, name, nickname, phone_number, gender, birth)
+VALUES
+(5, 'test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27'),
+(6, 'test3', '1234', '겨울1', '짱구3', '010-1234-5678', 'male', '27'),
+(7, 'test4', '1234', '봄3', '테스트얍12', '010-1234-5678', 'male', '27'),
+(8, 'test5', '1234', '여름4', '테스터4', '010-1234-5678', 'male', '27'),
+(9, 'test6', '1234', '가을5', '테스트6', '010-1234-5678', 'male', '27'),
+(10, 'test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
 
 -- 임시 데이터 학교
 INSERT INTO school_tb (id, school, name, region) VALUES
@@ -217,12 +228,88 @@ INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
 VALUES
 (1, 1, '게시글 1에 대한 첫 번째 댓글입니다.16 16 16 16 16', now());
 
+
+
+--INSERT INTO board_tb (school_id, title, content_location, image_location, user_id, view_count, likes, created_at)
+--VALUES
+--(1, '첫 번째 게시글', '게시글 1의 내용입니다.', NULL, 1, 50, 30, NOW()),
+--(1, '두 번째 게시글', '게시글 2의 내용입니다.', NULL, 1, 45, 25, NOW()),
+--(1, '세 번째 게시글', '게시글 3의 내용입니다.', NULL, 1, 60, 20, NOW()),
+--(1, '네 번째 게시글', '게시글 4의 내용입니다.', NULL, 2, 20, 15, NOW()),
+--(1, '다섯 번째 게시글', '게시글 5의 내용입니다.', NULL, 2, 70, 50, NOW()),
+--(1, '여섯 번째 게시글', '게시글 6의 내용입니다.', NULL, 3, 35, 40, NOW()),
+--(1, '일곱 번째 게시글', '게시글 7의 내용입니다.', NULL, 3, 10, 60, NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES
+(1, 1, '첫 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(1, 2, '첫 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+(1, 3, '첫 번째 게시글에 대한 세 번째 댓글입니다.', NOW()),
+(2, 1, '두 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(2, 2, '두 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+(3, 1, '세 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(4, 2, '네 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(5, 3, '다섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(5, 1, '다섯 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+(6, 2, '여섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(7, 3, '일곱 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+(7, 1, '일곱 번째 게시글에 대한 두 번째 댓글입니다.', NOW());
+
+-- LIKE_TB 테이블에 유저 ID 1을 제외한 임시 데이터 삽입
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 2);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 2);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 3);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 3);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 5);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 5);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 6);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 6);
+
 ---- 공지 임시 데이터
 INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 1', '첫 번째 공지사항 내용입니다.', 0);
 INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
+
+-- LIKE_TB 테이블에 다양한 유저가 좋아요한 데이터 삽입
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 1);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 2);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 2);
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 2);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 3);
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 3);
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 3);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 3);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (6, 4);
+INSERT INTO like_tb (user_id, board_id) VALUES (7, 4);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 5);
+INSERT INTO like_tb (user_id, board_id) VALUES (6, 5);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 5);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (6, 6);
+INSERT INTO like_tb (user_id, board_id) VALUES (7, 6);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 6);
+INSERT INTO like_tb (user_id, board_id) VALUES (4, 6);
+
+INSERT INTO like_tb (user_id, board_id) VALUES (7, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 7);
 INSERT INTO friend_tb (user_id, friend_id) VALUES
 (1, 2),
 (1, 3),
@@ -272,5 +359,14 @@ INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_p
 (3, '롱 헤어 외 1건', '롱 헤어, 정장 바지 구입', 1400, 1000),
 (4, '정장 바지 외 0건', '정장 바지 구입', 800, 500);
 
+-- 포인트충전 샘플데이터
+insert into charge_history_tb (user_id, order_name, order_id, point, total_amount, method, payment_key)
+values
+    (1, 'Order 001', 'ORD123456', 100, 5000, 'credit_card', 'PAYKEY001'),
+    (1, 'Order 002', 'ORD123457', 200, 10000, 'kakao_pay', 'PAYKEY002'),
+    (1, 'Order 003', 'ORD123458', 150, 7500, 'naver_pay', 'PAYKEY003');
+
+-- 샘플 이모티콘
 INSERT INTO emoticon_tb (url,name)
 VALUES ('/image/emoticon/smile.jpg','smile');
+
