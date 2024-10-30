@@ -7,6 +7,8 @@ import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.dto.UserDTO.NaverDTO;
 import com.example.amigo_project.repository.model.User;
 
+import java.util.List;
+
 @Mapper
 public interface UserRepository {
 
@@ -35,5 +37,10 @@ public interface UserRepository {
 
     // id로 유저 정보 가져오기
     public User findUserById(int id);
+
+    // 온라인인 친구 찾기
+    public List<User>findOnlineFriends(int id);
+    // 오프라인인 친구 찾기
+    public List<User>findOfflineFriends(int id);
 }
 

@@ -59,3 +59,82 @@ $(document).ready(function() {
             });
     });
 });
+
+$(document).ready(function() {
+    const screen = $('.screen-area');
+    $('.online-friend').on('click', function(event) {
+        const $infoBox = $('.info-box');
+        const id = $('.online-friend').attr('id');
+        // 온라인 친구 클릭 시, 화상 채팅 버튼 포함하여 info-box 내용 설정
+        $infoBox.html(`
+            <div class="info-profile">프로필 보기</div>
+            <div class="chat">1:1 채팅</div>
+            <div class="voice-chat-btn">화상 채팅</div>
+        `);
+
+        // 클릭한 위치에 info-box 표시
+        $infoBox.css({
+            display: 'block',
+            top: event.pageY + 5 + 'px',  // 클릭 위치에 맞게 설정
+            left: event.pageX + 5 + 'px'
+        });
+    });
+
+    $('.offline-friend').on('click', function(event) {
+        const $infoBox = $('.info-box');
+        const id = $('.offline-friend').attr('id');
+        // 오프라인 친구 클릭 시, 화상 채팅 버튼 없이 info-box 내용 설정
+        $infoBox.html(`
+            <div class="info-profile">프로필 보기</div>
+            <div class="chat">1:1 채팅</div>
+        `);
+
+        // 클릭한 위치에 info-box 표시
+        $infoBox.css({
+            display: 'block',
+            top: event.pageY + 5 + 'px',
+            left: event.pageX + 5 + 'px'
+        });
+    });
+
+    // info-box 외부를 클릭하면 info-box 숨기기
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.info-box, .online-friend, .offline-friend').length) {
+            $('.info-box').hide();
+        }
+    });
+
+    // info-box 내부의 버튼 클릭 이벤트 추가
+    $(document).on('click', '.info-profile', function() {
+        // 프로필 보기 버튼 클릭 이벤트
+        console.log("프로필 보기 클릭");
+        // 여기에 필요한 기능 추가
+    });
+
+    $(document).on('click', '.chat', function() {
+        // 1:1 채팅 버튼 클릭 이벤트
+        fetch("/chat/chatroom/" + id)
+            .then(response => response.text())
+            .then(data => {
+                screen.html(data);
+            })
+            .catch(error => {
+                console.error('게시판 로딩 중 오류 발생:', error);
+            });
+        console.log("1:1 채팅 클릭");
+        // 여기에 필요한 기능 추가
+    });
+
+    $(document).on('click', '.voice-chat-btn', function() {
+        fetch("/test")
+            .then(response => response.text())
+            .then(data => {
+                screen.html(data);
+            })
+            .catch(error => {
+                console.error('게시판 로딩 중 오류 발생:', error);
+            });
+        console.log("화상 채팅 클릭");
+        // 여기에 필요한 기능 추가
+    });
+});
