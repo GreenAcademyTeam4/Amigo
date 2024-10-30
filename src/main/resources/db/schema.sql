@@ -278,3 +278,15 @@ create table point_history_tb(
     created_at timestamp default CURRENT_TIMESTAMP,
     foreign key (user_id) references user_tb(id)
 );
+
+-- 알람 tb
+create table alarm_tb (
+	id int primary key auto_increment,
+	type varchar(20) not null,
+	sender_id int not null,
+    receiver_id int,
+	content varchar(255),
+    created_at timestamp default now(),
+    status int default 0,
+    foreign key (type) references alarm_type_tb(id)
+);

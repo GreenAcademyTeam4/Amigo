@@ -8,6 +8,6 @@ public class AlarmDTO {
     private String type;
     private Integer senderId;
     private Integer receiverId;
-    private Integer content;
+    private String content;
 
 }
