@@ -1,7 +1,7 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.chat.RoomDataDTO;
-import com.example.amigo_project.repository.model.Emoticon;
+import com.example.amigo_project.repository.model.chat.Emoticon;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.ChatService;
 import com.example.amigo_project.service.KakaoApiService;

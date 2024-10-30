@@ -1,0 +1,26 @@
+
+<div class ="chat-room">
+    <!--  상대방 프로필 띄우는 공간  -->
+    <div class="opponent-info">
+        <img src="data:image/jpeg;base64, + {{opponent.profile}}">
+    </div>
+    <div class="date-label">
+        {{lastMsgTime}} <!-- 서버에서 전달한 날짜를 표시 -->
+    </div>
+    <!--  대화 내용 띄우는 공간  -->
+    <div class="chat-area">
+
+    </div>
+    <!--  키보드로 대화 내용 입력하는 공간  -->
+    <div class="keyboard-area">
+        <label for="content">메시지 입력</label>
+        <input type="text" id="content" name="content" placeholder="메시지 입력">
+        <button class="btn" id="sendButton" onclick="send()">전송</button>
+    </div>
+</div>
+<script>
+    let roomId = {{roonKey}};
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/chat/friendChat.js"></script>
