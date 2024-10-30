@@ -4,8 +4,6 @@ let peerConnection;
 let cameraEnabled = true;
 let microphoneEnabled = true;
 
-console.log("보이스 채팅 들어옴!!!!");
-
 const servers = {
     iceServers: [
         { urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'] }
@@ -14,9 +12,23 @@ const servers = {
 
 const socket = new WebSocket("ws://localhost:8080/signaling");
 
+// 처음 입장할때 상대방의 id를 키값으로 내 세션을 저장
+socket.send(JSON.stringify({
+    type: "roomId",
+    message: friendId
+}));
+
+// 나갈때 상대방의 id로 저장해놓은 내 세션을 제거
+socket.onclose = () => {
+    socket.send(JSON.stringify({
+        type: "out",
+        message: friendId
+    }));
+}
+
+// 상대방이 오퍼를 보내거나 답장이 오거나 ice후보들을 보낼때 처리
 socket.onmessage = async (event) => {
     let data = JSON.parse(event.data);
-
     if (data.type === 'offer') {
         await handleOffer(data);
     } else if (data.type === 'answer') {
