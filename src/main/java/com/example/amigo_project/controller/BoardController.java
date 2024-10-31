@@ -196,8 +196,8 @@ public class BoardController {
         model.addAttribute("currentPage", page);
 
 
-        System.out.println("sangsasebogi : " + board);
-        System.out.println("comment : " + comment);
+        System.out.println("totalPages : " + totalPages);
+        System.out.println("currentPage : " + page);
 
         return "views/board/boardDetail";
     }
@@ -253,7 +253,6 @@ public class BoardController {
         System.out.println("@@@@@@@@@ boardId : " + boardId);
 
 
-
         BoardDTO boardDTO = boardService.findBoardId(boardId);
         System.out.println("updateDTO : " + boardDTO);
 
@@ -277,16 +276,60 @@ public class BoardController {
      * @return
      */
     @PostMapping("/update/{boardId}")
-    public String updateBoardProc(
+    public String updateBoardProc(Model model,
             @PathVariable(name = "boardId") int boardId,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "school_id") int schoolId,
             @RequestParam(name = "user_id") int userId,
-            @RequestParam(name = "content_location") String contentLocation
+            @RequestParam(name = "content_location") String contentLocation,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size
     ) {
 
+        System.out.println("update : " + boardId);
+
+        System.out.println("수정하기 컨트롤러 ");
         boardService.updateBoard(boardId, schoolId, title, contentLocation, userId);
-        return "redirect:/board/detail/" + boardId;
+
+        // 좋아요 상태 확인
+        boolean hasLiked = boardService.existsLike(userId, boardId);
+        model.addAttribute("hasLiked", hasLiked);
+
+        // 좋아요 개수 가져오기
+        int likeCount = boardService.getLikeCount(boardId);
+        model.addAttribute("likeCount", likeCount);
+
+
+        // 게시글 id를 기준으로 정보 가져오기
+        BoardDTO board = boardService.getBoardById(boardId);
+        board.getFormattedCreatedAt();
+        board.getFormattedImage();
+
+        // 게시글 id를 기준으로 댓글 전부 가져오기
+        int offset = page * size;
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
+        int totalComments = boardService.getTotalCommentsByBoardId(boardId);
+        int totalPages = (int) Math.ceil((double) totalComments / size);
+
+        // timestamp 전부 포맷시켜주기
+        for(CommentDTO a : comment) {
+            a.getFormattedCreatedAt();
+        }
+
+
+        model.addAttribute("board", board);
+        model.addAttribute("comment", comment);
+        model.addAttribute("hasLiked", hasLiked);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
+
+        System.out.println("board : " + board);
+        System.out.println("comment : " + comment);
+
+//        return "redirect:/board/detail/" + boardId;
+        return "views/board/boardDetail";
     }
 
     /**
@@ -588,7 +631,7 @@ public class BoardController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
 
-        return "views/board/boardHeartList";
+        return "views/board/boardCommentList";
     }
 
 
