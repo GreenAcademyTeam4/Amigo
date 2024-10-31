@@ -29,8 +29,12 @@ public class KakaoController {
         User principal = kakaoApiService.findKakaoUser(kakaoDTO);
         if (principal != null) {
             session.setAttribute("principal", principal);
+            if (principal.getNickname() != null) {
+                return "redirect:/";
+            }
 
             return "views/login/schoolSelect";
+
         } else {
             return "redirect:/";
         }
