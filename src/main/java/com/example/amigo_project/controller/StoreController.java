@@ -3,6 +3,7 @@ package com.example.amigo_project.controller;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.amigo_project.dto.StoreDTO;
+import com.example.amigo_project.repository.interfaces.StoreRepository;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.StoreService;
 import jakarta.servlet.http.HttpSession;
@@ -121,6 +122,10 @@ public class StoreController {
                         dto.getProdNameList(),
                         dto.getProdIdList()
                 ));
+                // 구매한 아바타 id를 히스토리 테이블에 전달
+                for(int i = 0; i < dto.getProdIdList().length; i++){
+                    storeService.insertProdHistory(dto.getProdIdList()[i]);
+                }
                 session.setAttribute("principal", user);
                 return ResponseEntity.ok("Success");
             }

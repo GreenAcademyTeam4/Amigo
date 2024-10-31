@@ -77,10 +77,10 @@ public class UserService {
      */
     public User findUserById(UserDTO.loginDTO dto) {
         User user = userRepository.findByUserId(dto.getUserId());
-        return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
-        
+        //return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
+        return user;
         //if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return user; 
+            //return user;
         //} else {
 //            return null;
   //      }

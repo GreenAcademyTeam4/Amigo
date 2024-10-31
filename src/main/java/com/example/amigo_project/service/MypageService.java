@@ -28,8 +28,8 @@ public class MypageService {
      * @param userId (user의 pk아이디 / 로그인 아이디 아님)
      * @return myPage 뷰 호출시 필요한 모든 정보를 MypageDTO 에 담아 보냄
      */
-    public MypageDTO findMypageInfoByUserId(Integer userId){
-        return mypageRepository.findMypageInfoByUserId(userId);
+    public MypageDTO.nowAvatarDTO findMypageInfoByUserId(Integer userId){
+        return mypageRepository.findNowAvatarByUserId(userId);
     }
 
     /**
@@ -64,14 +64,6 @@ public class MypageService {
         mypageRepository.updateNowAvatarByAvatarChangeDTO(dto.getUserId(), dto.getHead(), dto.getTop(), dto.getBottom(), dto.getShoes());
     }
 
-    /**
-     * 마이페이지에서 내 정보 변경 / 닉네임, 학교 변경
-     * @param dto
-     */
-    @Transactional
-    public void updateStatusByStatusDTO(MypageDTO.statusDTO dto){
-        mypageRepository.updateStatusByStatusDTO(dto.getId(), dto.getNickname(), dto.getElementarySchool(), dto.getMiddleSchool(), dto.getHighSchool());
-    }
 
     /**
      * 마이페이지 -> 친구관리 요청시 친구 목록 출력
@@ -136,7 +128,7 @@ public class MypageService {
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
         Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
-        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
+        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getSchool(), year);
     }
 
     public int countMyBoards (int id){
@@ -164,6 +156,17 @@ public class MypageService {
     public void deleteFriendByUserIdAndFriendId(Integer userId, Integer friendId){
         mypageRepository.deleteFriendByUserIdAndFriendId(userId, friendId);
     }
+
+    // 닉네임 변경
+    public void changeNickname(Integer userId, String nickname){
+        mypageRepository.changeNickname(userId, nickname);
+    }
+
+    // 학교 변경
+    public void changeSchool(Integer userId, String school){
+        mypageRepository.changeSchool(userId, school);
+    }
+
 
 
 }

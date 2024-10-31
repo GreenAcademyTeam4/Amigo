@@ -59,25 +59,6 @@ create table friend_wait_tb (
   foreign key (receiver_id) references user_tb(id) ON DELETE CASCADE
 );
 
--- 알람 테마 테이블
-create table alarm_theme_tb (
-  id int primary key auto_increment,
-  name varchar(20)
-);
-
--- 알람 테이블
-create table alarm_tb (
-  id int primary key auto_increment,
-  sender_user int,
-  receiver_user int,
-  theme int,
-  content varchar(255),
-  created_at timestamp default CURRENT_TIMESTAMP,
-  foreign key (theme) references alarm_theme_tb (id),
-  foreign key (sender_user) references user_tb(id),
-  foreign key (receiver_user) references user_tb(id)
-);
-
 -- 쪽지 테이블
 create table message_tb (
   id int primary key auto_increment,
@@ -199,10 +180,10 @@ create table inventory_tb (
 -- 현재 아바타 정보 테이블
 create table now_avatar_tb (
   user_id int primary key,
-  head int,
-  top int,
-  bottom int,
-  shoes int,
+  head int not null default 9999,
+  top int not null default 9998,
+  bottom int not null default 9997,
+  shoes int not null default 9996,
   foreign key (user_id) references user_tb(id),
   foreign key (head) references avatar_tb(id),
   foreign key (top) references avatar_tb(id),
@@ -285,6 +266,11 @@ create table alarm_tb (
     receiver_id int,
 	content varchar(255),
     created_at timestamp default now(),
-    status int default 0,
-    foreign key (type) references alarm_type_tb(id)
+    status int default 0
 );
+
+create table prodHistory_tb(
+    id int primary key auto_increment,
+    avatar_id int,
+    foreign key (avatar_id) references avatar_tb(id)
+)
