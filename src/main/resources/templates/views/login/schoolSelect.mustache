@@ -15,18 +15,110 @@
 
     <div class="selecter-box">
         <h2>활동 정보 추가</h2>
-        <form action="/user/addInformation" method="post">
-            <input type="text" id="nickname" name="nickname" placeholder="닉네임" required>
+   <form action="/user/addInformation" method="post">
+            <div id="nicknameMessage"></div>
+                <div class="input-container">
+                    <input type="text" id="nickname" name="nickname" placeholder="닉네임" >
+                    <button type="button" class="repetition">중복확인</button>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="school" name="school" placeholder="학교" readonly>
+                    <button type="button" class="select-school">선택</button>
+                </div>
 
-            
-            <input type="text" id="elementarySchool" name="elementarySchool" placeholder="초등학교" required>
+               
+             
 
-            
-
-            <button type="submit" class="insert-btn">추가</button>
-        </form>
+                <button type="submit" class="insert-btn">추가</button>
+    </form>
     </div>
 
 </div>
+
+
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ function setSchoolName(schoolName) {
+          
+            if (window.selectedInputId) {
+                $("#" + window.selectedInputId).val(schoolName);
+            }
+        }
+
+        
+        function openWindowAndSetValue(buttonClass, inputId) {
+            $(buttonClass).on('click', function() {
+               
+                window.selectedInputId = inputId.replace("#", ""); 
+
+              
+                window.open('/user/test', 'SelectSchool', 'width=600,height=400');
+            });
+        }
+
+
+        $(document).ready(function() {
+            openWindowAndSetValue('.select-school', '#school');
+           
+        });
+        
+
+
+
+         $(document).ready(function() {
+    let isUserIdValid = false;
+
+    // 중복 확인 버튼 클릭 이벤트
+    $('.repetition').on('click', function() {
+        const nickname = $('#nickname').val().trim();
+     
+        
+
+        // 입력 값 유효성 검사
+        if (nickname === "") {
+            $('#nicknameMessage').text('*닉네임을 입력하세요.').addClass('error').removeClass('success');
+            $('#nickname').css('border', '2px solid red');
+            isUserIdValid = false;
+            return;
+        }
+
+        // 서버에 닉네임 중복 확인 요청
+        checkUserNickName(nickname);
+    });
+
+    // 닉네임 중복 확인 함수
+    function checkUserNickName(nickname) {
+        console.log(nickname); // 콘솔에 닉네임 출력
+
+        $.ajax({
+            url: '/user/checkUsernickname', // 서버의 엔드포인트 URL
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ nickname: nickname }),
+            success: function(response) {
+                // 서버에서 닉네임이 중복된 경우 처리
+                if (response.repetition === "repetition") {
+                    $('#nicknameMessage').text('*중복된 닉네임입니다.').addClass('error').removeClass('success');
+                    $('#nickname').css('border', '2px solid red');
+                    isUserIdValid = false;
+                } else {
+                    // 닉네임이 사용 가능한 경우 처리
+                    $('#nicknameMessage').text('*사용 가능한 닉네임입니다.').addClass('success').removeClass('error');
+                    $('#nickname').css('border', '1px solid #ddd');
+                    isUserIdValid = true;
+                }
+            },
+            error: function(xhr, status, error) {
+                // 서버 통신 중 오류가 발생한 경우 처리
+                $('#nicknameMessage').text('*중복 확인 중 오류 발생.').addClass('error').removeClass('success');
+                $('#nickname').css('border', '2px solid red');
+                isUserIdValid = false;
+            }
+        });
+    }
+});
+
+
+</script>

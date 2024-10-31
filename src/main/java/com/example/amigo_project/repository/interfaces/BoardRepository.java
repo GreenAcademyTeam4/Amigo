@@ -118,4 +118,6 @@ public interface BoardRepository {
 
     // 좋아요 추가 기능
     void incrementLikeCount(@Param("boardId") int boardId);
+    // 본인 게시물 수
+    int countBoardByUserId (int userid);
 }

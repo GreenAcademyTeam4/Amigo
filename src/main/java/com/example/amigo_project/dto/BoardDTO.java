@@ -40,7 +40,7 @@ public class BoardDTO {
     private String image;
     // 날짜 포맷
     public void getFormattedCreatedAt() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd HH:mm");
         this.createdAtFormat = formatter.format(createdAt);
     }
     

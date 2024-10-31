@@ -1,27 +1,33 @@
 package com.example.amigo_project.controller;
 
-import com.example.amigo_project.dto.BoardDTO;
-import com.example.amigo_project.dto.CommentDTO;
-import com.example.amigo_project.repository.model.Board;
-import com.example.amigo_project.repository.model.Comment;
-import com.example.amigo_project.service.BoardService;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.io.IOException;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.amigo_project.dto.BoardDTO;
+import com.example.amigo_project.dto.CommentDTO;
+import com.example.amigo_project.repository.model.Comment;
+import com.example.amigo_project.service.BoardService;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 
 @Controller
@@ -101,7 +107,7 @@ public class BoardController {
      @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지 
      @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
         ) {
-
+        
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
         List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴

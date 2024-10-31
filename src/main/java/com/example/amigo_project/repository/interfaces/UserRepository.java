@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.amigo_project.dto.UserDTO;
-import com.example.amigo_project.dto.UserDTO.NaverDTO;
 import com.example.amigo_project.repository.model.User;
 
 @Mapper
@@ -20,6 +19,8 @@ public interface UserRepository {
     public User loginByUserIdandPassword(UserDTO.loginDTO dto);
     // 아이디로 로그인
     public User findByUserId(String userId);
+    // info 추가하기 (닉네임,학교)
+    public User updateInfo(UserDTO.infoDTO dto);
     
     /**
      * 간편로그인 관련 인터페이스
@@ -35,5 +36,7 @@ public interface UserRepository {
 
     // id로 유저 정보 가져오기
     public User findUserById(int id);
+    // 친구수 조회
+    public int countFriendByUserId(int id);
 }
 

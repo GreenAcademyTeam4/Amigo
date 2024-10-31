@@ -26,11 +26,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -48,17 +43,17 @@ public class UserController {
      */
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto){
-
         User principal = userService.findUserById(dto);
-   
-
-        System.out.println(dto);
     
-        System.out.println(principal);
-        if(principal != null){
+        if (principal != null) {
             session.setAttribute("principal", principal);
+            if (principal.getNickname() != null) {
+                return "redirect:/";
+            }
+
             return "views/login/schoolSelect";
-        } else{
+
+        } else {
             return "redirect:/";
         }
        
@@ -97,6 +92,13 @@ public class UserController {
         Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
+    
+    @PostMapping("/checkUsernickname")
+    public ResponseEntity<Map<String, String>> checkUserNickName(@RequestBody UserDTO.infoDTO dto) {
+    	System.out.println("SDFAFSADFSAFSAFD");
+        Map<String, String > repetitionResult = userService.checkNickNameRepetition(dto);
+        return ResponseEntity.ok(repetitionResult);
+    }
 
     /**
      * 회원가입 
@@ -106,12 +108,8 @@ public class UserController {
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
         int result = userService.joinUser(dto);
-        if (result > 0) {
-            return "views/login/login";
-        } else {
-            return "views/login/login";  
-        }
-
+        
+        return (result > 0) ? "views/login/login" : "views/login/login";
 
     }
   
@@ -123,8 +121,6 @@ public class UserController {
         final String Type = "json";
         final Integer pindex = 1;
         final Integer pSize = 1000;
-        System.out.println("들어옴!!!!!!" + region);
-        System.out.println("들어옴!!!!!!" + name);
         List<String> schoolList = new ArrayList<>();
         Mono<JsonNode> response = webClient.get().uri(uribuilder -> uribuilder.path("/hub/schoolInfo")
                         .queryParam("KEY", KEY)
@@ -187,5 +183,14 @@ public class UserController {
         model.addAttribute("schoolList", schoolList);  // schoolList를 모델에 추가하여 뷰에 전달
         return "views/test";  // test.mustache 또는 test.html로 전달
     }
+    @PostMapping("addInformation")
+    public String updateInfo(HttpSession session, @ModelAttribute UserDTO.infoDTO dto) {
+    
+        User principal = (User)session.getAttribute("principal");
+        dto.setId(principal.getId());
+        userService.updateInfo(dto);
+        return "redirect:/";
+    }
+    
 
 }

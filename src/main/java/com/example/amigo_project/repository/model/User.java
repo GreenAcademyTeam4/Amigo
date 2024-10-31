@@ -28,9 +28,7 @@ public class User {
     private Integer userRole;
     private boolean onlineStatus;
     private String activeStatus;
-    private String elementarySchool; // 초등학교
-    private String middleSchool;
-    private String highSchool; 
+    private String school; 
     private Timestamp createdAt;
     private String createdAtFormat;
 

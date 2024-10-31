@@ -37,6 +37,13 @@ public class UserDTO {
         private String gender;
         private Integer birth;
     }
+    @Data
+    public static class infoDTO{
+          private int id;
+    	  private String nickname;
+          private String school;
+    	
+    }
 
     /**
      * 로그인 DTO
