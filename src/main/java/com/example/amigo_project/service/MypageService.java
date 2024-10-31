@@ -135,8 +135,9 @@ public class MypageService {
     
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
-        Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
-        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
+        Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출'
+        return null;
+//        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(),user.getSchool(), year);
     }
 
     public int countMyBoards (int id){

@@ -48,18 +48,18 @@ $(document).ready(function() {
             });
     });
 
-    mypage.on('click', function() {
-        fetch("/my-page/")
-            .then(response => response.text())
-            .then(data => {
-                screen.html(data);
-                
-            
-            })
-            .catch(error => {
-                console.error('마이 페이지 로딩 중 오류 발생:', error);
-            });
-    });
+//    mypage.on('click', function() {
+//        fetch("/my-page/")
+//            .then(response => response.text())
+//            .then(data => {
+//                screen.html(data);
+//
+//
+//            })
+//            .catch(error => {
+//                console.error('마이 페이지 로딩 중 오류 발생:', error);
+//            });
+//    });
 });
 
 $(document).ready(function() {
