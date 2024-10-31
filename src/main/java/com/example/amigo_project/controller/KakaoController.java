@@ -23,7 +23,7 @@ public class KakaoController {
 
     @GetMapping("/callback")
     public String kakaoCallResource(@RequestParam("code") String code, HttpSession session) throws Exception {
-        System.out.println(code);
+        
         String resourceToken = kakaoApiService.getKakaoAccessToken(code);
         KakaoDTO kakaoDTO = kakaoApiService.createKakaoUser(resourceToken);
         User principal = kakaoApiService.findKakaoUser(kakaoDTO);

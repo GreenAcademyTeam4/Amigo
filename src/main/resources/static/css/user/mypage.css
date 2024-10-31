@@ -1,0 +1,72 @@
+
+.mypage-container{
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+.top-blanck{
+    display: flex;
+    align-items: center;
+    background-color: #D4B7AA;
+    min-height: 25px;
+    border-bottom: 1px solid #d4b7aa;
+    font-size: 25px;
+}
+
+
+.top-profile{
+    width: 100%;
+    padding-bottom: 10px;
+   
+    margin-top: 5px;
+   
+}
+.profile-charactor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    
+   
+}
+.charactor-box{
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border: 3px solid #d4b7aa ;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.profile-myinfo{
+    display: flex;
+    background-color: #D4B7AA;
+    height: 100px;
+    border-radius: 10px;
+    justify-content: center;
+  
+}
+.profile-nickname{
+    color:#d4b7aa ;
+}
+.profile-point,.profile-friend{
+    padding: 0 60px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+.profile-board{
+    padding: 0 60px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+}

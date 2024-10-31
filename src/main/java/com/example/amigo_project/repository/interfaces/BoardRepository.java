@@ -118,6 +118,8 @@ public interface BoardRepository {
 
     // 좋아요 추가 기능
     void incrementLikeCount(@Param("boardId") int boardId);
+    // 본인 게시물 수
+    int countBoardByUserId (int userid);
 
     // 특정 학교의 조회수가 가장 많은 게시글 조회  (페이징 처리 할려고)
     List<BoardDTO> findBoardView(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);

@@ -23,7 +23,6 @@ public class GoogleController {
 
     @GetMapping("/callback")
     public String googleCallback(@RequestParam("code") String code, HttpSession session) throws Exception {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+code);
         String resourceToken = googleService.getGoogleAccessToken(code);
         GoogleDTO googleDTO = googleService.createGoogleUser(resourceToken);
         User principal = (User)googleService.findGoogleUser(googleDTO);

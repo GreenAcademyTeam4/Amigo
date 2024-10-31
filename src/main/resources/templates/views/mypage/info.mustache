@@ -2,6 +2,53 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 레이아웃</title>
+    
+    <link rel="stylesheet" type="text/css" href="/css/user/mypage.css">
+
+  
+</head>
+<div class="mypage-container">
+<div class="top-blanck">
+       
+</div>
+    <div class="top-profile">
+      <div class="profile-charactor">
+        <div class="charactor-box">
+        </div>
+          <div class="profile-nickname">
+            {{user.nickname}}
+          </div>
+      </div>  
+     
+      <div class="profile-myinfo">
+    
+        <div class="profile-friend">
+          친구
+          <div class="my-friend">
+           {{friendCount}}
+          </div>
+        </div>
+        <div class="profile-board">
+        게시글 
+          <div class="my-board">
+            {{boardCount}}
+          </div>
+           
+        </div>
+        <div class="profile-point">
+        도토리
+          <div class="my-poin">
+            {{user.point}}
+          </div>  
+        </div>
+      </div>
+    </div>
+ 
+
+</div>
+
     <title>마이페이지</title>
 </head>
 <body>
