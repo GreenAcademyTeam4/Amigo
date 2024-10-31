@@ -159,7 +159,6 @@ create table notice_view_tb (
 );
 
 
-
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
@@ -273,4 +272,4 @@ create table prodHistory_tb(
     id int primary key auto_increment,
     avatar_id int,
     foreign key (avatar_id) references avatar_tb(id)
-)
+);

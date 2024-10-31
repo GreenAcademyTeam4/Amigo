@@ -2,7 +2,7 @@ $(document).ready(function() {
     const mpg = $('#mypage');
     const enter = $('.enter');
     const post = $('.post');
-    const screen = $('.screen-area');
+    window.screen = $('.screen-area');
     const logout = $('.logout');
     const school = $('.other-school');
     const friends = $('.friends');

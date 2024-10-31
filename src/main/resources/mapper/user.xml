@@ -68,7 +68,7 @@
         nickname = #{nickname}
     WHERE 
         id = #{id}
-</update>
+    </update>
   
  <!-- 친구 수 조회-->
     <select id="countFriendByUserId" resultType="Integer">
