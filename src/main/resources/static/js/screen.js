@@ -1,7 +1,7 @@
 $(document).ready(function() {
     const enter = $('.enter');
     const post = $('.post');
-    const screen = $('.screen-area');
+    window.screen = $('.screen-area');
     const logout = $('.logout');
     const school = $('.other-school');
     const friends = $('.friends');
