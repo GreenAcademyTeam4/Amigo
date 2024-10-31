@@ -1,86 +1,119 @@
-{{>layout/header}}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판 레이아웃</title>
-    
     <link rel="stylesheet" type="text/css" href="/css/user/mypage.css">
-
-  
-</head>
-<div class="mypage-container">
-<div class="top-blanck">
-       
-</div>
-    <div class="top-profile">
-      <div class="profile-charactor">
-        <div class="charactor-box">
-        </div>
-          <div class="profile-nickname">
-            {{user.nickname}}
-          </div>
-      </div>  
-     
-      <div class="profile-myinfo">
-    
-        <div class="profile-friend">
-          친구
-          <div class="my-friend">
-           {{friendCount}}
-          </div>
-        </div>
-        <div class="profile-board">
-        게시글 
-          <div class="my-board">
-            {{boardCount}}
-          </div>
-           
-        </div>
-        <div class="profile-point">
-        도토리
-          <div class="my-poin">
-            {{user.point}}
-          </div>  
-        </div>
-      </div>
-    </div>
- 
-
-</div>
-
-    <title>마이페이지</title>
 </head>
 <body>
+<div class="mypage-container">
+    <div class="top-blanck"></div>
+    <div class="top-profile">
+        <div class="profile-charactor">
+            <div class="charactor-box"></div>
+            <div class="profile-nickname">
+                <span id="nickname-text">{{user.nickname}}</span>
+            </div>
+        </div>
+        <div class="profile-myinfo">
+            <div class="profile-friend">
+                친구
+                <div class="my-friend">
+                    {{friendCount}}
+                </div>
+            </div>
+            <div class="profile-board">
+                게시글
+                <div class="my-board">
+                    {{boardCount}}
+                </div>
+            </div>
+            <div class="profile-point">
+                도토리
+                <div class="my-poin">
+                    {{user.point}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<title>마이페이지</title>
 <h1>마이페이지</h1>
 <div>
-    <p>닉네임: {{#dto.nickname}}{{dto.nickname}}{{/dto.nickname}}{{^dto.nickname}}N/A{{/dto.nickname}}</p>
-    <p>이름: {{#dto.name}}{{dto.name}}{{/dto.name}}{{^dto.name}}N/A{{/dto.name}}</p>
-    <p>전화번호: {{#dto.phoneNumber}}{{dto.phoneNumber}}{{/dto.phoneNumber}}{{^dto.phoneNumber}}N/A{{/dto.phoneNumber}}</p>
-    <p>성별: {{#dto.gender}}{{dto.gender}}{{/dto.gender}}{{^dto.gender}}N/A{{/dto.gender}}</p>
-    <p>생년월일: {{#dto.birth}}{{dto.birth}}{{/dto.birth}}{{^dto.birth}}N/A{{/dto.birth}}</p>
-    <p>포인트: {{#dto.point}}{{dto.point}}{{/dto.point}}{{^dto.point}}N/A{{/dto.point}}</p>
+    <div id="nickname-container">
+        <p>닉네임: <span id="nickname-text">{{#user.nickname}}{{user.nickname}}{{/user.nickname}}{{^user.nickname}}N/A{{/user.nickname}}</span> <button onclick="editNickname()">✏️</button></p>
+    </div>
+    <div id="school-container">
+        <p>학교: <span id="school-text">{{#user.school}}{{user.school}}{{/user.school}}{{^user.school}}N/A{{/user.school}}</span> <button onclick="editSchool()">✏️</button></p>
+    </div>
+    <p>이름: {{#user.name}}{{user.name}}{{/user.name}}{{^user.name}}N/A{{/user.name}}</p>
+    <p>전화번호: {{#user.phoneNumber}}{{user.phoneNumber}}{{/user.phoneNumber}}{{^user.phoneNumber}}N/A{{/user.phoneNumber}}</p>
+    <p>성별: {{#user.gender}}{{user.gender}}{{/user.gender}}{{^user.gender}}N/A{{/user.gender}}</p>
+    <p>생년월일: {{#user.birth}}{{user.birth}}{{/user.birth}}{{^user.birth}}N/A{{/user.birth}}</p>
+    <p>도토리: {{#user.point}}{{user.point}}{{/user.point}}{{^user.point}}N/A{{/user.point}}</p>
     <a href="/my-page/inventory">인벤토리</a> |
     <a href="/my-page/friend-list">친구 관리</a> |
     <a href="javascript:void(0)" onClick="javascript:goPost()">포인트 충전 내역</a> |
     <a href="/my-page/pwdcheck">비밀번호 변경</a>
 </div>
-</body>
+
 <script>
-function goPost(){
-    let f = document.createElement('form');
-    f.setAttribute('method', 'post');
-    f.setAttribute('action', '/my-page/charge-history');
-    document.body.appendChild(f);
-    f.submit();
-}
+    function goPost(){
+        let f = document.createElement('form');
+        f.setAttribute('method', 'post');
+        f.setAttribute('action', '/my-page/charge-history');
+        document.body.appendChild(f);
+        f.submit();
+    }
+
+    function editNickname() {
+        const nicknameText = document.getElementById('nickname-text').innerText;
+        document.getElementById('nickname-container').innerHTML = `
+            <label for="nickname-input">닉네임:</label>
+            <input type="text" id="nickname-input" value="${nicknameText}">
+            <button onclick="saveNickname()">변경</button>
+        `;
+    }
+
+    function saveNickname() {
+        const newNickname = document.getElementById('nickname-input').value;
+        fetch(`/my-page/chNick?nickname=${newNickname}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nickname-text').innerText = data.nickname;
+                document.getElementById('nickname-container').innerHTML = `
+                    <p>닉네임: <span id="nickname-text">${data.nickname}</span> <button onclick="editNickname()">✏️</button></p>
+                `;
+            })
+            .catch(error => {
+                console.error('닉네임 변경 중 오류 발생:', error);
+            });
+    }
+
+    function editSchool() {
+        const schoolText = document.getElementById('school-text').innerText;
+        document.getElementById('school-container').innerHTML = `
+            <label for="school-input">학교:</label>
+            <input type="text" id="school-input" value="${schoolText}">
+            <button onclick="saveSchool()">변경</button>
+        `;
+    }
+
+    function saveSchool() {
+        const newSchool = document.getElementById('school-input').value;
+        fetch(`/my-page/chSchool?school=${newSchool}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('school-container').innerHTML = `
+                    <p>학교: <span id="school-text">${data.school}</span> <button onclick="editSchool()">✏️</button></p>
+                `;
+            })
+            .catch(error => {
+                console.error('학교 변경 중 오류 발생:', error);
+            });
+    }
 </script>
-<<<<<<< HEAD
+</body>
 </html>
-=======
-<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</html>
-{{>layout/footer}}
->>>>>>> 0f2d27f (123)

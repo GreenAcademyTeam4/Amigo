@@ -36,51 +36,40 @@ public class UserController {
     private final WebClient webClient;
 
     /**
-     * 로그인 
-     * TODO 로그인 구현 다시 확인 
-     * @param 
+     * 로그인
+     * TODO 로그인 구현 다시 확인
+     *
+     * @param
      * @return
      */
     @PostMapping("/login")
-    public String login(HttpSession session, UserDTO.loginDTO dto){
+    public String login(HttpSession session, UserDTO.loginDTO dto) {
         User principal = userService.findUserById(dto);
-    
-        if (principal != null) {
 
-        System.out.println(dto);
-    
-        System.out.println(principal);
-        if(principal != null){
-            System.out.println("principal!!!!!!!!");
+        if (principal != null) {
+            System.out.println(dto);
+            System.out.println(principal);
             session.setAttribute("principal", principal);
-<<<<<<< HEAD
+
             if (principal.getNickname() != null) {
                 return "redirect:/";
             }
 
             return "views/login/schoolSelect";
-
-        } else {
-=======
-            //return "views/login/schoolSelect";
-            return "redirect:/";
-        } else{
->>>>>>> 0f2d27f (123)
-            return "redirect:/";
         }
-       
+
+        return "views/login/login";
     }
+
     /**
-     *   로그아웃
+     * 로그아웃
      * @return
      */
     @GetMapping("/logout")
-    public String logout(){
-    session.invalidate();
-    return "redirect:/";
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
     }
-    
-    
 
     /**
      * 회원 가입 페이지 호출 메서드
@@ -91,8 +80,6 @@ public class UserController {
         return "views/login/join";
     }
 
-
-    
     /**
      * 중복확인 , 회원가입 페이지 에서 사용
      * @param dto
@@ -100,31 +87,28 @@ public class UserController {
      */
     @PostMapping("/checkUserId")
     public ResponseEntity<Map<String, String>> checkUserId(@RequestBody UserDTO.joinDTO dto) {
-
-        Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
+        Map<String, String> repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
-    
+
     @PostMapping("/checkUsernickname")
     public ResponseEntity<Map<String, String>> checkUserNickName(@RequestBody UserDTO.infoDTO dto) {
-    	System.out.println("SDFAFSADFSAFSAFD");
-        Map<String, String > repetitionResult = userService.checkNickNameRepetition(dto);
+        System.out.println("SDFAFSADFSAFSAFD");
+        Map<String, String> repetitionResult = userService.checkNickNameRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
 
     /**
-     * 회원가입 
+     * 회원가입
      * @param dto
      * @return
      */
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
         int result = userService.joinUser(dto);
-        
         return (result > 0) ? "views/login/login" : "views/login/login";
-
     }
-  
+
     @GetMapping("/schoolData")
     @ResponseBody
     public Mono<List<String>> schoolData(@RequestParam(name = "region") String region,
@@ -195,14 +179,12 @@ public class UserController {
         model.addAttribute("schoolList", schoolList);  // schoolList를 모델에 추가하여 뷰에 전달
         return "views/test";  // test.mustache 또는 test.html로 전달
     }
+
     @PostMapping("addInformation")
     public String updateInfo(HttpSession session, @ModelAttribute UserDTO.infoDTO dto) {
-    
-        User principal = (User)session.getAttribute("principal");
+        User principal = (User) session.getAttribute("principal");
         dto.setId(principal.getId());
         userService.updateInfo(dto);
         return "redirect:/";
     }
-    
-
 }
