@@ -10,11 +10,25 @@ const servers = {
     ]
 };
 
-const socket = new WebSocket("ws://192.168.0.113:8080/signaling");
+const socket = new WebSocket("ws://localhost:8080/signaling");
 
+// 처음 입장할때 상대방의 id를 키값으로 내 세션을 저장
+socket.send(JSON.stringify({
+    type: "roomId",
+    message: friendId
+}));
+
+// 나갈때 상대방의 id로 저장해놓은 내 세션을 제거
+socket.onclose = () => {
+    socket.send(JSON.stringify({
+        type: "out",
+        message: friendId
+    }));
+}
+
+// 상대방이 오퍼를 보내거나 답장이 오거나 ice후보들을 보낼때 처리
 socket.onmessage = async (event) => {
     let data = JSON.parse(event.data);
-
     if (data.type === 'offer') {
         await handleOffer(data);
     } else if (data.type === 'answer') {
@@ -28,7 +42,12 @@ let init = async () => {
     try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.querySelector(".user-video").srcObject = localStream;
-        document.querySelector(".user-profile").style.display = "none"; // 캠이 켜지면 프로필 숨김
+
+        // 사용자 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".user-loading").style.opacity = 0;
+        document.querySelector(".user-loading").style.display = "none";
+        document.querySelector(".user-profile").style.display = "none";
+
         createOffer();
     } catch (error) {
         console.error("Error accessing media devices.", error);
@@ -48,8 +67,11 @@ let createOffer = async () => {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
         });
-        document.querySelector(".remote-loading").style.opacity = 0; // 상대방 들어오면 로딩 제거
-        document.querySelector(".remote-profile").style.display = "none"; // 상대방 캠 켜지면 프로필 숨김
+
+        // 상대방 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".remote-loading").style.opacity = 0;
+        document.querySelector(".remote-loading").style.display = "none";
+        document.querySelector(".remote-profile").style.display = "none";
     };
 
     peerConnection.onicecandidate = async (event) => {
@@ -76,8 +98,11 @@ let handleOffer = async (offer) => {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
         });
-        document.querySelector(".remote-loading").style.opacity = 0; // 상대방 들어오면 로딩 제거
-        document.querySelector(".remote-profile").style.display = "none"; // 상대방 캠 켜지면 프로필 숨김
+
+        // 상대방 로딩 애니메이션 제거 및 프로필 숨김
+        document.querySelector(".remote-loading").style.opacity = 0;
+        document.querySelector(".remote-loading").style.display = "none";
+        document.querySelector(".remote-profile").style.display = "none";
     };
 
     peerConnection.onicecandidate = async (event) => {

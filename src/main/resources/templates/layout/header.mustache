@@ -4,8 +4,23 @@
 <html>
 <body>
 <header>
+    <div class="alarm-box">
+        <div class="alarm-list">
+            <div class="sender-profile"></div>
+            <div class="sender-nickname"></div>
+            <div class="alarm-content"></div>
+        </div>
+    </div>
+    <div class="voice-chat hide">
+        <div class="sender-profile"></div>
+        <div class="sender-nickname"></div>
+        <div class="btn-area">
+            <button class="accept-btn"></button>
+            <button class="refuse-btn"></button>
+        </div>
+    </div>
     <div class="logo">
-        <img src="/image/logo.png"> 
+        <img src="/image/logo.png">
     </div>
     <div class="school-select">
         <div class="current-school">
@@ -19,49 +34,30 @@
         {{!{{/other_school}}
     </div>
 
-    {{#principal}}
         <div class="nav-area">
             <a href="#">친구</a>
             <a href="#">매점</a>
             <a href="#">공지</a>
-            <a href="#">알람</a>
-            <a href="#">쪽지</a>  
+            <a href="#">쪽지</a>
+            <a href="/my-page/info">마이페이지</a>
+            <a href="/store/shop">상점</a>
         </div>
+        {{#principal}}
         <div id="login-btn" class="transition-link" >
-            <a href="/logout">Logout</a>  
+            <a href="/logout">Logout</a>
         </div>
-
-    {{/principal}}
-    {{^principal}}
-      
+        {{/principal}}
         <div class="nav-area">
+            <img src="/image/alarm/alarm.png" id="alarm-icon">
             <a href="#">Support</a>
              <a href="#">Blog</a>
         </div>
+        {{^principal}}
         <div id="login-btn" class="transition-link" >
-            <a href="/login">Login</a>  
+            <a href="/login">Login</a>
         </div>
-            
-    {{/principal}}
+        {{/principal}}
 
-   
 </header>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-          $(document).ready(function() {
-        $('body').css('opacity', '1');
-        $('.transition-link a').on('click', function(e) {
-            var linkUrl = $(this).attr('href');
-                e.preventDefault(); 
-                $('body').animate({ opacity: 0 }, 500, function() {
-                    window.location.href = linkUrl;
-                });
-            
-        });
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || window.performance && window.performance.navigation.type === 2) {
-                $('body').css('opacity', '1');
-            }
-        });
-    });
-</script>
+<script src="/js/layout/header.js"></script>

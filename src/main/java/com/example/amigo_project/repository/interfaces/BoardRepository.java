@@ -120,4 +120,18 @@ public interface BoardRepository {
     void incrementLikeCount(@Param("boardId") int boardId);
     // 본인 게시물 수
     int countBoardByUserId (int userid);
+
+    // 특정 학교의 조회수가 가장 많은 게시글 조회  (페이징 처리 할려고)
+    List<BoardDTO> findBoardView(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
+
+    // 특정 학교의 댓글수가 가장 많은 게시글 조회  (페이징 처리 할려고)
+    List<BoardDTO> findBoardCommend(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
+
+    // 특정 학교의 최근에 생성된 게시글을 순서대로 조회 (페이징 처리 할려고)
+    List<BoardDTO> findBoardNew(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
+
+    List<BoardDTO> findBoardHeart(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
+
+    // 하트(공감)을 눌렀을 때 작동
+    void updateLikesCount(int boardId, int likeCount);
 }

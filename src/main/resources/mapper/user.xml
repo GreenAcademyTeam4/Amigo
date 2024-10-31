@@ -8,11 +8,13 @@
         FROM user_tb
         WHERE user_id = #{userId}
     </select>
+  
     <select id="checkUserNickname" resultType="boolean" parameterType="String">
         SELECT COUNT(*)
         FROM user_tb
         WHERE nickname = #{nickname}
     </select>
+
     <insert id="create" parameterType="com.example.amigo_project.dto.UserDTO">
         INSERT INTO user_tb (
             user_id, name, password, phone_number, gender, birth
@@ -27,13 +29,13 @@
         WHERE user_id = #{userId}
         AND password = #{password}
     </select>
+
     <select id="findByUserId"  parameterType="com.example.amigo_project.dto.UserDTO">
         SELECT *
         FROM user_tb
         WHERE user_id = #{userId} 
     </select>
-    
-  
+
     <insert id="kakaoInsert" parameterType="java.util.HashMap">
 		insert into user_tb(user_id, password)
 			values(#{kakaoId}, #{kakaoPassword})
@@ -58,6 +60,7 @@
         select * from user_tb
         where id = #{id}
     </select>
+  
    <update id="updateInfo" parameterType="com.example.amigo_project.dto.UserDTO">
     UPDATE user_tb
     SET 
@@ -66,9 +69,31 @@
     WHERE 
         id = #{id}
 </update>
+  
  <!-- 친구 수 조회-->
     <select id="countFriendByUserId" resultType="Integer">
         SELECT COUNT(*) FROM friend_tb WHERE user_id = #{id}
+
+    <update id="updatePasswordByUserId">
+        update user_tb
+        set password = #{password}
+        where id = #{userId}
+    </update>
+  
+    <select id="findOnlineFriends" resultType="com.example.amigo_project.repository.model.User">
+        select u.id, u.nickname, u.profile from friend_tb as f
+        join user_tb as u
+        on f.friend_id = u.id
+        where f.user_id = #{id}
+        and u.online_status = true
+    </select>
+
+    <select id="findOfflineFriends" resultType="com.example.amigo_project.repository.model.User">
+        select u.id, u.nickname, u.profile from friend_tb as f
+        join user_tb as u
+        on f.friend_id = u.id
+        where f.user_id = #{id}
+        and u.online_status = false
     </select>
 
 </mapper>

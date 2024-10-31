@@ -27,6 +27,7 @@ public class BoardDTO {
 
     private String contentLocation;  // 게시글 내용은 텍스트이므로 String으로 변경
 
+
     private byte[] imageLocation;    // BLOB 필드 (이미지)
 
     private int viewCount;
@@ -53,4 +54,15 @@ public class BoardDTO {
             this.image = null;
         }
     }
+
+    // HTML 태그를 제거하는 메서드
+    public String removeHtmlTags(String contentLocation) {
+        if (contentLocation == null) {
+            return null;
+        }
+        // HTML 태그를 모두 제거 (기본적으로 모든 HTML 태그 제거) and remove &nbsp;
+        return contentLocation.replaceAll("<(/?p[^>]*)>", "").replaceAll("&nbsp;", "");
+    }
+
+
 }
