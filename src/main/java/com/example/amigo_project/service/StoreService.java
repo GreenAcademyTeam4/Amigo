@@ -72,6 +72,11 @@ public class StoreService {
 
     }
 
+    // 구매한 아바타 id를 아바타 구매 히스토리 테이블에 넣기
+    @Transactional
+    public void insertProdHistory(Integer avatarId){
+        storeRepository.insertProdHistory(avatarId);
+    }
 
 
 
