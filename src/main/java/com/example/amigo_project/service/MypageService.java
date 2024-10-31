@@ -64,7 +64,6 @@ public class MypageService {
         mypageRepository.updateNowAvatarByAvatarChangeDTO(dto.getUserId(), dto.getHead(), dto.getTop(), dto.getBottom(), dto.getShoes());
     }
 
-
     /**
      * 마이페이지 -> 친구관리 요청시 친구 목록 출력
      * @param userId
