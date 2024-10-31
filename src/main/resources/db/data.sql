@@ -4,8 +4,8 @@ values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27', 50000)
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
 values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
 
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, elementary_school)
-values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27', 'ABC School');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');

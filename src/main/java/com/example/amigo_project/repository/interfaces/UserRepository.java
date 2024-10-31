@@ -22,7 +22,7 @@ public interface UserRepository {
     // 아이디로 로그인
     public User findByUserId(String userId);
     // info 추가하기 (닉네임,학교)
-    public User updateInfo(UserDTO.infoDTO dto);
+    public int updateInfo(UserDTO.infoDTO dto);
     
     /**
      * 간편로그인 관련 인터페이스

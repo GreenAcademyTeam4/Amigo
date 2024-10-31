@@ -68,11 +68,12 @@
         nickname = #{nickname}
     WHERE 
         id = #{id}
-</update>
+    </update>
   
  <!-- 친구 수 조회-->
     <select id="countFriendByUserId" resultType="Integer">
         SELECT COUNT(*) FROM friend_tb WHERE user_id = #{id}
+    </select>
 
     <update id="updatePasswordByUserId">
         update user_tb
