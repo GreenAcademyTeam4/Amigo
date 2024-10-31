@@ -9,6 +9,7 @@ create table user_tb (
   phone_number varchar(20)  null,
   school varchar(20) null,
   gender varchar(10)  null,
+  profile Blob,
   birth int  null,
   point int default 0,
   user_role int default 0,
@@ -54,8 +55,8 @@ create table friend_wait_tb (
   id int primary key auto_increment,
   sender_id int,
   receiver_id int,
-  foreign key (sender_id) references user_tb(id),
-  foreign key (receiver_id) references user_tb(id)
+  foreign key (sender_id) references user_tb(id) ON DELETE CASCADE,
+  foreign key (receiver_id) references user_tb(id) ON DELETE CASCADE
 );
 
 -- 알람 테마 테이블
@@ -136,7 +137,7 @@ create table board_view_tb (
   user_id int,
   board_id int,
   primary key(user_id, board_id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 좋아요 테이블
@@ -146,7 +147,7 @@ create table like_tb (
   board_id int,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (user_id) references user_tb(id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 댓글 테이블
@@ -274,4 +275,16 @@ create table point_history_tb(
     less_point int, -- 잔여 포인트
     created_at timestamp default CURRENT_TIMESTAMP,
     foreign key (user_id) references user_tb(id)
+);
+
+-- 알람 tb
+create table alarm_tb (
+	id int primary key auto_increment,
+	type varchar(20) not null,
+	sender_id int not null,
+    receiver_id int,
+	content varchar(255),
+    created_at timestamp default now(),
+    status int default 0,
+    foreign key (type) references alarm_type_tb(id)
 );

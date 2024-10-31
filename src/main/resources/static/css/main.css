@@ -4,29 +4,22 @@ main {
     display: flex;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
-    /*     align-items: center; */
     justify-content: space-between;
     border-radius: 20px;
     min-height: 100vh;
     border: 1px solid #d4b7aa;
 }
 
-
-
 .screen-area {
     display: flex;
     justify-content: center;
-  
     margin: 10px;
     max-width: 1100px;
     flex: 3;
     overflow-y: auto;
   
     border-radius: 10px;
-    
-    /* 나중에 지울거임 */
 }
-
 
 .remote-controller {
     flex: 0.5;
@@ -39,9 +32,7 @@ main {
     flex-direction: column;
     align-items: center;
     margin: 10px 10px 10px 0;
-
     box-sizing: border-box;
-
 }
 
 .profile {
@@ -51,10 +42,9 @@ main {
     width: 200px;
     border-radius: 10px;
     margin-bottom: 10px;
-
 }
 
-/*리모컨 내부 css */
+/* 리모컨 내부 스타일 */
 .remote-controller a {
     text-decoration: none;
     color: white;
@@ -71,10 +61,29 @@ main {
     align-content: center;
     border: 1px solid #d4b7aa;
     cursor: pointer;
-
 }
-.bt-controller:hover{
+
+.bt-controller:hover {
     background-color: #d98264;
+}
+
+@media (max-width: 768px) {
+    .remote-controller {
+        width: 100px;
+        min-width: none;
+    }
+
+    .remote-controller .my-page,
+    .remote-controller .enter,
+    .remote-controller .post,
+    .remote-controller .logout {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .remote-controller .nickname {
+        font-size: 14px;
+    }
 }
 
 .friend-box {
@@ -83,32 +92,130 @@ main {
     background-color: #fcf8f7;
     border: 1px solid #d4b7aa;
     min-width: 200px;
-    min-height: 400px;
+    min-height: 400px; /* 최대 높이 설정 */
+    overflow-y: auto;  /* 내용이 많을 경우 세로 스크롤 생성 */
+    padding: 10px;
 }
 
+/* 스크롤바 스타일 (옵션) */
+.friend-box::-webkit-scrollbar {
+    width: 8px;
+}
 
-@media (max-width: 768px) {
-    .remote-controller {
-        width: 100px;
-        /* 작은 화면에서는 사이드바 너비를 줄임 */
-        min-width: none;
-    }
-    .remote-controller {
-     min-width: none;
-    
-    }
+.friend-box::-webkit-scrollbar-thumb {
+    background-color: #d4b7aa; /* 스크롤바 색상 */
+    border-radius: 4px;
+}
 
+.friend-box::-webkit-scrollbar-track {
+    background: #fcf8f7;
+}
 
-    .remote-controller .my-page,
-    .remote-controller .enter,
-    .remote-controller .post,
-    .remote-controller .logout {
-        font-size: 12px;
-        /* 버튼 글씨 크기 축소 */
-        padding: 5px;
-    }
+/* 온라인 친구 리스트 스타일 */
+.online-friends {
+    margin-bottom: 15px;
+}
 
-    .remote-controller .nickname {
-        font-size: 14px;
-    }
+.online-friend {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #e0f7e9;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #a3d9a5;
+}
+
+.online-friend:hover {
+    background-color: #c6eec9;
+}
+
+.online-friend .friend-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #91c788;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.online-friend .friend-nickname {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 오프라인 친구 리스트 스타일 */
+.offline-friends {
+    margin-top: 10px;
+}
+
+.offline-friend {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #d4d4d4;
+}
+
+.offline-friend:hover {
+    background-color: #e2e2e2;
+}
+
+.offline-friend .friend-profile {
+    width: 40px;
+    height: 40px;
+    background-color: #cccccc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.offline-friend .friend-nickname {
+    font-weight: bold;
+    color: #666;
+}
+
+/* info-box 초기 숨김 상태 및 스타일 */
+.info-box {
+    display: none;
+    position: absolute;
+    background-color: #fcf8f7;
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.info-box .info-profile,
+.info-box .chat,
+.info-box .voice-chat-btn {
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.info-box .info-profile {
+    background-color: #91c788;
+}
+
+.info-box .chat {
+    background-color: #8dc6ff;
+}
+
+.info-box .voice-chat-btn {
+    background-color: #ffaeae;
+}
+
+.info-box div:hover {
+    background-color: #e0e0e0;
+}
+
+h3 {
+    color: black;
+    margin-bottom: 3px;
 }

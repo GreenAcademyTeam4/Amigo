@@ -98,6 +98,11 @@ public class MypageService {
         return mypageRepository.findFriendReqByUserId(userId);
     }
 
+    // 이름 or 학교 입력값으로 친구 찾기
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName(Integer userId, String search){
+        return mypageRepository.findFriendBySchoolOrName(userId, search);
+    }
+
     /**
      * 친구 요청 기능
      * @param senderId 보내는 쪽 id
@@ -108,6 +113,13 @@ public class MypageService {
         mypageRepository.insertFriendReqBySenderIdAndReceiverId(senderId, receiverId);
     }
 
+    // 보낸 친구 요청 취소 기능
+    @Transactional
+    public void cancelfriendreq(Integer senderId, Integer receiverId){
+        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
+
 
     /**
      * 친구요청 수락 시 보낸쪽 / 받은쪽 양측의 친구 목록에 등록하는 쿼리 발송 / 수락한 친구요청 삭제 처리
@@ -116,14 +128,15 @@ public class MypageService {
      */
     @Transactional
     public void acceptFriendReq(Integer senderId, Integer receiverId){
-        mypageRepository.insertFriendBySenderIdAndReceiverIdToReceiver(senderId, receiverId);
-        mypageRepository.insertFriendBySenderIdAndReceiverIdToSender(senderId, receiverId);
-        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+        mypageRepository.insertFriendBySenderIdAndReceiverIdToReceiver(senderId, receiverId); // 받는쪽 친구 정보 삽입
+        mypageRepository.insertFriendBySenderIdAndReceiverIdToSender(senderId, receiverId); // 보내는쪽 친구 정보 삽입
+        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId); // 수락한 친구 요청 삭제
     }
-
+    
+    // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
         Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
-        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
+        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
     }
 
     public int countMyBoards (int id){
@@ -132,6 +145,25 @@ public class MypageService {
     public int countFriendByUserId (int id){
         return userRepository.countFriendByUserId(id);
     } 
+    // 받는 id와 보내는 id로 친구 요청 정보 여부 확인
+    public Integer findFriendReq(Integer senderId, Integer receiverId){
+        return mypageRepository.findCountFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
+    // 친구 요청 거부
+    public void rejectFriendReq(Integer senderId, Integer receiverId){
+        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
+    // 내가 보낸 친구 요청 리스트 조회
+    public List<MypageDTO.friendReqDTO> myFriendReq(Integer userId){
+        return mypageRepository.findMyFriendReqByUserId(userId);
+    }
+
+    // 친구 삭제
+    public void deleteFriendByUserIdAndFriendId(Integer userId, Integer friendId){
+        mypageRepository.deleteFriendByUserIdAndFriendId(userId, friendId);
+    }
 
 
 }

@@ -20,14 +20,18 @@
         </textarea>
     </div>
 
-    <div>
-        <button type="button" onclick="submitPost()">수정하기</button>
-    </div>
+<!--    <div>-->
+<!--        <button type="button" onclick="submitPost()">수정하기</button>-->
+<!--    </div>-->
+    <button type="button" id="submitButton" onclick="modifyPost()">작성 완료</button>
+
 </form>
 
     <div>
-        <a href="/board/list">돌아가기</a>
+        <a onclick="screenChanger('/board/list')">돌아가기</a>
     </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"> </script>
 
 <script>
     let oEditors = [];

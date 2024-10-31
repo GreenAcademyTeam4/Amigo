@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.model.User;
 
+import java.util.List;
+
 @Mapper
 public interface UserRepository {
 
@@ -38,5 +40,10 @@ public interface UserRepository {
     public User findUserById(int id);
     // 친구수 조회
     public int countFriendByUserId(int id);
+
+    // 온라인인 친구 찾기
+    public List<User>findOnlineFriends(int id);
+    // 오프라인인 친구 찾기
+    public List<User>findOfflineFriends(int id);
 }
 

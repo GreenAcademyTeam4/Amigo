@@ -46,6 +46,12 @@ public class UserController {
         User principal = userService.findUserById(dto);
     
         if (principal != null) {
+
+        System.out.println(dto);
+    
+        System.out.println(principal);
+        if(principal != null){
+            System.out.println("principal!!!!!!!!");
             session.setAttribute("principal", principal);
             if (principal.getNickname() != null) {
                 return "redirect:/";
