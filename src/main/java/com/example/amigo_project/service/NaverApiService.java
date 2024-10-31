@@ -127,7 +127,7 @@ public class NaverApiService {
 
     public User findNaverUser(NaverDTO naverDTO) {
         User principal = userRepository.findByUserId(naverDTO.getNaverId());
-
+        
         if (principal == null) {
             userRepository.naverInsert(naverDTO.getNaverId(), naverDTO.getNaverPassword());
             principal = userRepository.findByUserId(naverDTO.getNaverId());

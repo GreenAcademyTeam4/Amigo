@@ -4,18 +4,24 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.repository.interfaces.MypageRepository;
 import com.example.amigo_project.repository.model.User;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import com.example.amigo_project.repository.interfaces.BoardRepository;
+import com.example.amigo_project.repository.interfaces.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class MypageService {
 
     private final MypageRepository mypageRepository;
-
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     /**
      * 유저 id로 마이페이지 호출에 필요한 정보 조회
@@ -120,6 +126,12 @@ public class MypageService {
         return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
     }
 
+    public int countMyBoards (int id){
+        return boardRepository.countBoardByUserId(id);
+    } 
+    public int countFriendByUserId (int id){
+        return userRepository.countFriendByUserId(id);
+    } 
 
 
 }

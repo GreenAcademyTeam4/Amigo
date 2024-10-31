@@ -1,21 +1,27 @@
 package com.example.amigo_project.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.MypageService;
 import com.example.amigo_project.service.PaymentService;
 import com.example.amigo_project.service.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,8 +50,12 @@ public class MypageController {
             return "alert";
         } else {
             MypageDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
+            int boardCount = mypageService.countMyBoards(principal.getId());
+            int friendCount = mypageService.countFriendByUserId(principal.getId());
             model.addAttribute("dto", dto);
             model.addAttribute("user", principal);
+            model.addAttribute("boardCount", boardCount);
+            model.addAttribute("friendCount", friendCount);
             return "views/mypage/info";
         }
     }
