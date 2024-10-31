@@ -53,6 +53,7 @@ public class UserController {
         if(principal != null){
             System.out.println("principal!!!!!!!!");
             session.setAttribute("principal", principal);
+<<<<<<< HEAD
             if (principal.getNickname() != null) {
                 return "redirect:/";
             }
@@ -60,6 +61,11 @@ public class UserController {
             return "views/login/schoolSelect";
 
         } else {
+=======
+            //return "views/login/schoolSelect";
+            return "redirect:/";
+        } else{
+>>>>>>> 0f2d27f (123)
             return "redirect:/";
         }
        
