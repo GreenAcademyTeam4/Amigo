@@ -61,7 +61,7 @@
         <tbody>
         {{#boardList}}
             <tr>
-                <td> <a href="/board/detail/{{id}}">{{title}}</a> </td>
+                <td> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a> </td>
                 <td>{{nickname}}</td>
                 <td>{{viewCount}}</td>
                 <td>{{likes}}</td>
@@ -85,7 +85,7 @@
 
 </div>
 </div>
-    <script>const totalPages = {{totalPages}};</script>
+    <script>const totalPages = {{totalPages}}</script>
 <script src="/js/board/boardList.js"></script>
 
 <script>

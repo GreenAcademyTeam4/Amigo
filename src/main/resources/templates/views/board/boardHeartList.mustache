@@ -7,6 +7,7 @@
     <title>게시글 목록</title>
 </head>
 <body>
+
 <div class="board-container">
     <div class="head-title">
         학교 번호: {{schoolId}} 게시글 목록
@@ -18,7 +19,7 @@
 
     <!-- 글쓰기 버튼과 검색창 -->
     <div class="mb-4">
-        <form action="/board/search" method="get" class="input-group" style="max-width: 600px;">
+        <form id="searchForm" class="input-group" style="max-width: 600px;">
             <!-- 검색 기준 선택 -->
             <select name="searchType" class="form-select" style="max-width: 100px;" required>
                 <option value="title">제목</option>
@@ -32,8 +33,11 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="검색 아이콘" style="width: 20px;">
             </button>
             <!-- 닫기 버튼 -->
-            <button class="btn btn-outline-secondary ml-2" type="button" onclick="window.location.href='/board/list';">닫기</button>
+            <button class="btn btn-outline-secondary ml-2" type="button" onclick="loadList()">닫기</button>
         </form>
+
+        <!-- 검색 결과를 표시할 영역 -->
+        <div id="searchResults"></div>
     </div>
 
     <!-- 글쓰기 버튼 -->
@@ -73,16 +77,17 @@
     </table>
 
     <!-- 페이지 네비게이션 -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center" id="pagination">
-            <!-- JavaScript로 페이지 번호 생성 -->
-        </ul>
+    <nav aria-label="Page navigation example" id="pagination-container">
+        <!-- 페이지네이션 버튼이 JavaScript로 직접 생성됩니다 -->
     </nav>
+
+    <script>
+        // 서버에서 렌더링된 페이지 수를 받아서 JavaScript로 전달
+        const totalPages = {{totalPages}};
+    </script>
 </div>
 
-<script>
-    const totalPages = {{totalPages}};
-</script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- 지금 이거 작동 안됨 페이징 처리 작동 X -->
