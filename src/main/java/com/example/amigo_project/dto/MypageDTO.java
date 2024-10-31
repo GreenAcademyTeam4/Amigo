@@ -58,8 +58,8 @@ public class MypageDTO {
     @Data
     @Builder
     public static class friendReqDTO{
-        private Integer id;
-        private String name;
+        private Integer friendId;
+        private String friendName;
     }
 
     @Data

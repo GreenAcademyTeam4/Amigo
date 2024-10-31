@@ -1,3 +1,5 @@
+{{>layout/header}}
+<link rel="stylesheet" type="text/css" href="/css/main.css">
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,9 +23,9 @@
     <h2>받은 친구 요청</h2>
     <ul id="friendReqList">
         {{#friendReqList}}
-            <li id="request-{{id}}" data-id="{{id}}">{{name}}
-                <button class="acceptFriendBtn" data-id="{{id}}">수락</button>
-                <button class="rejectFriendBtn" data-id="{{id}}">거부</button>
+            <li id="request-{{friendId}}" data-id="{{friendId}}">{{friendName}}
+                <button class="acceptFriendBtn" data-id="{{friendId}}">수락</button>
+                <button class="rejectFriendBtn" data-id="{{friendId}}">거부</button>
             </li>
         {{/friendReqList}}
     </ul>
@@ -40,8 +42,8 @@
     <h2>추천 친구</h2>
     <ul id="recFriendList">
         {{#recFriendList}}
-            <li id="rec-{{id}}" data-id="{{id}}">{{name}} ({{gender}})
-                <button class="sendFriendRequestBtn" data-id="{{id}}">친구 신청</button>
+            <li id="rec-{{friendId}}" data-id="{{friendId}}">{{friendName}} ({{gender}})
+                <button class="sendFriendRequestBtn" data-id="{{friendId}}">친구 신청</button>
             </li>
         {{/recFriendList}}
     </ul>
@@ -182,5 +184,8 @@
         });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
+{{>layout/footer}}
