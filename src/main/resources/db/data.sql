@@ -345,19 +345,47 @@ INSERT INTO inventory_tb (user_id, avatar_id) VALUES
 (1, 4),
 (1, 5),
 (1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(2, 1),
 (2, 2),
 (2, 3),
 (2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4),
 (3, 5),
 (3, 6),
-(4, 6);
+(3, 7),
+(3, 8),
+(3, 9),
+(3, 10),
+(4, 1),
+(4, 2),
+(4, 3),
+(4, 4),
+(4, 5),
+(4, 6),
+(4, 7),
+(4, 8),
+(4, 9),
+(4, 10);
 
 -- 현재 아바타 정보 테이블에 샘플 데이터 삽입
 INSERT INTO now_avatar_tb (user_id, head, top, bottom, shoes) VALUES
-(1, 1, NULL, 3, 4),
-(2, 2, NULL, 3, NULL),
-(3, 5, NULL, 6, NULL),
-(4, NULL, NULL, 6, NULL);
+(1, 1, 8, 3, 4),
+(2, 2, 8, 3, 4),
+(3, 5, 8, 6, 4),
+(4, 2, 8, 6, 4);
 
 -- 포인트 사용내역 테이블에 샘플 데이터 삽입
 INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_point) VALUES

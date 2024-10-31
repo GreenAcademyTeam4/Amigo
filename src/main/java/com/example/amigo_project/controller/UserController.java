@@ -29,6 +29,10 @@ public class UserController {
 
     /**
      * 로그인
+     * TODO 로그인 구현 다시 확인
+     *
+     * @param
+     * @return
      */
 
     @PostMapping("/login")
@@ -49,8 +53,10 @@ public class UserController {
 
         return "views/login/login";
     }
+
     /**
      * 로그아웃
+     * @return
      */
     @GetMapping("/logout")
     public String logoutHandler() {
@@ -77,12 +83,15 @@ public class UserController {
 
     @PostMapping("/checkUsernickname")
     public ResponseEntity<Map<String, String>> checkUserNickName(@RequestBody UserDTO.infoDTO dto) {
+        System.out.println("SDFAFSADFSAFSAFD");
         Map<String, String> repetitionResult = userService.checkNickNameRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
     }
 
     /**
      * 회원가입
+     * @param dto
+     * @return
      */
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
@@ -161,7 +170,7 @@ public class UserController {
         model.addAttribute("schoolList", schoolList);
         return "views/test";
     }
-
+      
     /**
      * 사용자 정보 업데이트
      */

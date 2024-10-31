@@ -1,10 +1,12 @@
 $(document).ready(function() {
+    const mpg = $('#mypage');
     const enter = $('.enter');
     const post = $('.post');
     window.screen = $('.screen-area');
     const logout = $('.logout');
     const school = $('.other-school');
     const friends = $('.friends');
+
 
     // 학교 바꾸기 기능 추가
     school.each(function (index, element) {
@@ -48,20 +50,18 @@ $(document).ready(function() {
             });
     });
 
-//    mypage.on('click', function() {
-//        fetch("/my-page/")
-//            .then(response => response.text())
-//            .then(data => {
-//                screen.html(data);
-//
-//
-//            })
-//            .catch(error => {
-//                console.error('마이 페이지 로딩 중 오류 발생:', error);
-//            });
-//    });
+    // 마이페이지 이동 이벤트 추가
+    mpg.on('click', function() {
+        fetch("/my-page/info")
+            .then(response => response.text())
+            .then(data => {
+                screen.html(data);
+            })
+            .catch(error => {
+                console.error('마이 페이지 로딩 중 오류 발생:', error);
+            });
+    });
 });
-
 $(document).ready(function() {
     const screen = $('.screen-area');
     $('.online-friend').on('click', function(event) {
