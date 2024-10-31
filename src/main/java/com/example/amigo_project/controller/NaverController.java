@@ -22,11 +22,11 @@ public class NaverController {
     private final UserService userService;
 
     @GetMapping("/callback")
+  
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,
                            HttpSession session) throws Exception {
 
-     
 
         // 세션에서 저장된 state 값 가져오기
         String sessionState = (String) session.getAttribute("oauthState");
@@ -41,17 +41,21 @@ public class NaverController {
 
         // 네이버 사용자 정보 생성
         NaverDTO naverDTO = naverApiService.createNaverUser(resourceToken);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + naverDTO.getNaverId());
 
         // 네이버 사용자 찾기 또는 생성
         User principal = naverApiService.findNaverUser(naverDTO);
-        
-
+       
+       System.out.println(principal);
         if (principal != null) {
             session.setAttribute("principal", principal);
-            return "views/login/schoolSelect"; // 로그인 성공 시 이동할 페이지
+            if (principal.getNickname() != null) {
+                return "redirect:/";
+            }
+            System.out.println("네이버 로그인 진입");
+            return "views/login/schoolSelect";
+
         } else {
-            return "redirect:/"; // 로그인 실패 시 리다이렉트할 페이지
+            return "redirect:/";
         }
     }
 }

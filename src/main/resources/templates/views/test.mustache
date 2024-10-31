@@ -7,7 +7,6 @@
             <option value="{{regionCode}}">{{regionName}}</option>
         {{/schoolList}}
     </select>
-
     <input type="text" class="name" placeholder="학교 이름 입력">
     <button onclick="send()">전송</button>
     <br>
@@ -17,22 +16,30 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
     function send() {
         const region = $(".region-select").val();
         const name = $(".name").val();
         const list = $(".list");
         list.empty();
+
         fetch("/user/schoolData?region=" + region + "&name=" + name)
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    data.forEach(school => {
-                        list.append(`<p>${school}</p>`);
-                    });
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(school => {
+                    // 학교 이름을 표시하고 클릭 가능한 옵션으로 만듭니다.
+                    list.append(`<p class="school-option">${school}</p>`);
                 });
+
+                // .school-option 클릭 이벤트 핸들러 등록
+                $(".school-option").on("click", function() {
+                    const selectedSchool = $(this).text();
+                    // 부모 창의 특정 입력 필드에 값 전달
+                    window.opener.setSchoolName(selectedSchool);
+                    window.close(); // 창 닫기
+                });
+            });
     }
 
+    
 </script>
