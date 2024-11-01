@@ -7,7 +7,6 @@ create table user_tb (
   nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20)  null,
-  school varchar(20) null,
   gender varchar(10)  null,
   profile Blob,
   birth int  null,
@@ -20,10 +19,18 @@ create table user_tb (
 
 -- 학교 테이블
 create table school_tb (
-  id int primary key auto_increment,
-  school varchar(20),
+  id int primary key,
   name varchar(10) not null,
-  region varchar(10) not null
+  region varchar(20) not null
+);
+
+-- 유저가 가진 학교 테이블
+create table user_school_tb (
+   user_id int,
+   school_id int,
+   primary key(user_id,school_id),
+   foreign key (school_id) references school_tb(id),
+   foreign key (user_id) references user_tb(id)
 );
 
 -- 게시글 테이블 (board_tb) - 참조되므로 먼저 생성
@@ -133,10 +140,11 @@ create table like_tb (
 
 -- 댓글 테이블
 create table comment_tb (
-  id int primary key auto_increment,
-  board_id int,
-  user_id int,
-  content_location varchar(255),
+  id int primary key auto_increment, -- pk
+  board_id int, --게시글 id
+  user_id int, --유저 id
+  parent_id int, --대댓글의 부모 게시글 id , 일반 댓글은 null
+  content_location varchar(255), -- 댓글, 대댓글 내용
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (board_id) references board_tb(id) ON DELETE CASCADE,
   foreign key (user_id) references user_tb(id)

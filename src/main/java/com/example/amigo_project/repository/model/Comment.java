@@ -14,6 +14,7 @@ public class Comment {
     private int id;
     private int boardId;
     private int userId;
+    private int parentId;
     private String contentLocation;
     private Timestamp createdAt;
 }
