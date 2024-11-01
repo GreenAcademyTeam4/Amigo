@@ -1,9 +1,9 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.*;
-import com.example.amigo_project.repository.model.ChargeHistory;
 import com.example.amigo_project.repository.model.Notice;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import com.example.amigo_project.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -297,20 +297,6 @@ public class AdminController {
         return adminService.findBirthCount();
     }
 
-    // 일별 매출
-    @GetMapping("/dailySales")
-    @ResponseBody
-    public List<ChargeHistory> getDailySales(){
-        return adminService.getDailySales();
-    }
-
-    // 주별 매출
-    @GetMapping("/weekSales")
-    @ResponseBody
-    public List<ChargeHistory> getWeekSales(){
-        return adminService.getWeekSales();
-    }
-
     // 연별 매출
     @GetMapping("/yearlySales")
     @ResponseBody
@@ -388,6 +374,5 @@ public class AdminController {
         System.out.println(dtos);
         return dtos;
     }
-
 
 }

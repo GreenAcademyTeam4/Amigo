@@ -1,8 +1,8 @@
 package com.example.amigo_project.repository.interfaces;
 
 import com.example.amigo_project.dto.*;
-import com.example.amigo_project.repository.model.ChargeHistory;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -49,13 +49,6 @@ public interface AdminRepository {
 
     // 나이 분포 조회
     public List<UserDTO> findBirthCount();
-
-    // 총매출
-    // 일별
-    public List<ChargeHistory> dailySales();
-
-    // 주별
-    public List<ChargeHistory> weekSales();
 
     // 연별
     public List<ChargeHistory> yearlySales();

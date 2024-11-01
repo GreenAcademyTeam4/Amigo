@@ -30,7 +30,7 @@ public interface StoreRepository {
     public List<StoreDTO.avatarListDTO> searchAvatarListByName(@Param("userId") Integer userId, @Param("search") String search);
 
     // 아바타 구매 시 포인트 차감 기능
-    public void updateUserPointByUserId(Integer userId);
+    public void updateUserPointByUserId(@Param("userId") Integer userId, @Param("point") Integer point);
 
     // 아바타 구매 시 인벤토리에 아바타 정보 삽입 기능
     public void insertAvatarInventoryByAvatarIdAndUserId(@Param("userId") Integer userId, @Param("avatarId") Integer avatarId);
@@ -41,5 +41,8 @@ public interface StoreRepository {
                                    @Param("orderBody") String orderBody,
                                    @Param("usePoint") Integer usePoint,
                                    @Param("lessPoint")Integer lessPoint);
+
+    // 관리자 용 아이템 팔린 히스토리 테이블에 정보 삽입
+    public void insertProdHistory(Integer avatar_id);
 
 }

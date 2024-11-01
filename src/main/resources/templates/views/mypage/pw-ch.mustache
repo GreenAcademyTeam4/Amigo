@@ -1,0 +1,19 @@
+{{>layout/header}}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 변경 확인</title>
+</head>
+<body>
+<h1>비밀번호 변경 확인</h1>
+<form action="/my-page/pwd-update" method="post">
+    <label for="password">변경할 비밀번호:</label>
+    <input type="password" id="password" name="password">
+    <button type="submit">변경</button>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>
+{{>layout/footer}}

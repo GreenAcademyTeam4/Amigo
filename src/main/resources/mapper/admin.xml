@@ -81,25 +81,8 @@
 
     </select>
 
-
-
-    <!-- 일별 총 매출 쿼리 -->
-    <select id="dailySales" resultType="com.example.amigo_project.repository.model.ChargeHistory">
-        SELECT DATE(approved_at) AS date, SUM(total_amount) AS daily_sales
-        FROM charge_history_tb
-        GROUP BY DATE(approved_at)
-        ORDER BY DATE(approved_at) DESC
-    </select>
-    <!-- 주별 총 매출 -->
-    <select id="weekSales" resultType="com.example.amigo_project.repository.model.ChargeHistory">
-        SELECT CAST(DATEADD('DAY', 1 - DAYOFWEEK(approved_at), approved_at) AS DATE) AS approvedAt, SUM(total_amount) AS totalAmount
-        FROM charge_history_tb
-        GROUP BY approvedAt
-        ORDER BY approvedAt DESC
-
-    </select>
     <!-- 연별 총 매출 -->
-    <select id="yearlySales" resultType="com.example.amigo_project.repository.model.ChargeHistory">
+    <select id="yearlySales" resultType="com.example.amigo_project.repository.model.payment.ChargeHistory">
         SELECT YEAR(approved_at) AS sales_year, SUM(total_amount) AS yearly_sales
         FROM charge_history_tb
         GROUP BY sales_year

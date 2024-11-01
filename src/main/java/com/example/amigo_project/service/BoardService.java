@@ -3,6 +3,7 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.interfaces.BoardRepository;
+import com.example.amigo_project.repository.model.Board;
 import com.example.amigo_project.repository.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -333,9 +334,62 @@ public class BoardService {
         return boardRepository.countLikes(boardId);
     }
 
-
     @Transactional(readOnly = true)
     public boolean existsLike(int userId, int boardId) {
         return boardRepository.existsLike(userId, boardId);
+    }
+
+    /**
+     * 특정 학교의 조회수가 가장 많은 게시글 조회 (페이징)
+     * @param schoolId
+     * @param page
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> getBoardfindBoardView(int schoolId, Integer page, Integer size) {
+        return boardRepository.findBoardView(schoolId, page, size);
+    }
+
+    /**
+     * 특정 학교의 댓글수가 가장 많은 게시글 조회 (페이징)
+     * @param schoolId
+     * @param page
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> getBoardfindBoardCommend(int schoolId, Integer page, Integer size) {
+        return boardRepository.findBoardCommend(schoolId, page, size);
+    }
+
+    /**
+     * 특정 학교의 최근에 생성된 게시글을 순서대로 조회 (페이지)
+     * @param schoolId
+     * @param page
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> getBoardfindBoardNew(int schoolId, Integer page, Integer size) {
+        return boardRepository.findBoardNew(schoolId, page, size);
+    }
+
+    /**
+     * 특정 학교의 하트(공감)을 많이 받은게시글을 순서대로 조회 (페이지)
+     * @param schoolId
+     * @param page
+     * @param size
+     * @return
+     */
+    public List<BoardDTO> getBoardfindBoardHeart(int schoolId, Integer page, Integer size) {
+        return boardRepository.findBoardHeart(schoolId, page, size);
+    }
+
+    /**
+     * 하트(공감)을 눌렀을 때 작동
+     * @param boardId
+     * @param likeCount
+     */
+
+    public void updateLikesCount(int boardId, int likeCount) {
+        boardRepository.updateLikesCount(boardId, likeCount);
     }
 }
