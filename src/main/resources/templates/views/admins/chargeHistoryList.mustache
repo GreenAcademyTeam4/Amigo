@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>환불 요청 내역</title>
+    <title>결제 관리</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -137,76 +137,41 @@
 
 <body>
 <div class="content-container">
-    <h1>환불 요청 목록</h1>
+    <h1>결제 조회</h1>
     <div class="requestRefundList">
         <table>
             <thead>
             <tr>
-                <th>결제 내역 번호</th>
-                <th>주문 번호</th>
-                <th>주문 이름</th>
-                <th>환불 요청 금액</th>
-                <th>환불 요청 사유</th>
-                <th>환불 요청 시간</th>
-                <th>환불 상태</th>
-                <th>조치</th>
+                <th>결제 내역 번호</th> <!-- c.id -->
+                <th>주문 번호</th> <!-- c.order_id -->
+                <th>주문 이름</th> <!-- c.order_name -->
+                <th>금액</th> <!-- c.total_amount -->
+                <th>시간</th> <!-- c.approved_at -->
+                <th>상태</th> <!-- c.refund_status -->
+                <th>조치</th> <!-- 관리자의 액션 버튼 -->
+                <th>조치</th> <!-- 관리자의 액션 버튼 -->
+                <th>조치</th> <!-- 관리자의 액션 버튼 -->
+                <th>조치</th> <!-- 관리자의 액션 버튼 -->
             </tr>
             </thead>
             <tbody id="refundList">
-            {{#requestRefundList}}
+            {{#chargeHistoryList}}
                 <tr>
-                    <td>{{chargeHistoryId}}</td>
-                    <td>{{orderId}}</td>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
                     <td>{{orderName}}</td>
-                    <td>{{cancelAmount}}</td>
-                    <td>{{cancelReason}}</td>
-                    <td>{{requestAt}}</td>
-                    <td>{{cancelStatus}}</td>
-                    <td>
-                        <div class="action-buttons">
-                            {{#isRefundable}}
-                                <button class="refundSuccess-btn" data-id="{{id}}"
-                                        onclick="updateRefundSuccessButton({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">승인</button>
-                                <button class="refundFail-btn" data-id="{{id}}"
-                                        onclick="openRefuseWindow({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">반려</button>
-                            {{/isRefundable}}
-                            {{^isRefundable}}
-                                <button class="refundSuccess-btn" disabled>승인 완료</button>
-                                <button class="refundFail-btn" disabled>반려 완료</button>
-                            {{/isRefundable}}
-                        </div>
-                    </td>
+                    <td>{{orderId}}</td>
+                    <td>{{totalAmount}}</td>
+                    <td>{{point}}</td>
+                    <td>{{approvedAt}}</td>
+                    <td>{{method}}</td>
+                    <td>{{refundStatus}}</td>
+
                 </tr>
-            {{/requestRefundList}}
-            {{^requestRefundList}}
-                <tr>
-                    <td colspan="8" class="text-center">환불 내역이 없습니다.</td>
-                </tr>
-            {{/requestRefundList}}
+            {{/chargeHistoryList}}
             </tbody>
 
 
-            <div id="paginationContainer">
-            <ul class="pagination">
-                {{#showPrevious}}
-                    <li class="page-item">
-                        <a class="page-link" href="/pay/requestRefundList?page={{previousPage}}&size={{pageSize}}">&lt;</a>
-                    </li>
-                {{/showPrevious}}
-
-                {{#pages}}
-                    <li class="page-item {{active}}">
-                        <a class="page-link" href="/pay/requestRefundList?page={{number}}&size={{pageSize}}">{{number}}</a>
-                    </li>
-                {{/pages}}
-
-                {{#showNext}}
-                    <li class="page-item">
-                        <a class="page-link" href="/pay/requestRefundList?page={{nextPage}}&size={{pageSize}}">&gt;</a>
-                    </li>
-                {{/showNext}}
-            </ul>
-        </div>
     </div>
 </div>
 

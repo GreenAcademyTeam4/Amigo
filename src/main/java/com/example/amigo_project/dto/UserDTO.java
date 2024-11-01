@@ -1,6 +1,6 @@
 package com.example.amigo_project.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -20,6 +20,11 @@ public class UserDTO {
     private boolean onlineStatus;
     private String activeStatus;
     private Timestamp createdAt;
+
+    // 통계
+    private String ageGroup;
+    private int userCount;
+
 
 
     /**

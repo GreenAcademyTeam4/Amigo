@@ -15,42 +15,40 @@
     <div id="content">
         <!-- Main Content -->
         <div class="container-fluid">
-            <h1 class="h3 mb-2 text-gray-800">회원 조회</h1><br>
+            <h1 class="h3 mb-2 text-gray-800">유저 신고 조회</h1><br>
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-secondary">회원 목록</h6>
+                    <h6 class="m-0 font-weight-bold text-secondary">유저 신고 목록</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>이름</th>
-                                <th>아이디</th>
-                                <th>온라인 상태</th>
-                                <th>활성상태</th>
+                                <th>신고 유형</th>
+                                <th>시간</th>
+
                                 <th>상세보기</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{#userList}}
+                            {{#userReport}}
                                 <tr>
-                                    <td>{{name}}</td>
-                                    <td>{{userId}}</td>
-                                    <td>
-                                        {{#onlineStatus}}
-                                            <img src="/image/admin/free-icon-checkmark.png" class="status-icon" alt="온라인 상태">
-                                        {{/onlineStatus}}
-                                        {{^onlineStatus}}
-                                            <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
-                                        {{/onlineStatus}}
-                                    </td>
-                                    <td>
-                                        {{activeStatus}}
-                                    </td>
-                                    <td><a href="/admin/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
+                                    <td>{{reportId}}</td>
+                                    <td>{{senderName}}</td>
+                                    <td>{{category}}</td>
+                                    <td>{{createdAt}}</td>
+
+                                    <td><button class="btn btn-primary btn-sm">상세보기</button></td>
                                 </tr>
-                            {{/userList}}
+                            {{/userReport}}
+                            {{^userReport}}
+                                <tr>
+                                    <td colspan="5" class="text-center">신고된 사용자가 없습니다.</td>
+                                </tr>
+                            {{/userReport}}
                             </tbody>
                         </table>
                     </div>
