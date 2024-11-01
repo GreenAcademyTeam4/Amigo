@@ -3,31 +3,48 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
     background-color: #f0f0f0;
+    overflow: hidden;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+/* 전체 컨테이너 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    height: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 /* 캠 영역 컨테이너 */
 .cam-area {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     width: 100%;
-    max-width: 900px; /* 최대 너비 설정 */
-    gap: 10px; /* 사용자와 상대방 간격 */
+    gap: 10px;
+    box-sizing: border-box;
+    flex-grow: 1;
+    padding-top: 20px; /* 컨트롤과의 간격 */
 }
 
 /* 비디오 컨테이너 */
 .video-container {
-    position: relative;
-    width: 48%; /* 각 비디오 컨테이너의 너비를 화면에 맞게 조정 */
-    height: 400px; /* 높이 조정 */
     background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 48%; /* 가로 비율을 넓게 */
+    height: calc(100% - 100px); /* 화면 높이에 맞춰 크기 조정, 최대 높이 */
+    max-height: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
-    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* 비디오 스타일 */
@@ -42,7 +59,6 @@ video {
     position: absolute;
     color: white;
     font-size: 24px;
-    opacity: 1;
     animation: blink 1.5s infinite;
     text-align: center;
     z-index: 2;
@@ -51,37 +67,54 @@ video {
 /* 프로필 이미지 스타일 */
 .user-profile, .remote-profile {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    object-fit: cover;
+    bottom: 10px;
+    right: 10px;
     z-index: 1;
+    border: 2px solid #fff;
+    object-fit: cover;
+}
+
+/* 하단 컨트롤 버튼 영역 */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px;
+    padding: 10px 0;
+    margin-top: 10px; /* cam-area와의 간격 */
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    margin-bottom: 100px;
 }
 
 /* 컨트롤 버튼 스타일 */
-.controls {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
 button {
-    padding: 10px 20px;
+    flex: 1;
+    padding: 10px;
     font-size: 16px;
+    margin: 0 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: white;
 }
 
-#toggle-camera { background-color: #4CAF50; color: white; }
-#toggle-microphone { background-color: #2196F3; color: white; }
-#end-call { background-color: #f44336; color: white; }
+/* 각 버튼의 기본 색상 */
+#toggle-camera { background-color: #4CAF50; }
+#toggle-microphone { background-color: #2196F3; }
+#end-call { background-color: #f44336; }
 
-button:hover { opacity: 0.8; }
+/* 버튼 호버 효과 */
+button:hover {
+    opacity: 0.9;
+}
 
 /* 로딩 애니메이션 */
 @keyframes blink {
@@ -89,14 +122,33 @@ button:hover { opacity: 0.8; }
     50% { opacity: 1; }
 }
 
-/* 추가 screen-area 및 friend-box 스타일 */
-.screen-area {
-    display: flex;
-    justify-content: center;
-    margin: 10px;
-    max-width: 1100px;
-    flex: 3;
-    overflow-y: hidden; /* 스크롤 비활성화 */
-    border: 1px solid #d4b7aa;
-    border-radius: 10px;
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+    }
+    .cam-area {
+        flex-direction: column;
+        padding-top: 10px;
+    }
+    .video-container {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+    }
+    .controls button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    .user-profile, .remote-profile {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+.voice-chat .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }

@@ -45,7 +45,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <button class="btn btn-danger btn-sm mt-3">탈퇴 처리</button>
+                            <button class="btn btn-danger btn-sm mt-3" onclick="deletePost({{user.id}})">탈퇴 처리</button>
                         </div>
                     </div>
                 </div>
@@ -123,6 +123,23 @@
             ]
         });
     });
+function deletePost(postId) {
+    if (confirm('정말로 탈퇴하시겠습니까?')) {
+        $.ajax({
+            url: '/admin/deleteUsers/' + postId,
+            type: 'POST', // 또는 'DELETE' 메서드로 변경 가능 (서버에서 처리 방식에 맞게)
+            success: function (result) {
+                alert('탈퇴 완료 되었습니다.');
+                // 탈퇴 후 목록 페이지로 리다이렉트하여 최신 사용자 목록 표시
+                window.location.href = "/admin/user";
+            },
+            error: function (err) {
+                alert('삭제에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    }
+}
+
 </script>
 
 </body>

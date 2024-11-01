@@ -2,6 +2,8 @@
 <html lang="ko">
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -54,15 +56,15 @@
 
         <!-- Nav Item - User Management -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement"
+               aria-expanded="true" aria-controls="collapseUserManagement">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>회원 관리</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUserManagement" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="/admin/user">회원 조회</a>
-                    <a class="collapse-item" href="#">탈퇴 회원 조회</a>
+                    <a class="collapse-item" href="/admin/deletedUsers">탈퇴 회원 조회</a>
                 </div>
             </div>
         </li>
@@ -78,12 +80,28 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Other Nav Items -->
+<!--        &lt;!&ndash; Other Nav Items &ndash;&gt;-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="/pay/requestRefundList">-->
+<!--                <i class="fas fa-fw fa-chart-area"></i>-->
+<!--                <span>결제 관리</span></a>-->
+<!--        </li>-->
+        <!-- Nav Item - 결제 관리 -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>결제 관리</span></a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayManagement"
+               aria-expanded="true" aria-controls="collapsePayManagement">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>결제 관리</span>
+            </a>
+            <div id="collapsePayManagement" class="collapse" aria-labelledby="headingPayManagement" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/admin/chargeHistoryList">결제 조회</a>
+                        <a class="collapse-item" href="/pay/requestRefundList">환불 요청 관리</a>
+                </div>
+            </div>
         </li>
+
+
         <li class="nav-item">
             <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-chart-area"></i>
@@ -94,15 +112,21 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>공지 관리</span></a>
         </li>
+
+
+            <!-- Nav Item - 신고 관리 -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>문의 관리</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>신고 관리</span></a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReportManagement"
+               aria-expanded="true" aria-controls="collapseReportManagement">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>신고 관리</span>
+            </a>
+            <div id="collapseReportManagement" class="collapse" aria-labelledby="headingReportManagement" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="/admin/userReport">회원 신고 관리</a>
+                    <a class="collapse-item" href="/admin/boardReport">게시글 신고 관리</a>
+                </div>
+            </div>
         </li>
 
         <!-- Nav Item - Statistics -->
@@ -115,4 +139,19 @@
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
     </ul>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Collapse 링크 클릭 시 열림 상태 유지
+            $('.nav-link.collapsed').on('click', function() {
+                const target = $(this).data('target');
+                $(target).collapse('toggle');
+            });
+        });
+    </script>
+
+</body>
+</html>
     <!-- End of Sidebar -->

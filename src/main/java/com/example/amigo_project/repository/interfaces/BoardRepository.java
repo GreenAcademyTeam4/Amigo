@@ -33,6 +33,9 @@ public interface BoardRepository {
     // 댓글을 입력한다.
     public int insertComment(Comment comment);
 
+    // 대댓글 입력
+    public void insertNestedComment(@Param("boardId") int boardId , @Param("userId") int userId, @Param("contentLocation") String contentLocation, @Param("parentId") int parentId);
+
     // 게시글 상세보기에서 게시글Id에 속한 모든 댓글을 리스트로 가져온다.
     List<CommentDTO> findCommentsByBoardId(@Param("boardId") int boardId);
 
@@ -89,10 +92,13 @@ public interface BoardRepository {
     int countSearchBoardsByTitleContent(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
 
     // 게시글 상세보기 클릭 시 기존 댓글 불러오기 메서드 (페이징 처리)
-    List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int page, int size);
+    List<CommentDTO> findCommentsByBoardIdWithPaging(@Param("boardId") int boardId, @Param("offset") int offset, @Param("size") int size);
 
     // 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수
     int countCommentsByBoardId(int boardId);
+
+    // 게시글 상세보기 의 댓글에서 답글보기 버튼 클릭시 대댓글 불러오기
+    List<CommentDTO> findNestedComment(@Param("boardId") Integer boardId, @Param("parentId") Integer parentId);
 
     // 사용자가 해당 게시글을 조회했는지 확인하는 쿼리 (조회수)
     int existsInBoardView(@Param("userId") int userId, @Param("boardId") int boardId);

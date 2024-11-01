@@ -1,16 +1,18 @@
 package com.example.amigo_project.repository.model;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Builder
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class School {
 
-    private Integer schoolId;
-    private String schoolName;
-
+    private int id;
+    private String name;
+    private String region;
 }

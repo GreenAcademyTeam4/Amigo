@@ -84,6 +84,16 @@ public class BoardService {
         boardRepository.insertComment(comment);
     }
 
+    // 답글 작성 후 리다이렉션을 위한 새로운 답글 정보 리턴
+    @Transactional
+    public List<CommentDTO> insertNestedComment(Comment comment){
+        boardRepository.insertNestedComment(comment.getBoardId(),  // 대댓글 삽입 
+                comment.getUserId(), 
+                comment.getContentLocation(), 
+                comment.getParentId());
+        return boardRepository.findNestedComment(comment.getBoardId(), comment.getParentId()); // 대댓글 삽입후 삽입한 대댓글 리스트 리턴
+    }
+
     /**
      * 게시글 상세보기에서 사용할 댓글 불러오기 기능
      * @param boardId
@@ -258,6 +268,13 @@ public class BoardService {
     public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int page, int size) {
         return boardRepository.findCommentsByBoardIdWithPaging(boardId, page, size);
     }
+
+    // 게시글의 댓글에 달린 답글 조회하기
+    public List<CommentDTO> findNestedComment(int boardId, int parentId){
+        return boardRepository.findNestedComment(boardId, parentId);
+    };
+
+
 
     /**
      * 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수 구하는 메서드 추가

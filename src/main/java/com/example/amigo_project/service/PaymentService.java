@@ -3,6 +3,10 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.payment.*;
 import com.example.amigo_project.repository.interfaces.PaymentRepository;
 import com.example.amigo_project.repository.model.*;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
+import com.example.amigo_project.repository.model.payment.Refund;
+import com.example.amigo_project.repository.model.payment.RefundRefuse;
+import com.example.amigo_project.repository.model.payment.RequestRefund;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -156,34 +160,15 @@ public class PaymentService {
     @Transactional
     public Refund refundCharge(RequestRefundListDTO dto) throws IOException, InterruptedException {
 
-        System.out.println("승인 요청 보냄..");
-        System.out.println("RequestRefundListDTO :" + dto); // 여기까지만 refundStatus가 success 가 들어옴.
-
         // 사용자가 입력한 cancelReason 받아오기
         String cancelReason = dto.getCancelReason();
-        System.out.println("cancelReason: " + cancelReason);
 
-        // ChargeHistory 업데이트를 위해 모델 생성
-        ChargeHistory chargeHistory = ChargeHistory.builder()
-                .id(dto.getChargeHistoryId()) // DTO에서 ChargeHistory의 ID 사용
-                .refundStatus(dto.getRefundStatus()) // DTO에서 가져온 refundStatus 사용
-                .build();
-        System.out.println("!!!!!!!!!chargeHistory:" + chargeHistory);
-
-        // 데이터베이스 업데이트 수행
-        paymentRepository.modifyRefundStatus(chargeHistory.getId(), chargeHistory.getRefundStatus());
-
-        ChargeHistory readChargeHistory = paymentRepository.readChargeHistoryById(chargeHistory.getId());
-        System.out.println("DB에 refundStatus 가 수정 되었나????:" + readChargeHistory);
+        ChargeHistory readChargeHistory = paymentRepository.readChargeHistoryById(dto.getChargeHistoryId());
 
         String paymentKey = readChargeHistory.getPaymentKey();
 
-        System.out.println("paymentKey: " + paymentKey);
-
-        System.out.println("=============================여기부터 service refundCharge 값 확인===========");
-
         // 인증 토큰 생성
-        String apiKey = "test_sk_4yKeq5bgrpP7eWgWzq4xrGX0lzW6";
+        String apiKey = "test_sk_4yKeq5bgrpP7eWgWzq4xrGX0lzW6"; // 시크릿키
         String encodedAuth = Base64.getEncoder().encodeToString((apiKey + ":").getBytes(StandardCharsets.UTF_8));
 
         // 결제 취소 API
@@ -195,34 +180,13 @@ public class PaymentService {
                 .method("POST", HttpRequest.BodyPublishers.ofString("{\"cancelReason\":\"" + cancelReason + "\"}"))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body()); // 여기서 취소된 내역 출력됨
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        Refund refund = objectMapper.readValue(response.body(), Refund.class); //JSON 데이터를 Refund model에 담음
 
         // Toss Payments API의 응답을 확인하여 이미 취소된 상태인지 체크
         if (response.body().contains("\"code\":\"ALREADY_CANCELED_PAYMENT\"")) {
             throw new IllegalStateException("이미 취소된 결제입니다.");
         }
-
-
-        // 결제 요청 승인 후 받은 JSON으로 온 데이터를 모델에 담음
-        ObjectMapper objectMapper = new ObjectMapper();
-        //Refund refund = objectMapper.readValue(response.body(), Refund.class);
-
-        ChargeHistoryDTO chargeHistoryDTO = readChargeListByPaymentKey(readChargeHistory); // paymentKey로 출력된 내역이 여기서 한 번 더 호출되면서 출력됨
-        Refund refund = Refund.builder()
-                .id(dto.getId()) // 기존 DTO에서 가져온 ID 설정
-                .chargeHistoryId(chargeHistoryDTO.getId())
-                .orderName(chargeHistoryDTO.getOrderName())
-                .orderId(chargeHistoryDTO.getOrderId())
-                .paymentKey(chargeHistoryDTO.getPaymentKey())
-                .cancelAmount(chargeHistoryDTO.getTotalAmount()) // 취소 금액 설정
-                .cancelReaseon(cancelReason)
-                .requestAt(chargeHistoryDTO.getApprovedAt()) // 승인된 시간 설정
-                .canceledAt(new Timestamp(System.currentTimeMillis())) // 현재 시간을 취소 완료 시간으로 설정
-                .cancelStatus("승인 완료") // 예시로 취소 상태를 설정
-                .build();
-        System.out.println("여기 반드시 확인!!!!!!!refund: " + refund);
-
         return refund;
 
     }
@@ -250,8 +214,6 @@ public class PaymentService {
         return paymentRepository.readRefuseReasonDetail(chargeHistoryId);
     }
 
-
-
     /**
      * 환불 완료 시 환불 내역 생성
      */
@@ -262,40 +224,11 @@ public class PaymentService {
 
 
     /**
-     * paymentKey로 결제 내역 조회하기
+     * id로 환불 요청 내역 조회
      */
-    @Transactional
-    public ChargeHistoryDTO readChargeListByPaymentKey(ChargeHistory chargeHistory) throws IOException, InterruptedException {
-
-        String paymentKey = chargeHistory.getPaymentKey();
-
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.tosspayments.com/v1/payments/" + paymentKey))
-                .header("Authorization", "Basic dGVzdF9za180eUtlcTViZ3JwUDdlV2dXenE0eHJHWDBselc2Og==")
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-
-        // 결제 내역 조회해서 JSON으로 받아온 데이터를 DTO에 담음
-        ObjectMapper objectMapper = new ObjectMapper();
-        ChargeHistoryDTO chargeHistoryDTO = objectMapper.readValue(response.body(), ChargeHistoryDTO.class);
-        chargeHistoryDTO.setId(chargeHistory.getId());
-        chargeHistoryDTO.setUserId(chargeHistory.getUserId());
-        chargeHistoryDTO.setRefundStatus(chargeHistory.getRefundStatus());
-
-        System.out.println("paymentKey로 조회 !!!!chargeHistoryDTO: " + chargeHistoryDTO);
-
-
-        return chargeHistoryDTO;
-    }
-
     @Transactional
     public RequestRefund readRequestRefundById(int id) {
         return paymentRepository.readRequestRefundById(id);
     }
-
-
 
 }

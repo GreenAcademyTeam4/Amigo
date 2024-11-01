@@ -28,7 +28,7 @@ public class GoogleController {
         User principal = (User)googleService.findGoogleUser(googleDTO);
         if (principal != null) {
             session.setAttribute("principal", principal);
-            return "views/login/schoolSelect";
+            return "views/login/socialInfo";
         } else {
             return "redirect:/";
         }
