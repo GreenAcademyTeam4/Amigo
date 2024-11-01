@@ -1,4 +1,16 @@
 package com.example.amigo_project.controller;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.amigo_project.dto.MypageDTO;
@@ -7,6 +19,7 @@ import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.MypageService;
 import com.example.amigo_project.service.PaymentService;
 import com.example.amigo_project.service.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +58,14 @@ public class MypageController {
             model.addAttribute("url", "redirect:/user/login");
             return "alert";
         } else {
-            MypageDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
+            MypageDTO.nowAvatarDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
+            int boardCount = mypageService.countMyBoards(principal.getId());
+            int friendCount = mypageService.countFriendByUserId(principal.getId());
             model.addAttribute("dto", dto);
             model.addAttribute("user", principal);
-            return "/views/mypage/info";
+            model.addAttribute("boardCount", boardCount);
+            model.addAttribute("friendCount", friendCount);
+            return "views/mypage/info";
         }
     }
 
@@ -68,7 +85,46 @@ public class MypageController {
         } else {
             List<MypageDTO.inventoryDTO> inventorydto = mypageService.findInventoryByUserId(principal.getId());
             MypageDTO.nowAvatarDTO nowAvatarDTO = mypageService.findNowAvatarByUserId(principal.getId());
-            model.addAttribute("inventoryList", inventorydto);
+            List<MypageDTO.headInventoryDTO> headInventory = new ArrayList<>();
+            List<MypageDTO.topInventoryDTO> topInventory = new ArrayList<>();
+            List<MypageDTO.bottomInventoryDTO> bottomInventory = new ArrayList<>();
+            List<MypageDTO.shoesInventoryDTO> shoesInventory = new ArrayList<>();
+            for(int i = 0; i < inventorydto.size(); i++){
+                if(inventorydto.get(i).getType() == 1){
+                    headInventory.add(MypageDTO.headInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 2) {
+                    topInventory.add(MypageDTO.topInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 3) {
+                    bottomInventory.add(MypageDTO.bottomInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 4) {
+                    shoesInventory.add(MypageDTO.shoesInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else{
+                    model.addAttribute("msg", "인벤토리 불러오기 중 오류 발생.");
+                    model.addAttribute("url", "/views/my-page/inventory");
+                    return "alert";
+                }
+
+
+
+
+            }
+
+            model.addAttribute("headInventory", headInventory);
+            model.addAttribute("topInventory", topInventory);
+            model.addAttribute("bottomInventory", bottomInventory);
+            model.addAttribute("shoesInventory", shoesInventory);
             model.addAttribute("nowAvatar", nowAvatarDTO);
             model.addAttribute("user", principal);
             return "views/mypage/inventory";
@@ -76,22 +132,18 @@ public class MypageController {
 
     }
 
-    /**
-     * 아바타 변경 동작
-     * 인벤토리에서 아바타 변경 시 동작. 뷰에서 각 부위의 아바타 id를 받아와 db에서 가져온
-     * 현재 보유중인 아바타 목록과 대조한 후 모두 유효한 값일 시 아바타 변경 기능 실행
-     *
-     * @param session
-     * @param model
-     * @param request
-     * @return
-     */
     @PostMapping("/inventory/change")
     public String changeAvatar(HttpSession session, Model model, HttpServletRequest request) {
-        Integer head = Integer.parseInt(request.getParameter("head"));
-        Integer top = Integer.parseInt(request.getParameter("top"));
-        Integer bottom = Integer.parseInt(request.getParameter("bottom"));
-        Integer shoes = Integer.parseInt(request.getParameter("shoes"));
+        String headParam = request.getParameter("head");
+        String topParam = request.getParameter("top");
+        String bottomParam = request.getParameter("bottom");
+        String shoesParam = request.getParameter("shoes");
+
+        Integer head = headParam != null && !headParam.isEmpty() ? Integer.parseInt(headParam) : null;
+        Integer top = topParam != null && !topParam.isEmpty() ? Integer.parseInt(topParam) : null;
+        Integer bottom = bottomParam != null && !bottomParam.isEmpty() ? Integer.parseInt(bottomParam) : null;
+        Integer shoes = shoesParam != null && !shoesParam.isEmpty() ? Integer.parseInt(shoesParam) : null;
+
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
@@ -100,14 +152,15 @@ public class MypageController {
         } else {
             List<MypageDTO.inventoryDTO> dto = mypageService.findInventoryByUserId(principal.getId());
             int having = 0; // 변경 요청한 아바타를 보유 중인지 확인하는 변수
-            for (int i = 0; i < dto.size(); i++) {
-                if (dto.get(i).getAvatarId() == head) {
+
+            for (MypageDTO.inventoryDTO inventory : dto) {
+                if (inventory.getAvatarId().equals(head) ||
+                        inventory.getAvatarId().equals(top) ||
+                        inventory.getAvatarId().equals(bottom) ||
+                        inventory.getAvatarId().equals(shoes))
+                        {
                     having++;
-                } else if (dto.get(i).getAvatarId() == top) {
-                    having++;
-                } else if (dto.get(i).getAvatarId() == bottom) {
-                    having++;
-                } else if (dto.get(i).getAvatarId() == shoes) {
+                }else if(head == 9999 || top == 9998 || bottom == 9997 || shoes == 9996){
                     having++;
                 }
             }
@@ -126,8 +179,8 @@ public class MypageController {
                 return "alert";
             }
         }
-
     }
+
 
     // 비밀번호 변경 전 기존 비밀번호 확인 창 띄우기
     @GetMapping("/pwdcheck")
@@ -372,11 +425,35 @@ public class MypageController {
         }
     }
     
+    // 닉네임 변경 기능
+    @ResponseBody
+    @GetMapping("/chNick")
+    public ResponseEntity<?> changeNickname(HttpSession session, @RequestParam("nickname") String nickname) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.changeNickname(principal.getId(), nickname);
+            User user = userService.findUser(principal.getId());
+            session.setAttribute("principal", user); // 세션 갱신
+            return ResponseEntity.ok(user);
+        }
+    }
 
-
-
-
-
+    // 학교 변경 기능
+    @ResponseBody
+    @GetMapping("/chSchool")
+    public ResponseEntity<?> changeSchool(HttpSession session, @RequestParam("school") String school) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.changeSchool(principal.getId(), school);
+            User user = userService.findUser(principal.getId());
+            session.setAttribute("principal", user); // 세션 갱신
+            return ResponseEntity.ok(user);
+        }
+    }
 
 
 
