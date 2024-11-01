@@ -230,3 +230,8 @@ h3 {
     color: black;
     margin-bottom: 3px;
 }
+.responsive-image {
+    max-width: 100%;   /* 부모 요소의 너비에 맞춰 최대 100%로 설정 */
+    max-height: 100%;  /* 부모 요소의 높이에 맞춰 최대 100%로 설정 */
+    object-fit: contain; /* 비율을 유지하며 이미지가 부모 안에 맞춰지도록 설정 */
+}

@@ -1,5 +1,8 @@
 package com.example.amigo_project.dto;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +25,7 @@ public class UserDTO {
     private boolean onlineStatus;
     private String activeStatus;
     private Timestamp createdAt;
-
+    private String base64Profile;
 
     /**
      * 회원가입 DTO
@@ -39,12 +42,17 @@ public class UserDTO {
     }
     @Data
     public static class infoDTO{
+
           private int id;
+          private int birth;
+          private String gender;
+          private String phoneNumber;
+          private String name;
     	  private String nickname;
           private String school;
-    	
+          private String schoolRegion;
+          private int schoolId;
     }
-
     /**
      * 로그인 DTO
      */
@@ -96,4 +104,9 @@ public class UserDTO {
             this.googlePassword = googlePassword;
         }
 }
+
+    public byte[] convertFileToBytes(String filePath) throws IOException {
+        File file = new File(filePath);
+        return Files.readAllBytes(file.toPath());
+    }
 }

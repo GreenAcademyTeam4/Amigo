@@ -29,9 +29,9 @@ insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values ('test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
 
 -- 임시 데이터 학교
-INSERT INTO school_tb (id, school, name, region) VALUES
-(1, 'ABC School', 'ABC', 'Seoul'),
-(2, 'XYZ School', 'XYZ', 'Busan');
+INSERT INTO school_tb (id, name, region) VALUES
+(1,'ABC', 'Seoul'),
+(2,'XYZ', 'Busan');
 
 -- 결제 임시 데이터
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
