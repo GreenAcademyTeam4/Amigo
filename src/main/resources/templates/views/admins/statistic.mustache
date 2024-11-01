@@ -1,77 +1,582 @@
 {{>layout/admin/adminSidebar}}
 
-<head>
-    <title>Document</title>
-</head>
 <style>
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #2196f3;
-      color: #fff;
-      border-radius: 30px;
-      border: none;
-      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease 0s;
-      cursor: pointer;
+    /* 기본 설정 */
+    html, body { height: 100%; margin: 0; padding: 0; overflow-x: hidden; overflow-y: auto; font-family: Arial, sans-serif; background-color: #f4f6f9; }
+
+    /* 전체 컨테이너 */
+    .charts-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        gap: 40px;
+        box-sizing: border-box;
     }
 
-    .button:hover {
-      background-color: #1976d2;
+    /* 통계 카드 섹션 */
+    .user-revenue-wrapper {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        width: 100%;
+        padding: 10px 0;
     }
+
+    /* 통계 카드 */
+    .user-count-container {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        color: #34495e;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInSlide 0.6s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 카드 애니메이션 효과 */
+    .user-count-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* 텍스트 스타일 */
+    .user-count-container .text-xs { font-size: 14px; font-weight: bold; color: #6c757d; }
+    .user-count-container .h5 { font-size: 26px; color: #2c3e50; margin-top: 8px; font-weight: 700; }
+
+    /* 순위 카드 스타일 */
+    .top-school-rank-container, .best-selling-products-container {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        text-align: left;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInSlide 0.6s ease-in-out;
+        position: relative;
+    }
+
+    .top-school-rank-container h6, .best-selling-products-container h6 {
+        font-weight: bold;
+        color: #34495e;
+        margin-bottom: 15px;
+        font-size: 18px;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 5px;
+    }
+
+    /* 순위 목록 스타일 */
+    .top-school-rank-container ol, .best-selling-products-container ol { padding: 0; list-style: none; margin: 0; }
+    .top-school-rank-container li, .best-selling-products-container li {
+        font-size: 16px;
+        margin: 10px 0;
+        color: #5a5a5a;
+        display: flex;
+        align-items: center;
+    }
+
+    /* 순위 강조 아이콘 */
+    .top-school-rank-container li::before, .best-selling-products-container li::before {
+        content: '🏅';
+        font-size: 18px;
+        margin-right: 8px;
+        color: #ffd700; /* 금메달 색상 */
+        animation: bounce 1s infinite alternate;
+    }
+
+    /* 차트 섹션 */
+    .top-charts-wrapper {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    /* 차트 카드 */
+    .chart-container {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 48%;
+        min-width: 300px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInSlide 0.6s ease-in-out;
+    }
+
+    .chart-container h6 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 15px;
+    }
+
+    /* 카드 애니메이션 효과 */
+    .top-school-rank-container:hover, .best-selling-products-container:hover, .chart-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* 애니메이션 키프레임 */
+    @keyframes fadeInSlide {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+        from { transform: translateY(0); }
+        to { transform: translateY(-3px); }
+    }
+
+    /* 스크롤바 스타일 */
+    ::-webkit-scrollbar { height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
 </style>
 
-<body>
-<div style="width: 400px" style="height: 400px">
-    <canvas id="myChart"></canvas>
+<!-- 전체 차트를 감싸는 컨테이너 -->
+<div class="charts-wrapper">
+    <!-- 통계 카드 섹션 -->
+    <div class="user-revenue-wrapper">
+        <div class="user-count-container" style="border-left: 6px solid #007bff;">
+            <div class="text-xs">총 유저 수 👤</div>
+            <div class="h5" id="totalUserCount">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #ffc107;">
+            <div class="text-xs">총 가입자 수 </div>
+            <div class="h5" id="totalMembers">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #17a2b8;">
+            <div class="text-xs">하루 방문 수 💡</div>
+            <div class="h5" id="dailyVisits">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #28a745;">
+            <div class="text-xs">수익(연간) 💰</div>
+            <div class="h5" id="totalRevenueAmount">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #343a40;">
+            <div class="text-xs">탈퇴 유저 수 </div>
+            <div class="h5" id="withdrawnUserCount">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #dc3545;">
+            <div class="text-xs">총 게시글 수 💬</div>
+            <div class="h5" id="totalPosts">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #6c757d;">
+            <div class="text-xs">총 댓글 수 💬</div>
+            <div class="h5" id="totalComments">로딩 중...</div>
+        </div>
+        <div class="user-count-container" style="border-left: 6px solid #6c757d;">
+            <div class="text-xs">BEST 상품 🏆</div>
+            <div class="h5" id="bestSellingItem">로딩 중...</div>
+        </div>
+    </div>
+
+    <!-- 순위 카드 -->
+    <div style="display: flex; gap: 20px; width: 100%; justify-content: space-between;">
+        <div class="top-school-rank-container">
+            <h6>가장 유저가 많은 학교 순위 (Top 3)</h6>
+            <ol id="topSchoolList">
+                <li>로딩 중...</li>
+            </ol>
+        </div>
+        <div class="best-selling-products-container">
+            <h6>가장 잘 팔린 상품</h6>
+            <ol id="bestSellingProductList">
+                <li>로딩 중...</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- 차트 섹션 -->
+    <div class="top-charts-wrapper">
+        <div class="chart-container">
+            <h6>남/여 사용자 수</h6>
+            <canvas id="myChart" width="500" height="400"></canvas>
+        </div>
+        <div class="chart-container">
+            <h6>나이 분포</h6>
+            <canvas id="ageDistributionChart" width="500" height="400"></canvas>
+        </div>
+    </div>
 </div>
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+
 
 
 <script>
+    // 전역 변수로 선언된 차트
+    let chartByGender, ageDistributionChart;
 
-<!--    function f_chart1() {-->
-<!--      $.ajax({-->
-<!--        method: 'get',-->
-<!--        url: 'test2.csv',-->
-<!--        dataType: 'text',-->
-<!--        success: function (res) {-->
-<!--          myChart.data.datasets[0].data = res.split(',');-->
-<!--          myChart.data.labels = ['10대', '20대', '30대', '40대', '50대', '60대'];-->
-<!--          myChart.update();-->
-<!--        },-->
-<!--        error: function (xhr, status, error) {-->
-
-<!--        }-->
-<!--      });-->
-<!--    }-->
-
-    const ctx = document.querySelector('#myChart');
-
-    var myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Red', 'Blue'],
-        datasets: [
-          {
-            label: '남녀 성별 비율',
-            data: [200, 300],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
+    // DOMContentLoaded 이벤트 리스너 추가
+    document.addEventListener('DOMContentLoaded', () => {
+        getTotalUserCount();
+        getTotalMemberCount();
+        getTotalRevenue();
+        getDailyVisits();
+        getWithdrawnUserCount();
+        getTotalPosts();
+        getTotalComments();
+        getBestSellingItem();
+        loadGenderData();
+        loadAgeData();
+        getTopUserCountSchool();
     });
-</script>
 
-</body>
+
+    // 페이지 로드 시 가장 유저가 많은 학교 순위 가져오기
+    function getTopUserCountSchool() {
+        fetch('/admin/topUserCountSchool')
+            .then(response => response.json())
+            .then(data => {
+                const topSchoolList = document.getElementById('topSchoolList');
+                topSchoolList.innerHTML = '';
+                data.slice(0, 3).forEach((school, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${index + 1}. ${school.schoolName} (${school.userCount}명)`;
+                    topSchoolList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('학교 순위 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('topSchoolList').innerHTML = '<li>오류</li>';
+            });
+    }
+
+
+
+    // 페이지 로드 시 전체 유저 수 가져오기
+    function getTotalUserCount() {
+        fetch('/admin/totalUsers')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 유저 수를 표시
+                document.getElementById('totalUserCount').textContent = data + ' 명';
+            })
+            .catch(error => {
+                console.error('데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('totalUserCount').textContent = '오류';
+            });
+    }
+
+    // 페이지 로드 시 총 가입자 수 가져오기
+    function getTotalMemberCount() {
+        fetch('/admin/totalMembers')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 가입자 수를 표시
+                document.getElementById('totalMembers').textContent = data + ' 명';
+            })
+            .catch(error => {
+                console.error('총 가입자 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('totalMembers').textContent = '오류';
+            });
+    }
+
+    // 페이지 로드 시 전체 하루 방문자 수 가져오기
+    function getDailyVisits() {
+        fetch('/admin/dailyVisits')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 유저 수를 표시
+                document.getElementById('dailyVisits').textContent = data + ' 명';
+            })
+            .catch(error => {
+                console.error('데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('dailyVisits').textContent = '오류';
+            });
+    }
+    // 페이지 로드 시 총 매출 가져오기
+    function getTotalRevenue() {
+        fetch('/admin/totalRevenue')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 총 매출을 표시
+                document.getElementById('totalRevenueAmount').textContent = data + ' 원';
+            })
+            .catch(error => {
+                console.error('총 매출 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('totalRevenueAmount').textContent = '오류';
+            });
+    }
+    // 페이지 로드 시 탈퇴 유저 수 가져오기
+    function getWithdrawnUserCount() {
+        fetch('/admin/withdrawnUserCount')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 총 매출을 표시
+                document.getElementById('withdrawnUserCount').textContent = data + ' 명';
+            })
+            .catch(error => {
+                console.error('총 매출 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('withdrawnUserCount').textContent = '오류';
+            });
+    }
+    // 페이지 로드 시 총 게시글 수 가져오기
+    function getTotalPosts() {
+        fetch('/admin/totalPosts')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 총 매출을 표시
+                document.getElementById('totalPosts').textContent = data + ' 개';
+            })
+            .catch(error => {
+                console.error('총 매출 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('totalPosts').textContent = '오류';
+            });
+    }
+    // 페이지 로드 시 총 댓글 수 가져오기
+    function getTotalComments() {
+        fetch('/admin/totalComments')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 받은 총 매출을 표시
+                document.getElementById('totalComments').textContent = data + ' 개';
+            })
+            .catch(error => {
+                console.error('총 매출 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('totalComments').textContent = '오류';
+            });
+    }
+
+     // 페이지 로드 시 베스트 상품 가져오기
+   function getBestSellingItem() {
+    fetch('/admin/bestSellingItem')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 응답에 문제가 있습니다.');
+            }
+            return response.json(); // JSON 형태로 응답을 받음
+        })
+        .then(data => {
+            if (Array.isArray(data)) {
+                const productNames = data.map(item => item.productName).join(', ');
+                document.getElementById('bestSellingItem').textContent = productNames;
+            } else {
+                document.getElementById('bestSellingItem').textContent = data.productName;
+            }
+        })
+        .catch(error => {
+            console.error('베스트 상품 데이터를 가져오는 중 문제가 발생했습니다:', error);
+            document.getElementById('bestSellingItem').textContent = '오류';
+        });
+}
+
+
+    //////
+       document.addEventListener('DOMContentLoaded', () => {
+        getBestSellingProducts();
+        getBestSellingItem();
+    });
+
+    // 페이지 로드 시 가장 잘 팔린 상품 가져오기
+    function getBestSellingProducts() {
+        fetch('/admin/bestSellingProducts')
+            .then(response => response.json())
+            .then(data => {
+                const productList = document.getElementById('bestSellingProductList');
+                productList.innerHTML = '';
+                data.forEach((product, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${index + 1}. ${product.productName} (${product.totalSold}개 판매)`;
+                    productList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('가장 잘 팔린 상품 데이터를 가져오는 중 문제가 발생했습니다:', error);
+                document.getElementById('bestSellingProductList').innerHTML = '<li>오류</li>';
+            });
+    }
+
+
+
+
+
+
+
+    // chart.js
+
+
+    // 성별 사용자 수 차트
+    function loadGenderData() {
+        fetch('/admin/gender')
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.length === 0) {
+                    throw new Error('성별 데이터가 비어 있습니다.');
+                }
+
+                const labels = data.map(item => item.gender);
+                const userCountData = data.map(item => item.count);
+
+                const ctx = document.getElementById('myChart');
+                if (!ctx) {
+                    throw new Error('myChart 캔버스를 찾을 수 없습니다.');
+                }
+
+                // 이전 차트가 존재하면 삭제
+                if (chartByGender) {
+                    chartByGender.destroy();
+                }
+
+                // 새로운 차트 생성
+                chartByGender = new Chart(ctx.getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '사용자 수',
+                            data: userCountData,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 1)', // 여
+                                'rgba(255, 99, 132, 1)', // 남
+                                'rgba(75, 192, 192, 1)' // 설정 안 함
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(75, 192, 192, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '남/여 사용자 수'
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('성별 데이터 로드 중 오류 발생:', error));
+    }
+
+    // 나이 분포 차트
+    function loadAgeData() {
+        fetch('/admin/age')
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.length === 0) {
+                    throw new Error('나이 데이터가 비어 있습니다.');
+                }
+
+                const labels = data.map(item => `${item.ageGroup}`);
+                const userData = data.map(item => item.userCount);
+                console.log(' userData 들어오나:', userData);
+                console.log('데이터 확인:', data);
+
+                const ctx = document.getElementById('ageDistributionChart');
+                if (!ctx) {
+                    throw new Error('ageDistributionChart 캔버스를 찾을 수 없습니다.');
+                }
+
+                // 이전 차트가 존재하면 삭제
+                if (ageDistributionChart) {
+                    ageDistributionChart.destroy();
+                }
+
+                ageDistributionChart = new Chart(ctx.getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '나이 분포',
+                            data: userData,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(201, 203, 207, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '나이 분포'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('나이 데이터 로드 중 오류 발생:', error));
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -1,13 +1,143 @@
+{{>layout/admin/adminSidebar}}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>환불 요청 내역</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: left;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #34495e;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        .page-item.active a {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .refundSuccess-btn,
+        .refundFail-btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .refundSuccess-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .refundSuccess-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .refundFail-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .refundFail-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .refundSuccess-btn:disabled,
+        .refundFail-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
+
 <body>
-<h1>환불 요청 목록</h1>
-<div>
+<div class="content-container">
+    <h1>환불 요청 목록</h1>
     <div class="requestRefundList">
         <table>
             <thead>
@@ -19,6 +149,7 @@
                 <th>환불 요청 사유</th>
                 <th>환불 요청 시간</th>
                 <th>환불 상태</th>
+                <th>조치</th>
             </tr>
             </thead>
             <tbody id="refundList">
@@ -32,21 +163,30 @@
                     <td>{{requestAt}}</td>
                     <td>{{cancelStatus}}</td>
                     <td>
-                        {{#isRefundable}}
-                            <button class="refundSuccess-btn" data-id="{{id}}" onclick="updateRefundSuccessButton({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">승인</button>
-                            <button class="refundFail-btn" data-id="{{id}}" onclick="openRefuseWindow({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">반려</button>
-                        {{/isRefundable}}
-                        {{^isRefundable}}
-                            <button class="refundSuccess-btn" disabled>승인 완료</button>
-                            <button class="refundFail-btn" disabled>반려 완료</button>
-                        {{/isRefundable}}
+                        <div class="action-buttons">
+                            {{#isRefundable}}
+                                <button class="refundSuccess-btn" data-id="{{id}}"
+                                        onclick="updateRefundSuccessButton({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">승인</button>
+                                <button class="refundFail-btn" data-id="{{id}}"
+                                        onclick="openRefuseWindow({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">반려</button>
+                            {{/isRefundable}}
+                            {{^isRefundable}}
+                                <button class="refundSuccess-btn" disabled>승인 완료</button>
+                                <button class="refundFail-btn" disabled>반려 완료</button>
+                            {{/isRefundable}}
+                        </div>
                     </td>
                 </tr>
             {{/requestRefundList}}
+            {{^requestRefundList}}
+                <tr>
+                    <td colspan="8" class="text-center">환불 내역이 없습니다.</td>
+                </tr>
+            {{/requestRefundList}}
             </tbody>
-        </table>
 
-        <div id="paginationContainer">
+
+            <div id="paginationContainer">
             <ul class="pagination">
                 {{#showPrevious}}
                     <li class="page-item">
@@ -71,9 +211,9 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        // 모든 requestAt 셀을 선택
-        $('#refundList tr').each(function() {
+    $(document).ready(function () {
+        // 모든 requestAt 셀을 선택하여 날짜 포맷팅
+        $('#refundList tr').each(function () {
             const $cell = $(this).find('td').eq(5); // 5번째 컬럼이 requestAt이라고 가정
             const originalTime = $cell.text().trim(); // 원본 텍스트 가져오기
 
@@ -101,87 +241,7 @@
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-
-    // 환불 처리 상태(승인)를 업데이트하는 함수 정의
-    function updateRefundSuccessButton(id, chargeHistoryId, cancelReason) {
-
-        $.ajax({
-            type: "POST",
-            url: "/pay/requestApprove",
-            contentType: "application/json",
-            data: JSON.stringify({
-                id: id,
-                chargeHistoryId: chargeHistoryId,
-                refundStatus: 'success',
-                action: "승인",
-                cancelReason: cancelReason
-            }),
-            success: function(response) {
-                alert(response); // 서버에서의 응답을 알림
-
-                // 버튼 비활성화 및 상태 업데이트
-                $(".refundSuccess-btn, .refundFail-btn").filter(function () {
-                    return $(this).data('id') == id;
-                }).prop('disabled', true);
-
-                const $statusCell = $(`.refundSuccess-btn[data-id='${id}']`).closest('tr').find('td').eq(6);
-                if ($statusCell.length) {
-                    $statusCell.text('승인 완료');
-                }
-            },
-            error: function(xhr, status, error) {
-                alert("승인 실패: " + error);
-            }
-        });
-    }
-
-    function openRefuseWindow(id, chargeHistoryId, cancelReason) {
-        const url = `/pay/refuseReasonForm?id=${id}&chargeHistoryId=${chargeHistoryId}&cancelReason=${encodeURIComponent(cancelReason)}`;
-        const windowFeatures = "width=600,height=400,left=100,top=100";
-
-        // 새 창 열기
-        window.open(url, "refuseWindow", windowFeatures);
-    }
-
-
-
-    // 환불 처리 상태(반려)를 업데이트하는 함수 정의
-    function updateRefuseStatus(id, chargeHistoryId, refundRefuseReason) {
-        console.log("Received data in parent window:", id, chargeHistoryId, refundRefuseReason);
-        $.ajax({
-            type: "POST",
-            url: "/pay/requestRefuse",
-            contentType: "application/json",
-            data: JSON.stringify({
-                id: parseInt(id, 10),  // 숫자형으로 변환
-                chargeHistoryId: parseInt(chargeHistoryId, 10),  // 숫자형으로 변환
-                refundStatus: 'fail',
-                action: "반려",
-                refundRefuseReason: refundRefuseReason
-            }),
-            success: function(response) {
-                alert(response); // 서버에서의 응답을 알림
-
-                // 버튼 비활성화 및 상태 업데이트
-                $(".refundSuccess-btn, .refundFail-btn").filter(function () {
-                    return $(this).data('id') == id;
-                }).prop('disabled', true);
-
-                const $statusCell = $(`.refundSuccess-btn[data-id='${id}']`).closest('tr').find('td').eq(6);
-                if ($statusCell.length) {
-                    $statusCell.text('반려 완료');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("Error in submitRefuseReason:", xhr.status, error);
-                alert("반려 실패: " + error);
-            }
-        });
-    }
-
-
-
 </script>
-
 </body>
+
 </html>

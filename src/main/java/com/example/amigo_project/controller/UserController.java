@@ -2,6 +2,7 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.SchoolDTO;
 import com.example.amigo_project.dto.UserDTO;
+import com.example.amigo_project.repository.model.School;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +25,11 @@ import java.util.Map;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
+
     private final HttpSession session;
     private final UserService userService;
     private final WebClient webClient;
+    private final ScreenController screenController;
 
     /**
      * 로그인
@@ -86,6 +90,7 @@ public class UserController {
         System.out.println("SDFAFSADFSAFSAFD");
         Map<String, String> repetitionResult = userService.checkNickNameRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
+
     }
 
     /**
@@ -104,12 +109,12 @@ public class UserController {
      */
     @GetMapping("/schoolData")
     @ResponseBody
-    public Mono<List<String>> schoolData(@RequestParam(name = "region") String region, @RequestParam(name = "name") String name) {
+    public Mono<List<School>> schoolData(@RequestParam(name = "region") String region, @RequestParam(name = "name") String name) {
         final String KEY = "09bbdab31c0d461c99f7216c700127cd";
         final String Type = "json";
         final Integer pindex = 1;
         final Integer pSize = 1000;
-        List<String> schoolList = new ArrayList<>();
+        List<School> schoolList = new ArrayList<>();
         Mono<JsonNode> response = webClient.get().uri(uribuilder -> uribuilder.path("/hub/schoolInfo")
                         .queryParam("KEY", KEY)
                         .queryParam("Type", Type)
@@ -133,7 +138,11 @@ public class UserController {
                 if (rows != null && rows.isArray()) {
                     for (JsonNode row : rows) {
                         String schoolName = row.get("SCHUL_NM").asText();
-                        schoolList.add(schoolName);  // 리스트에 추가
+                        String code = row.get("SD_SCHUL_CODE").asText();
+                        String regions = row.get("LCTN_SC_NM").asText();
+                        int id = Integer.parseInt(code);
+                        School school = School.builder().id(id).name(schoolName).region(regions).build();
+                        schoolList.add(school);  // 리스트에 추가
                     }
                 }
             }
@@ -175,10 +184,41 @@ public class UserController {
      * 사용자 정보 업데이트
      */
     @PostMapping("/addInformation")
-    public String updateInfo(HttpSession session, @ModelAttribute UserDTO.infoDTO dto) {
-        User principal = (User) session.getAttribute("principal");
+    public String updateInfo(HttpSession session, @ModelAttribute UserDTO.infoDTO dto,Model model) throws IOException {
+        User principal = (User)session.getAttribute("principal");
         dto.setId(principal.getId());
-        userService.updateInfo(dto);
+        if(principal.getGender() != null){
+            dto.setGender(principal.getGender());
+            dto.setName(principal.getName());
+            dto.setBirth(principal.getBirth());
+            dto.setPhoneNumber(principal.getPhoneNumber());
+            userService.updateInfo(dto);
+        } else {
+            userService.updateInfo(dto);
+        }
+        if(!userService.existsSchool(dto)) {
+            userService.createSchool(dto);
+        }
+        userService.createUserSchool(dto);
+        List<School>schoolList = userService.findUserSchoolList(dto);
+        User user = userService.findUser(principal.getId());
+        if(user.getGender().equals("male")) {
+            byte[]profile = user.convertFileToBytes("static/image/avator/male_head.png");
+            user.setProfile(profile);
+            userService.insertUserProfile(user);
+        } else {
+            byte[]profile = user.convertFileToBytes("static/image/avator/female_head.png");
+            user.setProfile(profile);
+            userService.insertUserProfile(user);
+        }
+        String profile = user.base64Encoding(user.getProfile());
+        // 유저 정보 업데이트
+        session.setAttribute("principal",user);
+        // 유저의 프로필을 base64로 인코딩하여 세션에 등록
+        session.setAttribute("profile",profile);
+        // 메인페이지 들어갈때는 첫번째에 담긴 id를 넣어줌
+        session.setAttribute("schoolId",schoolList.get(0).getId());
+        model.addAttribute("schoolList",schoolList);
         return "redirect:/";
     }
 }

@@ -7,7 +7,7 @@
 <body>
 
 <h3>Naver SmartEditor</h3>
-<form id="boardForm" action="/board/update/{{board.id}}" method="post">
+<form id="boardForm">
     <div>
         <h3>제목</h3>
         <input type="text" name="title" id="title" value="{{board.title}}" required>
@@ -52,9 +52,7 @@
         smartEditor();
     });
 
-    // 폼 제출 함수
-    function modifyPost() {
-        // 에디터 내용을 <textarea>와 동기화
+
         oEditors.getById["editorText"].exec("UPDATE_CONTENTS_FIELD", []);
         let content = $("#editorText").val();
 
@@ -64,10 +62,7 @@
             return;
         } else {
             console.log(content);
-            // 폼을 제출
-            $("#boardForm").submit();
         }
-    }
 
     // 함수를 전역으로 노출
     window.smartEditor = smartEditor;

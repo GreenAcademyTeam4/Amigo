@@ -8,9 +8,7 @@ import java.util.Map;
 
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
-import com.example.amigo_project.repository.model.Board;
-import com.example.amigo_project.repository.model.Comment;
-import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.repository.model.*;
 import com.example.amigo_project.service.BoardService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
@@ -68,7 +66,7 @@ public class BoardController {
         User principal = (User) session.getAttribute("principal");
 
 //        session.setAttribute("userId", principal); // principal의 user ID 저장
-        System.out.println("principal : " + principal);
+        System.out.println("principal.getId() : " + principal.getId());
 
 
         int user_id = 1; // 유저 아이디 (나중에 유저 세션에서 가져옴)
@@ -130,17 +128,20 @@ public class BoardController {
     // 특정 학교의 게시글 목록 조회
     @GetMapping("/list")
     public String getBoardListBySchool(/*@PathVariable("schoolId") int schoolId */ Model model,
-     @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지 
+     @RequestParam(name = "page", defaultValue = "1") Integer page, // 어디서 부터 시작할 건지
      @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
         ) {
-        
+
+        System.out.println("page : " + page);
+        System.out.println("size : " + size);
+
 
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
-        List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page - 1, size); // Service에서 페이징된 게시글 목록 가져옴
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
 
@@ -156,9 +157,11 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("schoolId", schoolId);
-
+        System.out.println("총 페이지 수 : " + totalPages);
+        System.out.println("현재 페이지 : " + page);
+        model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
+
 
         return "views/board/boardList";  // boardList.mustache를 반환
     }
@@ -170,10 +173,31 @@ public class BoardController {
      */
     @GetMapping("/detail/{id}")
     public String getBoardDetail(@PathVariable("id") int boardId, Model model,
-                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "page", defaultValue = "1") int page,
                                  @RequestParam(name = "size", defaultValue = "5") int size) {
 
-        int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
+     //   int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
+
+        System.out.println("page : " + page);
+        System.out.println("size : " + size);
+
+
+        // 세션에서 현재 로그인된 사용자 정보 가져오기
+        User principal = (User) session.getAttribute("principal");
+        int userId = principal.getId();
+        System.out.println("principal : " + userId);
+
+        // 게시글 정보를 가져오기
+        BoardDTO board2 = boardService.getBoardById(boardId);
+
+
+        // 현재 사용자가 게시글의 작성자인지 확인
+        boolean isAuthor = userId == board2.getUserId();
+        model.addAttribute("isAuthor", isAuthor);  // 작성자 여부 추가
+
+
+
+
 
         // 사용자가 해당 게시글을 조회한 적이 있는지 확인
         if (!boardService.hasViewed(userId, boardId)) {
@@ -199,22 +223,30 @@ public class BoardController {
 
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
-        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
-        int totalComments = boardService.getTotalCommentsByBoardId(boardId);
-        int totalPages = (int) Math.ceil((double) totalComments / size);
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, page-1, size);
+        int totalComments = boardService.getTotalCommentsByBoardId(boardId); // 게시글 댓글 총 갯수
+        int totalPages = (int) Math.ceil((double) totalComments / size); // 댓글 총 갯수 / 4
+
+        System.out.println("comment 게시글 상세보기 : " + comment);
 
         // timestamp 전부 포맷시켜주기
         for(CommentDTO a : comment) {
             a.getFormattedCreatedAt();
+           if(a.getUserId() == userId) {
+               System.out.println("게시글 판별 작동 Controller");
+               a.setCommentAuthor(true);
+           }
         }
 
         model.addAttribute("board", board);
         model.addAttribute("comment", comment);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
+        model.addAttribute("board", board);
+        model.addAttribute("comment", comment);
+        System.out.println("총 페이지 수 : " + totalPages);
+        System.out.println("현재 페이지 : " + page);
         model.addAttribute("currentPage", page);
-
-        System.out.println("totalPages : " + totalPages);
-        System.out.println("currentPage : " + page);
+        model.addAttribute("totalPages", totalPages);
 
         return "views/board/boardDetail";
     }
@@ -273,7 +305,11 @@ public class BoardController {
     public ResponseEntity<?> insertComment(@RequestParam(name = "boardId") int boardId,
                                            @RequestParam(name = "content") String content,
                                            HttpSession session) {
-        int userId = 1; // 나중에 유저 세션에서 가져옴
+
+        // 세션에서 현재 로그인된 사용자 정보 가져오기
+        User principal = (User) session.getAttribute("principal");
+        int userId = principal.getId();
+        System.out.println("principal : " + userId);
         Comment dto = Comment
                 .builder()
                 .boardId(boardId)
@@ -293,12 +329,19 @@ public class BoardController {
      * @return
      */
     @PostMapping("/delete/{boardId}")
-    public String deleteBoard(@PathVariable(name = "boardId") int boardId) {
-        System.out.println(boardId);
+    public String deleteBoard(@PathVariable(name = "boardId") int boardId, Model model
 
-        // 게시글 삭제
+    ) {
+
+//        // 게시글 삭제
         boardService.deleteBoard(boardId);
+//        model.addAttribute("msg", "게시글이 성공적으로 삭제되었습니다.");
+//        model.addAttribute("url", "/board/detail");
+//        return "alert";
+
+
         return "redirect:/board/list";
+ //       return "views/board/boardList";
     }
 
     /**
@@ -310,7 +353,6 @@ public class BoardController {
     @GetMapping("/update/{boardId}")
     public String updateBoard(@PathVariable(name = "boardId") int boardId, Model model) {
         System.out.println("@@@@@@@@@ boardId : " + boardId);
-
 
         BoardDTO boardDTO = boardService.findBoardId(boardId);
         System.out.println("updateDTO : " + boardDTO);
@@ -345,6 +387,7 @@ public class BoardController {
             @RequestParam(name = "size", defaultValue = "5") int size
     ) {
 
+
         System.out.println("update : " + boardId);
 
         System.out.println("수정하기 컨트롤러 ");
@@ -373,7 +416,21 @@ public class BoardController {
         // timestamp 전부 포맷시켜주기
         for(CommentDTO a : comment) {
             a.getFormattedCreatedAt();
+
+            if(a.getUserId() == userId) {
+                System.out.println("게시글 판별 작동 Controller");
+                a.setCommentAuthor(true);
+            }
         }
+        model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
+
+
+        // 게시글 정보를 가져오기
+        BoardDTO board2 = boardService.getBoardById(boardId);
+        // 현재 사용자가 게시글의 작성자인지 확인
+        boolean isAuthor = userId == board2.getUserId();
+        model.addAttribute("isAuthor", isAuthor);  // 작성자 여부 추가
+
 
 
         model.addAttribute("board", board);
@@ -387,7 +444,6 @@ public class BoardController {
         System.out.println("board : " + board);
         System.out.println("comment : " + comment);
 
-//        return "redirect:/board/detail/" + boardId;
         return "views/board/boardDetail";
     }
 
@@ -455,9 +511,23 @@ public class BoardController {
      * @return
      */
     @GetMapping("/multiBoard")
-    public String multiBoard(Model model) {
+    public String multiBoard(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
+        System.out.println("유저 아이디 : " + user.getUserId());
 
-        int schoolId = 1; // 나중에 세션에서 학교 아이디를 가져온다.
+//        if(user == null) {
+//            model.setAttribute("msg", "alert 창에 띄울 메세지");
+//            model.setAttribute("url", "리다이렉트 시킬 url 주소");
+//            return "alert";
+//        }
+        // 이런 식으로 예외처리 할 수 있음  - 로그인 하지 않은 유저 걸러내기 , 필요시 적용
+        
+//        School school = (School)session.getAttribute("school");
+//
+//        int userId = user.getId(); // 세션에서 가져온 userId
+//        int schoolId = school.getSchoolId(); // 세션에서 가져온 schoolId
+        int schoolId = 1;
+
 
         List<BoardDTO> Heart = boardService.findHeartBoard(schoolId);
         List<BoardDTO> Recomend = boardService.findRecomendBoard(schoolId);
@@ -571,7 +641,14 @@ public class BoardController {
     @PostMapping("/like/{boardId}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> addLike(@PathVariable int boardId) {
-        int userId = 1; // 세션에서 가져올 예정
+
+        // 세션에서 현재 로그인된 사용자 정보 가져오기
+        User principal = (User) session.getAttribute("principal");
+        int userId = principal.getId();
+        System.out.println("principal : " + userId);
+
+
+//        int userId = 1; // 세션에서 가져올 예정
         boardService.addLike(userId, boardId);
 
         int likeCount = boardService.getLikeCount(boardId);
@@ -592,7 +669,13 @@ public class BoardController {
     @DeleteMapping("/like/{boardId}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> removeLike(@PathVariable int boardId) {
-        int userId = 1; // 세션에서 가져올 예정
+
+        // 세션에서 현재 로그인된 사용자 정보 가져오기
+        User principal = (User) session.getAttribute("principal");
+        int userId = principal.getId();
+        System.out.println("principal : " + userId);
+
+//        int userId = 1; // 세션에서 가져올 예정
         boardService.removeLike(userId, boardId);
 
         int likeCount = boardService.getLikeCount(boardId);
@@ -614,7 +697,7 @@ public class BoardController {
      */
     @GetMapping("/bestview")
     public String boardView(Model model,
-            @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지
+            @RequestParam(name = "offset", defaultValue = "1") Integer page, // 어디서 부터 시작할 건지
             @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
     ) {
 
@@ -625,7 +708,7 @@ public class BoardController {
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
-        List<BoardDTO> boardList = boardService.getBoardfindBoardView(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        List<BoardDTO> boardList = boardService.getBoardfindBoardView(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
@@ -644,7 +727,7 @@ public class BoardController {
         model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
+        model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
 
         return "views/board/boardViewList";
     }
@@ -658,7 +741,7 @@ public class BoardController {
      */
     @GetMapping("/bestcomment")
     public String boardComment(Model model,
-                               @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지
+                               @RequestParam(name = "offset", defaultValue = "1") Integer page, // 어디서 부터 시작할 건지
                                @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
     ) {
 
@@ -669,7 +752,7 @@ public class BoardController {
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
-        List<BoardDTO> boardList = boardService.getBoardfindBoardCommend(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        List<BoardDTO> boardList = boardService.getBoardfindBoardCommend(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
@@ -688,7 +771,7 @@ public class BoardController {
         model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
+        model.addAttribute("currentPage", page);
 
         return "views/board/boardCommentList";
     }
@@ -703,7 +786,7 @@ public class BoardController {
      */
     @GetMapping("/newBoard")
     public String boardNew(Model model,
-                               @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지
+                               @RequestParam(name = "offset", defaultValue = "1") Integer page, // 어디서 부터 시작할 건지
                                @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
     ) {
 
@@ -714,7 +797,7 @@ public class BoardController {
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
-        List<BoardDTO> boardList = boardService.getBoardfindBoardNew(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        List<BoardDTO> boardList = boardService.getBoardfindBoardNew(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
@@ -733,7 +816,7 @@ public class BoardController {
         model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
+        model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
 
         return "views/board/boardNewList";
     }
@@ -749,7 +832,7 @@ public class BoardController {
      */
     @GetMapping("/newHeart")
     public String boardHeart(Model model,
-                           @RequestParam(name = "offset", defaultValue = "0") Integer page, // 어디서 부터 시작할 건지
+                           @RequestParam(name = "offset", defaultValue = "1") Integer page, // 어디서 부터 시작할 건지
                            @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
     ) {
 
@@ -760,7 +843,7 @@ public class BoardController {
 
         int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
 
-        List<BoardDTO> boardList = boardService.getBoardfindBoardHeart(schoolId, page, size); // Service에서 페이징된 게시글 목록 가져옴
+        List<BoardDTO> boardList = boardService.getBoardfindBoardHeart(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
         int totalPages = (int) Math.ceil((double) totalCount / size); // 게시글 총 갯수 / 4 --> 12/4 --> 3
@@ -779,7 +862,7 @@ public class BoardController {
         model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", page + 1); // 현재 페이지 (0부터 시작이므로 +1)
+        model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
 
         return "views/board/boardHeartList";
     }

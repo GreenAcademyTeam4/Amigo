@@ -1,30 +1,10 @@
 package com.example.amigo_project.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.example.amigo_project.dto.AdminDTO;
-import com.example.amigo_project.dto.BoardDTO;
-import com.example.amigo_project.dto.CommentDTO;
-import com.example.amigo_project.dto.NoticeDTO;
-import com.example.amigo_project.repository.model.Board;
+import com.example.amigo_project.dto.*;
 import com.example.amigo_project.repository.model.Notice;
 import com.example.amigo_project.repository.model.User;
-import com.example.amigo_project.service.AdminService;
-import com.example.amigo_project.service.BoardService;
-import com.example.amigo_project.service.NoticeService;
-import com.example.amigo_project.service.PaymentService;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
+import com.example.amigo_project.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,6 +23,7 @@ public class AdminController {
     private final BoardService boardService;
     private final NoticeService noticeService;
     private final PaymentService paymentService; // 결제
+    private final UserService userService;
 
 
 
@@ -67,6 +48,36 @@ public class AdminController {
         return "views/admins/user"; // 임시
     }
 
+
+
+    //    // 유저 탈퇴
+    @PostMapping("/deleteUsers/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id){
+        adminService.deactivatedUserId(id);
+        return "redirect:/admin/user/detail/" + id;
+    }
+//@PostMapping("/deleteUsers/{id}")
+//public ResponseEntity<?> deleteUser(@PathVariable int id) {
+//    try {
+//        adminService.deactivatedUserId(id); // 사용자를 삭제하는 서비스 호출
+//        return ResponseEntity.ok().build(); // 성공 응답 반환
+//    } catch (Exception e) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 삭제에 실패했습니다.");
+//    }
+//}
+
+    // 탈퇴 회원 조회
+    @GetMapping("/deletedUsers")
+    public String deletedUsersPage(Model model){
+        List<User> deletedUser = adminService.findDeletedUsers();
+        model.addAttribute("deletedUser", deletedUser);
+        return "views/admins/deletedUsers";
+    }
+
+
+
+
+    // 유저 관리 - 상세보기
     @GetMapping("/user/detail/{id}")
     public String userDetail(Model model, @PathVariable(name = "id") int id){
         User user = adminService.findById(id);
@@ -129,7 +140,7 @@ public class AdminController {
 
         return "views/admins/boardDetail";
     }
-    
+
 
     // 게시글 삭제하기
     @PostMapping("/deleteBoard/{id}")
@@ -140,7 +151,7 @@ public class AdminController {
 
         // TODO 나중에 오류 페이지 만들기
     }
-    
+
     // 댓글 삭제하기
     @DeleteMapping("/deleteComment/{id}")
     @ResponseBody
@@ -157,20 +168,21 @@ public class AdminController {
 
 
     /**
-     * 결제 관리
+     * 결제
      */
-//    @GetMapping("/user")
-//    public String userPage(Model model){
-//        List<User> userList = adminService.getUserList();
-//
-//        model.addAttribute("userList", userList);
-//        return "views/admins/user"; // 임시
-//    }
+    // 결제 내역 조회
+    @GetMapping("/chargeHistoryList")
+    public String chargeHistoryList(Model model){
+        List<PayListDTO> chargeHistoryList = adminService.findChargeHistoryList();
+
+        model.addAttribute("chargeHistoryList", chargeHistoryList);
+        return "views/admins/chargeHistoryList"; // 임시
+    }
 
 
 
-    
-    
+
+
 
     // 광고 관리
 
@@ -242,11 +254,125 @@ public class AdminController {
     // 문의 관리
 
     // 신고 관리
+    // 유저 신고 조회
+    @GetMapping("/userReport")
+    public String findReportUser(Model model){
+        List<UserReportDTO> userReport = adminService.findReportUser();
+        model.addAttribute("userReport", userReport);
+        return "views/admins/userReport";
+    }
+
+
+
+    // 게시글 신고 조회
+    @GetMapping("/boardReport")
+    public String findReportBoard(Model model){
+        List<BoardReportDTO> boardReport = adminService.findReportBoard();
+        model.addAttribute("boardReport", boardReport);
+        return "views/admins/boardReport";
+    }
+
+
 
     // 통계
     @GetMapping("/statistic")
     public String statisticForm(){
         return "views/admins/statistic";
+    }
+
+    /**
+     * chart
+     */
+    // 남녀 성비
+    @GetMapping("/gender")
+    @ResponseBody
+    public List<GenderRatioDTO> getGenderCount(){
+        return adminService.findGenderCount();
+    }
+
+    // 나이 분포
+    @GetMapping("/age")
+    @ResponseBody
+    public List<UserDTO> getBirthCount(){
+        return adminService.findBirthCount();
+    }
+
+    // 연별 매출
+    @GetMapping("/yearlySales")
+    @ResponseBody
+    public List<ChargeHistory> getYearlySales(){
+        return adminService.getYearlySales();
+    }
+
+    // 총 유저 수
+    @GetMapping("/totalUsers")
+    @ResponseBody
+    public Integer getTotalUserCount(){
+        return adminService.getTotalUserCount();
+    }
+
+    // 총 매출
+    @GetMapping("/totalRevenue")
+    @ResponseBody
+    public Integer getTotalRevenue(){
+        return adminService.getTotalRevenue();
+    }
+
+    // 총 가입자 수
+    @GetMapping("/totalMembers")
+    @ResponseBody
+    public Integer getTotalMembers(){
+        return adminService.getTotalMembers();
+    }
+
+    // 하루 방문 수
+    @GetMapping("/dailyVisits")
+    @ResponseBody
+    public Integer getDailyVisits(){
+        return adminService.getDailyVisits();
+    }
+
+    // 총 게시글 수
+    @GetMapping("totalPosts")
+    @ResponseBody
+    public Integer getTotalPosts(){
+        return adminService.getTotalPosts();
+    }
+
+    // 총 댓글 수
+    @GetMapping("/totalComments")
+    @ResponseBody
+    public Integer getTotalComments(){
+        return adminService.getTotalComments();
+    }
+    // 탈퇴 유저 수
+    @GetMapping("/withdrawnUserCount")
+    @ResponseBody
+    public Integer getWithdrawnUserCount(){
+        return adminService.getWithdrawnUserCount();
+    }
+
+    // 가장 유저가 많은 학교 순위
+    @GetMapping("/topUserCountSchool")
+    @ResponseBody
+    public List<SchoolUserCountDTO> getTopUserCountSchool(){
+        return  adminService.getTopUserCountSchool();
+    }
+
+    // 가장 잘 팔린 상품들(리스트)
+    @GetMapping("/bestSellingProducts")
+    @ResponseBody
+    public List<ProductDTO> getBestSellingProducts(){
+        return adminService.getBestSellingProducts();
+    }
+
+    // 베스트 상품
+    @GetMapping("/bestSellingItem")
+    @ResponseBody
+    public List<ProductDTO> getBestSellingItem(){
+        List<ProductDTO> dtos = adminService.getBestSellingItem();
+        System.out.println(dtos);
+        return dtos;
     }
 
 }
