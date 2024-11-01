@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.UUID;
 
+import com.example.amigo_project.dto.UserDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -96,7 +97,7 @@ public class NaverApiService {
             BufferedReader br;
             if (responseCode == 200) { // 정상 호출
                 br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            } else { // 에러 발생
+            } else { // 에러 발 생
                 br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             }
 
@@ -125,9 +126,9 @@ public class NaverApiService {
         return null;
     }
 
-    public User findNaverUser(NaverDTO naverDTO) {
+    public User findNaverUser(UserDTO.NaverDTO naverDTO) {
         User principal = userRepository.findByUserId(naverDTO.getNaverId());
-
+        
         if (principal == null) {
             userRepository.naverInsert(naverDTO.getNaverId(), naverDTO.getNaverPassword());
             principal = userRepository.findByUserId(naverDTO.getNaverId());

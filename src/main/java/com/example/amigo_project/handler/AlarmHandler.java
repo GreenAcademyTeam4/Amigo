@@ -3,6 +3,7 @@ package com.example.amigo_project.handler;
 import com.example.amigo_project.dto.chat.AlarmDTO;
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,23 +21,25 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class AlarmHandler extends TextWebSocketHandler {
 
+    private final UserService userService;
+
     // 알람 소켓에 온 유저 관리
     private Map<Integer, WebSocketSession> userManage = new ConcurrentHashMap<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        MessageDTO messageDTO = mapper.readValue(message.getPayload(), MessageDTO.class);
-        if(messageDTO.getType().equals("alarm")) {
-            // messageDTO 안에 담긴 AlarmDTO를 파싱
-            AlarmDTO alarmDTO = mapper.readValue(messageDTO.getMessage(), AlarmDTO.class);
+            AlarmDTO alarmDTO = mapper.readValue(message.getPayload(), AlarmDTO.class);
             for(Integer receiver : userManage.keySet()) {
                 if(receiver == alarmDTO.getReceiverId()) {
                     // alarmDTO 안에 담긴 받는이 에게  실시간 메세지 전달
-                    userManage.get(receiver).sendMessage(new TextMessage(messageDTO.getMessage()));
+                    User sender = userService.findUser(alarmDTO.getSenderId());
+                    alarmDTO.setSenderNickname(sender.getNickname());
+                    // alarmDTO.setSenderProfile(sender.getProfile()); TODO 프로필 추가
+                    String alarm = mapper.writeValueAsString(alarmDTO);
+                    userManage.get(receiver).sendMessage(new TextMessage(alarm));
                 }
             }
-        }
     }
 
     @Override
@@ -44,7 +47,6 @@ public class AlarmHandler extends TextWebSocketHandler {
         User user = (User)session.getAttributes().get("principal");
         // 유저 pk를 키 값으로 넣고 밸류를 웹소켓 세션으로 저장
         userManage.put(user.getId(), session);
-        
     }
 
     @Override

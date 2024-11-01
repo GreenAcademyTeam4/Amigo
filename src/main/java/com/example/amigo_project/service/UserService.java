@@ -4,22 +4,19 @@ import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
 import com.example.amigo_project.repository.model.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    
     // 비밀번호 엄호
 	private final PasswordEncoder passwordEncoder;
     /**
@@ -47,6 +44,18 @@ public class UserService {
         return result;
     }
 
+    public Map<String, String> checkNickNameRepetition(UserDTO.infoDTO dto) {
+        Map<String, String> result = new HashMap<>();
+        boolean repetition = false;
+        if(dto.getNickname() != null){
+            repetition = userRepository.checkUserNickname(dto.getNickname());
+            if(repetition == true){
+                result.put("repetition", "repetition");
+            }
+       }
+        return result;
+    }
+
     /**
      * 회원가입 
      * 
@@ -66,16 +75,22 @@ public class UserService {
      * @param dto
      * @return
      */
-    public User findUserById(UserDTO.loginDTO dto){
-     
+    public User findUserById(UserDTO.loginDTO dto) {
         User user = userRepository.findByUserId(dto.getUserId());
-
-        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return user; 
-        } else {
-            return null; 
-        }
+        //return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
+        //if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            //return user;
+        //} else {
+//            return null;
+  //      }
   
+//        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+//            return user;
+//        } else {
+//            return null;
+//        }
+        return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
+        
     }
 
     /**
@@ -88,7 +103,7 @@ public class UserService {
      */
     public int checkPasswordValid(Integer userId, String password){
         String hashpwd = userRepository.findPasswordByUserId(userId);
-        // 비밀번호 해싱 도입 시  if(passwordEncoder.matches(hashpwd, password)){
+        // TODO - 배포 시 변경, 개발 단계에선 해싱 처리 생략 if(passwordEncoder.matches(hashpwd, password)){
         if(hashpwd.equals(password)){
             return 1;
         }else{
@@ -111,6 +126,9 @@ public class UserService {
 
     public User findUser(int id) {
         return userRepository.findUserById(id);
+    }
+    public void updateInfo(UserDTO.infoDTO dto){
+        userRepository.updateInfo(dto);
     }
 
     // 온라인인 친구 찾기

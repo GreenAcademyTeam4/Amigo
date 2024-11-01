@@ -1,25 +1,32 @@
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27',true);
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point ,online_status)
+values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','27', 50000 ,true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
+values('test',1234,'정훈','게토 스구루','010-1234-5678','male','27',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('test1',1234,'겨울','짱구','010-1234-5678','male','27');
+values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');
 
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27');
 
--- USER_TB에 누락된 유저 데이터 삽입
-INSERT INTO user_tb (id, user_id, password, name, nickname, phone_number, gender, birth)
-VALUES
-(5, 'test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27'),
-(6, 'test3', '1234', '겨울1', '짱구3', '010-1234-5678', 'male', '27'),
-(7, 'test4', '1234', '봄3', '테스트얍12', '010-1234-5678', 'male', '27'),
-(8, 'test5', '1234', '여름4', '테스터4', '010-1234-5678', 'male', '27'),
-(9, 'test6', '1234', '가을5', '테스트6', '010-1234-5678', 'male', '27'),
-(10, 'test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test3', '1234', '겨울1', '짱구3', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test4', '1234', '봄3', '테스트얍12', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test5', '1234', '여름4', '테스터4', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test6', '1234', '가을5', '테스트6', '010-1234-5678', 'male', '27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values ('test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
 
 -- 임시 데이터 학교
 INSERT INTO school_tb (id, school, name, region) VALUES
@@ -62,7 +69,11 @@ insert into refund_tb(payment_key, order_name, order_id, cancel_amount, cancel_r
 
 
 
+        insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
+
 ---- 임시 데이터 게시글
+
 insert into board_tb (school_id, title, content_location, user_id)
 values (1, '테스트1', '테스트123123', 1);
 
@@ -151,126 +162,102 @@ insert into board_tb (school_id, title, content_location, user_id)
 values (1, '테테테테텥테15', '테스트1271272', 3);
 
 -- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다111111111111111111.', now());
 
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다22222222222222222222.', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다3333333333333.', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.444444444444444', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.555555555555', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.66666666666666', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.7777777777777777', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.88888888888888888', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.999999999999999999', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.10101010100101', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.11 11 11 11 11 11 11', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.12 12 12 12 12 12 12', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다. 13 13 13 13 13 13', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.14 14 14 14 14 14', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.15 15 15 15 15 15', now());
-
--- 댓글 테이블에 임시 데이터 삽입
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.16 16 16 16 16', now());
-
-
-
---INSERT INTO board_tb (school_id, title, content_location, image_location, user_id, view_count, likes, created_at)
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
 --VALUES
---(1, '첫 번째 게시글', '게시글 1의 내용입니다.', NULL, 1, 50, 30, NOW()),
---(1, '두 번째 게시글', '게시글 2의 내용입니다.', NULL, 1, 45, 25, NOW()),
---(1, '세 번째 게시글', '게시글 3의 내용입니다.', NULL, 1, 60, 20, NOW()),
---(1, '네 번째 게시글', '게시글 4의 내용입니다.', NULL, 2, 20, 15, NOW()),
---(1, '다섯 번째 게시글', '게시글 5의 내용입니다.', NULL, 2, 70, 50, NOW()),
---(1, '여섯 번째 게시글', '게시글 6의 내용입니다.', NULL, 3, 35, 40, NOW()),
---(1, '일곱 번째 게시글', '게시글 7의 내용입니다.', NULL, 3, 10, 60, NOW());
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다111111111111111111.', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다22222222222222222222.', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다3333333333333.', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.444444444444444', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.555555555555', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.66666666666666', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.7777777777777777', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.88888888888888888', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.999999999999999999', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.10101010100101', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.11 11 11 11 11 11 11', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.12 12 12 12 12 12 12', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다. 13 13 13 13 13 13', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.14 14 14 14 14 14', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.15 15 15 15 15 15', now());
+--
+---- 댓글 테이블에 임시 데이터 삽입
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '게시글 1에 대한 첫 번째 댓글입니다.16 16 16 16 16', now());
+--
+--
+--INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+--VALUES
+--(1, 1, '첫 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(1, 2, '첫 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+--(1, 3, '첫 번째 게시글에 대한 세 번째 댓글입니다.', NOW()),
+--(2, 1, '두 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(2, 2, '두 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+--(3, 1, '세 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(4, 2, '네 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(5, 3, '다섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(5, 1, '다섯 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
+--(6, 2, '여섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(7, 3, '일곱 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
+--(7, 1, '일곱 번째 게시글에 대한 두 번째 댓글입니다.', NOW());
 
-INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
-VALUES
-(1, 1, '첫 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(1, 2, '첫 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
-(1, 3, '첫 번째 게시글에 대한 세 번째 댓글입니다.', NOW()),
-(2, 1, '두 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(2, 2, '두 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
-(3, 1, '세 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(4, 2, '네 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(5, 3, '다섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(5, 1, '다섯 번째 게시글에 대한 두 번째 댓글입니다.', NOW()),
-(6, 2, '여섯 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(7, 3, '일곱 번째 게시글에 대한 첫 번째 댓글입니다.', NOW()),
-(7, 1, '일곱 번째 게시글에 대한 두 번째 댓글입니다.', NOW());
-
--- LIKE_TB 테이블에 유저 ID 1을 제외한 임시 데이터 삽입
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 1);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 1);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 2);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 2);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 3);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 3);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 5);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 5);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 6);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 6);
 
 ---- 공지 임시 데이터
 INSERT INTO notice_tb (title, content, view_count)
@@ -279,34 +266,76 @@ INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
--- LIKE_TB 테이블에 다양한 유저가 좋아요한 데이터 삽입
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 1);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 1);
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 1);
-INSERT INTO like_tb (user_id, board_id) VALUES (5, 1);
 
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 2);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 2);
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 2);
+INSERT INTO friend_tb (user_id, friend_id) VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 4);
 
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 3);
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 3);
-INSERT INTO like_tb (user_id, board_id) VALUES (5, 3);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 3);
+-- --------------------------------
 
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (5, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (6, 4);
-INSERT INTO like_tb (user_id, board_id) VALUES (7, 4);
+-- 게시글 데이터 삽입
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
+VALUES (1, '첫11 번째 게시글', '첫 번째 게시글 내용 위치', 1, 100, 2, NOW()); -- 23
 
-INSERT INTO like_tb (user_id, board_id) VALUES (5, 5);
-INSERT INTO like_tb (user_id, board_id) VALUES (6, 5);
-INSERT INTO like_tb (user_id, board_id) VALUES (2, 5);
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
+VALUES (1, '두22 번째 게시글', '두 번째 게시글 내용 위치', 2, 150, 3, NOW()); -- 24
 
-INSERT INTO like_tb (user_id, board_id) VALUES (6, 6);
-INSERT INTO like_tb (user_id, board_id) VALUES (7, 6);
-INSERT INTO like_tb (user_id, board_id) VALUES (3, 6);
-INSERT INTO like_tb (user_id, board_id) VALUES (4, 6);
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
+VALUES (1, '세33 번째 게시글', '세 번째 게시글 내용 위치', 3, 200, 4, NOW()); -- 25
+
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
+VALUES (1, '네44 번째 게시글', '세 번째 게시글 내용 위치', 3, 300, 6, NOW()); -- 26
+
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
+VALUES (1, '다섯55 번째 게시글', '세 번째 게시글 내용 위치', 4, 250, 7, NOW()); -- 27
+
+-- like_tb 데이터 삽입
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 23, NOW()); -- 첫 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 23, NOW()); -- 첫 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 5
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 6
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 5
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 6
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (7, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 7
+
+
+
+-- 댓글 데이터 삽입
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (1, 1, '첫 번째 게시글에 대한 첫 번째 댓글', NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (1, 2, '첫 번째 게시글에 대한 두 번째 댓글', NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (2, 3, '두 번째 게시글에 대한 첫 번째 댓글', NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (2, 1, '두 번째 게시글에 대한 두 번째 댓글', NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (3, 4, '세 번째 게시글에 대한 첫 번째 댓글', NOW());
+
+INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
+VALUES (3, 2, '세 번째 게시글에 대한 두 번째 댓글', NOW());
+
 
 INSERT INTO like_tb (user_id, board_id) VALUES (7, 7);
 INSERT INTO like_tb (user_id, board_id) VALUES (2, 7);
@@ -318,19 +347,18 @@ INSERT INTO friend_tb (user_id, friend_id) VALUES
 (2, 1),
 (3, 4);
 
--- 친구 요청 테이블에 샘플 데이터 삽입
-INSERT INTO friend_wait_tb (sender_id, receiver_id) VALUES
-(2, 4),
-(4, 1);
-
 -- 아바타 테이블에 샘플 데이터 삽입
 INSERT INTO avatar_tb (id, type, price, name) VALUES
 (1, 1, 500, '아프로 헤어'),
-(2, 2, 300, '양머리'),
+(2, 1, 300, '양머리'),
 (3, 3, 700, '배기팬츠'),
 (4, 4, 400, '운동화'),
 (5, 1, 600, '롱 헤어'),
-(6, 3, 800, '정장 바지');
+(6, 3, 800, '정장 바지'),
+(7, 1, 400, '폭풍간지컷'),
+(8, 2, 700, '탱크톱'),
+(9, 3, 1200, '돌핀팬츠'),
+(10, 4, 600, '캔버스화');
 
 -- 유저 아이템 인벤토리 테이블에 샘플 데이터 삽입
 INSERT INTO inventory_tb (user_id, avatar_id) VALUES
@@ -340,19 +368,47 @@ INSERT INTO inventory_tb (user_id, avatar_id) VALUES
 (1, 4),
 (1, 5),
 (1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(2, 1),
 (2, 2),
 (2, 3),
 (2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4),
 (3, 5),
 (3, 6),
-(4, 6);
+(3, 7),
+(3, 8),
+(3, 9),
+(3, 10),
+(4, 1),
+(4, 2),
+(4, 3),
+(4, 4),
+(4, 5),
+(4, 6),
+(4, 7),
+(4, 8),
+(4, 9),
+(4, 10);
 
 -- 현재 아바타 정보 테이블에 샘플 데이터 삽입
 INSERT INTO now_avatar_tb (user_id, head, top, bottom, shoes) VALUES
-(1, 1, NULL, 3, 4),
-(2, 2, NULL, 3, NULL),
-(3, 5, NULL, 6, NULL),
-(4, NULL, NULL, 6, NULL);
+(1, 1, 8, 3, 4),
+(2, 2, 8, 3, 4),
+(3, 5, 8, 6, 4),
+(4, 2, 8, 6, 4);
 
 -- 포인트 사용내역 테이블에 샘플 데이터 삽입
 INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_point) VALUES

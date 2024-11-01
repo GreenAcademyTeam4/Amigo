@@ -39,15 +39,20 @@
         where user_id = #{userId}
     </update>
 
-    <!-- 마이페이지에서 정보 변경 요청시 작동하는 쿼리 -->
-    <update id="updateStatusByStatusDTO">
+    <!-- 마이페이지에서 닉네임 변경 요청시 작동하는 쿼리 -->
+    <update id="changeNickname">
         update user_tb
-        set nickname = #{nickname},
-        elementary_school = #{elementarySchool},
-        middle_school = #{middleSchool}
-        high_school = #{highSchool}
+        set nickname = #{nickname}
         where id = #{userId}
     </update>
+
+    <!-- 마이페이지에서 학교 변경 요청시 작동하는 쿼리 -->
+    <update id="changeSchool">
+        update user_tb
+        set school = #{school}
+        where id = #{userId}
+    </update>
+
 
 
     <!-- 마이페이지에서 친구 관리 탭 요청시 작동하는 쿼리 / 내 친구 목록 조회, 접속중인 친구가 위쪽으로 가도록 내림차순 정렬 -->
@@ -67,6 +72,22 @@
         where f.user_id = #{userId}
         and (u.name LIKE CONCAT('%', #{search}, '%'))
         order by u.online_status desc
+    </select>
+
+    <!-- 친구 검색 기능 / 학교 or 이름을 입력 받아 해당 유저 정보 반환 -->
+    <select id="findFriendBySchoolOrName" parameterType="com.example.amigo_project.dto.MypageDTO$myFriendListDTO">
+        select u.id as friendId, u.name as friendName, u.gender
+        from user_tb as u
+        where u.id != #{userId} <!-- 자신은 제외 -->
+        and u.id not in (
+        select f.friend_id
+        from friend_tb as f
+        where f.user_id = #{userId} <!-- 현재 사용자의 친구 목록에 포함되지 않는 유저를 조회 -->
+        )
+        and (
+        (u.name LIKE CONCAT('%', #{search}, '%'))
+        or (u.school LIKE CONCAT('%', #{search}, '%')))
+
     </select>
 
     <!--  친구 관리 탭에서 받은 친구 요청 조회시 작동하는 쿼리 / 받은 친구 요청 목록 조회 -->
@@ -110,14 +131,12 @@
         where sender_id = #{receiverId} and receiver_id = #{senderId}
     </delete>
 
-    <!-- 나이가 같고 초중고 중 같은 학교가 있는 유저를 조회하는 쿼리  -->
+    <!-- 나이가 같고 학교가 같은 유저를 조회하는 쿼리  -->
     <select id="findRecommendFriendListByBirthAndSchool" parameterType="com.example.amigo_project.dto.MypageDTO$reccomendFriendDTO">
-        SELECT u.id, u.name, u.elementary_school, u.middle_school, u.high_school, u.gender
+        SELECT u.id, u.name, u.school, u.gender
         FROM user_tb as u
         LEFT JOIN friend_tb as f ON u.id = f.friend_id AND f.user_id = #{userId}
-        WHERE (u.elementary_school = #{elementarySchool}
-        OR u.middle_school = #{middleSchool}
-        OR u.high_school = #{highSchool})
+        WHERE u.school = #{school}
         AND u.birth LIKE CONCAT(#{year}, '%')
         AND f.friend_id IS NULL
         AND u.id &lt;&gt; #{userId};
