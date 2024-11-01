@@ -27,7 +27,6 @@ public class ChatInterceptor implements HandshakeInterceptor {
         HttpSession session = req.getSession(false); // 세션이 없으면 null 반환
         if (session != null) {
             User user = (User)session.getAttribute("principal");
-
         }
         return true;
     }

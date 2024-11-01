@@ -1,8 +1,6 @@
 package com.example.amigo_project.handler;
 
-import com.example.amigo_project.dto.chat.ChatLogDTO;
 import com.example.amigo_project.dto.chat.FriendChatDTO;
-import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.chat.ChatLog;
 import com.example.amigo_project.service.ChatService;
@@ -34,16 +32,13 @@ public class FriendChatHandler extends TextWebSocketHandler {
     // 새로운 맵: 세션과 방 ID를 매핑
     private final Map<WebSocketSession, Integer> sessionRoomMap = new ConcurrentHashMap<>();
 
-
-
-
     private final ChatService chatService;
     private final ObjectMapper mapper;
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        User user = (User) session.getAttributes().get("principal");
-
+        User user = (User)session.getAttributes().get("principal");
+        System.out.println("유저 정보!!! : " + user);
         // JSON 형식 메시지 파싱
         FriendChatDTO messageDTO = mapper.readValue(message.getPayload(), FriendChatDTO.class);
 
