@@ -5,6 +5,7 @@ import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.chat.ChatLog;
 import com.example.amigo_project.repository.model.chat.ChatRoom;
+import com.example.amigo_project.repository.model.chat.Emoticon;
 import com.example.amigo_project.service.ChatService;
 import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +42,7 @@ public class ChatController {
         // 서비스 레이어의 getOrCreateChatRoom 메서드를 사용하여 채팅방 가져오기 또는 생성
         ChatRoom room = chatService.getOrCreateChatRoom(user.getId(), friendId);
         User friend = userService.findUser(friendId);
-
+        List<Emoticon>emoticonList = chatService.findEmoticonList();
         // 로그로 방 ID 확인
         log.info("ChatRoom 할당: roomId={} for userId={} and friendId={}", room.getId(), user.getId(), friendId);
 
@@ -54,7 +55,7 @@ public class ChatController {
         model.addAttribute("roomKey", room.getId());
         model.addAttribute("opponent", friend);
         model.addAttribute("user", user);
-
+        model.addAttribute("emoticonList", emoticonList);
         return "views/chat/friendChat";
     }
 

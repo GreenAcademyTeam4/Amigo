@@ -22,10 +22,4 @@ public class ChatLogDTO {
     private String message; // 메시지
     private Timestamp createdAt; // 메시지 보낸 시간
 
-//    // 포맷 된  시간 반환
-//    public String getFormattedTime() {
-//        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-//        return formatter.format(createdAt);
-//    }
-
 }
