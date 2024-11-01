@@ -7,9 +7,7 @@ create table user_tb (
   nickname varchar(20) null,
   UNIQUE (nickname),
   phone_number varchar(20)  null,
-  elementary_school varchar(20) null,
-  middle_school varchar(20) null,
-  high_school varchar(20) null, 
+  school varchar(20) null,
   gender varchar(10)  null,
   profile Blob,
   birth int  null,
@@ -120,7 +118,7 @@ create table board_view_tb (
   user_id int,
   board_id int,
   primary key(user_id, board_id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 좋아요 테이블
@@ -130,7 +128,7 @@ create table like_tb (
   board_id int,
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (user_id) references user_tb(id),
-  foreign key (board_id) references board_tb(id)
+  foreign key (board_id) references board_tb(id) ON DELETE CASCADE
 );
 
 -- 댓글 테이블
@@ -161,7 +159,6 @@ create table notice_view_tb (
 );
 
 
-
 -- 아바타 테이블
 create table avatar_tb (
   id int primary key auto_increment,
@@ -183,10 +180,10 @@ create table inventory_tb (
 -- 현재 아바타 정보 테이블
 create table now_avatar_tb (
   user_id int primary key,
-  head int,
-  top int,
-  bottom int,
-  shoes int,
+  head int not null default 9999,
+  top int not null default 9998,
+  bottom int not null default 9997,
+  shoes int not null default 9996,
   foreign key (user_id) references user_tb(id),
   foreign key (head) references avatar_tb(id),
   foreign key (top) references avatar_tb(id),
@@ -266,8 +263,14 @@ create table alarm_tb (
 	id int primary key auto_increment,
 	type varchar(20) not null,
 	sender_id int not null,
-    receiver_id int,
+  receiver_id int,
 	content varchar(255),
-    created_at timestamp default now(),
-    status int default 0
+  created_at timestamp default now(),
+  status int default 0
+);
+
+create table prodHistory_tb(
+    id int primary key auto_increment,
+    avatar_id int,
+    foreign key (avatar_id) references avatar_tb(id)
 );

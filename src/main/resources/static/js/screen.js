@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    const mpg = $('#mypage');
     const enter = $('.enter');
     const post = $('.post');
     window.screen = $('.screen-area');
@@ -16,6 +17,7 @@ $(document).ready(function() {
             $('.voice-chat-btn').prop('disabled', false).css('background-color', '').css('cursor', 'pointer');
         }
     }
+
 
     // 학교 바꾸기 기능 추가
     school.each(function (index, element) {
@@ -59,8 +61,9 @@ $(document).ready(function() {
             });
     });
 
-    mypage.on('click', function() {
-        fetch("/my-page/")
+    // 마이페이지 이동 이벤트 추가
+    mpg.on('click', function() {
+        fetch("/my-page/info")
             .then(response => response.text())
             .then(data => {
                 screen.html(data);
@@ -70,9 +73,10 @@ $(document).ready(function() {
             });
     });
 
-    // 이벤트 위임을 사용한 온라인 친구 클릭 핸들러
-    $(document).on('click', '.online-friend', function(event) {
-        console.log("온라인 친구 클릭됨"); // 디버깅 로그
+});
+$(document).ready(function() {
+    const screen = $('.screen-area');
+    $('.online-friend').on('click', function(event) {
         const $infoBox = $('.info-box');
         const id = $(this).attr('id'); // 클릭된 요소의 id 가져오기
 

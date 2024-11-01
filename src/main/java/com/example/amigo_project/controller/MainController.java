@@ -41,8 +41,6 @@ public class MainController {
 public String firstPage(Model model) {
     // 필요한 변수를 모델에 추가
     model.addAttribute("content", "Welcome to the first page!");
-    model.addAttribute("msg", "Hello, this is a message.");
-
     return "index";
 }
 

@@ -20,18 +20,23 @@
         </textarea>
     </div>
 
-    <div>
-        <button type="button" onclick="submitPost()">수정하기</button>
-    </div>
+<!--    <div>-->
+<!--        <button type="button" onclick="submitPost()">수정하기</button>-->
+<!--    </div>-->
+    <button type="button" id="submitButton" onclick="modifyPost('/board/update/{{board.id}}', 'boardForm')">수정 하기</button>
+
 </form>
 
     <div>
-        <a href="/board/list">돌아가기</a>
+        <a onclick="screenChanger('/board/list')">돌아가기</a>
     </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"> </script>
 
 <script>
     let oEditors = [];
 
+    (function() {
     // 스마트 에디터 초기화 함수
     function smartEditor() {
         nhn.husky.EZCreator.createInIFrame({
@@ -48,7 +53,7 @@
     });
 
     // 폼 제출 함수
-    function submitPost() {
+    function modifyPost() {
         // 에디터 내용을 <textarea>와 동기화
         oEditors.getById["editorText"].exec("UPDATE_CONTENTS_FIELD", []);
         let content = $("#editorText").val();
@@ -63,6 +68,11 @@
             $("#boardForm").submit();
         }
     }
+
+    // 함수를 전역으로 노출
+    window.smartEditor = smartEditor;
+    window.modifyPost = modifyPost;
+})();
 </script>
 
 </body>

@@ -1,36 +1,23 @@
 package com.example.amigo_project.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.client.WebClient;
-
 import com.example.amigo_project.dto.SchoolDTO;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -42,40 +29,44 @@ public class UserController {
     private final WebClient webClient;
 
     /**
-     * 로그인 
-     * TODO 로그인 구현 다시 확인 
-     * @param 
+     * 로그인
+     * TODO 로그인 구현 다시 확인
+     *
+     * @param
      * @return
      */
-    @PostMapping("/login")
-    public String login(HttpSession session, UserDTO.loginDTO dto){
 
+    @PostMapping("/login")
+    public String login(HttpSession session, UserDTO.loginDTO dto) {
         User principal = userService.findUserById(dto);
 
-        System.out.println(dto);
-    
-        System.out.println(principal);
-        if(principal != null){
+        if (principal != null) {
+            System.out.println(dto);
+            System.out.println(principal);
             session.setAttribute("principal", principal);
+
+            if (principal.getNickname() != null) {
+                return "redirect:/";
+            }
+
             return "views/login/schoolSelect";
-        } else{
-            return "redirect:/";
         }
-       
+
+        return "views/login/login";
     }
+
     /**
-     *   로그아웃
+     * 로그아웃
      * @return
      */
     @GetMapping("/logout")
-    public String logout(){
-    session.invalidate();
-    return "redirect:/";
+    public String logoutHandler() {
+        session.invalidate();
+        return "redirect:/";
     }
 
     /**
      * 회원 가입 페이지 호출 메서드
-     * @return
      */
     @GetMapping("/join")
     public String joinForm() {
@@ -83,43 +74,43 @@ public class UserController {
     }
 
     /**
-     * 중복확인 , 회원가입 페이지 에서 사용
-     * @param dto
-     * @return
+     * 중복 확인 - 회원가입 페이지에서 사용
      */
     @PostMapping("/checkUserId")
     public ResponseEntity<Map<String, String>> checkUserId(@RequestBody UserDTO.joinDTO dto) {
+        Map<String, String> repetitionResult = userService.checkFieldRepetition(dto);
+        return ResponseEntity.ok(repetitionResult);
+    }
 
-        Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
+    @PostMapping("/checkUsernickname")
+    public ResponseEntity<Map<String, String>> checkUserNickName(@RequestBody UserDTO.infoDTO dto) {
+        System.out.println("SDFAFSADFSAFSAFD");
+        Map<String, String> repetitionResult = userService.checkNickNameRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
 
     }
 
     /**
-     * 회원가입 
+     * 회원가입
      * @param dto
      * @return
      */
     @PostMapping("/join")
     public String joinUser(@ModelAttribute UserDTO.joinDTO dto) {
         int result = userService.joinUser(dto);
-        if (result > 0) {
-            return "views/login/login";
-        } else {
-            return "views/login/login";  
-        }
+        return (result > 0) ? "views/login/login" : "views/login/login";
     }
-  
+
+    /**
+     * 학교 데이터 가져오기
+     */
     @GetMapping("/schoolData")
     @ResponseBody
-    public Mono<List<String>> schoolData(@RequestParam(name = "region") String region,
-                                         @RequestParam(name = "name") String name) {
+    public Mono<List<String>> schoolData(@RequestParam(name = "region") String region, @RequestParam(name = "name") String name) {
         final String KEY = "09bbdab31c0d461c99f7216c700127cd";
         final String Type = "json";
         final Integer pindex = 1;
         final Integer pSize = 1000;
-        System.out.println("들어옴!!!!!!" + region);
-        System.out.println("들어옴!!!!!!" + name);
         List<String> schoolList = new ArrayList<>();
         Mono<JsonNode> response = webClient.get().uri(uribuilder -> uribuilder.path("/hub/schoolInfo")
                         .queryParam("KEY", KEY)
@@ -138,16 +129,12 @@ public class UserController {
 
         // JSON 데이터에서 필요한 필드 추출
         return response.map(jsonNode -> {
-            // "schoolInfo" 배열 내 "row" 필드 탐색
             JsonNode schoolInfoArray = jsonNode.get("schoolInfo");
-
             if (schoolInfoArray != null && schoolInfoArray.isArray()) {
                 JsonNode rows = schoolInfoArray.get(1).get("row");  // 두 번째 객체에서 "row" 배열 접근
                 if (rows != null && rows.isArray()) {
                     for (JsonNode row : rows) {
-                        // 각 학교의 "SCHUL_NM" 필드 추출
                         String schoolName = row.get("SCHUL_NM").asText();
-                        System.out.println(schoolName);
                         schoolList.add(schoolName);  // 리스트에 추가
                     }
                 }
@@ -156,6 +143,9 @@ public class UserController {
         });
     }
 
+    /**
+     * 테스트 페이지 호출
+     */
     @GetMapping("/test")
     public String test(Model model) {
         List<SchoolDTO> schoolList = Arrays.asList(
@@ -179,8 +169,18 @@ public class UserController {
                 new SchoolDTO("V10", "재외한국")
         );
 
-        model.addAttribute("schoolList", schoolList);  // schoolList를 모델에 추가하여 뷰에 전달
-        return "views/test";  // test.mustache 또는 test.html로 전달
+        model.addAttribute("schoolList", schoolList);
+        return "views/test";
     }
-
+      
+    /**
+     * 사용자 정보 업데이트
+     */
+    @PostMapping("/addInformation")
+    public String updateInfo(HttpSession session, @ModelAttribute UserDTO.infoDTO dto) {
+        User principal = (User) session.getAttribute("principal");
+        dto.setId(principal.getId());
+        userService.updateInfo(dto);
+        return "redirect:/";
+    }
 }
