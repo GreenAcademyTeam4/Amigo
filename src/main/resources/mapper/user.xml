@@ -8,6 +8,12 @@
         FROM user_tb
         WHERE user_id = #{userId}
     </select>
+  
+    <select id="checkUserNickname" resultType="boolean" parameterType="String">
+        SELECT COUNT(*)
+        FROM user_tb
+        WHERE nickname = #{nickname}
+    </select>
 
     <insert id="create" parameterType="com.example.amigo_project.dto.UserDTO">
         INSERT INTO user_tb (
@@ -45,16 +51,37 @@
         from user_tb
         where id = #{userId}
     </select>
+
     <insert id="naverInsert" parameterType="java.util.HashMap">
     INSERT INTO user_tb (user_id, password)
     VALUES (#{naverId}, #{naverPassword})
-</insert>
+    </insert>
 
     <select id="findUserById" resultType="com.example.amigo_project.repository.model.User">
         select * from user_tb
         where id = #{id}
     </select>
+  
+   <update id="updateInfo" parameterType="com.example.amigo_project.dto.UserDTO">
+    UPDATE user_tb
+    SET 
+        school = #{school}, 
+        nickname = #{nickname}
+    WHERE 
+        id = #{id}
+    </update>
+  
+ <!-- 친구 수 조회-->
+    <select id="countFriendByUserId" resultType="Integer">
+        SELECT COUNT(*) FROM friend_tb WHERE user_id = #{id}
+    </select>
 
+    <update id="updatePasswordByUserId">
+        update user_tb
+        set password = #{password}
+        where id = #{userId}
+    </update>
+  
     <select id="findOnlineFriends" resultType="com.example.amigo_project.repository.model.User">
         select u.id, u.nickname, u.profile from friend_tb as f
         join user_tb as u

@@ -1,8 +1,13 @@
+{{>layout/header}}
 <div class="container">
     <h1>Avatar Shop</h1>
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search avatars by name...">
         <button id="searchBtn">Search</button>
+    </div>
+
+    <div>
+        MyPoint: {{user.point}}
     </div>
 
     <div id="avatarList">
@@ -15,7 +20,7 @@
                     <button class="owned" disabled>Owned</button>
                 {{/owned}}
                 {{^owned}}
-                    <button class="buy-btn" data-id="{{avatarId}}">Buy</button>
+                    <button class="buy-btn" data-id="{{avatarId}}" data-name="{{avatarName}}" data-price="{{price}}">Add to Cart</button>
                 {{/owned}}
             </div>
         {{/avatarList}}
@@ -24,32 +29,142 @@
     <div id="noResults" style="display: none;">
         <p>No avatars found.</p>
     </div>
+
+    <div id="cartContainer" class="cart-container">
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <button id="purchaseBtn" style="margin-top: 20px;">Purchase All</button>
+    </div>
 </div>
 
 <script>
-    document.getElementById("searchBtn").addEventListener("click", function() {
-      const searchValue = document.getElementById("searchInput").value;
-      fetch(`/shop?search=${encodeURIComponent(searchValue)}`)
-        .then(response => response.json())
+    let cart = [];
+
+// Search button event listener
+document.getElementById("searchBtn").addEventListener("click", function () {
+    const searchValue = document.getElementById("searchInput").value.trim();
+    if (searchValue === "") {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
+
+    fetch(`/store/search?search=${encodeURIComponent(searchValue)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("네트워크 응답에 문제가 있습니다.");
+            }
+            return response.json();
+        })
         .then(data => {
-          const avatarListContainer = document.getElementById("avatarList");
-          avatarListContainer.innerHTML = "";
-          if (data.length === 0) {
-            document.getElementById("noResults").style.display = "block";
-          } else {
-            document.getElementById("noResults").style.display = "none";
-            data.forEach(avatar => {
-              const avatarItem = document.createElement("div");
-              avatarItem.classList.add("avatar-item");
-              avatarItem.innerHTML = `
-                <h3>${avatar.avatarName}</h3>
-                <p>Type: ${avatar.type}</p>
-                <p>Price: ${avatar.price} points</p>
-                ${avatar.owned ? '<button class="owned" disabled>Owned</button>' : `<button class="buy-btn" data-id="${avatar.avatarId}">Buy</button>`}
-              `;
-              avatarListContainer.appendChild(avatarItem);
-            });
-          }
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            const avatarListContainer = document.getElementById("avatarList");
+            avatarListContainer.innerHTML = "";
+
+            if (data.length === 0) {
+                document.getElementById("noResults").style.display = "block";
+            } else {
+                document.getElementById("noResults").style.display = "none";
+                data.forEach(avatar => {
+                    const avatarItem = document.createElement("div");
+                    avatarItem.classList.add("avatar-item");
+                    avatarItem.innerHTML = `
+                        <h3>${avatar.avatarName}</h3>
+                        <p>Type: ${avatar.type}</p>
+                        <p>Price: ${avatar.price} points</p>
+                        ${avatar.owned ? '<button class="owned" disabled>Owned</button>' : `<button class="buy-btn" data-id="${avatar.avatarId}" data-name="${avatar.avatarName}" data-price="${avatar.price}">Add to Cart</button>`}
+                    `;
+                    avatarListContainer.appendChild(avatarItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error("에러 발생:", error);
+            alert("검색 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
+});
+
+// Event delegation for Add to Cart button
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.classList.contains("buy-btn")) {
+        const avatarId = event.target.getAttribute("data-id");
+        const avatarName = event.target.getAttribute("data-name");
+        const avatarPrice = parseInt(event.target.getAttribute("data-price"), 10);
+
+        // Check if the item is already in the cart
+        if (cart.some(item => item.avatarId === avatarId)) {
+            alert(`${avatarName} is already in your cart.`);
+            return;
+        }
+
+        // Add the item to the cart
+        cart.push({ avatarId, avatarName, avatarPrice });
+        updateCartView();
+        alert(`${avatarName} has been added to your cart.`);
+    }
+});
+
+// Function to update the cart view
+function updateCartView() {
+    const cartItemsContainer = document.getElementById("cartItems");
+    cartItemsContainer.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+        cart.forEach(item => {
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+            cartItem.innerHTML = `
+                <p><strong>${item.avatarName}</strong> - ${item.avatarPrice} points</p>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+    }
+}
+
+// Purchase all items in the cart
+document.getElementById("purchaseBtn").addEventListener("click", function () {
+    if (cart.length === 0) {
+        alert("장바구니가 비어 있습니다.");
+        return;
+    }
+
+    const totalPrice = cart.reduce((sum, item) => sum + item.avatarPrice, 0);
+    const prodNameList = cart.map(item => item.avatarName);
+    const prodIdList = cart.map(item => item.avatarId);
+
+    fetch(`/store/buy`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ totalPrice, prodNameList, prodIdList })
+    })
+    .then(response => response.text())
+    .then(result => {
+        if (result === "UnAuthorized") {
+            alert("로그인 후 이용 가능합니다.");
+        } else if (result === "LackOfPoint") {
+            alert("포인트가 부족합니다.");
+        } else if (result === "Success") {
+            alert("구매가 완료되었습니다!");
+            cart = []; // 장바구니 비우기
+            location.href = "/store/shop"; // 상점 페이지 새로고침
+        } else {
+            alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+    })
+    .catch(error => {
+        console.error("에러 발생:", error);
+        alert("구매 중 오류가 발생했습니다. 다시 시도해주세요.");
     });
+});
+
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{>layout/footer}}

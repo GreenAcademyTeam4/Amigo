@@ -101,6 +101,7 @@
 
 <body>
 
+
 <form id="boardForm" action="/board/insert" method="post" enctype="multipart/form-data">
 
     <div>
@@ -124,50 +125,38 @@
 
     <div class="form-footer">
         <button type="button" id="submitButton" onclick="submitPost()">작성 완료</button>
-        <button type="button" id="cancelButton" onclick="window.location.href='/board/list'">취소</button>
+        <button type="button" id="cancelButton" onclick="screenChanger('/board/list')">취소</button>
     </div>
 </form>
 
 <!--    <div>-->
 <!--        <a href="/board/list">돌아가기</a>-->
 <!--    </div>-->
-
 <script>
     let oEditors = [];
 
-    // 스마트 에디터 초기화 함수
-    function smartEditor() {
-        nhn.husky.EZCreator.createInIFrame({
-            oAppRef: oEditors,
-            elPlaceHolder: "editorText", // HTML의 textarea ID와 일치하도록 수정
-            sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-            fCreator: "createSEditor2"
-        });
-    }
-
-    // 문서가 준비되면 에디터를 초기화
-    $(document).ready(function() {
-        smartEditor();
-    });
-
-
-
-    // 폼 제출 함수
-    function submitPost() {
-        // 에디터 내용을 <textarea>와 동기화
-        oEditors.getById["editorText"].exec("UPDATE_CONTENTS_FIELD", []);
-        let content = $("#editorText").val();
-
-        if (content.trim() === '') {
-            alert("내용을 입력해주세요.");
-            oEditors.getById["editorText"].exec("FOCUS");
-            return;
-        } else {
-            console.log(content);
-            // 폼을 제출
-            $("#boardForm").submit();
+// 스마트 에디터 초기화 함수
+function smartEditor() {
+    nhn.husky.EZCreator.createInIFrame({
+        oAppRef: oEditors,
+        elPlaceHolder: "editorText", // HTML의 textarea ID와 일치하도록 수정
+        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+        fCreator: "createSEditor2",
+        fOnAppLoad: function() {
+            console.log("스마트 에디터가 성공적으로 초기화되었습니다.");
+        },
+        fOnError: function() {
+            console.error("스마트 에디터 초기화 중 오류 발생");
         }
-    }
+    });
+}
+
+// 문서가 준비되면 에디터를 초기화
+$(document).ready(function() {
+    smartEditor();
+});
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"></script>
 
 </body>

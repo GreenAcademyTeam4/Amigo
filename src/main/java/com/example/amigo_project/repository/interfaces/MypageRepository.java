@@ -23,11 +23,11 @@ public interface MypageRepository {
                                                  @Param("top")Integer top,@Param("bottom")Integer bottom,
                                                  @Param("shoes")Integer shoes);
 
-    // 마이페이지에서 내 정보 변경 기능
-    public void updateStatusByStatusDTO(@Param("userId")Integer userId, @Param("nickname")String nickname,
-                                        @Param("elementarySchool")String elementarySchool,
-                                        @Param("middleSchool")String middleSchool,
-                                        @Param("highSchool")String highSchool);
+    // 마이페이지에서 닉네임 변경
+    public void changeNickname(@Param("userId")Integer userId, @Param("nickname")String nickname);
+
+    // 마이페이지에서 닉네임 변경
+    public void changeSchool(@Param("userId")Integer userId, @Param("school")String school);
 
     // 내 친구 목록 조회
     public List<MypageDTO.myFriendListDTO> findMyFriendListByUserId(Integer userId);
@@ -35,6 +35,9 @@ public interface MypageRepository {
     // 내 친구 목록에서 검색기능 적용
     public List<MypageDTO.myFriendListDTO> searchFriend(@Param("userId") Integer userId,
                                                         @Param("search") String search);
+
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName (@Param("userId") Integer userId,
+                                                                     @Param("search") String search);
 
     //유저 id로 나한테 온 친구 요청 목록 조회
     public List<MypageDTO.friendReqDTO> findFriendReqByUserId(Integer userId);
@@ -64,11 +67,12 @@ public interface MypageRepository {
 
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(@Param("userId")Integer userId,
-                                                                                      @Param("elementarySchool") String elementarySchool,
-                                                                                      @Param("middleSchool") String middleSchool,
-                                                                                      @Param("highSchool")String highSchool ,
+                                                                                      @Param("school") String school,
                                                                                       @Param("year")Integer year);
-
+    // 친구 삭제 기능
     public void deleteFriendByUserIdAndFriendId(@Param("userId") Integer userId,
                                                 @Param("friendId") Integer friendId);
+
+
+
 }

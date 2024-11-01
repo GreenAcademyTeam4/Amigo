@@ -11,14 +11,16 @@
             <div class="alarm-content"></div>
         </div>
     </div>
+    <!-- 알림 박스 (voice-chat 클래스로 지정) -->
     <div class="voice-chat hide">
-        <div class="sender-profile"></div>
-        <div class="sender-nickname"></div>
-        <div class="btn-area">
-            <button class="accept-btn"></button>
-            <button class="refuse-btn"></button>
+        <div class="sender-profile" id="sender-profile"></div>
+        <div class="sender-nickname" id="sender-nickname">상대방 닉네임</div>
+        <div class="button-container">
+            <button class="accept-btn" onclick="acceptInvitation()">✔</button>
+            <button class="refuse-btn" onclick="declineInvitation()">✘</button>
         </div>
     </div>
+    <audio id="alarmSound" src="/audio/calling.mp3"></audio>
     <div class="logo">
         <img src="/image/logo.png">
     </div>
@@ -40,6 +42,7 @@
             <a href="#">공지</a>
             <a href="#">쪽지</a>
             <a href="/my-page/info">마이페이지</a>
+            <a href="/store/shop">상점</a>
         </div>
         {{#principal}}
         <div id="login-btn" class="transition-link" >

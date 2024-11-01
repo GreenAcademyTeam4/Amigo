@@ -4,26 +4,32 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.repository.interfaces.MypageRepository;
 import com.example.amigo_project.repository.model.User;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import com.example.amigo_project.repository.interfaces.BoardRepository;
+import com.example.amigo_project.repository.interfaces.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class MypageService {
 
     private final MypageRepository mypageRepository;
-
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     /**
      * 유저 id로 마이페이지 호출에 필요한 정보 조회
      * @param userId (user의 pk아이디 / 로그인 아이디 아님)
      * @return myPage 뷰 호출시 필요한 모든 정보를 MypageDTO 에 담아 보냄
      */
-    public MypageDTO findMypageInfoByUserId(Integer userId){
-        return mypageRepository.findMypageInfoByUserId(userId);
+    public MypageDTO.nowAvatarDTO findMypageInfoByUserId(Integer userId){
+        return mypageRepository.findNowAvatarByUserId(userId);
     }
 
     /**
@@ -59,15 +65,6 @@ public class MypageService {
     }
 
     /**
-     * 마이페이지에서 내 정보 변경 / 닉네임, 학교 변경
-     * @param dto
-     */
-    @Transactional
-    public void updateStatusByStatusDTO(MypageDTO.statusDTO dto){
-        mypageRepository.updateStatusByStatusDTO(dto.getId(), dto.getNickname(), dto.getElementarySchool(), dto.getMiddleSchool(), dto.getHighSchool());
-    }
-
-    /**
      * 마이페이지 -> 친구관리 요청시 친구 목록 출력
      * @param userId
      * @return 내 친구 목록 출력
@@ -92,6 +89,11 @@ public class MypageService {
         return mypageRepository.findFriendReqByUserId(userId);
     }
 
+    // 이름 or 학교 입력값으로 친구 찾기
+    public List<MypageDTO.myFriendListDTO> findFriendBySchoolOrName(Integer userId, String search){
+        return mypageRepository.findFriendBySchoolOrName(userId, search);
+    }
+
     /**
      * 친구 요청 기능
      * @param senderId 보내는 쪽 id
@@ -101,6 +103,13 @@ public class MypageService {
     public void reqFriend(Integer senderId, Integer receiverId){
         mypageRepository.insertFriendReqBySenderIdAndReceiverId(senderId, receiverId);
     }
+
+    // 보낸 친구 요청 취소 기능
+    @Transactional
+    public void cancelfriendreq(Integer senderId, Integer receiverId){
+        mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
 
 
     /**
@@ -118,9 +127,15 @@ public class MypageService {
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
         Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
-        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getElementarySchool(), user.getMiddleSchool(), user.getHighSchool(), year);
+        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getSchool(), year);
     }
 
+    public int countMyBoards (int id){
+        return boardRepository.countBoardByUserId(id);
+    } 
+    public int countFriendByUserId (int id){
+        return userRepository.countFriendByUserId(id);
+    } 
     // 받는 id와 보내는 id로 친구 요청 정보 여부 확인
     public Integer findFriendReq(Integer senderId, Integer receiverId){
         return mypageRepository.findCountFriendReqBySenderIdAndReceiverId(senderId, receiverId);
@@ -141,6 +156,15 @@ public class MypageService {
         mypageRepository.deleteFriendByUserIdAndFriendId(userId, friendId);
     }
 
+    // 닉네임 변경
+    public void changeNickname(Integer userId, String nickname){
+        mypageRepository.changeNickname(userId, nickname);
+    }
+
+    // 학교 변경
+    public void changeSchool(Integer userId, String school){
+        mypageRepository.changeSchool(userId, school);
+    }
 
 
 

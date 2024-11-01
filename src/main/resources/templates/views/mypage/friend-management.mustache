@@ -1,3 +1,5 @@
+{{>layout/header}}
+<link rel="stylesheet" type="text/css" href="/css/main.css">
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,34 +10,88 @@
 <body>
 <h1>친구 관리</h1>
 <div>
+    <input type="text" id="search" placeholder="친구 이름 입력">
+    <button id="searchFriendBtn">찾기</button>
+
     <h2>친구 목록</h2>
-    <ul>
+    <ul id="friendList">
         {{#friendList}}
             <li>{{friendName}} ({{gender}})</li>
         {{/friendList}}
     </ul>
 
     <h2>받은 친구 요청</h2>
-    <ul>
+    <ul id="friendReqList">
         {{#friendReqList}}
-            <li>{{name}} <button onclick="acceptFriend({{id}})">수락</button> <button onclick="rejectFriend({{id}})">거부</button></li>
+            <li id="request-{{friendId}}" data-id="{{friendId}}">{{friendName}}
+                <button class="acceptFriendBtn" data-id="{{friendId}}">수락</button>
+                <button class="rejectFriendBtn" data-id="{{friendId}}">거부</button>
+            </li>
         {{/friendReqList}}
     </ul>
 
     <h2>보낸 친구 요청</h2>
-    <ul>
+    <ul id="myFriendReq">
         {{#myFriendReq}}
-            <li>{{name}}</li>
+            <li id="sent-request-{{friendId}}" data-id="{{friendId}}">{{friendName}} (요청 상태)
+                <button class="cancelFriendRequestBtn" data-id="{{friendId}}">취소</button>
+            </li>
         {{/myFriendReq}}
     </ul>
 
-    <h2>친구 검색</h2>
-    <input type="text" id="search" placeholder="친구 이름 입력">
-    <button onclick="searchFriend()">검색</button>
+    <h2>추천 친구</h2>
+    <ul id="recFriendList">
+        {{#recFriendList}}
+            <li id="rec-{{friendId}}" data-id="{{friendId}}">{{friendName}} ({{gender}})
+                <button class="sendFriendRequestBtn" data-id="{{friendId}}">친구 신청</button>
+            </li>
+        {{/recFriendList}}
+    </ul>
+
+    <h2>검색</h2>
+    <input type="text" id="searchInput" placeholder="친구, 학교를 찾아보세요 :)">
+    <button id="findBtn">검색</button>
 
     <ul id="searchResult"></ul>
+
 </div>
 <script>
+    $(document).ready(function () {
+        // 친구 찾기 버튼 클릭 이벤트
+        $("#searchFriendBtn").click(function () {
+            searchFriend();
+        });
+
+        // 친구 요청 수락 버튼 클릭 이벤트
+        $(document).on("click", ".acceptFriendBtn", function () {
+            const id = $(this).data("id");
+            acceptFriend(id);
+        });
+
+        // 친구 요청 거부 버튼 클릭 이벤트
+        $(document).on("click", ".rejectFriendBtn", function () {
+            const id = $(this).data("id");
+            rejectFriend(id);
+        });
+
+        // 친구 요청 취소 버튼 클릭 이벤트
+        $(document).on("click", ".cancelFriendRequestBtn", function () {
+            const id = $(this).data("id");
+            cancelFriendRequest(id);
+        });
+
+        // 친구 신청 버튼 클릭 이벤트
+        $(document).on("click", ".sendFriendRequestBtn", function () {
+            const id = $(this).data("id");
+            sendFriendRequest(id);
+        });
+
+        // 검색 버튼 클릭 이벤트
+        $("#findBtn").click(function () {
+            find();
+        });
+    });
+
     function searchFriend() {
         const search = $("#search").val();
         $.get("/my-page/search", { search: search }, function(data) {
@@ -44,25 +100,92 @@
                 $("#searchResult").append(`<li>${data}</li>`);
             } else {
                 $.each(data, function(index, friend) {
-                    $("#searchResult").append(`<li>${friend.friendName} (${friend.gender})</li>`);
+                    $("#searchResult").append(`<li id="search-${friend.friendId}" data-id="${friend.friendId}">${friend.friendName} (${friend.gender}) <button class="sendFriendRequestBtn" data-id="${friend.friendId}">친구 신청</button></li>`);
                 });
             }
         });
     }
 
     function acceptFriend(id) {
-        $.post("/my-page/accept-friend-req", { receiverId: id }, function() {
-            alert("친구 요청이 수락되었습니다.");
-            location.reload();
+        $.post("/my-page/accept-friend-req", { receiverId: id }, function(response) {
+            alert(response);
+            $(`#request-${id}`).remove();
+        }).fail(function(xhr) {
+            if (xhr.status === 401) {
+                alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+            } else {
+                alert("친구 요청 수락 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
         });
     }
 
     function rejectFriend(id) {
         $.get("/my-page/reject", { senderId: id }, function(response) {
             alert(response);
-            location.reload();
+            $(`#request-${id}`).remove();
+        }).fail(function(xhr) {
+            alert("친구 요청 거부 중 오류가 발생했습니다. 다시 시도해주세요.");
+        });
+    }
+
+    function cancelFriendRequest(id) {
+        $.post("/my-page/cancel-friend-req", { receiverId: id }, function(response) {
+            alert(response);
+            $(`#sent-request-${id}`).remove();
+        }).fail(function(xhr) {
+            alert("친구 요청 취소 중 오류가 발생했습니다. 다시 시도해주세요.");
+        });
+    }
+
+    function find() {
+        const searchValue = $("#searchInput").val().trim();
+        if (searchValue === "") {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+
+        $.get("/my-page/find", { search: searchValue }, function(data) {
+            $("#searchResult").empty();
+            if (typeof data === 'string') {
+                $("#searchResult").append(`<li>${data}</li>`);
+            } else {
+                $.each(data, function(index, friend) {
+                    $("#searchResult").append(`<li id="search-${friend.friendId}" data-id="${friend.friendId}">${friend.friendName} (${friend.gender}) <button class="sendFriendRequestBtn" data-id="${friend.friendId}">친구 신청</button></li>`);
+                });
+            }
+        }).fail(function(xhr) {
+            if (xhr.status === 401) {
+                alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+            } else {
+                alert("검색 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        });
+    }
+
+    function sendFriendRequest(id) {
+        $.get("/my-page/send-friend-req", { receiverId: id }, function(response) {
+            alert(response);
+
+            // 보낸 친구 요청 목록에 추가
+            const friendElement = $(`#search-${id}`);
+            const friendName = friendElement.text().split("(")[0].trim();
+            $("#myFriendReq").append(
+                `<li id="sent-request-${id}" data-id="${id}">${friendName} (요청 상태) <button class="cancelFriendRequestBtn" data-id="${id}">취소</button></li>`
+            );
+
+            // 검색 결과에서 버튼 제거
+            friendElement.find("button").remove();
+        }).fail(function(xhr) {
+            if (xhr.status === 401) {
+                alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+            } else {
+                alert("친구 요청 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
         });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
+{{>layout/footer}}

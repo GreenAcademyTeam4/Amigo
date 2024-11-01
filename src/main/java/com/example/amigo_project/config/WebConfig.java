@@ -26,8 +26,8 @@ public class WebConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatHandler, "/chat").addInterceptors(new HttpSessionHandshakeInterceptor(),socketInterceptor).setAllowedOrigins("*");
-        registry.addHandler(signalingHandler,"/signaling" ).setAllowedOrigins("*");
         registry.addHandler(friendChatHandler, "/friendChat" ).addInterceptors(new HttpSessionHandshakeInterceptor(), chatInterceptor).setAllowedOrigins("*");
+        registry.addHandler(signalingHandler,"/signaling" ).addInterceptors(socketInterceptor).setAllowedOrigins("*");
         registry.addHandler(alarmHandler,"/alarm").addInterceptors(socketInterceptor).setAllowedOrigins("*");
     }
 }
