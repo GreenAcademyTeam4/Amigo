@@ -65,9 +65,12 @@ public interface MypageRepository {
     public void deleteFriendReqBySenderIdAndReceiverId(@Param("senderId") Integer senderId,
                                                        @Param("receiverId") Integer receiverId);
 
+    // 유저 id로 유저가 등록한 학교 정보 출력
+    public List<MypageDTO.userSchoolDTO> findSchoolIdByUserId(Integer userId);
+
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(@Param("userId")Integer userId,
-                                                                                      @Param("school") String school,
+                                                                                      @Param("schoolId") Integer schoolId,
                                                                                       @Param("year")Integer year);
     // 친구 삭제 기능
     public void deleteFriendByUserIdAndFriendId(@Param("userId") Integer userId,
