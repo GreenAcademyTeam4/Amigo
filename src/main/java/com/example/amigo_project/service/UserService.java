@@ -2,6 +2,7 @@ package com.example.amigo_project.service;
 
 import java.util.*;
 
+import com.example.amigo_project.repository.model.School;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,6 +140,31 @@ public class UserService {
     // 오프라인인 친구 찾기
     public List<User> findOfflineFriends(int id) {
         return userRepository.findOfflineFriends(id);
+    }
+
+    // 학교 데이터 넣기
+    public void createSchool(UserDTO.infoDTO dto) {
+        userRepository.createSchool(dto);
+    }
+
+    // 유저 학교 데이터 넣기
+    public void createUserSchool(UserDTO.infoDTO dto) {
+        userRepository.createUserSchool(dto);
+    }
+
+    // 유저가 가진 학교 찾기
+    public List<School> findUserSchoolList(UserDTO.infoDTO dto) {
+        return userRepository.findUserSchool(dto);
+    }
+
+    // 학교 데이터가 있는지 검사
+    public boolean existsSchool(UserDTO.infoDTO dto) {
+        return userRepository.existsSchool(dto);
+    }
+
+    // 유저 프로필 삽입
+    public void insertUserProfile(User user) {
+        userRepository.insertUserProfile(user);
     }
 }
 

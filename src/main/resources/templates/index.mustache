@@ -7,7 +7,9 @@
     </div>
     <div class="remote-controller">
         <div class="profile">
-            <img src=""> {{!유저 프로필이미지}}
+            {{#profile}}
+            <img src="data:image/png;base64, {{profile}}"> {{!유저 프로필이미지}}
+            {{/profile}}
         </div>
         <div class="nickname">
            {{principal.nickname}}

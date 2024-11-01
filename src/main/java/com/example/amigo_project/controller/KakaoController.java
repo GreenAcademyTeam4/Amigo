@@ -32,9 +32,7 @@ public class KakaoController {
             if (principal.getNickname() != null) {
                 return "redirect:/";
             }
-
-            return "views/login/schoolSelect";
-
+            return "views/login/socialInfo";
         } else {
             return "redirect:/";
         }
