@@ -9,5 +9,6 @@ public class AlarmDTO {
     private Integer senderId;
     private Integer receiverId;
     private String content;
-
+    private String senderNickname;
+    private String senderProfile;
 }

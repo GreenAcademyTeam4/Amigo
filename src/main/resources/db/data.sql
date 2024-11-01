@@ -1,8 +1,8 @@
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point)
-values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27', 50000);
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point ,online_status)
+values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','27', 50000 ,true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
+values('test',1234,'정훈','게토 스구루','010-1234-5678','male','27',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27');
@@ -249,7 +249,7 @@ VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 INSERT INTO friend_tb (user_id, friend_id) VALUES
 (1, 2),
 (1, 3),
-(2, 3),
+(2, 1),
 (3, 4);
 
 -- --------------------------------

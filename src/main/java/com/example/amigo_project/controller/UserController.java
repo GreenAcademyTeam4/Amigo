@@ -23,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
+
     private final HttpSession session;
     private final UserService userService;
     private final WebClient webClient;
@@ -86,6 +87,7 @@ public class UserController {
         System.out.println("SDFAFSADFSAFSAFD");
         Map<String, String> repetitionResult = userService.checkNickNameRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
+
     }
 
     /**
