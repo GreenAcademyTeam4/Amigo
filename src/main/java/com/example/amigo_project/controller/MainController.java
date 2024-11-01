@@ -90,9 +90,22 @@ return "views/login/login";
         return "index";
     }
 
+    @GetMapping("/test3")
+    public String test3(Model model, HttpSession session){
+        User user = userService.findUser(2);
+        session.setAttribute("principal", user);
+        List<User>onlineFriends = userRepository.findOnlineFriends(user.getId());
+        List<User>offlineFriends = userRepository.findOfflineFriends(user.getId());
+        model.addAttribute("onlineFriendList", onlineFriends);
+        model.addAttribute("offlineFriendList", offlineFriends);
+        return "index";
+    }
+
     @GetMapping("/test/{id}")
     public String test(@PathVariable(name = "id")int friendId, Model model, HttpSession session){
+        System.out.println("아이디 잘 들ㅇ옴 !!!!! : " + friendId);
         User user = (User)session.getAttribute("principal");
+        List<User>onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<Emoticon>emoticonList = chatService.findEmoticonList();
         RoomDataDTO roomDataDTO = new RoomDataDTO();
         roomDataDTO.setClassRoom("1");
@@ -102,11 +115,10 @@ return "views/login/login";
         session.setAttribute("principal",user);
         // school ID 세션에서 가져오기
         System.out.println(emoticonList);
+        model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("friendId", friendId);
         model.addAttribute("user",user.getId());
         model.addAttribute("emoticonList",emoticonList);
         return "views/chat/voiceChat";
     }
-
-
 }

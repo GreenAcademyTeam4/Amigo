@@ -2,12 +2,8 @@
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <main>
     <div class="info-box">
-        <div class="info-profile">프로필 보기</div>
-        <div class="chat">1:1 채팅</div>
-        <div class="voice-chat-btn">화상 채팅</div>
     </div>
     <div id="screen-area" class="screen-area">
-      
     </div>
     <div class="remote-controller">
         <div class="profile">
@@ -16,11 +12,10 @@
         <div class="nickname">
             유저 이름
         </div>
-    
             <div class="bt-controller" id="my-page">
                 <a href="/my-page/info">마이페이지</a>
             </div>
-     
+
         <a href="">
             <div class="bt-controller" id="enter">
                 등교하기
@@ -30,7 +25,7 @@
         <div class="bt-controller" id="post">
             게시판
         </div>
- 
+
         <div class="friend-box">
             <div class="online-friends">
                 <h3>온라인 친구</h3>
@@ -55,7 +50,9 @@
             </div>
         </div>
     </div>
-
+<script>(function(global) {
+    global.userId = {{principal.id}}; // roomId 변수를 글로벌로 설정
+})(window);</script>
 <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/screen.js"></script>
