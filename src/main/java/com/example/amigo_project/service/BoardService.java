@@ -268,8 +268,8 @@ public class BoardService {
      * @param size
      * @return
      */
-    public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int offset, int size) {
-        return boardRepository.findCommentsByBoardIdWithPaging(boardId, offset, size);
+    public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int page, int size) {
+        return boardRepository.findCommentsByBoardIdWithPaging(boardId, page, size);
     }
 
     // 게시글의 댓글에 달린 답글 조회하기

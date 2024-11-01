@@ -2,12 +2,11 @@ package com.example.amigo_project.repository.interfaces;
 
 import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.dto.payment.RefundRefuseDTO;
-import com.example.amigo_project.dto.payment.RequestRefundDTO;
 import com.example.amigo_project.dto.payment.RequestRefundListDTO;
-import com.example.amigo_project.repository.model.ChargeHistory;
-import com.example.amigo_project.repository.model.Refund;
-import com.example.amigo_project.repository.model.RefundRefuse;
-import com.example.amigo_project.repository.model.RequestRefund;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
+import com.example.amigo_project.repository.model.payment.Refund;
+import com.example.amigo_project.repository.model.payment.RefundRefuse;
+import com.example.amigo_project.repository.model.payment.RequestRefund;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,6 +17,15 @@ public interface PaymentRepository {
 
     // 결제 내역 생성
     public void createChargeHistory(ChargeHistory chargeHistory);
+
+    // 결제 내역 조회(리스트 및 페이징 처리)
+    public List<ChargeHistoryDTO> readChargeHistory(@Param("limit") Integer limit, @Param("offset") Integer offset, @Param("userId") Integer userId);
+
+    // 결제 내역 개수(페이징 처리)
+    public Integer countChargeHistory(@Param("userId") Integer userId);
+
+    // id로 거래 내역 조회
+    public ChargeHistory readChargeHistoryById(@Param("id") Integer id);
 
     // 포인트 충전
     public void chargePoint(ChargeHistory chargeHistory);
@@ -34,29 +42,11 @@ public interface PaymentRepository {
     // 환불 반려 시 환불 반려 사유 상세 내역 보기
     public RefundRefuseDTO readRefuseReasonDetail(Integer chargeHistoryId);
 
-
-    // 상품 구매
-    // 상품 선택 --> 구매 --> 포인트 사용 --> 구매 완료
-
-
     // 환불 완료 내역 생성
     public void createRefund(Refund refund);
 
-    //
-
-    // 결제 내역 조회(리스트 및 페이징 처리)
-    public List<ChargeHistoryDTO> readChargeHistory(@Param("limit") Integer limit, @Param("offset") Integer offset, @Param("userId") Integer userId);
-
-    // 결제 내역 개수(페이징 처리)
-    public Integer countChargeHistory(@Param("userId") Integer userId);
-
-
     // 환불 요청 등록
     public void createRequestRefund(RequestRefund requestRefund);
-
-    // 거래 내역 조회
-    public ChargeHistory readChargeHistoryById(@Param("id") Integer id);
-
 
     // 환불 요청 상태 변경
     public void modifyRefundStatus(@Param("id") int id, @Param("refundStatus") String refundStatus);
@@ -70,9 +60,4 @@ public interface PaymentRepository {
     // id로 환불 요청 내역 조회
     public RequestRefund readRequestRefundById(@Param("id") Integer id);
 
-
-
-    // 중복 결제 확인
-
-    
 }

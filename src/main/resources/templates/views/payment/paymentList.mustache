@@ -1,0 +1,73 @@
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<h1>결제 목록</h1>
+<div>
+<div class="chargeHistoryList">
+<table>
+    <thead>
+    <tr>
+        <th>주문 이름</th>
+        <th>주문 번호</th>
+        <th>결제 금액</th>
+        <th>결제 일자</th>
+        <th>결제 방식</th>
+        <th>상태</th>
+        <th>환불 신청</th>
+    </tr>
+    </thead>
+<tbody id="paymentList">
+{{#paymentList}}
+    <tr>
+        <td>{{orderName}}</td>
+        <td>{{orderId}}</td>
+        <td>{{totalAmount}}</td>
+        <td>{{approvedAt}}</td>
+        <td>{{method}}</td>
+        <td>
+            {{#isRefused}}
+                <a href="javascript:void(0);" onclick="openRefuseReasonWindow({{id}})">환불 거부</a>
+            {{/isRefused}}
+            {{^isRefused}}
+                {{refundStatus}}
+            {{/isRefused}}
+        </td>
+    <td>
+        {{#isRefundable}}
+            <button class="refund-btn" data-id="{{id}}" onclick="handleRefundRequest({{id}})">신청하기</button>
+        {{/isRefundable}}
+        {{^isRefundable}}
+            <button class="refund-btn" disabled>신청 완료</button>
+        {{/isRefundable}}
+    </td>
+</tr>
+{{/paymentList}}
+</tbody>
+</table>
+
+    <div id="paginationContainer">
+        <ul class="pagination">
+            {{#showPrevious}}
+                <li class="page-item">
+                    <a class="page-link" href="/pay/paymentList?page={{previousPage}}&size={{pageSize}}">&lt;</a>
+                </li>
+            {{/showPrevious}}
+
+            {{#pages}}
+                <li class="page-item {{active}}">
+                    <a class="page-link" href="/pay/paymentList?page={{number}}&size={{pageSize}}">{{number}}</a>
+                </li>
+            {{/pages}}
+
+            {{#showNext}}
+                <li class="page-item">
+                    <a class="page-link" href="/pay/paymentList?page={{nextPage}}&size={{pageSize}}">&gt;</a>
+                </li>
+            {{/showNext}}
+        </ul>
+    </div>
+</div>
+</div>
+
+<script src="/js/payment/paymentList.js"></script>
+

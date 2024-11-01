@@ -1,4 +1,4 @@
-package com.example.amigo_project.repository.model;
+package com.example.amigo_project.repository.model.chat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

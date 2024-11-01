@@ -1059,10 +1059,13 @@ pre code {
         max-width: 41.66667%
     }
 
-    .col-md-6 {
+/*    .col-md-6 {
         flex: 0 0 50%;
         max-width: 50%
-    }
+    }*/
+.row .col-xl-3.col-md-6.mb-4{
+    width: 25% !important;
+}
 
     .col-md-7 {
         flex: 0 0 58.33333%;
@@ -1468,10 +1471,10 @@ pre code {
         max-width: 16.66667%
     }
 
-    .col-xl-3 {
+ /*   .col-xl-3 {
         flex: 0 0 25%;
         max-width: 25%
-    }
+    }*/
 
     .col-xl-4 {
         flex: 0 0 33.33333%;
@@ -10134,9 +10137,11 @@ a:focus {
     overflow: hidden !important
 }
 
+/*
 .text-xs {
     font-size: .7rem
 }
+*/
 
 .text-lg {
     font-size: 1.2rem

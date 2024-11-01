@@ -1,5 +1,22 @@
 {{>layout/admin/adminSidebar}}
 
+<style>
+    /* DataTables 검색창 스타일 조정 */
+    #dataTable_filter {
+        float: right;
+        margin-right: 20px;
+    }
+
+    #dataTable_filter label {
+        font-weight: bold;
+    }
+
+    #dataTable_filter input {
+        width: 200px; /* 검색 입력 필드의 너비 조정 */
+        padding: 4px;
+    }
+</style>
+
 <div class="container-fluid">
     <!-- 페이지 제목 -->
     <h1 class="h3 mb-4 text-gray-800">공지사항 관리</h1>
@@ -11,7 +28,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover" id="dataTable" width="95%" cellspacing="0" >
                     <thead class="thead-light">
                     <tr>
                         <th class="text-center" style="width: 5%;"><input type="checkbox" onclick="toggleAll(this)"></th>
@@ -46,13 +63,31 @@
 <!-- DataTables JavaScript 의존성 -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable();
-    });
+         // DataTables 초기화
+         var table = $('#dataTable').DataTable({
+             dom: 'lfrtip', // 검색창 등 기본 UI 설정
+             responsive: true, // 반응형 디자인 설정
+             initComplete: function () {
+                 // 열별 검색 기능 추가
+                 this.api().columns().every(function () {
+                     var that = this;
 
-    function toggleAll(source) {
-        const checkboxes = document.querySelectorAll('input[name="selectNotice"]');
-        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
-    }
+                     // 각 열의 필터 입력 필드 설정
+                     $('input', this.header()).on('keyup change clear', function () {
+                         if (that.search() !== this.value) {
+                             that.search(this.value).draw();
+                         }
+                     });
+                 });
+             }
+         });
+     });
+
+     function toggleAll(source) {
+         const checkboxes = document.querySelectorAll('input[name="selectNotice"]');
+         checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+     }
 </script>

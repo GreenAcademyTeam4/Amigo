@@ -19,7 +19,7 @@ public interface BoardRepository {
     List<BoardDTO> findBoardsBySchoolId(int schoolId);
 
     // 특정 학교의 게시글을 리스트로 가져온다. (페이징 처리)
-    List<BoardDTO> findBoardsBySchoolId2(@Param("schoolId") int schoolId, @Param("offset") int offset, @Param("size") int size);
+    List<BoardDTO> findBoardsBySchoolId2(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
 
     // 특정 학교의 게시글의 리스트의 갯수를 가져온다. (페이징 처리)
     int countBoardsBySchoolId(int schoolId);

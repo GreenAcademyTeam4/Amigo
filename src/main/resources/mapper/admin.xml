@@ -4,18 +4,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.amigo_project.repository.interfaces.AdminRepository">
 
-<!--    &lt;!&ndash; 일반 유저 리스트 받아 오기 &ndash;&gt;-->
-<!--    <select id="findUserAll" resultType="com.example.amigo_project.repository.model.User">-->
-<!--        SELECT * FROM user_tb WHERE user_role = 0-->
-<!--    </select>-->
 
     <!-- 일반 유저 리스트 받아 오기 -->
     <select id="findUserAll" resultType="com.example.amigo_project.repository.model.User">
-        SELECT * FROM user_tb
+        SELECT *
+        FROM user_tb
+        WHERE user_role = 0
+        AND active_status = '활동중'
+    </select>
+
+    <!-- 탈퇴 회원 조회 -->
+    <select id="findDeletedUsers" resultType="com.example.amigo_project.repository.model.User">
+        SELECT *
+        FROM user_tb
+        WHERE active_status = '탈퇴'
     </select>
 
     <select id="findById" resultType="com.example.amigo_project.repository.model.User">
         SELECT * FROM user_tb WHERE id = #{id}
+    </select>
+
+    <!-- 유저 탈퇴 -->
+    <update id="deactivatedUserId" parameterType="com.example.amigo_project.repository.model.User">
+        UPDATE user_tb
+        SET active_status = '탈퇴'
+        WHERE id = #{id}
+    </update>
+
+    <!-- 결제 조회 -->
+    <select id="findChargeHistoryList" resultType="com.example.amigo_project.dto.PayListDTO">
+        select c.id, u.user_id, u.name, c.order_name, c.order_id, c.total_amount, c.approved_at, c.method, c.refund_status
+        from charge_history_tb c
+        join user_tb u on c.user_id = u.id
+        order by c.approved_at desc
     </select>
 
     <!-- 유저 게시글수 받아오기 -->
@@ -29,5 +50,135 @@
     <select id="findCommentCount" resultType="com.example.amigo_project.dto.CommentDTO">
         SELECT  COUNT(*) AS comment_count  FROM
         comment_tb  WHERE  user_id = #{id}
+    </select>
+
+    <!-- 남녀 성비 쿼리  -->
+    <select id="findGenderCount" resultType="com.example.amigo_project.dto.GenderRatioDTO">
+        SELECT gender, COUNT(*) AS count,
+        ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM user_tb), 2) AS percentage
+        FROM user_tb
+        GROUP BY gender
+    </select>
+
+    <!-- 나이 분포 쿼리 -->
+    <select id="findBirthCount" resultType="com.example.amigo_project.dto.UserDTO">
+        SELECT
+        CASE
+        WHEN birth BETWEEN 10 AND 19 THEN '10대'
+        WHEN birth BETWEEN 20 AND 29 THEN '20대'
+        WHEN birth BETWEEN 30 AND 39 THEN '30대'
+        WHEN birth BETWEEN 40 AND 49 THEN '40대'
+        WHEN birth BETWEEN 50 AND 59 THEN '50대'
+        WHEN birth BETWEEN 60 AND 69 THEN '60대'
+        ELSE '70대 이상'
+        END AS ageGroup,
+        COUNT(*) AS user_count
+        FROM user_tb
+        WHERE birth IS NOT NULL
+        GROUP BY ageGroup
+        ORDER BY ageGroup
+
+
+    </select>
+
+    <!-- 연별 총 매출 -->
+    <select id="yearlySales" resultType="com.example.amigo_project.repository.model.payment.ChargeHistory">
+        SELECT YEAR(approved_at) AS sales_year, SUM(total_amount) AS yearly_sales
+        FROM charge_history_tb
+        GROUP BY sales_year
+        ORDER BY sales_year DESC
+    </select>
+
+    <!-- 총 유저 수 -->
+    <select id="findTotalUserCount" resultType="Integer">
+        SELECT COUNT(*) FROM user_tb WHERE active_status = '활동중'
+    </select>
+
+    <!-- 총 매출 -->
+    <select id="totalRevenue" resultType="Integer">
+        SELECT
+        (SELECT IFNULL(SUM(total_amount), 0) FROM charge_history_tb) -
+        (SELECT IFNULL(SUM(cancel_amount), 0) FROM refund_tb) AS 총매출
+    </select>
+
+    <!-- 가입자 수  -->
+    <select id="totalMembers" resultType="Integer">
+        SELECT COUNT(*) AS total_members FROM user_tb
+    </select>
+
+    <!-- 하루 방문자 수 -->
+    <select id="dailyVisits" resultType="Integer">
+        SELECT COUNT(user_id) FROM day_record_tb WHERE date = #{date}
+    </select>
+
+    <!-- 총 게시글 수 -->
+    <select id="totalPosts" resultType="Integer">
+        SELECT COUNT(*) AS total_posts FROM board_tb
+    </select>
+
+    <!-- 총 댓글 수 -->
+    <select id="totalComments" resultType="Integer">
+        SELECT COUNT(*) AS total_comments FROM comment_tb
+    </select>
+
+    <!-- 탈퇴 유저 수 -->
+    <select id="withdrawnUserCount" resultType="Integer">
+        SELECT COUNT(*) AS withdrawal_users FROM user_tb WHERE active_status = '탈퇴'
+    </select>
+
+    <!-- 가장 유저가 많은 학교 순위 -->
+    <select id="topUserCountSchool" resultType="com.example.amigo_project.dto.SchoolUserCountDTO">
+        SELECT school_tb.name AS schoolName, COUNT(user_tb.id) AS userCount
+        FROM user_tb
+        JOIN school_tb ON (user_tb.elementary_school = school_tb.school
+        OR user_tb.middle_school = school_tb.school
+        OR user_tb.high_school = school_tb.school)
+        GROUP BY school_tb.name
+        ORDER BY userCount DESC
+        LIMIT 3
+    </select>
+
+
+    <!-- 잘 팔린 상품들 (리스트) -->
+    <select id="bestSellingProducts" resultType="com.example.amigo_project.dto.ProductDTO">
+        SELECT avatar_id AS product_id, (SELECT name FROM avatar_tb WHERE id = avatar_id) AS product_name, COUNT(avatar_id) AS total_sold
+        FROM inventory_tb
+        GROUP BY avatar_id
+        ORDER BY total_sold DESC
+        LIMIT 3
+    </select>
+
+    <!-- 제일 잘 팔린 상품 (1개) -->
+    <select id="bestSellingItem" resultType="com.example.amigo_project.dto.ProductDTO">
+        SELECT avatar_id AS product_id, (SELECT name FROM avatar_tb WHERE id = avatar_id) AS product_name, COUNT(avatar_id) AS total_sold
+        FROM inventory_tb
+        GROUP BY avatar_id
+        ORDER BY total_sold DESC
+        LIMIT 1
+    </select>
+
+
+    <!-- 유저 신고 리스트 -->
+    <select id="findReportUser" resultType="com.example.amigo_project.dto.UserReportDTO">
+        SELECT
+        ur.id AS report_id,
+        sender.name AS sender_name,
+        receiver.name AS receiver_name,
+        ur.category,
+        ur.content,
+        ur.created_at
+        FROM
+        user_report_tb ur
+        JOIN
+        user_tb sender ON ur.sender_user = sender.id
+        JOIN
+        user_tb receiver ON ur.receiver_user = receiver.id
+        ORDER BY
+        ur.created_at DESC
+    </select>
+
+    <!-- 게시글 신고 리스트 -->
+    <select id="findReportBoard" resultType="com.example.amigo_project.dto.BoardReportDTO">
+        SELECT * FROM BOARD_REPORT_TB
     </select>
 </mapper>
