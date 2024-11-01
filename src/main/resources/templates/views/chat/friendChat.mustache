@@ -1,26 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>친구와의 1대1 채팅방</title>
+    <link rel="stylesheet" href="/css/chat/friendChat.css">
+</head>
+<body>
+<main>
+    <div class="screen-area">
+        <div class="chat-room">
+            <!-- 상대방 프로필 띄우는 공간 -->
+            <div class="opponent-info">
+                <img src="data:image/jpeg;base64," alt="프로필 이미지" onerror="this.src=''">
+                <span>{{opponent.nickname}}</span>
+            </div>
+            <!-- 대화 내용 띄우는 공간 -->
+            <div class="chat-area" id="chat-area">
+            </div>
+            <!-- 키보드로 대화 내용 입력하는 공간 -->
+            <div class="keyboard-area">
+                <input type="text" id="content" name="content" placeholder="메시지 입력" autocomplete="off">
+                <button class="btn" id="sendButton">전송</button>
+            </div>
+        </div>
+    </div>
 
-<div class ="chat-room">
-    <!--  상대방 프로필 띄우는 공간  -->
-    <div class="opponent-info">
-        <img src="data:image/jpeg;base64, + {{opponent.profile}}">
-    </div>
-    <div class="date-label">
-        {{lastMsgTime}} <!-- 서버에서 전달한 날짜를 표시 -->
-    </div>
-    <!--  대화 내용 띄우는 공간  -->
-    <div class="chat-area">
+</main>
 
-    </div>
-    <!--  키보드로 대화 내용 입력하는 공간  -->
-    <div class="keyboard-area">
-        <label for="content">메시지 입력</label>
-        <input type="text" id="content" name="content" placeholder="메시지 입력">
-        <button class="btn" id="sendButton" onclick="send()">전송</button>
-    </div>
-</div>
+<!-- Mustache 템플릿에서 roomId 설정 -->
 <script>
-    let roomId = {{roonKey}};
+    (function(global) {
+        global.roomId = {{roomKey}};// roomId 변수를 글로벌로 설정
+        global.currentUserId = {{user.id}}
+        console.log("Current roomId:", global.roomId);
+        console.log("CurrentId:", global.currentUserId);
+    })(window);
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/chat/friendChat.js"></script>
+</body>
+</html>

@@ -60,7 +60,4 @@ public interface PaymentRepository {
     // id로 환불 요청 내역 조회
     public RequestRefund readRequestRefundById(@Param("id") Integer id);
 
-    // 전체 수익(총 결제 금액 - 총 환불 금액)(통계)
-    public Integer readAllRevenue();
-
 }

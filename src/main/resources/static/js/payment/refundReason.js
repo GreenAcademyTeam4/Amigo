@@ -81,9 +81,10 @@ $('button[type="submit"]').on('click', function(event) {
             cancelReason: selectedValue
         },
         success: function(response) {
+            alert("환불 신청이 완료되었습니다."); // 성공적으로 환불 신청이 완료된 경우 알림창 띄우기
+
             if (window.opener) {
                 window.opener.updateRefundButton(id); // 부모 창의 함수 호출
-                // 창 닫기
                 window.close(); // 성공적으로 업데이트가 된 경우 창 닫기
             } else {
                 alert("부모 창이 열려 있지 않습니다.");

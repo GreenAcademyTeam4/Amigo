@@ -1,10 +1,16 @@
 package com.example.amigo_project.repository.model.chat;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatLog {
     private int id; // PK
     private int roomId; // chat_room_tb의 PK

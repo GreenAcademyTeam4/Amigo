@@ -62,14 +62,46 @@ function updateRefundSuccessButton(id, chargeHistoryId, cancelReason) {
     });
 }
 
+// 환불 반려 사유 등록 폼
 function openRefuseWindow(id, chargeHistoryId, cancelReason) {
     const url = `/pay/refuseReasonForm?id=${id}&chargeHistoryId=${chargeHistoryId}&cancelReason=${encodeURIComponent(cancelReason)}`;
-    const windowFeatures = "width=600,height=400,left=100,top=100";
 
-    // 새 창 열기
-    window.open(url, "refuseWindow", windowFeatures);
+    // 브라우저의 화면 크기 가져오기
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // 팝업 창 크기 설정
+    const popupWidth = 630;
+    const popupHeight = 700;
+
+    // 중앙 위치 계산
+    const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+    const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+    // 팝업 창 띄우기 (위치 설정 포함)
+    window.open(url, "refuseWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+
 }
 
+// 사용자의 환불 사유 상세보기 창(관리자 관점)
+function openCancelReasonWindow(id) {
+    const url = `/pay/cancelReasonForAdmin?id=${id}`;
+
+    // 브라우저의 화면 크기 가져오기
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // 팝업 창 크기 설정
+    const popupWidth = 630;
+    const popupHeight = 400;
+
+    // 중앙 위치 계산
+    const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+    const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+    // 팝업 창 띄우기 (위치 설정 포함)
+    window.open(url, "cancelReasonWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+}
 
 
 // 환불 처리 상태(반려)를 업데이트하는 함수 정의
