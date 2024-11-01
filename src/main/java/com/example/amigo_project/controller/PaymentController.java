@@ -136,7 +136,7 @@ public class PaymentController {
     @GetMapping("/paymentList")
     public String showPaymentPage(Model model,
                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
-                                  @RequestParam(name = "size", defaultValue = "10") Integer size) {
+                                  @RequestParam(name = "size", defaultValue = "7") Integer size) {
 
         User user = (User) session.getAttribute("principal");
 
