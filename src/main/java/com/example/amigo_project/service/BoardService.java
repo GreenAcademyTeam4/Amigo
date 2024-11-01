@@ -94,6 +94,9 @@ public class BoardService {
         return boardRepository.findNestedComment(comment.getBoardId(), comment.getParentId()); // 대댓글 삽입후 삽입한 대댓글 리스트 리턴
     }
 
+
+    // commentid로 대댓글 숫자 불러오기
+
     /**
      * 게시글 상세보기에서 사용할 댓글 불러오기 기능
      * @param boardId
