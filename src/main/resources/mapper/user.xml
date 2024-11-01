@@ -51,10 +51,11 @@
         from user_tb
         where id = #{userId}
     </select>
+
     <insert id="naverInsert" parameterType="java.util.HashMap">
     INSERT INTO user_tb (user_id, password)
     VALUES (#{naverId}, #{naverPassword})
-</insert>
+    </insert>
 
     <select id="findUserById" resultType="com.example.amigo_project.repository.model.User">
         select * from user_tb

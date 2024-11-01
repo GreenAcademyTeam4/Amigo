@@ -188,17 +188,20 @@ main {
     z-index: 1000;
 }
 
-.info-box .info-profile,
-.info-box .chat,
-.info-box .voice-chat-btn {
+.info-box button {
+    display: block;
+    width: 100%;
     padding: 8px;
+    font-size: 0.9em;
     cursor: pointer;
     text-align: center;
+    border: none;
     border-radius: 8px;
     margin-bottom: 5px;
-    font-size: 0.9em;
+    color: #fff;
 }
 
+/* 각각의 버튼 색상 */
 .info-box .info-profile {
     background-color: #91c788;
 }
@@ -211,8 +214,16 @@ main {
     background-color: #ffaeae;
 }
 
-.info-box div:hover {
+/* 호버 시 모든 버튼의 스타일 */
+.info-box button:hover {
     background-color: #e0e0e0;
+    color: #333;
+}
+
+/* 비활성화된 화상 채팅 버튼 스타일 */
+.info-box .voice-chat-btn.disabled {
+    background-color: gray;
+    cursor: not-allowed;
 }
 
 h3 {
