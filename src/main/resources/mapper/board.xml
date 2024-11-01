@@ -68,6 +68,12 @@
         VALUES (#{boardId}, #{userId}, #{contentLocation})
     </insert>
 
+    <!-- 대댓글 입력 쿼리 -->
+    <insert id="insertNestedComment">
+        INSERT INTO comment_tb (board_id, user_id, content_location, parent_id)
+        VALUES (#{boardId}, #{userId}, #{contentLocation}, #{parentId})
+    </insert>
+
     <!-- 게시글 상세보기 에서 게시글Id에 속한 모든 댓글을 보여주는 쿼리 -->
     <select id="findCommentsByBoardId" resultType="com.example.amigo_project.dto.CommentDTO">
         SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at as createdAt
@@ -232,9 +238,18 @@
         SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at AS createdAt
         FROM comment_tb c
         JOIN user_tb u ON c.user_id = u.id
-        WHERE board_id = #{boardId}
+        WHERE board_id = #{boardId} and parent_id = null
         ORDER BY c.created_at DESC
         LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 대댓글 불러오기 -->
+    <select id="findNestedComment" resultType="com.example.amigo_project.dto.CommentDTO">
+        SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at AS createdAt
+        FROM comment_tb c
+        JOIN user_tb u ON c.user_id = u.id
+        WHERE board_id = #{boardId} and parent_id = #{parentId}
+        ORDER BY c.created_at DESC
     </select>
 
     <!-- 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수 (댓글) -->

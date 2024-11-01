@@ -130,4 +130,19 @@
         set profile = #{profile}
         where id = #{id}
     </update>
+
+    <!-- 유저 온라인 상태 업데이트 -->
+    <update id="updateOnline">
+        update user_tb
+        set online_status = true
+        where id = #{id}
+    </update>
+
+    <!-- 유저 오프라인 상태 업데이트 -->
+    <update id="updateOffline">
+        update user_tb
+        set online_status = false
+        where id = #{id}
+    </update>
+
 </mapper>

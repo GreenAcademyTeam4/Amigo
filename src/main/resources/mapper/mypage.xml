@@ -141,7 +141,7 @@
 
     <!-- 나이가 같고 학교가 같은 유저를 조회하는 쿼리  -->
     <select id="findRecommendFriendListByBirthAndSchool" parameterType="com.example.amigo_project.dto.MypageDTO$reccomendFriendDTO">
-        SELECT u.id, u.name, u.gender
+        SELECT u.id as friendId, u.name as friendName, u.gender as gender
         FROM user_tb as u
                  LEFT JOIN friend_tb as f ON u.id = f.friend_id AND f.user_id = #{userId}
                  join user_school_tb as us on u.id = us.user_id

@@ -56,5 +56,10 @@ public interface UserRepository {
     public boolean existsSchool(UserDTO.infoDTO dto);
     // 유저 프로필사진 삽입
     public void insertUserProfile(User user);
+    // 온라인 상태로 업데이트
+    public void updateOnline(int id);
+    // 오프라인 상태로 업데이트
+    public void updateOffline(int id);
+
 }
 
