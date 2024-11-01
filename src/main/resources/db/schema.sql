@@ -159,10 +159,11 @@ create table like_tb (
 
 -- 댓글 테이블
 create table comment_tb (
-  id int primary key auto_increment,
-  board_id int,
-  user_id int,
-  content_location varchar(255),
+  id int primary key auto_increment, -- pk
+  board_id int, --게시글 id
+  user_id int, --유저 id
+  parent_id int, --대댓글의 부모 게시글 id , 일반 댓글은 null
+  content_location varchar(255), -- 댓글, 대댓글 내용
   created_at timestamp default CURRENT_TIMESTAMP,
   foreign key (board_id) references board_tb(id) ON DELETE CASCADE,
   foreign key (user_id) references user_tb(id)

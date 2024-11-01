@@ -49,6 +49,7 @@ public class UserController {
             session.setAttribute("principal", principal);
 
             if (principal.getNickname() != null) {
+                userService.updateOnline(principal.getId());
                 return "redirect:/";
             }
 
@@ -64,6 +65,8 @@ public class UserController {
      */
     @GetMapping("/logout")
     public String logoutHandler() {
+        User user = (User)session.getAttribute("principal");
+        userService.updateOffline(user.getId());
         session.invalidate();
         return "redirect:/";
     }
@@ -211,6 +214,7 @@ public class UserController {
             user.setProfile(profile);
             userService.insertUserProfile(user);
         }
+        userService.updateOnline(user.getId());
         String profile = user.base64Encoding(user.getProfile());
         // 유저 정보 업데이트
         session.setAttribute("principal",user);

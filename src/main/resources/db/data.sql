@@ -1,8 +1,8 @@
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point ,online_status)
-values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','27', 50000 ,true);
+values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','19980115', 50000 ,true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('test',1234,'정훈','게토 스구루','010-1234-5678','male','27',true);
+values('test',1234,'정훈','게토 스구루','010-1234-5678','male','19980225',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test','1234','가을','정훈','010-1234-5678','male','27');
@@ -275,7 +275,6 @@ INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
--- --------------------------------
 
 -- 게시글 데이터 삽입
 INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
@@ -344,10 +343,8 @@ INSERT INTO like_tb (user_id, board_id) VALUES (2, 7);
 INSERT INTO like_tb (user_id, board_id) VALUES (3, 7);
 INSERT INTO like_tb (user_id, board_id) VALUES (5, 7);
 INSERT INTO friend_tb (user_id, friend_id) VALUES
-(1, 2),
 (1, 3),
-(2, 1),
-(3, 4);
+(3, 1);
 
 -- 아바타 테이블에 샘플 데이터 삽입
 INSERT INTO avatar_tb (id, type, price, name) VALUES
@@ -430,3 +427,8 @@ values
 INSERT INTO emoticon_tb (url,name)
 VALUES ('/image/emoticon/smile.jpg','smile');
 
+insert into user_school_tb (user_id,school_id)
+values (1,1),
+       (2,1),
+        (1,2),
+        (2,2);

@@ -86,11 +86,11 @@ public class UserService {
   //      }
   
 //        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-//            return user;
+            return user;
 //        } else {
 //            return null;
 //        }
-        return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
+       // return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
         
     }
 
@@ -165,6 +165,15 @@ public class UserService {
     // 유저 프로필 삽입
     public void insertUserProfile(User user) {
         userRepository.insertUserProfile(user);
+    }
+
+    // 온라인 상태로 업데이트
+    public void updateOnline(int id) {
+        userRepository.updateOnline(id);
+    }
+    // 오프라인 상태로 업데이트
+    public void updateOffline(int id) {
+        userRepository.updateOffline(id);
     }
 }
 

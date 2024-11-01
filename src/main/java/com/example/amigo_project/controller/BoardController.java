@@ -13,6 +13,7 @@ import com.example.amigo_project.repository.model.Comment;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.BoardService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -199,6 +200,8 @@ public class BoardController {
         board.getFormattedCreatedAt();
         board.getFormattedImage();
 
+
+
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
         List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
@@ -221,6 +224,51 @@ public class BoardController {
 
         return "views/board/boardDetail";
     }
+
+    /**
+     * 뷰에서 답글 버튼 선택시 비동기적으로 답글 조회
+     */
+    @ResponseBody
+    @GetMapping("/nested-comment")
+    public ResponseEntity<?>findNestedComment(@RequestParam("boardId") int boardId,
+                                              @RequestParam("parentId") int parendId){
+        List<CommentDTO> nestedCommentList = boardService.findNestedComment(boardId, parendId);
+        if (nestedCommentList.isEmpty()) {
+            return ResponseEntity.ok("현재 작성된 답글이 없습니다.");
+        }
+        return ResponseEntity.ok(nestedCommentList);
+    }
+
+
+    /**
+     *  대댓글 작성 기능 -> 대댓글 정보 db 삽입 후 새로운 대댓글 정보 조회 후 리턴
+     */
+    @ResponseBody
+    @PostMapping("/post-nested-comment")
+    public ResponseEntity<?>postNestedComment(@RequestParam("boardId") int boardId,
+                                              @RequestParam("parentId") int parentId,
+                                              @RequestParam("content") String content,
+                                              HttpSession session){
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 답글 작성이 가능합니다.");
+        } else {
+            Comment dto = Comment.builder()
+                    .boardId(boardId)
+                    .userId(principal.getId())
+                    .parentId(parentId)
+                    .contentLocation(content)
+                    .build();
+            List<CommentDTO> nestedCommentList = boardService.insertNestedComment(dto);
+            if(nestedCommentList == null){
+                return ResponseEntity.ok("댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다.");
+            }
+            return ResponseEntity.ok(nestedCommentList);
+        }
+
+
+    }
+
 
     /**
      * 댓글 전송
