@@ -165,7 +165,6 @@ public class BoardController {
 
         return "views/board/boardList";  // boardList.mustache를 반환
     }
-
     /**
      * 게시글 상세 보기
      * @param boardId
@@ -217,14 +216,10 @@ public class BoardController {
         int likeCount = boardService.getLikeCount(boardId);
         model.addAttribute("likeCount", likeCount);
 
-
-
         // 게시글 id를 기준으로 정보 가져오기
         BoardDTO board = boardService.getBoardById(boardId);
         board.getFormattedCreatedAt();
         board.getFormattedImage();
-
-
 
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
@@ -243,11 +238,11 @@ public class BoardController {
            }
         }
 
-        model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
-        
         model.addAttribute("board", board);
         model.addAttribute("comment", comment);
-
+        model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
+        model.addAttribute("board", board);
+        model.addAttribute("comment", comment);
         System.out.println("총 페이지 수 : " + totalPages);
         System.out.println("현재 페이지 : " + page);
         model.addAttribute("currentPage", page);
@@ -256,6 +251,7 @@ public class BoardController {
         return "views/board/boardDetail";
     }
 
+
     /**
      * 뷰에서 답글 버튼 선택시 비동기적으로 답글 조회
      */
@@ -263,11 +259,11 @@ public class BoardController {
     @GetMapping("/nested-comment")
     public ResponseEntity<?>findNestedComment(@RequestParam("boardId") int boardId,
                                               @RequestParam("parentId") int parendId){
-        List<CommentDTO> nestedCommentList = boardService.findNestedComment(boardId, parendId);
-        if (nestedCommentList.isEmpty()) {
+        List<CommentDTO> replyList = boardService.findNestedComment(boardId, parendId);
+        if (replyList.isEmpty()) {
             return ResponseEntity.ok("현재 작성된 답글이 없습니다.");
         }
-        return ResponseEntity.ok(nestedCommentList);
+        return ResponseEntity.ok(replyList);
     }
 
 
@@ -290,11 +286,11 @@ public class BoardController {
                     .parentId(parentId)
                     .contentLocation(content)
                     .build();
-            List<CommentDTO> nestedCommentList = boardService.insertNestedComment(dto);
-            if(nestedCommentList == null){
+            List<CommentDTO> replyList = boardService.insertNestedComment(dto);
+            if(replyList == null){
                 return ResponseEntity.ok("댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다.");
             }
-            return ResponseEntity.ok(nestedCommentList);
+            return ResponseEntity.ok(replyList);
         }
 
 
@@ -302,23 +298,18 @@ public class BoardController {
 
 
     /**
-     * 댓글 전송
+     * 댓글 전송 (비동기 처리)
      */
+    @ResponseBody
     @PostMapping("/comment")
-    public String insertComment(
-            @RequestParam(name = "boardId") int boardId,
-            @RequestParam(name = "content") String content,
-            RedirectAttributes redirectAttributes) {
-
-       // int userId = 1; // 나중에 유저 세션에서 가져옴
+    public ResponseEntity<?> insertComment(@RequestParam(name = "boardId") int boardId,
+                                           @RequestParam(name = "content") String content,
+                                           HttpSession session) {
 
         // 세션에서 현재 로그인된 사용자 정보 가져오기
         User principal = (User) session.getAttribute("principal");
         int userId = principal.getId();
         System.out.println("principal : " + userId);
-
-
-
         Comment dto = Comment
                 .builder()
                 .boardId(boardId)
@@ -329,10 +320,7 @@ public class BoardController {
         boardService.insertComment(dto);
         System.out.println("commentDTO : " + dto);
 
-        redirectAttributes.addFlashAttribute("message", "댓글이 성공적으로 등록되었습니다!");
-
-        // 댓글 등록 후 해당 게시글 상세 페이지로 리다이렉트
-        return "redirect:/board/detail/" + boardId;
+        return ResponseEntity.ok("댓글이 성공적으로 등록되었습니다!");
     }
 
     /**

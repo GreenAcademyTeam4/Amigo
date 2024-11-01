@@ -162,7 +162,17 @@
         <!-- 작성자만 삭제/수정 버튼을 볼 수 있음 -->
         {{#isAuthor}}
             <button type="button" class="btn btn-danger" onclick="screenDelete('/board/delete/{{board.id}}')">게시글 삭제</button>
+            <!--            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">-->
+            <!--                <button type="submit" class="btn btn-danger">게시글 삭제</button>-->
+            <!--            </form>-->
 
+            <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
+
+            <!--            <form onclick = "screenChanger('/board/update/{{board.id}}')" method="get" >-->
+            <!--                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>-->
+            <!--            </form>-->
+
+            <!-- 게시글 본문 아래 신고 버튼 추가 -->
            <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
         {{/isAuthor}}
 
@@ -172,7 +182,6 @@
                 <button id="report-button" class="btn btn-warning" onclick="reportPost({{board.id}})">신고하기</button>
             </div>
         {{/isAuthor}}
-
         </div>
     </div>
 
@@ -429,6 +438,3 @@ $(document).ready(function() {
 
 
 </script>
-
-
-
