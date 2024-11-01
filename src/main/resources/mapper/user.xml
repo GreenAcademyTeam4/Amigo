@@ -64,8 +64,11 @@
   
    <update id="updateInfo" parameterType="com.example.amigo_project.dto.UserDTO">
     UPDATE user_tb
-    SET 
-        school = #{school}, 
+    SET
+        birth = #{birth},
+        phone_number = #{phoneNumber},
+        gender = #{gender},
+        name = #{name},
         nickname = #{nickname}
     WHERE 
         id = #{id}
@@ -97,5 +100,34 @@
         where f.user_id = #{id}
         and u.online_status = false
     </select>
+    <!-- 해당 데이터가 있는지 -->
+    <select id="existsSchool" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM school_tb
+        WHERE id = #{schoolId}
+    </select>
+    <!--학교 데이터 만들기 -->
+    <insert id="createSchool">
+        insert into school_tb (id,name,region)
+            VALUES (#{schoolId},#{school},#{schoolRegion})
+    </insert>
+    <!--유저의 학교 데이터 추가-->
+    <insert id="createUserSchool">
+        insert into user_school_tb (user_id,school_id)
+            VALUES  (#{id},#{schoolId})
+    </insert>
+    <!--유저가 가진 학교 찾아오기 -->
+    <select id="findUserSchool" resultType="com.example.amigo_project.repository.model.School">
+        select * from user_school_tb as u
+        join school_tb as s
+        on u.school_id = s.id
+        where u.user_id = #{id}
+    </select>
 
+    <!-- 회원가입 시 기본 프사 삽입 -->
+    <update id="insertUserProfile">
+        update user_tb
+        set profile = #{profile}
+        where id = #{id}
+    </update>
 </mapper>
