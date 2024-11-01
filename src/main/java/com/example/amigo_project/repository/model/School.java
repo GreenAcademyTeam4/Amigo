@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Emoticon {
+public class School {
 
-    private Integer id;
-    private String url;
+    private int id;
     private String name;
-
+    private String region;
 }
