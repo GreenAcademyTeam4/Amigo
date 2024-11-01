@@ -10,12 +10,12 @@ public class PayListDTO {
 
     private Integer id;
     private String name;
-    private String orderName;
-    private String orderId;
+    private String orderName; // 주문 이름
+    private String orderId; // 주문번호
     private Integer totalAmount;
     private Integer point;
     private Timestamp approvedAt;
-    private String method;
-    private String refundStatus;
+    private String method; // 결제 방법
+
 
 }
