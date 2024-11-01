@@ -20,7 +20,7 @@ img {
 }
 
 body {
-    background-color:#f0dcd5 ;
+    background-color: #f0dcd5;
     background-position: center;
     height: 100vh;
     display: flex;
@@ -28,8 +28,6 @@ body {
     align-items: center;
     flex-direction: column;
 }
-
-
 
 .selecter-container {
     display: flex;
@@ -58,18 +56,44 @@ form {
     flex-direction: column;
 }
 
-input[type="text"] {
+.input-container {
+    position: relative;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input[type="text"] {
+    width: 100%;
     padding: 12px;
+    padding-right: 60px; /* 버튼 공간 확보 */
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
+    background-color: #fff;
 }
 
-input:focus {
+.input-container input:focus {
     border-color: #c05720;
     background-color: #fae1d7;
+}
+
+.input-container .select-btn,.select-school,.repetition {
+    position: absolute;
+    right: 5px;
+    height: 70%;
+    background-color: #ce9178;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.input-container .select-btn:hover {
+    background-color: #c05720;
 }
 
 button.insert-btn {
@@ -80,7 +104,7 @@ button.insert-btn {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-top: 15px;
 }
 
 button.insert-btn:hover {

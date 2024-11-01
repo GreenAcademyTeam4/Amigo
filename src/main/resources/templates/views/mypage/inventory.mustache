@@ -1,0 +1,82 @@
+{{>layout/header}}
+<!DOCTYPE html>
+<html lang="ko">
+<link rel="stylesheet" type="text/css" href="/css/mypage/inventory.css">
+
+<head>
+    <meta charset="UTF-8">
+    <title>인벤토리</title>
+</head>
+<body>
+<h1>인벤토리</h1>
+<div>
+    <h2>현재 착용중인 아바타</h2>
+    <p>헤드: {{#nowAvatar.head}}{{.}}{{/nowAvatar.head}}{{^nowAvatar.head}}N/A{{/nowAvatar.head}}</p>
+    <p>상의: {{#nowAvatar.top}}{{.}}{{/nowAvatar.top}}{{^nowAvatar.top}}N/A{{/nowAvatar.top}}</p>
+    <p>하의: {{#nowAvatar.bottom}}{{.}}{{/nowAvatar.bottom}}{{^nowAvatar.bottom}}N/A{{/nowAvatar.bottom}}</p>
+    <p>신발: {{#nowAvatar.shoes}}{{.}}{{/nowAvatar.shoes}}{{^nowAvatar.shoes}}N/A{{/nowAvatar.shoes}}</p>
+
+    <h2>내가 보유중인 아바타</h2>
+    <h3>머리</h3>
+    <ul>
+        {{#headInventory}}
+            <li>{{avatarName}} </li>
+        {{/headInventory}}
+    </ul>
+    <h3>상의</h3>
+    <ul>
+        {{#topInventory}}
+            <li>{{avatarName}} </li>
+        {{/topInventory}}
+    </ul>
+    <h3>하의</h3>
+    <ul>
+        {{#bottomInventory}}
+            <li>{{avatarName}} </li>
+        {{/bottomInventory}}
+    </ul>
+    <h3>신발</h3>
+    <ul>
+        {{#shoesInventory}}
+            <li>{{avatarName}} </li>
+        {{/shoesInventory}}
+    </ul>
+
+    <form action="/my-page/inventory/change" method="post">
+        <label for="head">헤드:</label>
+        <select id="head" name="head">
+            <option value="">선택하세요</option>
+            {{#headInventory}}
+                <option value="{{avatarId}}">{{avatarName}}</option>
+            {{/headInventory}}
+        </select>
+        <label for="top">상의:</label>
+        <select id="top" name="top">
+            <option value="">선택하세요</option>
+            {{#topInventory}}
+                <option value="{{avatarId}}">{{avatarName}}</option>
+            {{/topInventory}}
+        </select>
+        <label for="bottom">하의:</label>
+        <select id="bottom" name="bottom">
+            <option value="">선택하세요</option>
+            {{#bottomInventory}}
+                <option value="{{avatarId}}">{{avatarName}}</option>
+            {{/bottomInventory}}
+        </select>
+        <label for="shoes">신발:</label>
+        <select id="shoes" name="shoes">
+            <option value="">선택하세요</option>
+            {{#shoesInventory}}
+                <option value="{{avatarId}}">{{avatarName}}</option>
+            {{/shoesInventory}}
+        </select>
+        <button type="submit">아바타 변경</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+</html>
+{{>layout/footer}}

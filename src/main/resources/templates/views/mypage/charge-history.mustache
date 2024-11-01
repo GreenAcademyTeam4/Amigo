@@ -1,0 +1,22 @@
+{{>layout/header}}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>포인트 충전 내역</title>
+</head>
+<body>
+<h1>포인트 충전 내역</h1>
+<div>
+    <ul>
+        {{#paylist}}
+            <li>주문명: {{orderName}}, 금액: {{totalAmount}}, 결제 일자: {{approvedAt}}, 결제 수단: {{method}}</li>
+        {{/paylist}}
+    </ul>
+    <a href="/my-page/info">마이페이지로 돌아가기</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>
+{{>layout/footer}}

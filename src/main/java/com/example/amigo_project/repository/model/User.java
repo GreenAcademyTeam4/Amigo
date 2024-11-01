@@ -1,9 +1,14 @@
 package com.example.amigo_project.repository.model;
 
 import lombok.*;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 
 /**
  * onlineStatus 접속상태 default 0
@@ -26,16 +31,24 @@ public class User {
     private Integer birth;
     private Integer point;
     private Integer userRole;
+    private byte[] profile;
     private boolean onlineStatus;
     private String activeStatus;
-    private String elementarySchool; // 초등학교
-    private String middleSchool;
-    private String highSchool; 
+    private String school; 
     private Timestamp createdAt;
     private String createdAtFormat;
 
     public void getFormattedCreatedAt() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.createdAtFormat = formatter.format(createdAt);
+    }
+
+    public byte[] convertFileToBytes(String filePath) throws IOException {
+        ClassPathResource resource = new ClassPathResource(filePath);
+        return Files.readAllBytes(resource.getFile().toPath());
+    }
+
+    public String base64Encoding(byte[] profile) {
+        return Base64.getEncoder().encodeToString(profile);
     }
 }

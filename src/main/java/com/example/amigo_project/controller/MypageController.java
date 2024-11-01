@@ -1,11 +1,25 @@
 package com.example.amigo_project.controller;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.MypageService;
 import com.example.amigo_project.service.PaymentService;
 import com.example.amigo_project.service.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Clock;
 import java.util.List;
 
 @Controller
@@ -34,7 +49,7 @@ public class MypageController {
      * @param model   - 마이페이지 렌더링에 필요한 정보를 MypageDTO 형식으로 model 에 담아 전달
      * @return - info.mustache 파일 호출
      */
-    @GetMapping("/")
+    @GetMapping("/info")
     public String getMypage(HttpSession session, Model model) {
 
         User principal = (User) session.getAttribute("principal");
@@ -43,17 +58,22 @@ public class MypageController {
             model.addAttribute("url", "redirect:/user/login");
             return "alert";
         } else {
-            MypageDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
+            MypageDTO.nowAvatarDTO dto = mypageService.findMypageInfoByUserId(principal.getId());
+            int boardCount = mypageService.countMyBoards(principal.getId());
+            int friendCount = mypageService.countFriendByUserId(principal.getId());
             model.addAttribute("dto", dto);
             model.addAttribute("user", principal);
+            model.addAttribute("boardCount", boardCount);
+            model.addAttribute("friendCount", friendCount);
             return "views/mypage/info";
         }
     }
 
     /**
+     * 인벤토리 호출
      * @param session - 세션에서 userId추출
      * @param model   - 인벤토리 정보를 Model에 담아 전달 (내가 가진 아바타 + 현재 입고있는 아바타)
-     * @return - inventory.mustache 파일 호출
+     * @return - inventory.mustache 호출
      */
     @GetMapping("/inventory")
     public String getInventory(HttpSession session, Model model) {
@@ -61,11 +81,50 @@ public class MypageController {
         if (principal == null) {
             model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
             model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return "/alert";
         } else {
             List<MypageDTO.inventoryDTO> inventorydto = mypageService.findInventoryByUserId(principal.getId());
             MypageDTO.nowAvatarDTO nowAvatarDTO = mypageService.findNowAvatarByUserId(principal.getId());
-            model.addAttribute("inventoryList", inventorydto);
+            List<MypageDTO.headInventoryDTO> headInventory = new ArrayList<>();
+            List<MypageDTO.topInventoryDTO> topInventory = new ArrayList<>();
+            List<MypageDTO.bottomInventoryDTO> bottomInventory = new ArrayList<>();
+            List<MypageDTO.shoesInventoryDTO> shoesInventory = new ArrayList<>();
+            for(int i = 0; i < inventorydto.size(); i++){
+                if(inventorydto.get(i).getType() == 1){
+                    headInventory.add(MypageDTO.headInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 2) {
+                    topInventory.add(MypageDTO.topInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 3) {
+                    bottomInventory.add(MypageDTO.bottomInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else if(inventorydto.get(i).getType() == 4) {
+                    shoesInventory.add(MypageDTO.shoesInventoryDTO.builder()
+                            .avatarId(inventorydto.get(i).getAvatarId())
+                            .avatarName(inventorydto.get(i).getAvatarName())
+                            .build());
+                }else{
+                    model.addAttribute("msg", "인벤토리 불러오기 중 오류 발생.");
+                    model.addAttribute("url", "/views/my-page/inventory");
+                    return "alert";
+                }
+
+
+
+
+            }
+
+            model.addAttribute("headInventory", headInventory);
+            model.addAttribute("topInventory", topInventory);
+            model.addAttribute("bottomInventory", bottomInventory);
+            model.addAttribute("shoesInventory", shoesInventory);
             model.addAttribute("nowAvatar", nowAvatarDTO);
             model.addAttribute("user", principal);
             return "views/mypage/inventory";
@@ -73,21 +132,18 @@ public class MypageController {
 
     }
 
-    /**
-     * 인벤토리에서 아바타 변경 시 동작. 뷰에서 각 부위의 아바타 id를 받아와 db에서 가져온
-     * 현재 보유중인 아바타 목록과 대조한 후 모두 유효한 값일 시 아바타 변경 기능 실행
-     *
-     * @param session
-     * @param model
-     * @param request
-     * @return
-     */
     @PostMapping("/inventory/change")
     public String changeAvatar(HttpSession session, Model model, HttpServletRequest request) {
-        Integer head = Integer.parseInt(request.getParameter("head"));
-        Integer top = Integer.parseInt(request.getParameter("top"));
-        Integer bottom = Integer.parseInt(request.getParameter("bottom"));
-        Integer shoes = Integer.parseInt(request.getParameter("shoes"));
+        String headParam = request.getParameter("head");
+        String topParam = request.getParameter("top");
+        String bottomParam = request.getParameter("bottom");
+        String shoesParam = request.getParameter("shoes");
+
+        Integer head = headParam != null && !headParam.isEmpty() ? Integer.parseInt(headParam) : null;
+        Integer top = topParam != null && !topParam.isEmpty() ? Integer.parseInt(topParam) : null;
+        Integer bottom = bottomParam != null && !bottomParam.isEmpty() ? Integer.parseInt(bottomParam) : null;
+        Integer shoes = shoesParam != null && !shoesParam.isEmpty() ? Integer.parseInt(shoesParam) : null;
+
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
@@ -96,14 +152,15 @@ public class MypageController {
         } else {
             List<MypageDTO.inventoryDTO> dto = mypageService.findInventoryByUserId(principal.getId());
             int having = 0; // 변경 요청한 아바타를 보유 중인지 확인하는 변수
-            for (int i = 0; i < dto.size(); i++) {
-                if (dto.get(i).getAvatarId() == head) {
+
+            for (MypageDTO.inventoryDTO inventory : dto) {
+                if (inventory.getAvatarId().equals(head) ||
+                        inventory.getAvatarId().equals(top) ||
+                        inventory.getAvatarId().equals(bottom) ||
+                        inventory.getAvatarId().equals(shoes))
+                        {
                     having++;
-                } else if (dto.get(i).getAvatarId() == top) {
-                    having++;
-                } else if (dto.get(i).getAvatarId() == bottom) {
-                    having++;
-                } else if (dto.get(i).getAvatarId() == shoes) {
+                }else if(head == 9999 || top == 9998 || bottom == 9997 || shoes == 9996){
                     having++;
                 }
             }
@@ -122,7 +179,14 @@ public class MypageController {
                 return "alert";
             }
         }
+    }
 
+
+    // 비밀번호 변경 전 기존 비밀번호 확인 창 띄우기
+    @GetMapping("/pwdcheck")
+    public String pwdcheck(){
+        System.out.println("여기왜안탐??");
+        return "/views/mypage/pw-check";
     }
 
     /**
@@ -131,7 +195,7 @@ public class MypageController {
      * @param session 에서 userId 추출
      * @return 세션에서 얻은 userId로 db의 저장된 pwd 조회 후 입력한 password 값이랑 대조 (유저서비스에서 수행)
      */
-    @PostMapping("/pwdValid")
+    @GetMapping("/pwdValid")
     public String pwdValid(String password, HttpSession session, Model model, HttpServletRequest request) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
@@ -141,12 +205,11 @@ public class MypageController {
         } else {
             int result = userService.checkPasswordValid(principal.getId(), password);
             if(result == 1){
-                // TODO - 뷰에서 비동기로 처리
                 model.addAttribute("user", principal);
-                return "";
+                return "/views/mypage/pw-ch";
             }else{
                 model.addAttribute("msg", "비밀번호가 일치하지 않습니다. 확인 후 다시 시도해 주세요");
-                model.addAttribute("url", "/my-page/");
+                model.addAttribute("url", "/my-page/info");
                 return "alert";
             }
         }
@@ -155,12 +218,12 @@ public class MypageController {
 
     /**
      * 비밀번호 변경 기능
-     * @param password 변경할 비밀번호
      * @param session 에서 userId 추출
      * @return alert창 출력 후 mypage 초기 페이지로 이동
      */
-    @PostMapping("/pwdupdate")
-    public String pwdUpdate(String password, HttpSession session, Model model){
+    @PostMapping("/pwd-update")
+    public String pwdUpdate(HttpServletRequest request,  HttpSession session, Model model){
+        String password = request.getParameter("password");
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
@@ -170,7 +233,7 @@ public class MypageController {
             // 회원가입 뷰의 비밀번호 입력값 유효성 체크 재활용
             userService.updatePasswordByUserId(principal.getId(), password);
             model.addAttribute("msg", "비밀번호 변경 완료.");
-            model.addAttribute("url", "/my-page/");
+            model.addAttribute("url", "/my-page/info");
             return "alert";
         }
     }
@@ -192,10 +255,17 @@ public class MypageController {
             return "alert";
         } else {
             List<MypageDTO.myFriendListDTO> friendList = mypageService.findMyFriendListByUserId(principal.getId());
-            // 뷰 측에서 친구가 0명일때 등록된 친구가 없습니다. 띄우기
-            model.addAttribute("friendList" ,friendList);
+            List<MypageDTO.friendReqDTO> friendReqList = mypageService.findFriendReqByUserId(principal.getId());
+            List<MypageDTO.reccomendFriendDTO> recFriendList = mypageService.findRecommendFriendListByBirthAndSchool(principal);
+            List<MypageDTO.friendReqDTO> myFriendReq = mypageService.myFriendReq(principal.getId());
+
+            model.addAttribute("friendList" ,friendList); // 친구 목록
+            model.addAttribute("recFriendList", recFriendList); // 추천 친구(나이가 같고 학교가 같은 적이 있는 유저) 목록
+            model.addAttribute("friendReqList", friendReqList); // 받은 친구요청 목록
+            model.addAttribute("myFriendReq", myFriendReq); // 내가 보낸 친구요청 목록
             model.addAttribute("user", principal);
-            return "";  // TODO - 뷰 mustache 파일 명 넣기
+
+            return "/views/mypage/friend-management";
         }
     }
 
@@ -222,52 +292,38 @@ public class MypageController {
         }
     }
 
+
     /**
-     * 받은 친구 요청 출력
-     * @param session
-     * @param model
-     * @return
+     * 학교 또는 이름을 입력받아서 해당 정보로 사용자 검색
      */
-    @GetMapping("/friend-req-list")
-    public String friendReqList(HttpSession session, Model model) {
+    @GetMapping("/find")
+    @ResponseBody
+    public ResponseEntity<?> findFriendBySchoolOrName(@RequestParam("search") String search, HttpSession session) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-            model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
         } else {
-            List<MypageDTO.friendReqDTO> friendReqList = mypageService.findFriendReqByUserId(principal.getId());
-            List<MypageDTO.reccomendFriendDTO> recFriendList = mypageService.findRecommendFriendListByBirthAndSchool(principal);
-
-            // 받은 친구 요청이 없을 때 / 추천 친구가 없을 때 뷰 측에서 받은 친구 요청이 없습니다 출력
-            model.addAttribute("recFriendList", recFriendList); // 추천 친구(나이가 같고 학교가 같은 적이 있는 유저) 목록
-            model.addAttribute("friendReqList", friendReqList); // 받은 친구요청 목록
-            model.addAttribute("user", principal);
-            return ""; // TODO - 뷰 mustache 파일 명 넣기
+            List<MypageDTO.myFriendListDTO> friendList = mypageService.findFriendBySchoolOrName(principal.getId(), search);
+            if (friendList.isEmpty()) {
+                return ResponseEntity.ok("검색 결과가 없습니다.");
+            }
+            return ResponseEntity.ok(friendList);
         }
     }
 
 
-
     /**
      * 친구요청 보내기 기능
-     * @param session
-     * @param model
-     * @return
      */
-    @PostMapping("/send-friend-req")
-    public String sendFriendReq(HttpSession session, Model model, HttpServletRequest request){
+    @ResponseBody
+    @GetMapping("/send-friend-req")
+    public ResponseEntity<?> sendFriendReq(HttpSession session, Model model,@RequestParam("receiverId")Integer receiverId){
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-            model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
         } else {
-            Integer receiverId = Integer.parseInt(request.getParameter("receiverId"));
             mypageService.reqFriend(principal.getId(), receiverId);
-            model.addAttribute("msg", "친구 요청 보내기 완료");
-            model.addAttribute("url", "/my-page/friend-list");
-            return "alert";
+            return ResponseEntity.ok("친구 요청 보냄.");
         }
     }
 
@@ -277,30 +333,37 @@ public class MypageController {
 
     /**
      * 친구요청 수락 기능
-     * @param session - 유저 id 추출
-     * @param model
-     * @param request - 요청 보낸 이 id 추출
-     * @return 내 친구 리스트 재호출
      */
+    @ResponseBody
     @PostMapping("/accept-friend-req")
-    public String acceptFriendReq(HttpSession session, Model model, HttpServletRequest request){
+    public ResponseEntity<?> acceptFriendReq(HttpSession session, Model model, @RequestParam("receiverId")Integer receiverId){
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            model.addAttribute("msg", "로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
-            model.addAttribute("url", "redirect:/user/login");
-            return "alert";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
         } else {
-            Integer receiverId = Integer.parseInt(request.getParameter("receiverId"));
             mypageService.acceptFriendReq(principal.getId(), receiverId);
-            model.addAttribute("msg", "친구 요청이 수락되었습니다.");
-            model.addAttribute("url", "/my-page/friend-list");
-            return "alert";
+            return ResponseEntity.ok("친구 요청 수락됨.");
+        }
+    }
+
+    // 친구요청 취소 기능
+    @ResponseBody
+    @PostMapping("/cancel-friend-req")
+    public ResponseEntity<?> cancleFriendReq(HttpSession session, Model model, @RequestParam("receiverId")Integer receiverId){
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.cancelfriendreq(principal.getId(), receiverId);
+            return ResponseEntity.ok("친구 요청 취소됨.");
         }
     }
 
 
+
+
     /**
-     * 포인트 충전 내역 조회 (결제 측 기능 재활용)
+     * 포인트 층전 내역 조회 (결제 측 기능 재활용)
      * TODO 포인트 결제 내역 조회
      * @param session - userId 추출
      * @return 포인트 충전 내역 정보 + 페이징
@@ -318,13 +381,79 @@ public class MypageController {
             List<ChargeHistoryDTO> list = paymentService.readChargeHistory(page, size, principal.getId());
             model.addAttribute("paylist", list);
             model.addAttribute("user", principal);
-            return ""; // TODO - view 주소 달기
+            return "/views/mypage/charge-history";
         }
 
 
     }
 
+    /**
+     * 받은 친구 요청 거부
+     * @param session
+     * @param senderId
+     * @return
+     */
+    @GetMapping("/reject")
+    @ResponseBody
+    public ResponseEntity<?> rejectFriendReq(HttpSession session, @RequestParam("senderId") Integer senderId) {
+        User principal = (User) session.getAttribute("principal");
+        Integer result = 0;
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
 
+                mypageService.rejectFriendReq(principal.getId(), senderId);
+                return ResponseEntity.ok("친구 요청 삭제");
+
+        }
+    }
+
+
+    /**
+     * 친구 삭제 기능
+     */
+    @ResponseBody
+    @GetMapping("/delete-friend")
+    public ResponseEntity<?> deleteFriend(HttpSession session, @RequestParam("friendId") Integer friendId) {
+        User principal = (User) session.getAttribute("principal");
+        Integer result = 0;
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.deleteFriendByUserIdAndFriendId(friendId, principal.getId());
+            return ResponseEntity.ok("친구 삭제 완료");
+        }
+    }
+    
+    // 닉네임 변경 기능
+    @ResponseBody
+    @GetMapping("/chNick")
+    public ResponseEntity<?> changeNickname(HttpSession session, @RequestParam("nickname") String nickname) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.changeNickname(principal.getId(), nickname);
+            User user = userService.findUser(principal.getId());
+            session.setAttribute("principal", user); // 세션 갱신
+            return ResponseEntity.ok(user);
+        }
+    }
+
+    // 학교 변경 기능
+    @ResponseBody
+    @GetMapping("/chSchool")
+    public ResponseEntity<?> changeSchool(HttpSession session, @RequestParam("school") String school) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 만료되었습니다. 다시 로그인해 주세요");
+        } else {
+            mypageService.changeSchool(principal.getId(), school);
+            User user = userService.findUser(principal.getId());
+            session.setAttribute("principal", user); // 세션 갱신
+            return ResponseEntity.ok(user);
+        }
+    }
 
 
 

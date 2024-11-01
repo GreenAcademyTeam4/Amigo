@@ -3,8 +3,8 @@ package com.example.amigo_project.service;
 import com.example.amigo_project.dto.*;
 import com.example.amigo_project.repository.interfaces.AdminRepository;
 import com.example.amigo_project.repository.interfaces.NoticeRepository;
-import com.example.amigo_project.repository.model.ChargeHistory;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -83,26 +83,12 @@ public class AdminService {
         return adminRepository.findGenderCount();
     }
 
-//    // 나이 분포 조회
+    // 나이 분포 조회
     public List<UserDTO> findBirthCount(){
         return adminRepository.findBirthCount();
     }
 
-
-
-    /**
-     * 총매출
-     */
-    // 일별
-    public List<ChargeHistory> getDailySales(){
-        return adminRepository.dailySales();
-    }
-
-    // 주별
-    public List<ChargeHistory> getWeekSales(){
-        return adminRepository.weekSales();
-    }
-
+    // 연별
     public List<ChargeHistory> getYearlySales(){
         return adminRepository.yearlySales();
     }
