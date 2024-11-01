@@ -41,6 +41,10 @@
             await handleAnswer(data);
         } else if (data.type === 'ice-candidate') {
             await handleIceCandidate(data);
+        } else if (data.type === 'out') {
+            // 상대방이 나갔을 때 실행할 코드
+            alert("상대방이 나갔습니다");
+            global.endCall(); // 통화 종료 함수 호출
         }
     };
 
@@ -84,9 +88,6 @@
                 peerConnection.iceConnectionState === "failed" ||
                 peerConnection.iceConnectionState === "closed") {
 
-                // 상대방이 나갔을 때 실행할 코드
-                alert("상대방이 나갔습니다");
-                global.endCall(); // 통화 종료 함수 호출
             }
         };
 
