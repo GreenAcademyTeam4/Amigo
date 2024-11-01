@@ -173,7 +173,34 @@ $(document).ready(function() {
         // 채팅 영역에 추가
         chatContainer.appendChild(messageWrapper);
         } else if(log.type === 'emoticon'){
+            // 메시지 래퍼
+            const messageWrapper = document.createElement("div");
+            messageWrapper.className = "message-wrapper";
 
+            // 메시지 컨테이너
+            const messageElement = document.createElement("img");
+            messageElement.className = "chat-emoticon";
+            messageElement.src = log.message;
+
+            // 메시지 방향 설정 (currentUserId와 log.userId를 비교)
+            if (log.userId === currentUserId) {
+                messageElement.classList.add("sent");  // 내가 보낸 메시지
+            } else {
+                messageElement.classList.add("received");  // 상대방이 보낸 메시지
+            }
+
+            // 타임스탬프 표시
+            let logTimeStamp = new Date(log.createdAt);
+            const timestampElement = document.createElement("div");
+            timestampElement.className = "timestamp";
+            timestampElement.textContent = formatTimestamp(logTimeStamp.toISOString());
+
+            // 메시지와 타임스탬프를 감싸는 구조
+            messageWrapper.appendChild(messageElement);
+            messageWrapper.appendChild(timestampElement);
+
+            // 채팅 영역에 추가
+            chatContainer.appendChild(messageWrapper);
         } else if(log.type === "dateLog"){
             console.log(log.createdAt);
             let logDate = new Date(log.createdAt);
@@ -195,6 +222,36 @@ $(document).ready(function() {
             chatContainer.appendChild(dateWrapper);
         }
     }
+    
 
 
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.keyboard-area').length) {
+            $('.emoticon-box').removeClass('show');
+        }
+    });
+
+    // 이모티콘 클릭 시 박스 닫기
+    $('.emoticon-box').on('click', '.emoticon', function() {
+        $('.emoticon-box').removeClass('show');
+    });
+    
+
+    
 });
+
+// 이모티콘 창 띄우기
+function openEmoticonBox() {
+    $('.emoticon-box').toggleClass('show');
+}
+
+// 이모티콘 보낼 때
+function sendEmoticon(data) {
+    console.log(data);
+    socket.send(JSON.stringify({
+        type: 'emoticon',
+        message: data,
+        sender: "self",
+        date: Date.now()
+    }));
+}
