@@ -1,0 +1,130 @@
+/* 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+#payment-method {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px;
+    margin-bottom: 20px;
+    justify-content: center; /* 버튼들을 중앙에 정렬 */
+}
+
+.button {
+    width: 170px; /* 각 버튼의 너비를 고정 */
+    height: 80px; /* 각 버튼의 높이를 고정 */
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #fff;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.button:hover {
+    background-color: #f0f8ff;
+    border-color: #0070f3;
+}
+
+.button.selected {
+    background-color: #f0f8ff;
+    border-color: #0070f3;
+}
+
+
+.button.active {
+    background-color: #4CAF50; /* 녹색 배경 */
+    color: white;
+}
+
+/* 포인트 충전 스타일 */
+.payment-wrapper {
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.payment-method-section,
+.point-charge-section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+select, input[type="number"] {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.charge-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.charge-button:hover {
+    background-color: #0056b3;
+}
+
+.charge-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+h1, h5 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+h5 {
+    color: #777;
+    font-size: 16px;
+}
+
+/* 금액 입력 필드에서 오른쪽 화살표 제거 */
+#point-input::-webkit-inner-spin-button,
+#point-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#point-input {
+    -moz-appearance: textfield;
+}
+
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .payment-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    #payment-method {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}

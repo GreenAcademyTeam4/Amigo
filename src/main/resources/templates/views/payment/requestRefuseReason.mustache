@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>환불 반려 사유 등록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/payment/requestRefuseReason.css"/>
+</head>
+<body>
+<h1>환불 반려 사유 등록</h1>
+<form id="refuseForm">
+    <p>주문 이름: {{chargeHistory.orderName}}</p>
+    <p>주문 번호: {{chargeHistory.orderId}}</p>
+    <p>환불 사유: {{requestRefund.cancelReason}}</p>
+
+    <input type="hidden" name="id" value="{{requestRefund.id}}">
+    <input type="hidden" name="chargeHistoryId" value="{{chargeHistoryId}}">
+    <label for="comment">반려 사유를 입력해주세요.</label>
+    <textarea name="refuseReason" rows="5" cols="50" id="comment"
+              maxlength="200"></textarea>
+    <div class="count-container">
+        글자수: <span id="charCount">0</span> / 200
+    </div>
+    <button type="button" onclick="submitRefuseReason()">반려 사유 제출하기</button>
+</form>
+
+<script src="/js/payment/requestRefuseReason.js"></script>
+
+</body>
+</html>

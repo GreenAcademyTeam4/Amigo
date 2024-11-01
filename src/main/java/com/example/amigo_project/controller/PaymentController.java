@@ -2,6 +2,10 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.payment.*;
 import com.example.amigo_project.repository.model.*;
+import com.example.amigo_project.repository.model.payment.ChargeHistory;
+import com.example.amigo_project.repository.model.payment.Refund;
+import com.example.amigo_project.repository.model.payment.RefundRefuse;
+import com.example.amigo_project.repository.model.payment.RequestRefund;
 import com.example.amigo_project.service.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,14 +34,19 @@ public class PaymentController {
     /**
      * 포인트 충전 화면
      */
-    @GetMapping("/pointcharge")
+    @GetMapping("/pointCharge")
     public String getPaymentPage(Model model) {
         User user = (User) session.getAttribute("principal");
 
-        //String phoneNumber = user.getPhoneNumber(); // TODO - 주석 해제 예정
-        //model.addAttribute("phoneNumber", phoneNumber);
-        //System.out.println("phoneNumber : " + phoneNumber); // TODO - 삭제 예정
-        return "/payment/pointCharge"; // Mustache 파일 이름
+        String phoneNumber = user.getPhoneNumber(); // TODO - 주석 해제 예정
+
+        // 전화번호에서 '-' 제거
+        if (phoneNumber != null) {
+            phoneNumber = phoneNumber.replaceAll("[^0-9]", ""); // 숫자가 아닌 모든 문자 제거
+        }
+        model.addAttribute("phoneNumber", phoneNumber);
+        System.out.println("phoneNumber : " + phoneNumber); // TODO - 삭제 예정
+        return "/views/payment/pointCharge"; // Mustache 파일 이름
     }
 
 
@@ -65,7 +74,7 @@ public class PaymentController {
 
         // ChargeHistory에 담긴 값을 ChargeHistoryDTO에 담음
         ChargeHistoryDTO dto = ChargeHistoryDTO.builder()
-                //.name(user.getName())
+                .name(user.getName())
                 .userId(result.getUserId())
                 .orderName(result.getOrderName())
                 .totalAmount(result.getTotalAmount())
@@ -80,8 +89,8 @@ public class PaymentController {
 
         // 결제 내역 보여주기 위해 model에 값 담기
         model.addAttribute("payment", dto);
-        //model.addAttribute("user", user);
-        return "/payment/success";
+        model.addAttribute("user", user);
+        return "/views/payment/success";
     }
 
     /**
@@ -172,7 +181,7 @@ public class PaymentController {
         }
         model.addAttribute("pages", pages);
 
-        return "/payment/paymentList"; // Mustache 템플릿 이름
+        return "/views/payment/paymentList"; // Mustache 템플릿 이름
     }
 
 
@@ -192,8 +201,7 @@ public class PaymentController {
         List<RequestRefundListDTO> filteredList = requestRefundList.stream()
                 .filter(dto -> "request".equals(dto.getRefundStatus()))
                 .map(dto -> {
-                    // cancelStatus 필드에 빈 문자열을 설정
-                    dto.setCancelStatus("대기중"); // cancelStatus에 빈 문자열 설정
+                    dto.setCancelStatus("대기중");
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -233,7 +241,7 @@ public class PaymentController {
         }
         model.addAttribute("pages", pages);
 
-        return "/payment/requestRefundList";
+        return "/views/payment/requestRefundList";
 
     }
 
@@ -245,7 +253,7 @@ public class PaymentController {
     public ResponseEntity<String> checkPoint(@RequestParam(name = "id") int id) {
         User user = (User) session.getAttribute("principal");
         //int userPoint = user.getPoint(); // TODO - 주석 해제
-        int userPoint = 1000;
+        int userPoint = 5000000;
 
         // 결제 내역 조회
         ChargeHistory chargeHistory = paymentService.readChargeHistoryById(id);
@@ -261,7 +269,7 @@ public class PaymentController {
 
 
     /**
-     * 환불 사유 입력 폼
+     * 환불 사유 입력 폼(사용자)
      *
      * @param id
      * @param model
@@ -271,7 +279,7 @@ public class PaymentController {
     public String showRefundForm(@RequestParam(name = "id") int id, Model model) {
         ChargeHistory chargeHistory = paymentService.readChargeHistoryById(id);
         model.addAttribute("chargeHistory", chargeHistory);
-        return "/payment/refundReason";
+        return "/views/payment/refundReason";
     }
 
     /**
@@ -282,14 +290,11 @@ public class PaymentController {
         RequestRefund requestRefund = paymentService.readRequestRefundById(id);
         ChargeHistory chargeHistory = paymentService.readChargeHistoryById(requestRefund.getChargeHistoryId());
 
-        System.out.println("#########ChargeHistory: " + chargeHistory);
-        System.out.println("RequestRefund: " + requestRefund);
-
         model.addAttribute("id", chargeHistory.getId());
         model.addAttribute("chargeHistoryId", requestRefund.getChargeHistoryId()); // 적절한 필드 사용
         model.addAttribute("chargeHistory", chargeHistory);
         model.addAttribute("requestRefund", requestRefund);
-        return "/payment/requestRefuseReason";
+        return "/views/payment/requestRefuseReason";
     }
 
 
@@ -404,9 +409,21 @@ public class PaymentController {
         // 조회된 환불 거부 사유를 모델에 추가합니다.
         model.addAttribute("refundRefuse", refundRefuse);
 
-        return "/payment/refuseReasonDetail";
+        return "/views/payment/refuseReasonDetail";
     }
 
+    /**
+     * 환불 요청 사유 상세보기 폼(관리자 측)
+     */
+    @GetMapping("/cancelReasonForAdmin")
+    public String showCancelReasonForAdmin(@RequestParam(name = "id") int id, Model model) {
+        // 환불 요청 사유 조회
+        RequestRefund reasonDetail = paymentService.readRequestRefundById(id);
 
+        // 조회된 환불 거부 사유를 모델에 추가합니다.
+        model.addAttribute("reasonDetail", reasonDetail);
+
+        return "/views/payment/cancelReasonForAdmin";
+    }
 
 }

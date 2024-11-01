@@ -1,0 +1,139 @@
+$(document).ready(function() {
+    // 모든 requestAt 셀을 선택
+    $('#refundList tr').each(function() {
+        const $cell = $(this).find('td').eq(5); // 5번째 컬럼이 requestAt이라고 가정
+        const originalTime = $cell.text().trim(); // 원본 텍스트 가져오기
+
+        if (originalTime) {
+            // Date 객체로 변환
+            const date = new Date(originalTime);
+
+            // 포맷팅 함수 정의
+            const formattedTime = formatDate(date);
+
+            // 포맷된 시간으로 텍스트 변경
+            $cell.text(formattedTime);
+        }
+    });
+});
+
+// 날짜를 YY-MM-DD HH:mm:ss 형식으로 포맷하는 함수
+function formatDate(date) {
+    const year = String(date.getFullYear()).slice(2); // 연도에서 마지막 두 자리를 사용
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로 패딩
+    const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로 패딩
+    const hours = String(date.getHours()).padStart(2, '0'); // 시간을 2자리로 패딩
+    const minutes = String(date.getMinutes()).padStart(2, '0'); // 분을 2자리로 패딩
+    const seconds = String(date.getSeconds()).padStart(2, '0'); // 초를 2자리로 패딩
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+// 환불 처리 상태(승인)를 업데이트하는 함수 정의
+function updateRefundSuccessButton(id, chargeHistoryId, cancelReason) {
+
+    $.ajax({
+        type: "POST",
+        url: "/pay/requestApprove",
+        contentType: "application/json",
+        data: JSON.stringify({
+            id: id,
+            chargeHistoryId: chargeHistoryId,
+            refundStatus: 'success',
+            action: "승인",
+            cancelReason: cancelReason
+        }),
+        success: function(response) {
+            alert(response); // 서버에서의 응답을 알림
+
+            // 버튼 비활성화 및 상태 업데이트
+            $(".refundSuccess-btn, .refundFail-btn").filter(function () {
+                return $(this).data('id') == id;
+            }).prop('disabled', true);
+
+            const $statusCell = $(`.refundSuccess-btn[data-id='${id}']`).closest('tr').find('td').eq(6);
+            if ($statusCell.length) {
+                $statusCell.text('승인 완료');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("승인 실패: " + error);
+        }
+    });
+}
+
+// 환불 반려 사유 등록 폼
+function openRefuseWindow(id, chargeHistoryId, cancelReason) {
+    const url = `/pay/refuseReasonForm?id=${id}&chargeHistoryId=${chargeHistoryId}&cancelReason=${encodeURIComponent(cancelReason)}`;
+
+    // 브라우저의 화면 크기 가져오기
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // 팝업 창 크기 설정
+    const popupWidth = 630;
+    const popupHeight = 700;
+
+    // 중앙 위치 계산
+    const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+    const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+    // 팝업 창 띄우기 (위치 설정 포함)
+    window.open(url, "refuseWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+
+}
+
+// 사용자의 환불 사유 상세보기 창(관리자 관점)
+function openCancelReasonWindow(id) {
+    const url = `/pay/cancelReasonForAdmin?id=${id}`;
+
+    // 브라우저의 화면 크기 가져오기
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // 팝업 창 크기 설정
+    const popupWidth = 630;
+    const popupHeight = 400;
+
+    // 중앙 위치 계산
+    const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+    const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+    // 팝업 창 띄우기 (위치 설정 포함)
+    window.open(url, "cancelReasonWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+}
+
+
+// 환불 처리 상태(반려)를 업데이트하는 함수 정의
+function updateRefuseStatus(id, chargeHistoryId, refundRefuseReason) {
+    console.log("Received data in parent window:", id, chargeHistoryId, refundRefuseReason);
+    $.ajax({
+        type: "POST",
+        url: "/pay/requestRefuse",
+        contentType: "application/json",
+        data: JSON.stringify({
+            id: parseInt(id, 10),  // 숫자형으로 변환
+            chargeHistoryId: parseInt(chargeHistoryId, 10),  // 숫자형으로 변환
+            refundStatus: 'fail',
+            action: "반려",
+            refundRefuseReason: refundRefuseReason
+        }),
+        success: function(response) {
+            alert(response); // 서버에서의 응답을 알림
+
+            // 버튼 비활성화 및 상태 업데이트
+            $(".refundSuccess-btn, .refundFail-btn").filter(function () {
+                return $(this).data('id') == id;
+            }).prop('disabled', true);
+
+            const $statusCell = $(`.refundSuccess-btn[data-id='${id}']`).closest('tr').find('td').eq(6);
+            if ($statusCell.length) {
+                $statusCell.text('반려 완료');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error in submitRefuseReason:", xhr.status, error);
+            alert("반려 실패: " + error);
+        }
+    });
+}

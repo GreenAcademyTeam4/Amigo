@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.amigo_project.dto.chat.RoomDataDTO;
-import com.example.amigo_project.repository.model.Emoticon;
+import com.example.amigo_project.repository.model.chat.Emoticon;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.ChatService;
 import com.example.amigo_project.service.GoogleService;
@@ -94,6 +94,8 @@ return "views/login/login";
         session.setAttribute("principal", user);
         List<User>onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<User>offlineFriends = userRepository.findOfflineFriends(user.getId());
+        System.out.println(onlineFriends);
+        System.out.println(offlineFriends);
         model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("offlineFriendList", offlineFriends);
         return "index";
