@@ -99,13 +99,19 @@ public class MypageDTO {
         private String gender;
     }
 
+    @Data
+    public static class userSchoolDTO{
+        private Integer userId;
+        private Integer schoolId;
+    }
+
+
     // 친구 추천을 받기 위한 정보를 담은 DTO
     @Data
     public static class reccomendFriendDTO{
         private Integer friendId;
         private String friendName;
         private String gender;
-        private String school;
     }
 
 

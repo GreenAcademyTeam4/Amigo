@@ -14,12 +14,6 @@ insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test2','1234','봄','도라에몽','010-1234-5678','female','17');
 
 -- 임시 데이터
-INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
-('test3','포테이도맨','1234','감자깡','010-1234-5656','male','45','ABC School', null ,null );
-INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
-('test4','여름','1234','매미','010-1234-5656','male','65','ABC School', null ,null );
-INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
-('test5','얍얍','1234','쨉쨉','010-1234-5656','female','15','XYZ School', null ,null );
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values ('test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27');
 
@@ -281,7 +275,6 @@ INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
--- --------------------------------
 
 -- 게시글 데이터 삽입
 INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)

@@ -86,11 +86,11 @@ public class UserService {
   //      }
   
 //        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-//            return user;
+            return user;
 //        } else {
 //            return null;
 //        }
-        return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
+       // return (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) ? user : null;
         
     }
 
