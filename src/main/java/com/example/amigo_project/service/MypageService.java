@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.amigo_project.repository.interfaces.BoardRepository;
 import com.example.amigo_project.repository.interfaces.UserRepository;
@@ -123,11 +126,19 @@ public class MypageService {
         mypageRepository.insertFriendBySenderIdAndReceiverIdToSender(senderId, receiverId); // 보내는쪽 친구 정보 삽입
         mypageRepository.deleteFriendReqBySenderIdAndReceiverId(senderId, receiverId); // 수락한 친구 요청 삭제
     }
-    
+
+
     // 추천 친구 조회
     public List<MypageDTO.reccomendFriendDTO> findRecommendFriendListByBirthAndSchool(User user){
+        List<MypageDTO.userSchoolDTO> dto = mypageRepository.findSchoolIdByUserId(user.getId());
         Integer year = user.getBirth()/(10*10*10*10); // 생년월일 8자리중 앞 4자리만 추출
-        return mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), user.getSchool(), year);
+        List<MypageDTO.reccomendFriendDTO> recFriList = new ArrayList<>();
+        for(int i = 0; i < dto.size(); i++){
+            recFriList.addAll(mypageRepository.findRecommendFriendListByBirthAndSchool(user.getId(), dto.get(i).getSchoolId(), year));
+        }
+        Set<MypageDTO.reccomendFriendDTO> recset = new HashSet<>(recFriList); // 중복 제거를 위해 List를 set으로 변환
+        List<MypageDTO.reccomendFriendDTO> distinctList = new ArrayList<>(recset);  // set에서 다시 List로 변환
+        return distinctList;
     }
 
     public int countMyBoards (int id){
