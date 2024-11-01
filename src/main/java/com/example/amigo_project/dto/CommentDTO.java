@@ -16,6 +16,7 @@ public class CommentDTO {
     private int boardId;
     private int userId;
     private int parentId;
+    private int replyCount;
     private String nickname;
     private String content;
     private Timestamp createdAt;
