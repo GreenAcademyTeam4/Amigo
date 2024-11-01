@@ -89,6 +89,19 @@ return "views/login/login";
         return "index";
     }
 
+    @GetMapping("/test3")
+    public String test3(Model model, HttpSession session){
+        User user = userService.findUser(2);
+        session.setAttribute("principal", user);
+        List<User>onlineFriends = userRepository.findOnlineFriends(user.getId());
+        List<User>offlineFriends = userRepository.findOfflineFriends(user.getId());
+        System.out.println(onlineFriends);
+        System.out.println(offlineFriends);
+        model.addAttribute("onlineFriendList", onlineFriends);
+        model.addAttribute("offlineFriendList", offlineFriends);
+        return "index";
+    }
+
     @GetMapping("/test")
     public String test(Model model, HttpSession session){
         User user = userService.findUser(1);

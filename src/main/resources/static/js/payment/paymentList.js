@@ -29,7 +29,20 @@ function handleRefundRequest(id) {
         url: "/pay/checkPoint?id=" + id,
         success: function(response) {
             alert(response); // 서버에서의 응답을 알림
-            window.open("/pay/refundForm?id=" + id, "refundWindow", "width=800, height=600");
+            // 브라우저의 화면 크기 가져오기
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // 팝업 창 크기 설정
+            const popupWidth = 750;
+            const popupHeight = 670;
+
+            // 중앙 위치 계산
+            const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+            const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+            // 팝업 창 띄우기 (위치 설정 포함)
+            window.open("/pay/refundForm?id=" + id, "refundWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
         },
         error: function(xhr, status, error) {
             // 포인트 부족 시 에러 메시지 표시
@@ -52,20 +65,49 @@ $(document).ready(function () {
         if (originalTime) {
             // Date 객체로 변환
             const date = new Date(originalTime);
-
             // 포맷팅 함수 정의
             const formattedTime = formatDate(date);
-
             // 포맷된 시간으로 텍스트 변경
             $cell.text(formattedTime);
+        }
+
+        // 모든 totalAmount 셀을 선택하여 금액을 포맷
+        const $amountCell = $(this).find('td').eq(2);
+        const originalAmount = $amountCell.text().trim(); // 원본 텍스트 가져오기
+
+        if (originalAmount) {
+            // 금액 포맷 처리
+            const formattedAmount = formatAmount(originalAmount);
+            $amountCell.text(formattedAmount);
         }
     });
 });
 
+// 금액을 포맷하는 함수 (1,000 단위로 쉼표 추가)
+function formatAmount(amount) {
+    // 숫자 변환 및 쉼표 추가하여 포맷 처리
+    return parseInt(amount, 10).toLocaleString('ko-KR') + " 원";
+}
+
+
 // 환불 거부 시 거부 사유 상세보기 새 창 열기
 function openRefuseReasonWindow(id) {
     const url = "/pay/refuseReasonDetail?id=" + id;
-    window.open(url, "refuseReasonWindow", "width=800,height=600");
+
+    // 브라우저의 화면 크기 가져오기
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // 팝업 창 크기 설정
+    const popupWidth = 500;
+    const popupHeight = 500;
+
+    // 중앙 위치 계산
+    const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+    const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+    // 팝업 창 띄우기 (위치 설정 포함)
+    window.open(url, "openRefuseReasonWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
 }
 
 

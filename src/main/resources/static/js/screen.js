@@ -64,12 +64,12 @@ $(document).ready(function() {
     const screen = $('.screen-area');
     $('.online-friend').on('click', function(event) {
         const $infoBox = $('.info-box');
-        const id = $('.online-friend').attr('id');
+        const friend = $('.online-friend').attr('id');
         // 온라인 친구 클릭 시, 화상 채팅 버튼 포함하여 info-box 내용 설정
         $infoBox.html(`
-            <div class="info-profile">프로필 보기</div>
-            <div class="chat">1:1 채팅</div>
-            <div class="voice-chat-btn">화상 채팅</div>
+            <div class="info-profile" id="${friend}">프로필 보기</div>
+            <div class="chat" id="${friend}">1:1 채팅</div>
+            <div class="voice-chat-btn" id="${friend}">화상 채팅</div>
         `);
 
         // 클릭한 위치에 info-box 표시
@@ -82,11 +82,11 @@ $(document).ready(function() {
 
     $('.offline-friend').on('click', function(event) {
         const $infoBox = $('.info-box');
-        const id = $('.offline-friend').attr('id');
+        const friend = $('.offline-friend').attr('id');
         // 오프라인 친구 클릭 시, 화상 채팅 버튼 없이 info-box 내용 설정
         $infoBox.html(`
-            <div class="info-profile">프로필 보기</div>
-            <div class="chat">1:1 채팅</div>
+            <div class="info-profile" id="${friend}">프로필 보기</div>
+            <div class="chat" id="${friend}">1:1 채팅</div>
         `);
 
         // 클릭한 위치에 info-box 표시
@@ -112,8 +112,9 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.chat', function() {
+        const id = $(this).attr("id");
         // 1:1 채팅 버튼 클릭 이벤트
-        fetch("/chat/chatroom/" + id)
+        fetch("/chat/chatRoom/" + id)
             .then(response => response.text())
             .then(data => {
                 screen.html(data);
@@ -137,4 +138,28 @@ $(document).ready(function() {
         console.log("화상 채팅 클릭");
         // 여기에 필요한 기능 추가
     });
+
+    // 포인트 충전 새 창
+    $(document).ready(function() {
+        // 포인트 충전 버튼 클릭 시 결제 창 열기
+        $('#charge').on('click', function() {
+            const url = "/pay/pointCharge";
+
+            // 브라우저의 화면 크기 가져오기
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // 팝업 창 크기 설정
+            const popupWidth = 630;
+            const popupHeight = 630;
+
+            // 중앙 위치 계산
+            const popupLeft = (screenWidth - popupWidth) / 2 + window.screenX;
+            const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
+
+            // 팝업 창 띄우기 (위치 설정 포함)
+            window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+        });
+    });
+
 });

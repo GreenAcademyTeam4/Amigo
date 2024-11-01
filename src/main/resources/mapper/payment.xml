@@ -78,12 +78,4 @@
         WHERE charge_history_id = #{chargeHistoryId}
     </select>
 
-    <select id="readAllRevenue" resultType="Integer">
-        SELECT
-            (SELECT SUM(total_amount) FROM charge_history_tb) -
-            (SELECT IFNULL(SUM(cancel_amount), 0) FROM refund_tb) AS revenue
-    </select>
-
-
-
 </mapper>

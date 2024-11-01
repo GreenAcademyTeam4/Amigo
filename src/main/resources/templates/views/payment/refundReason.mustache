@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>환불 사유 입력</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/payment/refundReason.css"/>
 </head>
 <body>
 <h1>환불 신청</h1>
-<form id="refundReason" method="post" action="/pay/refundForm" target="submitFrame">
+<form id="refundReason" method="post" action="/pay/refundForm">
     <p>주문 이름: {{chargeHistory.orderName}}</p>
     <p>주문 번호: {{chargeHistory.orderId}}</p>
     <div class="form-check">
@@ -45,9 +46,6 @@
     <button type="submit">환불 신청</button>
 </form>
 
-<iframe name="submitFrame" style="display:none;"></iframe>
-
 <script src="/js/payment/refundReason.js"></script>
-
 </body>
 </html>

@@ -231,12 +231,4 @@ public class PaymentService {
         return paymentRepository.readRequestRefundById(id);
     }
 
-    /**
-     * 전체 수익(통계)
-     */
-    public Integer readAllRevenue(){
-        return paymentRepository.readAllRevenue();
-    }
-
-
 }

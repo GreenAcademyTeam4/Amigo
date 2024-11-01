@@ -7,6 +7,7 @@ import com.example.amigo_project.repository.model.chat.Emoticon;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -27,7 +28,10 @@ public interface ChatRepository {
     public List<ChatLogDTO> findChatLogById(@Param("roomId") int roomId);
 
     // roomId로 마지막 메시지 시간 조회
-    public String findLastMessageDate(@Param("roomId") int roomId);
+    public LocalDate findLastMessageDate(@Param("id") int roomId);
+
+    // roomId로 마지막 메시지 시간 수정
+    public void updateLastMessageDate(@Param("id") int roomId, @Param("lastMessageDate") LocalDate lastMessageDate);
 
 
 }

@@ -277,10 +277,6 @@ create table point_history_tb(
     foreign key (user_id) references user_tb(id)
 );
 
--- 채팅 테이블(친구 1 : 1)
-create table friend_chat_tb(
-    id int primary key auto_increment -- 방 번호처럼 사용
-);
 
 -- 채팅에 참가한 유저 리스트
 create table chat_room_tb (
@@ -300,8 +296,8 @@ create table chat_log_tb (
     user_id int not null,
     type varchar (10),
     message varchar(255),
-    created_at timestamp default CURRENT_TIMESTAMP,
-    foreign key (room_id) references friend_chat_tb(id),
+    created_at timestamp,
+    foreign key (room_id) references chat_room_tb(id),
     foreign key (user_id) references user_tb(id)
 );
 
