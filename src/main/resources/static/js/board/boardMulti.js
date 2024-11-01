@@ -1,4 +1,5 @@
 ﻿(function() {
+    let screen = $('.screen-area');
     // 폼 제출 함수
     function submitPost() {
         // 에디터 내용을 <textarea>와 동기화
@@ -24,6 +25,7 @@
 
     // 게시판에서 <a> 태그를 처리하는 함수
     function screenChanger(data) {
+    console.log("화면 전환!~!");
         fetch(data)
             .then(response => response.text())
             .then(data => {
@@ -36,8 +38,12 @@
 
     // 게시글 삭제 함수
     function screenDelete(data) {
+
         console.log("screenChange!!!");
-        fetch(data, {
+        // 삭제 확인 창
+                const userConfirmed = confirm("게시글을 정말로 삭제하시겠습니까?");
+
+        if(userConfirmed) { fetch(data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,6 +57,7 @@
             console.error('게시판 삭제 중 오류 발생:', error);
         });
     }
+   }
 
     // 폼 데이터를 전송하는 함수
     function screenCreate(url, formElementId) {
@@ -134,6 +141,12 @@
         });
     }
 
+
+
+
+
+
+
     // 함수를 전역으로 노출
     window.submitPost = submitPost;
     window.screenChanger = screenChanger;
@@ -141,5 +154,8 @@
     window.screenCreate = screenCreate;
     window.submitComment = submitComment;
     window.modifyPost = modifyPost;
+
+
+
 
 })();

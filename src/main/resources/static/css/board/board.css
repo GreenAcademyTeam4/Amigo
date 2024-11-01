@@ -1,41 +1,114 @@
-.board-container{
+.board-container {
     width: 100%;
+    max-width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.head-title{
+
+.head-title {
     display: flex;
     align-items: center;
     background-color: #D4B7AA;
     min-height: 25px;
     border-bottom: 1px solid #d4b7aa;
     font-size: 25px;
+    color: #FFFFFF;
+    width: 100%;
+    text-align: center;
 }
-.container{
+
+.container {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 900px; /* Ensure it fits within the screen-area */
 }
-.board-title{
+
+.board-title {
     font-size: 30px;
     color: #333333;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0;
     border-bottom: 1px solid #D4B7AA;
+    text-align: center;
 }
-.input-area{
+
+.input-area {
     display: flex;
     margin-top: 10px;
+    justify-content: center;
 }
-.form-select{
+
+.form-select, .form-control {
     height: 30px;
-    width: auto;
     outline: none;
 }
-.form-control{
-    height: 30px;
+
+.form-control {
     width: auto;
-    outline: none;
+    padding-left: 5px;
 }
-.btn-search{
+
+.btn-search {
     margin-top: 10px;
+}
+
+.table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+    color: #333333;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #D4B7AA;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2e7de;
+    font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f2ec;
+}
+
+#pagination-wrapper {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 10px;
+}
+
+/* Pagination styling */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    margin-top: 10px;
+    gap: 5px; /* 버튼 간격 추가 */
+}
+
+.page-button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    color: #333333;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.page-button:hover {
+    background-color: #D4B7AA;
+    color: #fff;
+}
+
+.page-button.active {
+    background-color: #D4B7AA;
+    color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 1.1em;
 }
