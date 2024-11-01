@@ -4,115 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판 레이아웃</title>
-    
     <link rel="stylesheet" type="text/css" href="/css/board/boardMulti.css">
 
-  
+    <style>
+        /* 전체 컨테이너 스타일 */
+        .boardMulti-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            justify-content: center;
+        }
+
+        /* 각 섹션 */
+        .boardMulti-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* 각 카드 스타일 */
+        .boardMulti-board {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: calc(50% - 20px); /* 두 개씩 배치되도록 설정 */
+            box-sizing: border-box;
+        }
+
+        /* 제목 스타일 */
+        .boardMulti-part-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        /* 게시글 아이템 스타일 */
+        .boardMulti-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .boardMulti-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 아이템 내 각 요소 스타일 */
+        .boardMulti-item p,
+        .boardMulti-item li {
+            margin: 0;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        /* 생성일자 스타일 */
+        .boardMulti-createdAt {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        /* 제목 링크 스타일 */
+        .boardMulti-item a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .boardMulti-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* 반응형 스타일 */
+        @media (max-width: 768px) {
+            .boardMulti-board {
+                width: 100%;
+            }
+            .boardMulti-part-title {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
-<div class="board-container">
-<section class="first-board">
-    <div class="board">
-        <div class="part-title">조회가 많은 게시글</div>
-       
-            {{#Search}}
-                <a href="/board/detail/{{id}}">
-                 <div class="board-item">
-                    <div class="item-title">{{title}}</div>
-                     <div class="item-createdAt"> {{createdAtFormat}}</div>
-                 </div>
-                </a>
-            {{/Search}}
-        <h3> <a onclick="screenChanger('/board/bestview')">조회가 많은 게시글</a></h3>
-        <ul>
-            {{#Search}}
-                <div class="board-item">
-                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
-                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
-                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
-                </div>
-            {{/Search}}
+<body>
 
-            {{^Search}}
-                <p>게시글이 없습니다.</p>
-            {{/Search}}
-        
-    </div>
+<div class="boardMulti-container">
+    <section class="boardMulti-section">
+        <div class="boardMulti-board">
+            <div class="boardMulti-part-title">
+                <a onclick="screenChanger('/board/bestview')">조회가 많은 게시글</a>
+            </div>
 
-    <div class="board">
-    
-       <div class="part-title">댓글이 많은 게시글</div>
-       
-        <h3> <a onclick="screenChanger('/board/bestcomment')">댓글이 많은 게시글</a></h3>
-        <ul>
-            {{#Recomend}}
-            <a href="/board/detail/{{id}}">
-                <div class="board-item">
-                  <div class="item-title"> {{title}}</div>
-                    
-                    <div class="item-createdAt">{{createdAtFormat}}</div>
-                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
-                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
-                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
-                </div>
-            </a>
-            {{/Recomend}}
+            <ul>
+                {{#Search}}
+                    <div class="boardMulti-item">
+                        <div class="boardMulti-createdAt">{{createdAtFormat}}</div>
+                        <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
+                        <li><p><strong>작성자:</strong> {{nickname}}</p></li>
+                        <li><p><strong>작성일자:</strong> {{createdAtFormat}}</p></li>
+                    </div>
+                {{/Search}}
 
-            {{^Recomend}}
-                <p>게시글이 없습니다.</p>
-            {{/Recomend}}
-       
-    </div>
-</section>
-<section class="second-board">
-    <div class="board">
-        <div class="part-title">최신글</div>
-        
-        <h3> <a onclick="screenChanger('/board/newBoard')">최신글</a></h3>
-        <ul>
-            {{#createdAt}}
-            <a href="/board/detail/{{id}}">
-                <div class="board-item">
-                  <div class="item-title">  {{title}}</div>
-                   <div class="item-createdAt">{{createdAtFormat}}</div>
-                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
-                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
-                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
-                </div>
-            </a>
-            {{/createdAt}}
+                {{^Search}}
+                    <p>게시글이 없습니다.</p>
+                {{/Search}}
+            </ul>
+        </div>
 
-            {{^createdAt}}
-                <p>게시글이 없습니다.</p>
-            {{/createdAt}}
-        
-    </div>
+        <div class="boardMulti-board">
+            <div class="boardMulti-part-title">
+                <a onclick="screenChanger('/board/bestcomment')">댓글이 많은 게시글</a>
+            </div>
 
-    <div class="board">
-        <div class="part-title">하트가 많은 게시글</div>
-       
-        <h3> <a onclick="screenChanger('/board/newHeart')">하트가 많은 게시글</a></h3>
-        <ul>
-            {{#Heart}}
-             <a href="/board/detail/{{id}}">
-                <div class="board-item">
-                    <div class="item-title">{{title}}</div>
-                    <div class="item-createdAt"> {{createdAtFormat}}</div>
-                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
-                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
-                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
-                </div>
-                </a>
-            {{/Heart}}
+            <ul>
+                {{#Recomend}}
+                    <div class="boardMulti-item">
+                        <div class="boardMulti-createdAt">{{createdAtFormat}}</div>
+                        <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
+                        <li><p><strong>작성자:</strong> {{nickname}}</p></li>
+                        <li><p><strong>작성일자:</strong> {{createdAtFormat}}</p></li>
+                    </div>
+                {{/Recomend}}
 
-            {{^Heart}}
-                <p>게시글이 없습니다.</p>
-            {{/Heart}}
-        
-    </div>
-</section>
+                {{^Recomend}}
+                    <p>게시글이 없습니다.</p>
+                {{/Recomend}}
+            </ul>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/board/boardMulti.js"></script>
+        <div class="boardMulti-board">
+            <div class="boardMulti-part-title">
+                <a onclick="screenChanger('/board/newBoard')">최신글</a>
+            </div>
+
+            <ul>
+                {{#createdAt}}
+                    <div class="boardMulti-item">
+                        <div class="boardMulti-createdAt">{{createdAtFormat}}</div>
+                        <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
+                        <li><p><strong>작성자:</strong> {{nickname}}</p></li>
+                        <li><p><strong>작성일자:</strong> {{createdAtFormat}}</p></li>
+                    </div>
+                {{/createdAt}}
+
+                {{^createdAt}}
+                    <p>게시글이 없습니다.</p>
+                {{/createdAt}}
+            </ul>
+        </div>
+
+        <div class="boardMulti-board">
+            <div class="boardMulti-part-title">
+                <a onclick="screenChanger('/board/newHeart')">하트가 많은 게시글</a>
+            </div>
+
+            <ul>
+                {{#Heart}}
+                    <div class="boardMulti-item">
+                        <div class="boardMulti-createdAt">{{createdAtFormat}}</div>
+                        <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
+                        <li><p><strong>작성자:</strong> {{nickname}}</p></li>
+                        <li><p><strong>작성일자:</strong> {{createdAtFormat}}</p></li>
+                    </div>
+                {{/Heart}}
+
+                {{^Heart}}
+                    <p>게시글이 없습니다.</p>
+                {{/Heart}}
+            </ul>
+        </div>
+    </section>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"></script>
+
+</body>
+</html>
