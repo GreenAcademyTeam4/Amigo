@@ -21,17 +21,14 @@ public class SocketInterceptor implements HandshakeInterceptor {
 
         HttpServletRequest req = ((ServletServerHttpRequest)request).getServletRequest();
         HttpSession session = req.getSession(false); // 세션이 없으면 null 반환
-
         if (session != null) {
             RoomDataDTO data = (RoomDataDTO) session.getAttribute("roomData");
             User user = (User)session.getAttribute("principal");
             if (data != null) {
                 attributes.put("roomData", data); // WebSocketSession에 저장할 데이터 추가
                 attributes.put("principal", user);
-                System.out.println("넣은 데이터 !! : " + data);
             } else {
                 attributes.put("principal", user);
-                System.out.println("넣은 데이터 !! : " + user);
             }
         } else {
             throw new Exception401("로그인이 필요합니다");

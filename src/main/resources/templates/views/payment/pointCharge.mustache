@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/payment/chargePage.css"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>포인트 충전 화면</title>
+    <script src="https://js.tosspayments.com/v2/standard"></script>
+
+</head>
+<body>
+<div class="payment-wrapper">
+
+    <section class="payment-method-section">
+        <h1>포인트 충전</h1>
+        <h5>결제 방법을 선택해주세요</h5>
+        <!-- 결제 UI -->
+        <div id="payment-method">
+            <button id="CARD" class="button" onclick="selectPaymentMethod('CARD')">카드</button>
+            <button id="TRANSFER" class="button" onclick="selectPaymentMethod('TRANSFER')">계좌이체</button>
+            <button id="MOBILE_PHONE" class="button" onclick="selectPaymentMethod('MOBILE_PHONE')">휴대폰</button>
+        </div>
+    </section>
+
+    <section class="point-charge-section">
+        <div class="container">
+            <label for="point-select">포인트 충전</label>
+            <select id="point-select" onchange="handlePointSelection()">
+                <option value="custom" id="direct-input-option">직접입력</option>
+                <option value="1000" selected>1,000 원</option>
+                <option value="3000">3,000 원</option>
+                <option value="5000">5,000 원</option>
+                <option value="10000">10,000 원</option>
+                <option value="30000">30,000 원</option>
+                <option value="50000">50,000 원</option>
+                <option value="100000">100,000 원</option>
+            </select>
+
+            <!-- 직접입력 필드 생성 -->
+            <input type="number" id="point-input" placeholder="금액입력" min="1" max="1000000" style="display: none;" oninput="updateChargeButton()" />
+
+            <button id="chargeButton" class="charge-button" onclick="requestPayment(1000)">충전하기</button>
+        </div>
+    </section>
+
+</div>
+
+<!--전화번호를 javascript에 넘겨주기 위함-->
+<input type="hidden" id="phoneNumberHidden" value="{{phoneNumber}}" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/payment/pointCharge.js"></script>
+
+</body>
+</html>

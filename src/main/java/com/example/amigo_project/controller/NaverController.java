@@ -49,10 +49,10 @@ public class NaverController {
         if (principal != null) {
             session.setAttribute("principal", principal);
             if (principal.getNickname() != null) {
+            System.out.println("네이버 로그인 진입");
                 return "redirect:/";
             }
-            System.out.println("네이버 로그인 진입");
-            return "views/login/schoolSelect";
+            return "views/login/socialInfo";
 
         } else {
             return "redirect:/";
