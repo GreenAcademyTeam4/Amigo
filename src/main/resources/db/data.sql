@@ -281,13 +281,6 @@ INSERT INTO notice_tb (title, content, view_count)
 VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
-
-INSERT INTO friend_tb (user_id, friend_id) VALUES
-(1, 2),
-(1, 3),
-(2, 1),
-(3, 4);
-
 -- --------------------------------
 
 -- 게시글 데이터 삽입

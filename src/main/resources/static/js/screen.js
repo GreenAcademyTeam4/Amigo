@@ -73,8 +73,7 @@ $(document).ready(function() {
             });
     });
 
-});
-$(document).ready(function() {
+
     const screen = $('.screen-area');
     $('.online-friend').on('click', function(event) {
         const $infoBox = $('.info-box');
@@ -149,7 +148,6 @@ $(document).ready(function() {
                 console.error('게시판 로딩 중 오류 발생:', error);
             });
         console.log("1:1 채팅 클릭");
-        // 여기에 필요한 기능 추가
     });
 
     $(document).on('click', '.voice-chat-btn', function() {
@@ -199,7 +197,6 @@ $(document).ready(function() {
             // 팝업 창 띄우기 (위치 설정 포함)
             window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
         });
-    });
 
 });
 });
