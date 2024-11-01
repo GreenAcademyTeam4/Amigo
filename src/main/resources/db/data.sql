@@ -5,11 +5,21 @@ insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,on
 values('test',1234,'정훈','게토 스구루','010-1234-5678','male','27',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values('test','1234','가을','정훈','010-1234-5678','male','27');
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');
+values('test2','1234','봄','도라에몽','010-1234-5678','female','17');
 
+-- 임시 데이터
+INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
+('test3','포테이도맨','1234','감자깡','010-1234-5656','male','45','ABC School', null ,null );
+INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
+('test4','여름','1234','매미','010-1234-5656','male','65','ABC School', null ,null );
+INSERT INTO user_tb (user_id, name, password,nickname,phone_number,gender,birth, elementary_school, middle_school, high_school) VALUES
+('test5','얍얍','1234','쨉쨉','010-1234-5656','female','15','XYZ School', null ,null );
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values ('test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27');
 
@@ -36,6 +46,11 @@ INSERT INTO school_tb (id, name, region) VALUES
 -- 결제 임시 데이터
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (1, '포인트 충전1,000원', 'MC4yMjkyMzc5MTMyMDA3', 1000, 1000, '2024-10-21 12:50:31', '휴대폰', 'tviva20241021124957fLyI0', 'none');
+
+-- 임시 데이터 유저 신고 (나중에 삭제하기)
+INSERT INTO user_report_tb (sender_user, receiver_user, category, content)
+VALUES
+(1, 2, '부적절한 언행', '도라에몽이 게임에서 비매너 발언을 했습니다.');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (2, '포인트 충전1,000원', 'MC4yNTM2NTY3NjQzODc3', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182058fESt7', 'none');

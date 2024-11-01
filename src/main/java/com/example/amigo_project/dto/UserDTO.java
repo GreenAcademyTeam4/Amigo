@@ -1,13 +1,13 @@
 package com.example.amigo_project.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Timestamp;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 
@@ -26,6 +26,11 @@ public class UserDTO {
     private String activeStatus;
     private Timestamp createdAt;
     private String base64Profile;
+
+    // 통계
+    private String ageGroup;
+    private int userCount;
+
 
     /**
      * 회원가입 DTO
