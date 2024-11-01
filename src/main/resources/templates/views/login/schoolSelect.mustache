@@ -26,7 +26,9 @@
                     <button type="button" class="select-school">선택</button>
                 </div>
 
-               
+                 <!-- 숨겨진 input 필드 추가 -->
+                 <input type="hidden" id="schoolId" name="schoolId">
+                 <input type="hidden" id="schoolRegion" name="schoolRegion">
              
 
                 <button type="submit" class="insert-btn">추가</button>
@@ -41,10 +43,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
  function setSchoolName(schoolName) {
-          
+          const school = JSON.parse(schoolName);
             if (window.selectedInputId) {
-                $("#" + window.selectedInputId).val(schoolName);
+                $("#" + window.selectedInputId).val(school.name);
             }
+            // 숨겨진 필드에 id와 region 설정
+            $("#schoolId").val(school.id);
+            $("#schoolRegion").val(school.region);
         }
 
         
