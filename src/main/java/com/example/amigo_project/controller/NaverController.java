@@ -26,7 +26,6 @@ public class NaverController {
                            @RequestParam("state") String state,
                            HttpSession session) throws Exception {
 
-     
 
         // 세션에서 저장된 state 값 가져오기
         String sessionState = (String) session.getAttribute("oauthState");

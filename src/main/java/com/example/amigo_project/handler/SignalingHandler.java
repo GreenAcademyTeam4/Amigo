@@ -2,6 +2,7 @@ package com.example.amigo_project.handler;
 
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.repository.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;

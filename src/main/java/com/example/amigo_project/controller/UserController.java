@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
+
     private final HttpSession session;
     private final UserService userService;
     private final WebClient webClient;
@@ -71,8 +72,6 @@ public class UserController {
     session.invalidate();
     return "redirect:/";
     }
-    
-    
 
     /**
      * 회원 가입 페이지 호출 메서드
@@ -83,8 +82,6 @@ public class UserController {
         return "views/login/join";
     }
 
-
-    
     /**
      * 중복확인 , 회원가입 페이지 에서 사용
      * @param dto
@@ -95,6 +92,7 @@ public class UserController {
 
         Map<String, String > repetitionResult = userService.checkFieldRepetition(dto);
         return ResponseEntity.ok(repetitionResult);
+
     }
 
     /**
@@ -110,8 +108,6 @@ public class UserController {
         } else {
             return "views/login/login";  
         }
-
-
     }
   
     @GetMapping("/schoolData")
