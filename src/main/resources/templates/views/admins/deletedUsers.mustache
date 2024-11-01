@@ -5,6 +5,36 @@
         width: 24px;
         height: 24px;
     }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 45% !important; /* 이 부분에 !important 추가 */
+}
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
 
 <body id="page-top">
@@ -15,10 +45,10 @@
     <div id="content">
         <!-- Main Content -->
         <div class="container-fluid">
-            <h1 class="h3 mb-2 text-gray-800">회원 조회</h1><br>
+            <h1 class="h3 mb-2 text-gray-800">탈퇴 회원 조회</h1><br>
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-secondary">회원 목록</h6>
+                    <h6 class="m-0 font-weight-bold text-secondary">탈퇴 회원 목록</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -27,30 +57,21 @@
                             <tr>
                                 <th>이름</th>
                                 <th>아이디</th>
-                                <th>온라인 상태</th>
                                 <th>활성상태</th>
                                 <th>상세보기</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{#userList}}
+                            {{#deletedUser}}
                                 <tr>
                                     <td>{{name}}</td>
                                     <td>{{userId}}</td>
                                     <td>
-                                        {{#onlineStatus}}
-                                            <img src="/image/admin/free-icon-checkmark.png" class="status-icon" alt="온라인 상태">
-                                        {{/onlineStatus}}
-                                        {{^onlineStatus}}
-                                            <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
-                                        {{/onlineStatus}}
-                                    </td>
-                                    <td>
                                         {{activeStatus}}
                                     </td>
-                                    <td><a href="/admin/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
+                                    <td><button class="btn btn-primary btn-sm detail-btn" data-id="{{id}}">상세보기</button></td>
                                 </tr>
-                            {{/userList}}
+                            {{/deletedUser}}
                             </tbody>
                         </table>
                     </div>
@@ -61,6 +82,15 @@
     </div>
 </div>
 <!-- End of Content Wrapper -->
+
+<!-- Modal -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>탈퇴 사유</h2>
+        <p id="withdrawReason">탈퇴 사유를 불러오는 중...</p>
+    </div>
+</div>
 
 <!-- JavaScript Files Load -->
 <!-- jQuery CDN -->
@@ -108,9 +138,42 @@
         $('#userTable_filter input').on('keyup change', function() {
             table.draw();
         });
+
+        // Modal 관련 스크립트
+        var modal = $('#detailModal');
+        var span = $('.close');
+
+        // 상세보기 버튼 클릭 시
+        $('.detail-btn').on('click', function() {
+            var userId = $(this).data('id');
+            // AJAX를 사용해 탈퇴 사유를 가져옵니다
+            $.ajax({
+                url: '/admin/user/withdrawReason/' + userId,
+                method: 'GET',
+                success: function(response) {
+                    $('#withdrawReason').text(response.reason);
+                    modal.show();
+                },
+                error: function() {
+                    $('#withdrawReason').text('탈퇴 사유를 불러오지 못했습니다.');
+                    modal.show();
+                }
+            });
+        });
+
+        // 모달 닫기 버튼 클릭 시
+        span.on('click', function() {
+            modal.hide();
+        });
+
+        // 모달 바깥 클릭 시 모달 닫기
+        $(window).on('click', function(event) {
+            if (event.target == modal[0]) {
+                modal.hide();
+            }
+        });
     });
 </script>
-
 
 </body>
 

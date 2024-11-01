@@ -19,6 +19,25 @@ create table user_tb (
   created_at timestamp default CURRENT_TIMESTAMP
 );
 
+-- 탈퇴 사유 조회 테이블
+create table withdrawal_reason_tb (
+  id int primary key auto_increment,
+  user_id int not null,
+  reason varchar(255) not null,
+  details text null,
+  created_at timestamp default CURRENT_TIMESTAMP,
+  foreign key (user_id) references user_tb(id) on delete cascade
+);
+
+
+-- 방문 수 테이블
+create table day_record_tb (
+    user_id INT,
+    date DATE,
+    Unique(user_id,date),
+    foreign key(user_id) references user_tb(id)
+);
+
 -- 학교 테이블
 create table school_tb (
   id int primary key auto_increment,
@@ -276,4 +295,11 @@ create table point_history_tb(
     less_point int, -- 잔여 포인트
     created_at timestamp default CURRENT_TIMESTAMP,
     foreign key (user_id) references user_tb(id)
+);
+
+-- 유저가 산 아이템 내역
+create table prodHistory_tb(
+    id int primary key auto_increment,
+    avatar_id int,
+    foreign key (avatar_id) references avatar_tb(id)
 );
