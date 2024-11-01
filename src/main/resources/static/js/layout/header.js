@@ -33,6 +33,7 @@
                     .catch(error => {
                         console.error('화면 로딩 중 오류 발생', error);
                     });
+                tryCall = false;
             } else if (alarm.content === 'accept') {
                 callStatus = true;
             } else if (alarm.content === 'callback') {
