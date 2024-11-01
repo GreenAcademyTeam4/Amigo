@@ -1,15 +1,19 @@
-insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point)
-values('thddnjstjr','1234','고죠','고죠','010-1234-5678','male','27', 50000);
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, point ,online_status)
+values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','27', 50000 ,true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('test',1234,'가을','정훈','010-1234-5678','male','27',true);
+values('test',1234,'정훈','게토 스구루','010-1234-5678','male','27',true);
+
+insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
+values('test','1234','가을','정훈','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test1','5996ec04-eebf-42e2-a05e-a9aaf02095cf','겨울','짱구','010-1234-5678','male','27');
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
-values('test2',1234,'봄','도라에몽','010-1234-5678','female','17');
+values('test2','1234','봄','도라에몽','010-1234-5678','female','17');
 
+-- 임시 데이터
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values ('test2', '1234', '가을2', '구구2', '010-1234-5678', 'male', '27');
 
@@ -29,24 +33,50 @@ insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values ('test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27');
 
 -- 임시 데이터 학교
-INSERT INTO school_tb (id, school, name, region) VALUES
-(1, 'ABC School', 'ABC', 'Seoul'),
-(2, 'XYZ School', 'XYZ', 'Busan');
+INSERT INTO school_tb (id, name, region) VALUES
+(1,'ABC', 'Seoul'),
+(2,'XYZ', 'Busan');
+
+-- 결제 임시 데이터
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1,000원', 'MC4yMjkyMzc5MTMyMDA3', 1000, 1000, '2024-10-21 12:50:31', '휴대폰', 'tviva20241021124957fLyI0', 'none');
+
+-- 임시 데이터 유저 신고 (나중에 삭제하기)
+INSERT INTO user_report_tb (sender_user, receiver_user, category, content)
+VALUES
+(1, 2, '부적절한 언행', '도라에몽이 게임에서 비매너 발언을 했습니다.');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC4yMjkyMzc5MTMyMDA3', 1000, 1000, '2024-10-21 12:50:31', '휴대폰', 'tviva20241021124957fLyI0', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4yNTM2NTY3NjQzODc3', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182058fESt7', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC4yNTM2NTY3NjQzODc3', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182058fESt7', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4yNjcxMTU1ODY1NTIw', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182937rTWv7', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC4yNjcxMTU1ODY1NTIw', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182937rTWv7', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4xNzQ5NzM4MTQwMDE0', 1000, 1000, '2024-10-28 18:21:23', '휴대폰', 'tviva20241028093632rKXj1', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC4xNzQ5NzM4MTQwMDE0', 1000, 1000, '2024-10-28 18:21:23', '휴대폰', 'tviva20241028093632rKXj1', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4wMzY5MTA2MDk5MTIy', 1000, 1000, '2024-10-28 14:39:01', '휴대폰', 'tviva20241028143745iHv15', 'none');
 
-        insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC4wMzY5MTA2MDk5MTIy', 1000, 1000, '2024-10-28 14:39:01', '휴대폰', 'tviva20241028143745iHv15', 'none');
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1,000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전3,000원', 'MC43NjQyMDExNTgzMjM4', 3000, 3000, '2024-10-29 15:14:41', '카드', 'tviva202410291510575csH7', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전1,000원', 'MC4yNzk5MjI2MTE0MTA1', 1000, 1000, '2024-10-29 16:23:27', '휴대폰', 'tviva202410291622277ipp7', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전3,000원', 'MC44NTA2MzM1MDc4MDQ1', 3000, 3000, '2024-10-30 16:23:30', '휴대폰', 'tviva20241030162248JlTT9', 'none');
+
+insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
+        VALUES (1, '포인트 충전500,000원', 'MC43NzE0MDYzNDcyMTQw', 500000, 500000, '2024-11-01 11:15:09', '간편결제', 'tviva20241101111408StJK2', 'none');
+
+insert into refund_tb(payment_key, order_name, order_id, cancel_amount, cancel_reason, requested_at, canceled_at, cancel_status)
+        VALUES ('tviva20241030162248JlTT9', '포인트 충전3,000원', 'MC44NTA2MzM1MDc4MDQ1', 3000, '단순 변심', '2024-10-30 16:22:48', '2024-10-30 16:25:37', 'DONE');
+
+
 
         insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (1, '포인트 충전1000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
@@ -246,14 +276,6 @@ VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
 
-INSERT INTO friend_tb (user_id, friend_id) VALUES
-(1, 2),
-(1, 3),
-(2, 3),
-(3, 4);
-
--- --------------------------------
-
 -- 게시글 데이터 삽입
 INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
 VALUES (1, '첫11 번째 게시글', '첫 번째 게시글 내용 위치', 1, 100, 2, NOW()); -- 23
@@ -316,13 +338,15 @@ INSERT INTO comment_tb (board_id, user_id, content_location, created_at)
 VALUES (3, 2, '세 번째 게시글에 대한 두 번째 댓글', NOW());
 
 
-
-
-
--- 친구 요청 테이블에 샘플 데이터 삽입
-INSERT INTO friend_wait_tb (sender_id, receiver_id) VALUES
-(2, 4),
-(4, 1);
+INSERT INTO like_tb (user_id, board_id) VALUES (7, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (2, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (3, 7);
+INSERT INTO like_tb (user_id, board_id) VALUES (5, 7);
+INSERT INTO friend_tb (user_id, friend_id) VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 4);
 
 -- 아바타 테이블에 샘플 데이터 삽입
 INSERT INTO avatar_tb (id, type, price, name) VALUES
@@ -345,19 +369,47 @@ INSERT INTO inventory_tb (user_id, avatar_id) VALUES
 (1, 4),
 (1, 5),
 (1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(2, 1),
 (2, 2),
 (2, 3),
 (2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4),
 (3, 5),
 (3, 6),
-(4, 6);
+(3, 7),
+(3, 8),
+(3, 9),
+(3, 10),
+(4, 1),
+(4, 2),
+(4, 3),
+(4, 4),
+(4, 5),
+(4, 6),
+(4, 7),
+(4, 8),
+(4, 9),
+(4, 10);
 
 -- 현재 아바타 정보 테이블에 샘플 데이터 삽입
 INSERT INTO now_avatar_tb (user_id, head, top, bottom, shoes) VALUES
-(1, 1, NULL, 3, 4),
-(2, 2, NULL, 3, NULL),
-(3, 5, NULL, 6, NULL),
-(4, NULL, NULL, 6, NULL);
+(1, 1, 8, 3, 4),
+(2, 2, 8, 3, 4),
+(3, 5, 8, 6, 4),
+(4, 2, 8, 6, 4);
 
 -- 포인트 사용내역 테이블에 샘플 데이터 삽입
 INSERT INTO point_history_tb (user_id, order_head, order_body, use_point, less_point) VALUES
