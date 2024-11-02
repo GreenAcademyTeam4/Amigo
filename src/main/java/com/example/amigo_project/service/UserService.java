@@ -178,5 +178,9 @@ public class UserService {
     public void updateOffline(int id) {
         userRepository.updateOffline(id);
     }
+    // 학교 정보 가져오기
+    public School findSchoolData(int id) {
+        return userRepository.findSchoolData(id);
+    }
 }
 
