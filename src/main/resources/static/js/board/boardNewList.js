@@ -2,7 +2,6 @@
 
  document.addEventListener('DOMContentLoaded', function () {
         // totalPages는 서버에서 Mustache로 전달된 변수
-        const totalPages = {{totalPages}};
         const paginationContainer = document.getElementById('pagination');
         const urlParams = new URLSearchParams(window.location.search);
         const size = parseInt(urlParams.get('size')) || 4;

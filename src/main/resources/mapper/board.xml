@@ -31,7 +31,7 @@
         WHERE school_id = #{schoolId}
         ORDER BY b.created_at DESC, b.id DESC
         LIMIT #{size}
-        OFFSET #{offset}
+        OFFSET #{page}
     </select>
 
     <!-- 특정 학교의 게시글 갯수 조회 (페이징 처리 할려고)-->
@@ -82,6 +82,7 @@
         on c.user_id = u.id
         WHERE board_id = #{boardId}
         ORDER BY c.created_at DESC
+<!--        LIMIT = #{size} OFFSET = #{page}-->
     </select>
 
     <!-- 게시판Id를 기준으로 게시글을 삭제하는 쿼리   -->
@@ -235,12 +236,18 @@
 
     <!-- 게시글 상세보기 클릭 시 기존 댓글 불러오기 메서드 (댓글) (페이징 처리) -->
     <select id="findCommentsByBoardIdWithPaging" resultType="com.example.amigo_project.dto.CommentDTO">
-        SELECT c.id, c.board_id AS boardId, u.nickname, c.content_location AS content, c.created_at AS createdAt
+        SELECT c.id,
+               c.board_id AS boardId,
+               c.user_id AS userId,
+               u.nickname,
+               c.content_location AS content,
+               c.created_at AS createdAt,
+               (SELECT COUNT(*) FROM comment_tb WHERE parent_id = c.id) AS replyCount
         FROM comment_tb c
-        JOIN user_tb u ON c.user_id = u.id
-        WHERE board_id = #{boardId} and parent_id = null
+                 JOIN user_tb u ON c.user_id = u.id
+        WHERE c.board_id = #{boardId} AND c.parent_id IS NULL
         ORDER BY c.created_at DESC
-        LIMIT #{size} OFFSET #{offset}
+            LIMIT #{size} OFFSET #{page};
     </select>
 
     <!-- 대댓글 불러오기 -->

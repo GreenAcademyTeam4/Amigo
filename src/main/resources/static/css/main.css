@@ -33,6 +33,7 @@ main {
     align-items: center;
     margin: 10px 10px 10px 0;
     box-sizing: border-box;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .profile {
@@ -96,7 +97,9 @@ main {
     overflow-y: auto;  /* 내용이 많을 경우 세로 스크롤 생성 */
     padding: 10px;
 }
-
+.friend-title{
+    color: #333;
+}
 /* 스크롤바 스타일 (옵션) */
 .friend-box::-webkit-scrollbar {
     width: 8px;
