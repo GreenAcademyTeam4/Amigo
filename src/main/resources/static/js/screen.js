@@ -6,6 +6,7 @@ $(document).ready(function() {
     const school = $('.other-school');
     const friends = $('.friends');
     const mypage = $('#my-page'); // 올바르게 선언
+    
     window.tryCall = false;
 
     // 화상 채팅 버튼 활성화/비활성화 설정 함수
@@ -58,7 +59,7 @@ $(document).ready(function() {
                 console.error('등교하기 중 오류 발생:', error);
             });
     });
-
+ 
    mypage.on('click', function() {
        fetch("/my-page/info")
            .then(response => response.text())
