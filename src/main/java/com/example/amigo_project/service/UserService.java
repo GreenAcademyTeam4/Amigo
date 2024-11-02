@@ -153,8 +153,8 @@ public class UserService {
     }
 
     // 유저가 가진 학교 찾기
-    public List<School> findUserSchoolList(UserDTO.infoDTO dto) {
-        return userRepository.findUserSchool(dto);
+    public List<School> findUserSchoolList(int id) {
+        return userRepository.findUserSchool(id);
     }
 
     // 학교 데이터가 있는지 검사

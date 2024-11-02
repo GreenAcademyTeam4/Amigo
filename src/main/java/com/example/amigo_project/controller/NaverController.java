@@ -1,6 +1,8 @@
 package com.example.amigo_project.controller;
 
+import com.example.amigo_project.repository.model.School;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +14,8 @@ import com.example.amigo_project.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,9 +29,7 @@ public class NaverController {
   
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,
-                           HttpSession session) throws Exception {
-
-
+                           HttpSession session, Model model) throws Exception {
         // 세션에서 저장된 state 값 가져오기
         String sessionState = (String) session.getAttribute("oauthState");
 
@@ -50,6 +52,12 @@ public class NaverController {
             session.setAttribute("principal", principal);
             if (principal.getNickname() != null) {
             System.out.println("네이버 로그인 진입");
+                userService.updateOnline(principal.getId());
+                List<School> schoolList = userService.findUserSchoolList(principal.getId());
+                model.addAttribute("schoolList",schoolList);
+                String profile = principal.base64Encoding(principal.getProfile());
+                session.setAttribute("profile",profile);
+                session.setAttribute("schoolId",schoolList.get(0).getId());
                 return "redirect:/";
             }
             return "views/login/socialInfo";

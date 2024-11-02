@@ -40,16 +40,20 @@ public class UserController {
      */
 
     @PostMapping("/login")
-    public String login(HttpSession session, UserDTO.loginDTO dto) {
+    public String login(HttpSession session, UserDTO.loginDTO dto,Model model) {
         User principal = userService.findUserById(dto);
 
         if (principal != null) {
             System.out.println(dto);
             System.out.println(principal);
             session.setAttribute("principal", principal);
-
             if (principal.getNickname() != null) {
                 userService.updateOnline(principal.getId());
+                List<School> schoolList = userService.findUserSchoolList(principal.getId());
+                model.addAttribute("schoolList",schoolList);
+                String profile = principal.base64Encoding(principal.getProfile());
+                session.setAttribute("profile",profile);
+                session.setAttribute("schoolId",schoolList.get(0).getId());
                 return "redirect:/";
             }
 
@@ -203,7 +207,7 @@ public class UserController {
             userService.createSchool(dto);
         }
         userService.createUserSchool(dto);
-        List<School>schoolList = userService.findUserSchoolList(dto);
+        List<School>schoolList = userService.findUserSchoolList(dto.getId());
         User user = userService.findUser(principal.getId());
         if(user.getGender().equals("male")) {
             byte[]profile = user.convertFileToBytes("static/image/avator/male_head.png");
