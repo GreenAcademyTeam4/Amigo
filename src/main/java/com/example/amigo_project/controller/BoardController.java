@@ -10,6 +10,7 @@ import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.model.*;
 import com.example.amigo_project.service.BoardService;
+import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,7 @@ public class BoardController {
 
     private final HttpSession session;
     private final BoardService boardService;
+    private final UserService userService;
 
 
     /**
@@ -116,8 +118,6 @@ public class BoardController {
         return "redirect:/board/list";  // 등록 후 목록 페이지로 리다이렉트
     }
 
-
-
     /**
      * 학교에 속한 게시글 모두 출력
      * @param
@@ -138,8 +138,7 @@ public class BoardController {
 
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
-
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page - 1, size); // Service에서 페이징된 게시글 목록 가져옴
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
@@ -156,7 +155,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
         System.out.println("총 페이지 수 : " + totalPages);
         System.out.println("현재 페이지 : " + page);
         model.addAttribute("currentPage", page);
@@ -300,7 +298,6 @@ public class BoardController {
     /**
      * 댓글 전송 (비동기 처리)
      */
-    @ResponseBody
     @PostMapping("/comment")
     public ResponseEntity<?> insertComment(@RequestParam(name = "boardId") int boardId,
                                            @RequestParam(name = "content") String content,
@@ -514,21 +511,9 @@ public class BoardController {
     public String multiBoard(Model model, HttpSession session) {
         User user = (User) session.getAttribute("principal");
         System.out.println("유저 아이디 : " + user.getUserId());
-
-//        if(user == null) {
-//            model.setAttribute("msg", "alert 창에 띄울 메세지");
-//            model.setAttribute("url", "리다이렉트 시킬 url 주소");
-//            return "alert";
-//        }
-        // 이런 식으로 예외처리 할 수 있음  - 로그인 하지 않은 유저 걸러내기 , 필요시 적용
-        
-//        School school = (School)session.getAttribute("school");
-//
-//        int userId = user.getId(); // 세션에서 가져온 userId
-//        int schoolId = school.getSchoolId(); // 세션에서 가져온 schoolId
-        int schoolId = 1;
-
-
+        int schoolId = (Integer)session.getAttribute("schoolId");
+        List<School> schoolList = userService.findUserSchoolList(user.getId());
+        schoolId = schoolList.get(0).getId();
         List<BoardDTO> Heart = boardService.findHeartBoard(schoolId);
         List<BoardDTO> Recomend = boardService.findRecomendBoard(schoolId);
         List<BoardDTO> Search = boardService.findSearchBoard(schoolId);

@@ -341,6 +341,8 @@ INSERT INTO like_tb (user_id, board_id) VALUES (2, 7);
 INSERT INTO like_tb (user_id, board_id) VALUES (3, 7);
 INSERT INTO like_tb (user_id, board_id) VALUES (5, 7);
 INSERT INTO friend_tb (user_id, friend_id) VALUES
+(1, 2),
+(2, 1),
 (1, 3),
 (3, 1);
 
