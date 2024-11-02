@@ -146,4 +146,8 @@
         where id = #{id}
     </update>
 
+    <!-- 학교 정보 가져오기 -->
+    <select id="findSchoolData" resultType="com.example.amigo_project.repository.model.School">
+        select * from school_tb where id = #{id}
+    </select>
 </mapper>

@@ -26,6 +26,20 @@ import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -116,12 +130,13 @@ public class MainController {
         List<User> onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<Emoticon> emoticonList = chatService.findEmoticonList();
         RoomDataDTO roomDataDTO = new RoomDataDTO();
-        roomDataDTO.setClassRoom("1");
-        roomDataDTO.setSchool("분포고등학교");
-        roomDataDTO.setGrade("1");
-        session.setAttribute("roomData", roomDataDTO);
-        session.setAttribute("principal", user);
-        // school ID 세션에서 가져오기
+
+        roomDataDTO.setClassRoom(1);
+        roomDataDTO.setSchoolId(1);
+        roomDataDTO.setGrade(1);
+        session.setAttribute("roomData",roomDataDTO);
+        session.setAttribute("principal",user);
+
         System.out.println(emoticonList);
         model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("friendId", friendId);
@@ -129,6 +144,7 @@ public class MainController {
         model.addAttribute("emoticonList", emoticonList);
         return "views/chat/voiceChat";
     }
+
 
     @PostMapping("/change/{id}")
     public String loadContent(@PathVariable("id") int id, Model model, HttpSession session) {
@@ -173,5 +189,43 @@ public class MainController {
         model.addAttribute("offlineFriendList", offlineFriends);
 
         return "views/board/boardMultiList";
+
+    @GetMapping("/enter")
+    public String enterSchool(Model model,HttpSession session) {
+        int schoolId = (Integer)session.getAttribute("schoolId");
+        School school = userService.findSchoolData(schoolId);
+        // 학년 목록 초기화
+        List<Integer>grades = new ArrayList<>();
+        for(int i = 0; i < 6; i++) {
+            grades.add(i,i+1);
+        }
+        // 반 목록 초기화
+        List<Integer>classes = new ArrayList<>(10);
+        for(int i = 0; i < 10; i++) {
+            classes.add(i,i+1);
+        }
+        model.addAttribute("schoolName",school.getName());
+        model.addAttribute("grades",grades);
+        model.addAttribute("classes",classes);
+        return "views/classroom/schoolHall";
+    }
+
+    @PostMapping("/enterClass")
+    public String enterClassroom(@RequestBody Map<String, Integer> params, Model model,HttpSession session) {
+        User user = (User)session.getAttribute("principal");
+        List<Emoticon>emoticonList = chatService.findEmoticonList();
+        System.out.println("들어오는중 !!!!!");
+        Integer grade = params.get("grade");
+        Integer classSelect = params.get("class");
+        Integer schoolId = (Integer)session.getAttribute("schoolId");
+        RoomDataDTO roomDataDTO = new RoomDataDTO();
+        roomDataDTO.setClassRoom(classSelect);
+        roomDataDTO.setGrade(grade);
+        roomDataDTO.setSchoolId(schoolId);
+        session.setAttribute("roomData",roomDataDTO);
+        model.addAttribute("user",user.getId());
+        model.addAttribute("emoticonList",emoticonList);
+        return "views/classroom/classroom2";
+
     }
 }
