@@ -1,69 +1,75 @@
 {{>layout/header}}
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-
-<main>
-    <div class="info-box">
-    </div>
-    <div id="screen-area" class="screen-area">
-    </div>
-    <div class="remote-controller">
-        <div class="profile">
-            {{#profile}}
-            <img src="data:image/png;base64, {{profile}}"> {{!유저 프로필이미지}}
-            {{/profile}}
-        </div>
-        <div class="nickname">
-           {{principal.nickname}}
-        </div>
-    
-            <div class="bt-controller" id="my-page">
-                마이페이지
+<section class="content-box">
+        {{#schoolList}}
+            <span class="school-part">
+                 {{name}}
+            </span>
+        {{/schoolList}}
+         
+        <main>
+            <div class="info-box">
             </div>
-
-        <a href="">
-            <div class="bt-controller" id="enter">
-                등교하기
+            <div id="screen-area" class="screen-area">
             </div>
-        </a>
-   
-        <div class="bt-controller" id="post">
-            게시판
-        </div>
-
-        <div class="bt-controller" id="charge">
-            포인트 충전하기
-        </div>
-
-        <div class="friend-box">
-            <div class="online-friends">
-                <span class="friend-title">-온라인 친구-</span>
-                {{#onlineFriendList}}
-                    <div class="online-friend layer" id="{{id}}">
-                        <div class="friend-profile">
-
-                        </div>
-                        <span class="friend-nickname">{{nickname}}</span>
+            <div class="remote-controller">
+                <div class="profile">
+                    {{#profile}}
+                    <img src="data:image/png;base64, {{profile}}"> {{!유저 프로필이미지}}
+                    {{/profile}}
+                </div>
+                <div class="nickname">
+                {{principal.nickname}}
+                </div>
+            
+                    <div class="bt-controller" id="my-page">
+                        마이페이지
                     </div>
-                {{/onlineFriendList}}
-            </div>
-            <div class="offline-friends">
-                <span class="friend-title"> -오프라인 친구-</span>
-                {{#offlineFriendList}}
-                    <div class="offline-friend layer" id="{{id}}">
-                        <div class="friend-profile">
-                        </div>
-                        <span class="friend-nickname">{{nickname}}</span>
-                    </div>
-                {{/offlineFriendList}}
-            </div>
-        </div>
-    </div>
-<script>(function(global) {
-    global.userId = {{principal.id}}; // roomId 변수를 글로벌로 설정
-})(window);</script>
-<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/screen.js"></script>
-</main>
 
+                <a href="">
+                    <div class="bt-controller" id="enter">
+                        등교하기
+                    </div>
+                </a>
+        
+                <div class="bt-controller" id="post">
+                    게시판
+                </div>
+
+                <div class="bt-controller" id="charge">
+                    포인트 충전하기
+                </div>
+
+                <div class="friend-box">
+                    <div class="online-friends">
+                        <span class="friend-title">-온라인 친구-</span>
+                        {{#onlineFriendList}}
+                            <div class="online-friend layer" id="{{id}}">
+                                <div class="friend-profile">
+
+                                </div>
+                                <span class="friend-nickname">{{nickname}}</span>
+                            </div>
+                        {{/onlineFriendList}}
+                    </div>
+                    <div class="offline-friends">
+                        <span class="friend-title"> -오프라인 친구-</span>
+                        {{#offlineFriendList}}
+                            <div class="offline-friend layer" id="{{id}}">
+                                <div class="friend-profile">
+                                </div>
+                                <span class="friend-nickname">{{nickname}}</span>
+                            </div>
+                        {{/offlineFriendList}}
+                    </div>
+                </div>
+            </div>
+        <script>(function(global) {
+            global.userId = {{principal.id}}; 
+        })(window);</script>
+        <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="/js/screen.js"></script>
+        </main>
+</section>
 {{>layout/footer}}
