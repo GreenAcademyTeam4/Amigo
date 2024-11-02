@@ -1,14 +1,16 @@
 package com.example.amigo_project.service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.example.amigo_project.repository.model.School;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
+import com.example.amigo_project.repository.model.School;
 import com.example.amigo_project.repository.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -154,6 +156,7 @@ public class UserService {
 
     // 유저가 가진 학교 찾기
     public List<School> findUserSchoolList(int id) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+id);
         return userRepository.findUserSchool(id);
     }
 

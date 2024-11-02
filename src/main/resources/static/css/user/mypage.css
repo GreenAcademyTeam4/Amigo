@@ -52,7 +52,7 @@
     color:#d4b7aa ;
 }
 .profile-point,.profile-friend{
-    padding: 0 60px;
+    padding: 0 130px;
     flex-direction: column;
     display: flex;
     align-items: center;
@@ -61,14 +61,14 @@
     font-size: 20px;
 }
 .profile-board{
-    padding: 0 60px;
+    padding: 0 130px;
     flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 20px;
-    border-left: 2px solid white;
-    border-right: 2px solid white;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
 }
 
