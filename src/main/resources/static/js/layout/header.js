@@ -156,3 +156,45 @@ function declineInvitation(senderId) {
     alarmSound.pause();
     alarmSound.currentTime = 0;
 }
+
+$(document).ready(function() {
+    // 친구 관리
+    // $('#friendLink').on('click', function(event) {
+    //     event.preventDefault();
+    //     fetchContent('/friend');
+    // });
+
+    $('#storeLink').on('click', function(event) {
+        fetch('/store/shop')
+            .then(response => response.text())
+            .then(data => {
+                screen.html(data);
+            })
+            .catch(error => {
+                console.error('화면 로딩 중 오류 발생', error);
+            });
+    });
+    
+    // 공지 사이트
+    // $('#noticeLink').on('click', function(event) {
+    //     event.preventDefault();
+    //     fetchContent('/notice');
+    // });
+
+    // 쪽지 사이트
+    // $('#messageLink').on('click', function(event) {
+    //     event.preventDefault();
+    //     fetchContent('/message');
+    // });
+
+    function fetchContent(url) {
+        fetch(url, {
+            method: 'GET'
+        })
+            .then(response => response.text())
+            .then(data => {
+                $('#screen-area').html(data);
+            })
+            .catch(error => console.error('Error fetching content:', error));
+    }
+});

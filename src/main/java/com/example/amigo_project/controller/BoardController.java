@@ -77,7 +77,6 @@ public class BoardController {
 
         System.out.println();
         model.addAttribute("userId", user_id);
-        model.addAttribute("schoolId", school_id);
 
         System.out.println("userId : " + user_id);
         System.out.println("schoolId : " + school_id);
@@ -554,13 +553,13 @@ public class BoardController {
     /**
      * 게시판에서 검색했을 시 작동하는 기능
      */
-    @GetMapping("/search")
-    public String searchBoard(@RequestParam("keyword") String keyword ,
-                              @RequestParam("searchType") String searchType,
+    @PostMapping("/search")
+    public String searchBoard(@RequestBody Map<String, String> params,
                               @RequestParam(name = "page", defaultValue = "0") Integer page,
                               @RequestParam(name = "size", defaultValue = "4") Integer size,
                               Model model) {
-
+        String keyword = params.get("keyword");
+        String searchType = params.get("searchType");
         int totalCount = 0;
         List<BoardDTO> searchResults = new ArrayList<>();
         int schoolId = (Integer)session.getAttribute("schoolId");
@@ -706,8 +705,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
-
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
 
@@ -750,7 +747,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
@@ -841,7 +837,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
