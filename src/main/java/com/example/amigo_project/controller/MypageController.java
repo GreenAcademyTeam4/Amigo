@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.amigo_project.dto.MypageDTO;
 import com.example.amigo_project.dto.payment.ChargeHistoryDTO;
 import com.example.amigo_project.repository.model.User;
@@ -23,14 +22,6 @@ import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.Clock;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
