@@ -1,0 +1,39 @@
+/* Selection Box */
+.selection-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+}
+
+.selection-box h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.select-box {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #d4b7aa;
+    margin-bottom: 15px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    color: white;
+    background-color: #d98264;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #ce9178;
+}

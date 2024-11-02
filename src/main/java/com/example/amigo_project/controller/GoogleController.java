@@ -33,11 +33,10 @@ public class GoogleController {
         if (principal != null) {
             session.setAttribute("principal", principal);
             userService.updateOnline(principal.getId());
-            List<School> schoolList = userService.findUserSchoolList(principal.getId());
-            model.addAttribute("schoolList",schoolList);
-            String profile = principal.base64Encoding(principal.getProfile());
-            session.setAttribute("profile",profile);
-            session.setAttribute("schoolId",schoolList.get(0).getId());
+            if(principal.getProfile() != null) {
+                String profile = principal.base64Encoding(principal.getProfile());
+                session.setAttribute("profile",profile);
+            }
             return "views/login/socialInfo";
         } else {
             return "redirect:/";

@@ -316,3 +316,26 @@ main {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
 }
+
+/* 이모티콘 스타일 */
+.chat-emoticon {
+    max-width: 50px;  /* 채팅과 비슷한 크기 */
+    max-height: 50px;
+    border-radius: 10px;
+}
+
+/* 보낸 이모티콘 */
+.chat-emoticon.sent {
+    align-self: flex-end;
+    background-color: #d4b7aa; /* 보낸 이모티콘 배경색 */
+    padding: 5px;
+    border-radius: 10px 10px 0 10px;
+}
+
+/* 받은 이모티콘 */
+.chat-emoticon.received {
+    align-self: flex-start;
+    background-color: #a8c3d1; /* 받은 이모티콘 배경색 */
+    padding: 5px;
+    border-radius: 10px 10px 10px 0;
+}
