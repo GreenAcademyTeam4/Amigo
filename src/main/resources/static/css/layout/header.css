@@ -11,14 +11,25 @@ header {
     z-index: 1000;
     border-bottom: 1px solid #d4b7aa;
     margin-bottom: 10px;
-}
+    font-family: 'Bazzi', sans-serif;
+    transition: box-shadow 0.3s ease;
 
+}
+header.scrolled {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0px 20px;
+}
 /* 로고 스타일 */
 .logo img {
     height: auto;
     width: 180px;
-}
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 
+}
+.hide {
+    opacity: 0;
+    visibility: hidden;
+}
 /* 로그인 버튼 스타일 */
 #login-btn {
     background-color: #ce9178;
@@ -46,7 +57,7 @@ header {
     padding-left: 15px;
     color: #ce9178;
     text-decoration: none;
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Bazzi', sans-serif;
     font-weight: bolder;
 }
 

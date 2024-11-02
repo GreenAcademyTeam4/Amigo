@@ -1,3 +1,15 @@
+$(window).on('scroll', function () {
+    const $header = $('header');
+    const $logo = $('.logo');
+
+    if ($(window).scrollTop() > 0) {
+        $header.addClass('scrolled');
+        $logo.addClass('hide');
+    } else {
+        $header.removeClass('scrolled');
+        $logo.removeClass('hide');
+    }
+});
     const alarmSocket = new WebSocket("ws://192.168.0.113:8080/alarm");
     let callStatus = false;
     const alarmSound = document.getElementById("alarmSound");
@@ -12,7 +24,42 @@
             if (alarm.content === 'request') {
                 if(callStatus === false) {
                     createRequest(alarm); // 통화 요청 UI 생성
+        $('.voice-chat').removeClass('hide').addClass('slide-in'); // 통화 요청이 오면 표시
+        setTimeout(() => {
+            $('.voice-chat').removeClass('slide-in'); // 애니메이션 후에 클래스 유지
+        }, 500);
+    }
+};
 
+$(document).ready(function () {
+    $('body').css('opacity', '1');
+    $('.transition-link a').on('click', function (e) {
+        var linkUrl = $(this).attr('href');
+        e.preventDefault();
+        $('body').animate({ opacity: 0 }, 500, function () {
+            window.location.href = linkUrl;
+        });
+    });
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+            $('body').css('opacity', '1');
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('#alarm-icon').on('click', function () {
+        var $alarmBox = $('.alarm-box');
+
+        // 알림창이 숨겨져 있으면 슬라이드 인, 그렇지 않으면 슬라이드 아웃
+        if ($alarmBox.css('display') === 'none') {
+            $alarmBox.removeClass('hide-slide-out').addClass('show-slide-in');
+            $alarmBox.show();
+        } else {
+            $alarmBox.removeClass('show-slide-in').addClass('hide-slide-out');
+            setTimeout(function () {
+                $alarmBox.hide();
+            }, 400); // 애니메이션이 끝난 후 숨김 처리
                     // 통화 요청 알람음 재생
                     alarmSound.play();
                 } else {
