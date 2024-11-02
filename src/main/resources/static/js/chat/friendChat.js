@@ -5,7 +5,7 @@ $(document).ready(function() {
         window.socket.close();
     }
     // 새로운 WebSocket 연결 생성
-    window.socket = new WebSocket("ws://192.168.0.113:8080/friendChat");
+    window.socket = new WebSocket("ws://192.168.112.46:8080/friendChat");
 
     // 디버깅: roomId 확인
     console.log("roomId (JavaScript):", roomId); // 디버깅 로그 추가
@@ -71,6 +71,32 @@ $(document).ready(function() {
             messageWrapper.appendChild(timestampElement);
             chatContainer.appendChild(messageWrapper);
             console.log("일반 메시지:", messageData.message);
+        } else if(messageData.type === 'emoticon'){
+            // 메시지 래퍼
+            const messageWrapper = document.createElement("div");
+            messageWrapper.className = "message-wrapper";
+
+            // 메시지 컨테이너
+            const messageElement = document.createElement("img");
+            messageElement.className = "chat-emoticon";
+            messageElement.src = messageData.message;
+
+            // 메시지 방향 설정 (내 메시지는 오른쪽, 상대 메시지는 왼쪽)
+            if (messageData.sender === 'self') {
+                console.log("내가 보낸 메세지");
+                messageElement.classList.add('sent');
+            } else {
+                messageElement.classList.add('received');
+            }
+
+            // 타임스탬프 요소 생성
+            const timestampElement = document.createElement("div");
+            timestampElement.className = "timestamp";
+            timestampElement.textContent = formatTimestamp(messageData.date);
+            // 메시지와 타임스탬프 위치 설정
+            messageWrapper.appendChild(messageElement);
+            messageWrapper.appendChild(timestampElement);
+            chatContainer.appendChild(messageWrapper);
         }
 
     };

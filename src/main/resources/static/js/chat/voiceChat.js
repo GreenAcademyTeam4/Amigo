@@ -12,7 +12,7 @@
         ]
     };
 
-    const voiceSocket = new WebSocket("ws://172.30.1.90:8080/signaling");
+    const voiceSocket = new WebSocket("ws://192.168.112.46:8080/signaling");
 
     global.friendId = friendId; // friendId를 전역 스코프에 설정
 
