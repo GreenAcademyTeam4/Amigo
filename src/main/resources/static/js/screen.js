@@ -1,9 +1,9 @@
 $(document).ready(function() {
-    const enter = $('.enter');
+    const enter = $('#enter');
     const post = $('#post');
     window.screen = $('.screen-area');
     const logout = $('.logout');
-    const school = $('.other-school');
+    const school = $('.other-schoolId');
     const friends = $('.friends');
     const mypage = $('#my-page'); // 올바르게 선언
     window.tryCall = false;
@@ -66,6 +66,17 @@ $(document).ready(function() {
                screen.html(data);
 
 
+           })
+           .catch(error => {
+               console.error('마이 페이지 로딩 중 오류 발생:', error);
+           });
+   });
+
+   enter.on('click', function() {
+       fetch("/enter")
+           .then(response => response.text())
+           .then(data => {
+               screen.html(data);
            })
            .catch(error => {
                console.error('마이 페이지 로딩 중 오류 발생:', error);

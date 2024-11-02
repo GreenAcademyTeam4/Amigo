@@ -60,6 +60,7 @@ public interface UserRepository {
     public void updateOnline(int id);
     // 오프라인 상태로 업데이트
     public void updateOffline(int id);
-
+    // 학교 정보 가져오기
+    public School findSchoolData(int id);
 }
 
