@@ -257,48 +257,48 @@ public class BoardController {
      */
     @ResponseBody
     @GetMapping("/nested-comment")
-    public ResponseEntity<?>findNestedComment(@RequestParam("boardId") int boardId,
-                                              @RequestParam("parentId") int parendId){
-        List<CommentDTO> replyList = boardService.findNestedComment(boardId, parendId);
+    public ResponseEntity<?> findNestedComment(@RequestParam("boardId") int boardId,
+                                               @RequestParam("parentId") int parentId) {
+        List<CommentDTO> replyList = boardService.findNestedComment(boardId, parentId);
         if (replyList.isEmpty()) {
-            return ResponseEntity.ok("현재 작성된 답글이 없습니다.");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "현재 작성된 답글이 없습니다.");
+            return ResponseEntity.ok(response); // 답글이 없을 때 메시지 반환
         }
         return ResponseEntity.ok(replyList);
     }
 
 
+
+
     /**
-     *  대댓글 작성 기능 -> 대댓글 정보 db 삽입 후 새로운 대댓글 정보 조회 후 리턴
+     *  답글 작성 기능 -> 답글 정보 db 삽입 후 새로운 답글 정보 조회 후 리턴
      */
     @ResponseBody
     @PostMapping("/post-nested-comment")
-    public ResponseEntity<?>postNestedComment(@RequestParam("boardId") int boardId,
-                                              @RequestParam("parentId") int parentId,
-                                              @RequestParam("content") String content,
-                                              HttpSession session){
+    public ResponseEntity<?> postNestedComment(@RequestParam("boardId") int boardId,
+                                               @RequestParam("parentId") int parentId,
+                                               @RequestParam("content") String content,
+                                               HttpSession session) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 답글 작성이 가능합니다.");
-        } else {
-            Comment dto = Comment.builder()
-                    .boardId(boardId)
-                    .userId(principal.getId())
-                    .parentId(parentId)
-                    .contentLocation(content)
-                    .build();
-            List<CommentDTO> replyList = boardService.insertNestedComment(dto);
-            if(replyList == null){
-                return ResponseEntity.ok("댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다.");
-            }
-            return ResponseEntity.ok(replyList);
         }
-
-
+        
+        Comment reply = Comment.builder()
+                .boardId(boardId)
+                .userId(principal.getId())
+                .parentId(parentId)
+                .contentLocation(content)
+                .build();
+        
+        List<CommentDTO> replyList = boardService.insertNestedComment(reply);
+        return ResponseEntity.ok(replyList == null ? "댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다." : replyList);
     }
 
 
     /**
-     * 댓글 전송 (비동기 처리)
+     * 댓글 전송 (비동기 처리) 
      */
     @ResponseBody
     @PostMapping("/comment")
@@ -318,9 +318,17 @@ public class BoardController {
                 .build();
 
         boardService.insertComment(dto);
-        System.out.println("commentDTO : " + dto);
+        
 
-        return ResponseEntity.ok("댓글이 성공적으로 등록되었습니다!");
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, 0, 5);
+        List<CommentDTO> replyList = boardService.findCommentsByBoardId(boardId);
+        
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("comment", comment);
+        responseData.put("replyList", replyList);
+        
+        
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     /**
