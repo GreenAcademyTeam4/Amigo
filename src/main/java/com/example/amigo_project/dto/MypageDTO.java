@@ -27,9 +27,42 @@ public class MypageDTO {
         private Integer avatarId;
         private String avatarName;
         private Integer type;
-
-
     }
+
+    @Builder
+    @Data
+    public static class headInventoryDTO{
+
+        private Integer avatarId;
+        private String avatarName;
+    }
+
+    @Builder
+    @Data
+    public static class topInventoryDTO{
+
+        private Integer avatarId;
+        private String avatarName;
+    }
+
+    @Builder
+    @Data
+    public static class bottomInventoryDTO{
+
+        private Integer avatarId;
+        private String avatarName;
+    }
+
+    @Builder
+    @Data
+    public static class shoesInventoryDTO {
+
+        private Integer avatarId;
+        private String avatarName;
+    }
+
+
+
 
     @Builder
     @Data
@@ -49,17 +82,14 @@ public class MypageDTO {
 
         private Integer id; // (pk) auto_increment
         private String nickname;
-        private String elementarySchool;
-        private String middleSchool;
-        private String highSchool;
-
+        private String school;
     }
 
     @Data
     @Builder
     public static class friendReqDTO{
-        private Integer id;
-        private String name;
+        private Integer friendId;
+        private String friendName;
     }
 
     @Data
@@ -69,15 +99,19 @@ public class MypageDTO {
         private String gender;
     }
 
+    @Data
+    public static class userSchoolDTO{
+        private Integer userId;
+        private Integer schoolId;
+    }
+
+
     // 친구 추천을 받기 위한 정보를 담은 DTO
     @Data
     public static class reccomendFriendDTO{
         private Integer friendId;
         private String friendName;
         private String gender;
-        private String elementarySchool;
-        private String middleSchool;
-        private String highSchool;
     }
 
 

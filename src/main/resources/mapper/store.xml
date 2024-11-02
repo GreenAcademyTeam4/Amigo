@@ -87,4 +87,10 @@
         values(#{userId}, #{orderHead}, #{orderBody}, #{usePoint}, #{lessPoint})
     </insert>
 
+    <!-- 아이템 판매시 아이템 id 히스토리 테이블에 넣기 / 관리자 통계 내기용 -->
+    <insert id="insertProdHistory">
+        insert into prodHistory_tb(avatar_id)
+        values(#{avatar_id})
+    </insert>
+
 </mapper>

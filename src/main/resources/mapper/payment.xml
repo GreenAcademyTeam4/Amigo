@@ -28,8 +28,11 @@
     </select>
 
     <insert id="createRefund">
-        INSERT INTO refund_tb(charge_history_id, order_Name, order_id, payment_key, cancel_amount, cancel_reason, request_at, canceled_at, cancel_status)
-        VALUES (#{chargeHistoryId}, #{orderName}, #{orderId}, #{paymentKey}, #{cancelAmount}, #{cancelReaseon}, #{requestAt}, #{canceledAt}, #{cancelStatus})
+        INSERT INTO refund_tb(payment_key, order_name, order_id, cancel_amount, cancel_reason, requested_at, canceled_at, cancel_status)
+        VALUES
+        <foreach collection="cancels" item="cancel" separator=",">
+            (#{paymentKey}, #{orderName}, #{orderId}, #{cancel.cancelAmount}, #{cancel.cancelReason}, #{requestedAt}, #{cancel.canceledAt}, #{cancel.cancelStatus})
+        </foreach>
     </insert>
 
     <update id="modifyRefundStatus">
@@ -41,7 +44,7 @@
         VALUES (#{chargeHistoryId}, #{cancelReason})
     </insert>
 
-    <select id="readChargeHistoryById" resultType="com.example.amigo_project.repository.model.ChargeHistory">
+    <select id="readChargeHistoryById" resultType="com.example.amigo_project.repository.model.payment.ChargeHistory">
         SELECT * FROM charge_history_tb WHERE id = #{id}
     </select>
 
@@ -56,7 +59,7 @@
         SELECT COUNT(*) AS count FROM request_refund_tb
     </select>
 
-    <select id="readRequestRefundById" resultType="com.example.amigo_project.repository.model.RequestRefund">
+    <select id="readRequestRefundById" resultType="com.example.amigo_project.repository.model.payment.RequestRefund">
         SELECT * FROM request_refund_tb WHERE id = #{id}
     </select>
 
@@ -74,7 +77,5 @@
         FROM refund_refuse_tb
         WHERE charge_history_id = #{chargeHistoryId}
     </select>
-
-
 
 </mapper>

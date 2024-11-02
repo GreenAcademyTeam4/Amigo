@@ -2,6 +2,7 @@ package com.example.amigo_project.handler;
 
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.repository.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -31,6 +32,8 @@ public class SignalingHandler extends TextWebSocketHandler {
         } else if(messageDTO.getType().equals("out")) {
             // 채팅을 나갈때 상대방 id로 저장해놓은 내 세션을 지움
             int roomId = Integer.parseInt(messageDTO.getMessage());
+            // 상대에게 나갔음을 알림
+            userManage.get(user.getId()).sendMessage(message);
             userManage.remove(roomId);
         } else {
             // ice 후보와 sdp 교환 요청이면 내 id로 상대방의 세션을 찾아서 sdp와 ice 후보들을 전송
