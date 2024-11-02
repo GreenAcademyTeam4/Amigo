@@ -42,4 +42,7 @@ public interface StoreRepository {
                                    @Param("usePoint") Integer usePoint,
                                    @Param("lessPoint")Integer lessPoint);
 
+    // 관리자 용 아이템 팔린 히스토리 테이블에 정보 삽입
+    public void insertProdHistory(Integer avatar_id);
+
 }

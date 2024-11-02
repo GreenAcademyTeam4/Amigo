@@ -1,0 +1,80 @@
+{{>layout/header}}
+<link rel="stylesheet" href="/css/payment/paymentList.css">
+
+
+<h1>포인트 충전 내역</h1>
+<div class="chargeHistoryList">
+<table>
+    <thead>
+    <tr>
+        <th>주문 이름</th>
+        <th>주문 번호</th>
+        <th>결제 금액</th>
+        <th>결제 일자</th>
+        <th>결제 방식</th>
+        <th>상태</th>
+        <th>환불 신청</th>
+    </tr>
+    </thead>
+<tbody id="paymentList">
+{{#paymentList}}
+    <tr>
+        <td>{{orderName}}</td>
+        <td>{{orderId}}</td>
+        <td>{{totalAmount}}</td>
+        <td>{{approvedAt}}</td>
+        <td>{{method}}</td>
+        <td>
+            {{#isRefused}}
+                <a href="javascript:void(0);" onclick="openRefuseReasonWindow({{id}})">환불 거부</a>
+            {{/isRefused}}
+            {{^isRefused}}
+                {{refundStatus}}
+            {{/isRefused}}
+        </td>
+    <td>
+        {{#isRefundable}}
+            <button class="refund-btn" data-id="{{id}}" onclick="handleRefundRequest({{id}})">신청하기</button>
+        {{/isRefundable}}
+        {{^isRefundable}}
+            <button class="refund-btn" disabled>신청 완료</button>
+        {{/isRefundable}}
+    </td>
+</tr>
+{{/paymentList}}
+{{^paymentList}}
+    <tr>
+        <td colspan="7" class="no-data">충전 내역이 존재하지 않습니다.</td>
+    </tr>
+{{/paymentList}}
+</tbody>
+</table>
+
+    <div id="paginationContainer">
+        <ul class="pagination">
+            {{#showPrevious}}
+                <li class="page-item">
+                    <a class="page-link" href="/pay/paymentList?page={{previousPage}}&size={{pageSize}}">&lt;</a>
+                </li>
+            {{/showPrevious}}
+
+            {{#pages}}
+                <li class="page-item {{active}}">
+                    <a class="page-link" href="/pay/paymentList?page={{number}}&size={{pageSize}}">{{number}}</a>
+                </li>
+            {{/pages}}
+
+            {{#showNext}}
+                <li class="page-item">
+                    <a class="page-link" href="/pay/paymentList?page={{nextPage}}&size={{pageSize}}">&gt;</a>
+                </li>
+            {{/showNext}}
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/payment/paymentList.js"></script>
+
+{{>layout/footer}}

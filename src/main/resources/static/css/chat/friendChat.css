@@ -1,0 +1,318 @@
+/* main 레이아웃 */
+main {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    justify-content: space-between;
+    min-height: 100vh;
+    border: 1px solid #d4b7aa;
+    box-sizing: border-box; /* 박스 사이징 추가 */
+}
+
+/* screen-area 스타일 */
+.screen-area {
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 변경 */
+    justify-content: flex-start;
+    margin: 10px;
+    max-width: 1100px;
+    flex: 3;
+    overflow: hidden; /* 내부 스크롤을 숨김 */
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
+    box-sizing: border-box; /* 박스 사이징 추가 */
+}
+
+/* chat-room 스타일 */
+.chat-room {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%; /* screen-area의 전체 높이 사용 */
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #d4b7aa;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-sizing: border-box; /* 박스 사이징 추가 */
+}
+
+/* 상대방 프로필 영역 */
+.opponent-info {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #fcf8f7;
+    border-bottom: 1px solid #d4b7aa;
+    flex-shrink: 0; /* 크기 고정 */
+}
+
+/* 상대방 프로필 이미지 */
+.opponent-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 1px solid #d4b7aa;
+    object-fit: cover; /* 이미지 비율 유지 */
+}
+
+/* 상대방 닉네임 */
+.opponent-info span {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 채팅 내용 영역 */
+.chat-area {
+    flex: 1; /* 남은 공간 모두 사용 */
+    padding: 15px;
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    background-color: #e9ecef;
+    position: relative;
+    box-sizing: border-box; /* 박스 사이징 추가 */
+    display: flex;
+    flex-direction: column;
+}
+/* 메시지 및 타임스탬프 래퍼 */
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 메시지와 타임스탬프를 왼쪽 정렬 */
+    margin-bottom: 10px;
+}
+
+/* 개별 메시지 스타일 */
+.chat-message {
+    max-width: 70%;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    position: relative;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 자신이 보낸 메시지 스타일 */
+.chat-message.sent {
+    background-color: #d4b7aa; /* 자신이 보낸 메시지 배경색 */
+    align-self: flex-end;
+    color: white;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 15px;
+    text-align: right;
+}
+
+/* 상대방이 보낸 메시지 스타일 */
+.chat-message.received {
+    background-color: #a8c3d1; /* 상대방이 보낸 메시지 배경색 (다르게 설정) */
+    align-self: flex-start;
+    color: white;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 15px;
+    text-align: left;
+}
+
+/* 타임스탬프 */
+.timestamp {
+    font-size: 0.7em;
+    color: #888;
+    margin-left: 10px;
+    align-self: flex-end; /* 타임스탬프를 오른쪽 정렬 */
+}
+
+
+.message-wrapper .sent + .timestamp {
+    align-self: flex-end; /* 보낸 메시지 타임스탬프 오른쪽 정렬 */
+    margin-left: auto;
+}
+
+.message-wrapper .received + .timestamp {
+    align-self: flex-start; /* 받은 메시지 타임스탬프 왼쪽 정렬 */
+}
+
+
+/* 키보드 영역을 relative로 설정하여 이모티콘 박스의 절대 위치 기준을 지정 */
+.keyboard-area {
+    position: relative;
+    display: flex;
+    padding: 15px;
+    background-color: #fcf8f7;
+    border-top: 1px solid #d4b7aa;
+    flex-shrink: 0; /* 크기 고정 */
+}
+
+.keyboard-area label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+    align-self: center;
+}
+
+.keyboard-area input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d4b7aa;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.keyboard-area .btn {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #ce9178;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.keyboard-area .btn:hover {
+    background-color: #d98264;
+}
+
+/* 스크롤바 스타일 (채팅 영역) */
+.chat-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+    background-color: #d4b7aa;
+    border-radius: 4px;
+}
+
+.chat-area::-webkit-scrollbar-track {
+    background: #e9ecef;
+}
+
+/* 날짜 표시 요소 */
+.chat-date-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+}
+
+.chat-date {
+    text-align: center;
+    font-size: 1.0em;
+    color: #666;
+    margin: 0 15px;
+}
+
+.chat-date-wrapper::before,
+.chat-date-wrapper::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+}
+
+#emojiButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .screen-area {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .chat-room {
+        border-radius: 0;
+    }
+
+    .opponent-info img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .opponent-info span {
+        font-size: 1em;
+    }
+
+    .keyboard-area input[type="text"] {
+        font-size: 0.9em;
+    }
+
+    .keyboard-area .btn {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    .message {
+        max-width: 80%;
+    }
+}
+
+/* 이모티콘 박스 스타일 */
+.emoticon-box {
+    display: none; /* 처음엔 숨김 */
+    position: absolute;
+    bottom: 60px; /* 키보드 영역 위에 위치 */
+    right: 15px; /* 키보드 영역 오른쪽에 위치 */
+    width: 250px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid #d4b7aa;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000; /* 다른 요소들보다 위에 표시 */
+    box-sizing: border-box;
+}
+
+/* 이모티콘 목록 스타일 */
+.emoticon-box .emoticon {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.emoticon-box .emoticon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+.emoticon-box .emoticon:hover img {
+    transform: scale(1.1);
+}
+
+/* 이모티콘 박스를 표시할 때 애니메이션 추가 */
+.emoticon-box.show {
+    display: flex;
+    flex-wrap: wrap;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 페이드 인 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}

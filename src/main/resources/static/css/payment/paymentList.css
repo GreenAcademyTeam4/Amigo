@@ -1,0 +1,127 @@
+/* 페이지 전체 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #444;
+    margin-bottom: 30px;
+}
+
+/* 테이블 스타일 */
+.chargeHistoryList {
+    overflow-x: auto;
+}
+
+.chargeHistoryList table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chargeHistoryList th,
+.chargeHistoryList td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.chargeHistoryList th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #555;
+}
+
+.chargeHistoryList tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.chargeHistoryList tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 상태 링크 스타일 */
+.chargeHistoryList a {
+    color: #d9534f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.chargeHistoryList a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 스타일 */
+.refund-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.refund-btn:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.refund-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* 페이지네이션 스타일 */
+#paginationContainer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 5px;
+}
+
+.pagination .page-item {
+    display: inline;
+}
+
+.pagination .page-link {
+    display: block;
+    padding: 10px 15px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    pointer-events: none;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
