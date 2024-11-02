@@ -1,6 +1,7 @@
 package com.example.amigo_project.controller;
 
-import com.example.amigo_project.repository.model.School;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,14 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.amigo_project.dto.UserDTO.NaverDTO;
+import com.example.amigo_project.repository.model.School;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.NaverApiService;
 import com.example.amigo_project.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,6 +54,8 @@ public class NaverController {
             System.out.println("네이버 로그인 진입");
                 userService.updateOnline(principal.getId());
                 List<School> schoolList = userService.findUserSchoolList(principal.getId());
+                System.out.println("School List: " + schoolList);
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+schoolList);
                 model.addAttribute("schoolList",schoolList);
                 String profile = principal.base64Encoding(principal.getProfile());
                 session.setAttribute("profile",profile);
