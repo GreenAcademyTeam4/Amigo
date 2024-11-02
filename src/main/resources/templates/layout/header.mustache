@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="/css/layout/header.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
 <link rel="stylesheet" type="text/css" href="/css/layout/footer.css">
+<link rel="stylesheet" type="text/css" href="/css/font/fontbazzi.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <html>
 <body>
 <header>
@@ -36,25 +38,29 @@
         {{!{{/other_school}}
     </div>
 
+        
+        {{#principal}}
+      
         <div class="nav-area">
             <a href="#">친구</a>
-            <a href="#">매점</a>
+            <a href="/store/shop">매점</a>
             <a href="#">공지</a>
             <a href="#">쪽지</a>
-            <a href="/my-page/info">마이페이지</a>
-            <a href="/store/shop">상점</a>
+            <div class="nav-area">
+            <i class="fa fa-bell"  id="alarm-icon" style="color: yellow"></i>
+            <a href="#">문의</a>
         </div>
-        {{#principal}}
-        <div id="login-btn" class="transition-link" >
+        </div>
+          <div id="login-btn" class="transition-link" >
             <a href="/logout">Logout</a>
         </div>
         {{/principal}}
-        <div class="nav-area">
-            <img src="/image/alarm/alarm.png" id="alarm-icon">
-            <a href="#">Support</a>
-             <a href="#">Blog</a>
-        </div>
+        
         {{^principal}}
+        <div class="nav-area">
+            
+            <a href="#">문의</a>
+        </div>
         <div id="login-btn" class="transition-link" >
             <a href="/login">Login</a>
         </div>
