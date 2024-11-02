@@ -1,7 +1,19 @@
 const socket = new WebSocket("ws://localhost:8080/alarm");
+$(window).on('scroll', function () {
+    const $header = $('header');
+    const $logo = $('.logo');
+
+    if ($(window).scrollTop() > 0) {
+        $header.addClass('scrolled');
+        $logo.addClass('hide');
+    } else {
+        $header.removeClass('scrolled');
+        $logo.removeClass('hide');
+    }
+});
 socket.onmessage = (event) => {
     const alarm = JSON.parse(event.data);
-    if(alarm.type === 'chat') {
+    if (alarm.type === 'chat') {
 
     } else if (alarm.type === 'post') {
 
@@ -14,16 +26,16 @@ socket.onmessage = (event) => {
     }
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('body').css('opacity', '1');
-    $('.transition-link a').on('click', function(e) {
+    $('.transition-link a').on('click', function (e) {
         var linkUrl = $(this).attr('href');
         e.preventDefault();
-        $('body').animate({ opacity: 0 }, 500, function() {
+        $('body').animate({ opacity: 0 }, 500, function () {
             window.location.href = linkUrl;
         });
     });
-    window.addEventListener('pageshow', function(event) {
+    window.addEventListener('pageshow', function (event) {
         if (event.persisted || window.performance && window.performance.navigation.type === 2) {
             $('body').css('opacity', '1');
         }

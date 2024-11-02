@@ -45,27 +45,23 @@
         </div>
       </div>
     </div>
- 
+    <a href="/my-page/inventory">인벤토리</a> 
+          <a href="/my-page/friend-list">친구 관리</a> 
+          <a href="javascript:void(0)" onClick="javascript:goPost()">포인트 충전 내역</a> 
+          <a href="/my-page/pwdcheck">비밀번호 변경</a>
+    
+  
+      <div>
+          <p>이름: {{#dto.name}}{{dto.name}}{{/dto.name}}{{^dto.name}}N/A{{/dto.name}}</p>
+          <p>전화번호: {{#dto.phoneNumber}}{{dto.phoneNumber}}{{/dto.phoneNumber}}{{^dto.phoneNumber}}N/A{{/dto.phoneNumber}}</p>
+          <p>성별: {{#dto.gender}}{{dto.gender}}{{/dto.gender}}{{^dto.gender}}N/A{{/dto.gender}}</p>
+          <p>생년월일: {{#dto.birth}}{{dto.birth}}{{/dto.birth}}{{^dto.birth}}N/A{{/dto.birth}}</p>
+      </div>
 
 </div>
 
-    <title>마이페이지</title>
-</head>
-<body>
-<h1>마이페이지</h1>
-<div>
-    <p>닉네임: {{#dto.nickname}}{{dto.nickname}}{{/dto.nickname}}{{^dto.nickname}}N/A{{/dto.nickname}}</p>
-    <p>이름: {{#dto.name}}{{dto.name}}{{/dto.name}}{{^dto.name}}N/A{{/dto.name}}</p>
-    <p>전화번호: {{#dto.phoneNumber}}{{dto.phoneNumber}}{{/dto.phoneNumber}}{{^dto.phoneNumber}}N/A{{/dto.phoneNumber}}</p>
-    <p>성별: {{#dto.gender}}{{dto.gender}}{{/dto.gender}}{{^dto.gender}}N/A{{/dto.gender}}</p>
-    <p>생년월일: {{#dto.birth}}{{dto.birth}}{{/dto.birth}}{{^dto.birth}}N/A{{/dto.birth}}</p>
-    <p>포인트: {{#dto.point}}{{dto.point}}{{/dto.point}}{{^dto.point}}N/A{{/dto.point}}</p>
-    <a href="/my-page/inventory">인벤토리</a> |
-    <a href="/my-page/friend-list">친구 관리</a> |
-    <a href="javascript:void(0)" onClick="javascript:goPost()">포인트 충전 내역</a> |
-    <a href="/my-page/pwdcheck">비밀번호 변경</a>
-</div>
-</body>
+  
+
 <script>
 function goPost(){
     let f = document.createElement('form');
