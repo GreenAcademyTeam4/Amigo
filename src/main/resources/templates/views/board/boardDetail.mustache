@@ -235,6 +235,7 @@
                     alert('댓글이 성공적으로 삭제되었습니다.');
                     const commentElement = document.getElementById(`comment-${commentId}`);
                     if (commentElement) {
+                        console.log("댓글 삭제완료!!!!!");
                         commentElement.remove();
                     }
                 } else {

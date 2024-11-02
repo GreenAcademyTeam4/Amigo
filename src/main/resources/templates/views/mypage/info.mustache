@@ -94,8 +94,8 @@
     }
 
     function editSchool() {
-        const schoolText = document.getElementById('school-text').innerText;
-        document.getElementById('school-container').innerHTML = `
+        const schoolText = document.getElementById('schoolId-text').innerText;
+        document.getElementById('schoolId-container').innerHTML = `
             <label for="school-input">학교:</label>
             <input type="text" id="school-input" value="${schoolText}">
             <button onclick="saveSchool()">변경</button>
@@ -103,11 +103,11 @@
     }
 
     function saveSchool() {
-        const newSchool = document.getElementById('school-input').value;
+        const newSchool = document.getElementById('schoolId-input').value;
         fetch(`/my-page/chSchool?school=${newSchool}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('school-container').innerHTML = `
+                document.getElementById('schoolId-container').innerHTML = `
                     <p>학교: <span id="school-text">${data.school}</span> <button onclick="editSchool()">✏️</button></p>
                 `;
             })
