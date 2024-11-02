@@ -179,3 +179,4 @@ $(document).ready(function () {
         alarmSound.currentTime = 0;
 
     }
+}
