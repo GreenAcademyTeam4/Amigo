@@ -31,8 +31,8 @@
                     list.append(`<p class="school-option" data-id="${school.id}" data-region="${school.region}">${school.name}</p>`);
                 });
 
-                // .school-option 클릭 이벤트 핸들러 등록
-                $(".school-option").on("click", function() {
+                // .schoolId-option 클릭 이벤트 핸들러 등록
+                $(".schoolId-option").on("click", function() {
                     const name = $(this).text();
                     const id = $(this).data("id");
                     const region = $(this).data("region");

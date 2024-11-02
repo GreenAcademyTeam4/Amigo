@@ -3332,7 +3332,7 @@ chalkboard:
     terms:
       - blackboard
       - learning
-      - school
+      - schoolId
       - teaching
       - whiteboard
       - writing
@@ -3350,7 +3350,7 @@ chalkboard-teacher:
       - instructor
       - learning
       - professor
-      - school
+      - schoolId
       - whiteboard
       - writing
   styles:
@@ -8815,7 +8815,7 @@ graduation-cap:
       - college
       - graduate
       - learning
-      - school
+      - schoolId
       - student
   styles:
     - solid

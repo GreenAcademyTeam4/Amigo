@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class RoomDataDTO {
 
-    public String school;
-    public String grade;
-    public String classRoom;
+    public int schoolId;
+    public int grade;
+    public int classRoom;
 
 }
