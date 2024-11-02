@@ -116,6 +116,7 @@
         insert into user_school_tb (user_id,school_id)
             VALUES  (#{id},#{schoolId})
     </insert>
+
     <!--유저가 가진 학교 찾아오기 -->
     <select id="findUserSchool" resultType="com.example.amigo_project.repository.model.School">
         select * from user_school_tb as u
@@ -145,4 +146,8 @@
         where id = #{id}
     </update>
 
+    <!-- 학교 정보 가져오기 -->
+    <select id="findSchoolData" resultType="com.example.amigo_project.repository.model.School">
+        select * from school_tb where id = #{id}
+    </select>
 </mapper>

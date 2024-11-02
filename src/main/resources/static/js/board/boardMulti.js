@@ -262,13 +262,41 @@ $(document).ready(function() {
             method: 'POST',
             body: formData // FormData 객체를 전송
         })
-        .then(response => response.text())
-        .then(data => {
-            screen.html(data);
+        .then(response => {
+            if (response.ok) {
+                addCommentToPage(commentContent); // 페이지에 새 댓글 추가
+                document.getElementById('commentContent').value = ''; // 입력 필드 초기화
+            } else {
+                throw new Error('댓글 등록에 실패했습니다.');
+            }
         })
         .catch(error => {
             console.error('게시판 댓글 오류 발생:', error);
         });
+    }
+
+    // 페이지에 새 댓글을 추가하는 함수
+    function addCommentToPage(content) {
+        const commentSection = document.querySelector('.comments');
+
+        const newComment = document.createElement('div');
+        newComment.className = 'comment';
+        newComment.innerHTML = `
+            <div class="comment-header">
+                <p><strong>작성자:</strong> 나</p>
+                <p><small>작성일자: 지금</small></p>
+            </div>
+            <div class="comment-body">
+                <p>${content}</p>
+            </div>
+            <div class="comment-actions">
+                <button onclick="confirmDeleteComment(-1)" class="btn btn-danger btn-sm">🗑</button>
+                <button onclick="showEditForm(-1)" class="btn btn-link btn-sm">수정</button>
+            </div>
+            <hr>
+        `;
+
+        commentSection.prepend(newComment); // 새 댓글을 최상단에 추가
     }
 
     // 폼 수정 제출 함수
