@@ -70,8 +70,6 @@ model.addAttribute("googleLocation", googleLocation);
 
 return "views/login/login";
 
-
-   
 }
     @GetMapping("/test2")
     public String test2(Model model, HttpSession session){

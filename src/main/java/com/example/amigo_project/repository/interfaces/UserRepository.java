@@ -51,7 +51,7 @@ public interface UserRepository {
     // 유저가 가진 학교데이터 추가
     public void createUserSchool(UserDTO.infoDTO dto);
     // 유저가 가진 학교 찾기
-    public List<School> findUserSchool(UserDTO.infoDTO dto);
+    public List<School> findUserSchool(int id);
     // 학교가 존재하는지 확인
     public boolean existsSchool(UserDTO.infoDTO dto);
     // 유저 프로필사진 삽입
