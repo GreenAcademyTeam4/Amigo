@@ -13,31 +13,26 @@
 <div class="board-container">
 <section class="first-board">
     <div class="board">
-        <div class="part-title">조회가 많은 게시글</div>
+        
        
-            {{#Search}}
-                <a href="/board/detail/{{id}}">
-                 <div class="board-item">
-                    <div class="item-title">{{title}}</div>
-                     <div class="item-createdAt"> {{createdAtFormat}}</div>
-                 </div>
-                </a>
-            {{/Search}}
-        <h3> <a onclick="screenChanger('/board/bestview')">조회가 많은 게시글</a></h3>
-        <ul>
-            {{#Search}}
+          
+       <a onclick="screenChanger('/board/bestview')"><span class="part-title">조회가 많은 게시글</span></a>
+            {{#Search}} 
+            <a onclick="screenChanger('/board/detail/{{id}}')">
                 <div class="board-item">
-                    <p><strong>제목:</strong> <a onclick="screenChanger('/board/detail/{{id}}')">{{title}}</a></p>
-                    <li> <p><strong>작성자:</strong> {{nickname}}</p> </li>
-                    <li> <p><strong>작성일자:</strong> {{createdAtFormat}}</p> </li>
+                  <div class="item-title">{{title}}</div>
+                      
+                     <div class="item-createdAt"> {{createdAtFormat}}</div>
+                   
                 </div>
+                  </a>
             {{/Search}}
 
             {{^Search}}
                 <p>게시글이 없습니다.</p>
             {{/Search}}
         
-    </div>
+   
 
     <div class="board">
     

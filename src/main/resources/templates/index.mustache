@@ -1,5 +1,6 @@
 {{>layout/header}}
 <link rel="stylesheet" type="text/css" href="/css/main.css">
+
 <main>
     <div class="info-box">
         <div class="info-profile">프로필 보기</div>
@@ -18,7 +19,7 @@
         </div>
     
             <div class="bt-controller" id="my-page">
-                <a href="/my-page/info">마이페이지</a>
+                마이페이지
             </div>
      
         <a href="">
@@ -33,7 +34,7 @@
  
         <div class="friend-box">
             <div class="online-friends">
-                <h3>온라인 친구</h3>
+                <span class="friend-title">-온라인 친구-</span>
                 {{#onlineFriendList}}
                     <div class="online-friend layer" id="{{id}}">
                         <div class="friend-profile">
@@ -44,7 +45,7 @@
                 {{/onlineFriendList}}
             </div>
             <div class="offline-friends">
-                <h3>오프라인 친구</h3>
+                <span class="friend-title"> -오프라인 친구-</span>
                 {{#offlineFriendList}}
                     <div class="offline-friend layer" id="{{id}}">
                         <div class="friend-profile">
