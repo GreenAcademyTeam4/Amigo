@@ -30,6 +30,7 @@ public class NaverController {
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,
                            HttpSession session, Model model) throws Exception {
+
         // 세션에서 저장된 state 값 가져오기
         String sessionState = (String) session.getAttribute("oauthState");
 
@@ -47,19 +48,17 @@ public class NaverController {
         // 네이버 사용자 찾기 또는 생성
         User principal = naverApiService.findNaverUser(naverDTO);
        
-       System.out.println(principal);
         if (principal != null) {
             session.setAttribute("principal", principal);
             if (principal.getNickname() != null) {
             System.out.println("네이버 로그인 진입");
                 userService.updateOnline(principal.getId());
-                List<School> schoolList = userService.findUserSchoolList(principal.getId());
-                System.out.println("School List: " + schoolList);
-                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+schoolList);
-                model.addAttribute("schoolList",schoolList);
+                if(principal.getProfile() != null) {
+                    String profile = principal.base64Encoding(principal.getProfile());
+                    session.setAttribute("profile",profile);
+                }
                 String profile = principal.base64Encoding(principal.getProfile());
                 session.setAttribute("profile",profile);
-                session.setAttribute("schoolId",schoolList.get(0).getId());
                 return "redirect:/";
             }
             return "views/login/socialInfo";
