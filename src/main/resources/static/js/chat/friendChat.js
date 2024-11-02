@@ -5,7 +5,7 @@ $(document).ready(function() {
         window.socket.close();
     }
     // 새로운 WebSocket 연결 생성
-    window.socket = new WebSocket("ws://localhost:8080/friendChat");
+    window.socket = new WebSocket("ws://192.168.0.113:8080/friendChat");
 
     // 디버깅: roomId 확인
     console.log("roomId (JavaScript):", roomId); // 디버깅 로그 추가
