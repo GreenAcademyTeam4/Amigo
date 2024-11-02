@@ -94,6 +94,9 @@ public class BoardService {
         return boardRepository.findNestedComment(comment.getBoardId(), comment.getParentId()); // 대댓글 삽입후 삽입한 대댓글 리스트 리턴
     }
 
+
+    // commentid로 대댓글 숫자 불러오기
+
     /**
      * 게시글 상세보기에서 사용할 댓글 불러오기 기능
      * @param boardId
@@ -265,8 +268,8 @@ public class BoardService {
      * @param size
      * @return
      */
-    public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int offset, int size) {
-        return boardRepository.findCommentsByBoardIdWithPaging(boardId, offset, size);
+    public List<CommentDTO> findCommentsByBoardIdWithPaging(int boardId, int page, int size) {
+        return boardRepository.findCommentsByBoardIdWithPaging(boardId, page, size);
     }
 
     // 게시글의 댓글에 달린 답글 조회하기

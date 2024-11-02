@@ -6,151 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세보기</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/board/boardDetail.css">
 </head>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f1f1f1;
-        color: #333;
-        padding: 20px;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .board-card {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .top-buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .board-header {
-        text-align: center;
-    }
-
-    .like-section {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    #like-icon {
-        cursor: pointer;
-        width: 30px;
-        margin-right: 10px;
-    }
-
-    .comments {
-        margin-top: 40px;
-    }
-
-    .comments .comment {
-       display: flex;
-        flex-direction: column;
-        background: #ffffff;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .comment-header {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 10px;
-    }
-
-    .comment-body {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
-
-    .comment-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .comment-actions button {
-        padding: 5px 10px;
-    }
-
-    .comments .comment p {
-        margin-bottom: 5px;
-    }
-
-    .comment-form {
-        background-color: #fff;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
-
-    .form-footer {
-        text-align: right;
-    }
-
-    .btn {
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .btn-link {
-        color: #007bff;
-        text-decoration: underline;
-    }
-
-    .btn-success {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .pagination {
-        justify-content: center;
-        margin-top: 30px;
-    }
-
-    .pagination .page-item .page-link {
-        color: #007bff;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-    }
-</style>
-
 
 <body>
 <div class="container">
@@ -159,23 +16,29 @@
         <a class="btn btn-primary" onclick="screenChanger('/board/list')" >목록으로 돌아가기</a>
         <div>
 
+        <!-- 작성자만 삭제/수정 버튼을 볼 수 있음 -->
+        {{#isAuthor}}
             <button type="button" class="btn btn-danger" onclick="screenDelete('/board/delete/{{board.id}}')">게시글 삭제</button>
+            <!--            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">-->
+            <!--                <button type="submit" class="btn btn-danger">게시글 삭제</button>-->
+            <!--            </form>-->
 
-<!--            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">-->
-<!--                <button type="submit" class="btn btn-danger">게시글 삭제</button>-->
-<!--            </form>-->
+            <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
 
-           <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
-
-<!--            <form onclick = "screenChanger('/board/update/{{board.id}}')" method="get" >-->
-<!--                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>-->
-<!--            </form>-->
+            <!--            <form onclick = "screenChanger('/board/update/{{board.id}}')" method="get" >-->
+            <!--                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>-->
+            <!--            </form>-->
 
             <!-- 게시글 본문 아래 신고 버튼 추가 -->
+           <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
+        {{/isAuthor}}
+
+        <!-- 게시글 본문 아래 신고 버튼 추가 -->
+        {{^isAuthor}}
             <div class="report-section text-center mt-3">
                 <button id="report-button" class="btn btn-warning" onclick="reportPost({{board.id}})">신고하기</button>
             </div>
-
+        {{/isAuthor}}
         </div>
     </div>
 
@@ -225,10 +88,14 @@
                 <div class="comment-body">
                     <p id="content-{{id}}">{{content}}</p>
                 </div>
+
+            {{#CommentAuthor}}
                 <div class="comment-actions">
-                    <button onclick="deleteComment({{id}})" class="btn btn-danger btn-sm">🗑</button>
+                    <button onclick="confirmDeleteComment({{id}})"  class="btn btn-danger btn-sm">🗑</button>
                     <button onclick="showEditForm({{id}})" class="btn btn-link btn-sm">수정</button>
                 </div>
+            {{/CommentAuthor}}
+
                 <!-- 댓글 수정 폼 (기본적으로 숨김 처리) -->
                 <div id="edit-form-{{id}}" style="display: none; margin-top: 10px;">
                     <textarea id="edit-content-{{id}}" rows="3" class="form-control">{{content}}</textarea>
@@ -243,12 +110,13 @@
         {{/comment}}
     </div>
 
-    <!-- 페이지네이션 섹션 -->
-    <nav aria-label="Page navigation example" class="mt-4" id="pagination-container" data-total-pages="{{totalPages}}">
-        <ul class="pagination justify-content-center" id="pagination">
-            <!-- 페이지네이션 버튼이 동적으로 생성됩니다. -->
-        </ul>
-    </nav>
+    <!-- 페이지네이션 버튼 -->
+    <div class="pagination-wrapper">
+        <div id="pagination-container"></div>
+    </div>
+
+
+
 
     <!-- 댓글 작성 폼 -->
     <div class="comment-form">
@@ -267,7 +135,7 @@
 </div>
 </body>
 </html>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/board/boardMulti.js"></script>
 
 <script>
@@ -346,76 +214,84 @@
         }
 
         // 댓글 삭제 아이콘 클릭 시 비동기 처리 함수
-        function deleteComment(commentId) {
-            fetch(`/board/reply/delete/${commentId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
+         function confirmDeleteComment(commentId) {
+        // confirm 창으로 삭제 확인
+        const userConfirmed = confirm("댓글을 삭제하시겠습니까?");
+        if (userConfirmed) {
+            deleteComment(commentId);  // 예를 누른 경우에만 삭제 함수 호출
+        }
+    }
+
+    function deleteComment(commentId) {
+        fetch(`/board/reply/delete/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('댓글이 성공적으로 삭제되었습니다.');
+                    const commentElement = document.getElementById(`comment-${commentId}`);
+                    if (commentElement) {
+                        commentElement.remove();
+                    }
+                } else {
+                    alert('댓글 삭제에 실패했습니다.');
                 }
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('댓글이 성공적으로 삭제되었습니다.');
-                        const commentElement = document.getElementById(`comment-${commentId}`);
-                        if (commentElement) {
-                            commentElement.remove();
-                        }
-                    } else {
-                        alert('댓글 삭제에 실패했습니다.');
-                    }
-                });
-        }
-
-
-    // 비동기 페이지 로딩 함수
-    function loadPage(page = 0) {
-        const size = 5; // 한 페이지의 댓글 개수
-        const url = `/board/detail/{{board.id}}?page=${page}&size=${size}`;
-
-        // 비동기로 페이지 콘텐츠 로드
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('#comments-section').innerHTML = html; // 댓글 섹션 업데이트
-
-                // totalPages를 HTML에서 가져와서 사용
-                const totalPages = parseInt(document.getElementById('pagination-container').dataset.totalPages, 10);
-                renderPagination(page, totalPages); // 현재 페이지와 총 페이지를 인수로 전달
-            })
-            .catch(error => console.error('페이지 로드 중 오류:', error));
-    }
-
-    // 페이지네이션 버튼 생성 함수
-    function renderPagination(currentPage, totalPages) {
-        const paginationContainer = document.getElementById('pagination');
-        paginationContainer.innerHTML = ''; // 기존 페이지네이션 초기화
-
-        for (let i = 0; i < totalPages; i++) {
-            let li = document.createElement('li');
-            li.className = 'page-item' + (i === currentPage ? ' active' : '');
-
-            let a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#';
-            a.textContent = i + 1;
-
-            a.addEventListener('click', (event) => {
-                event.preventDefault();
-                loadPage(i); // 해당 페이지 로드
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버 오류로 댓글 삭제에 실패했습니다.');
             });
-
-            li.appendChild(a);
-            paginationContainer.appendChild(li);
-        }
     }
 
-    // 초기 페이지 로드
-    document.addEventListener('DOMContentLoaded', function () {
-        loadPage(0); // 첫 페이지 로드
-    });
+
+// 서버에서 받은 Mustache 변수들을 JavaScript 변수로 할당
+window.totalPages = {{totalPages}};
+window.initialPage = {{currentPage}};
+
+// 비동기 페이지 이동 함수
+function fetchBoardPage(page) {
+    fetch(`/board/detail/{{board.id}}?page=${page}&size=5`)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.board-container').innerHTML = html;
+            updatePagination(page);
+        })
+        .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
+}
+
+// 페이지네이션 버튼 생성 함수
+function updatePagination(currentPage) {
+    console.log('함수 발동');
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = '';
+
+    for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i + 1;
+        button.classList.add('page-button');
+        console.log('버튼 생성');
+
+        if (i === currentPage - 1) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', () => fetchBoardPage(i + 1));
+        paginationContainer.appendChild(button);
+    }
+}
+
+// 초기 페이지네이션 설정
+$(document).ready(function() {
+    console.log('페이지 네이션');
+    updatePagination(initialPage);
+});
+
+
+
+
 
 </script>
-
-
-

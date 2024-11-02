@@ -19,7 +19,7 @@ public interface BoardRepository {
     List<BoardDTO> findBoardsBySchoolId(int schoolId);
 
     // 특정 학교의 게시글을 리스트로 가져온다. (페이징 처리)
-    List<BoardDTO> findBoardsBySchoolId2(@Param("schoolId") int schoolId, @Param("offset") int offset, @Param("size") int size);
+    List<BoardDTO> findBoardsBySchoolId2(@Param("schoolId") int schoolId, @Param("page") int page, @Param("size") int size);
 
     // 특정 학교의 게시글의 리스트의 갯수를 가져온다. (페이징 처리)
     int countBoardsBySchoolId(int schoolId);
@@ -92,7 +92,7 @@ public interface BoardRepository {
     int countSearchBoardsByTitleContent(@Param("schoolId") int schoolId, @Param("keyword") String keyword);
 
     // 게시글 상세보기 클릭 시 기존 댓글 불러오기 메서드 (페이징 처리)
-    List<CommentDTO> findCommentsByBoardIdWithPaging(@Param("boardId") int boardId, @Param("offset") int offset, @Param("size") int size);
+    List<CommentDTO> findCommentsByBoardIdWithPaging(@Param("boardId") int boardId, @Param("page") int page, @Param("size") int size);
 
     // 게시글 상세보기 클릭 시 게시글에 적힌 댓글 총 개수
     int countCommentsByBoardId(int boardId);

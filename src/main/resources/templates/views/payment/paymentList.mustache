@@ -1,8 +1,8 @@
+{{>layout/header}}
+<link rel="stylesheet" href="/css/payment/paymentList.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<h1>결제 목록</h1>
-<div>
+<h1>포인트 충전 내역</h1>
 <div class="chargeHistoryList">
 <table>
     <thead>
@@ -42,6 +42,11 @@
     </td>
 </tr>
 {{/paymentList}}
+{{^paymentList}}
+    <tr>
+        <td colspan="7" class="no-data">충전 내역이 존재하지 않습니다.</td>
+    </tr>
+{{/paymentList}}
 </tbody>
 </table>
 
@@ -67,7 +72,9 @@
         </ul>
     </div>
 </div>
-</div>
 
+<script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/payment/paymentList.js"></script>
 
+{{>layout/footer}}

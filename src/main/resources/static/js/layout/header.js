@@ -1,4 +1,16 @@
-    const alarmSocket = new WebSocket("ws://192.168.0.113:8080/alarm");
+$(window).on('scroll', function () {
+    const $header = $('header');
+    const $logo = $('.logo');
+
+    if ($(window).scrollTop() > 0) {
+        $header.addClass('scrolled');
+        $logo.addClass('hide');
+    } else {
+        $header.removeClass('scrolled');
+        $logo.removeClass('hide');
+    }
+});
+    const alarmSocket = new WebSocket("ws://172.30.1.90:8080/alarm");
     let callStatus = false;
     const alarmSound = document.getElementById("alarmSound");
     alarmSocket.onmessage = (event) => {
@@ -12,44 +24,58 @@
             if (alarm.content === 'request') {
                 if(callStatus === false) {
                     createRequest(alarm); // 통화 요청 UI 생성
-
-                    // 통화 요청 알람음 재생
                     alarmSound.play();
                 } else {
-                    alarmSocket.send(JSON.stringify({
-                        type: 'voice',
-                        senderId: userId,
-                        receiverId: senderId,
-                        content: 'callback'
-                    }));
-                }
-            } else if (alarm.content === 'refuse') {
-                alert("상대방이 화상 채팅 요청을 거절하였습니다.");
-                fetch(`/board/list`)
-                    .then(response => response.text())
-                    .then(data => {
-                        screen.html(data);
-                    })
-                    .catch(error => {
-                        console.error('화면 로딩 중 오류 발생', error);
-                    });
-                tryCall = false;
-            } else if (alarm.content === 'accept') {
-                callStatus = true;
-            } else if (alarm.content === 'callback') {
-                console.log("상대방이 통화중");
-                alert("상대방이 통화중 입니다.");
-                fetch(`/board/list`)
-                    .then(response => response.text())
-                    .then(data => {
-                        screen.html(data);
-                    })
-                    .catch(error => {
-                        console.error('화면 로딩 중 오류 발생', error);
-                    });
+                alarmSocket.send(JSON.stringify({
+                    type: 'voice',
+                    senderId: userId,
+                    receiverId: senderId,
+                    content: 'callback'
+                }));
             }
+        } else if (alarm.content === 'refuse') {
+            alert("상대방이 화상 채팅 요청을 거절하였습니다.");
+            fetch(`/board/list`)
+                .then(response => response.text())
+                .then(data => {
+                    screen.html(data);
+                })
+                .catch(error => {
+                    console.error('화면 로딩 중 오류 발생', error);
+                });
+            tryCall = false;
+        } else if (alarm.content === 'accept') {
+            callStatus = true;
+        } else if (alarm.content === 'callback') {
+            console.log("상대방이 통화중");
+            alert("상대방이 통화중 입니다.");
+            fetch(`/board/list`)
+                .then(response => response.text())
+                .then(data => {
+                    screen.html(data);
+                })
+                .catch(error => {
+                    console.error('화면 로딩 중 오류 발생', error);
+                });
         }
-    };
+    }
+};
+
+$(document).ready(function () {
+    $('body').css('opacity', '1');
+    $('.transition-link a').on('click', function (e) {
+        var linkUrl = $(this).attr('href');
+        e.preventDefault();
+        $('body').animate({ opacity: 0 }, 500, function () {
+            window.location.href = linkUrl;
+        });
+    });
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+            $('body').css('opacity', '1');
+        }
+    });
+});
 
     $(document).ready(function() {
         $('body').css('opacity', '1');

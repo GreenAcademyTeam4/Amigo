@@ -8,7 +8,6 @@
         select * from emoticon_tb
     </select>
 
-
     <!--  채팅방 생성  -->
     <insert id="createChatRoom">
         INSERT INTO chat_room_tb(user_id, friend_id)

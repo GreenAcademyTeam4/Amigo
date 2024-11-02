@@ -1,5 +1,6 @@
 package com.example.amigo_project.repository.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
