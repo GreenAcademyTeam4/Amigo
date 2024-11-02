@@ -53,11 +53,10 @@ public class NaverController {
             if (principal.getNickname() != null) {
             System.out.println("네이버 로그인 진입");
                 userService.updateOnline(principal.getId());
-                List<School> schoolList = userService.findUserSchoolList(principal.getId());
-                model.addAttribute("schoolList",schoolList);
-                String profile = principal.base64Encoding(principal.getProfile());
-                session.setAttribute("profile",profile);
-                session.setAttribute("schoolId",schoolList.get(0).getId());
+                if(principal.getProfile() != null) {
+                    String profile = principal.base64Encoding(principal.getProfile());
+                    session.setAttribute("profile",profile);
+                }
                 return "redirect:/";
             }
             return "views/login/socialInfo";
