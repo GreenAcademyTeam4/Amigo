@@ -242,13 +242,11 @@
         c.content_location AS content,
         c.created_at AS createdAt,
         (SELECT COUNT(*) FROM comment_tb WHERE parent_id = c.id) AS replyCount
-        SELECT c.id, c.board_id AS boardId, c.user_id AS userId ,u.nickname, c.content_location AS content, c.created_at AS createdAt
         FROM comment_tb c
         JOIN user_tb u ON c.user_id = u.id
         WHERE c.board_id = #{boardId} AND c.parent_id IS NULL
         ORDER BY c.created_at DESC
-        LIMIT #{size} OFFSET #{offset};
-        LIMIT #{size} OFFSET #{page}
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
     <!-- 대댓글 불러오기 -->
