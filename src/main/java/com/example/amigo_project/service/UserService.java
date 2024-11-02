@@ -153,8 +153,8 @@ public class UserService {
     }
 
     // 유저가 가진 학교 찾기
-    public List<School> findUserSchoolList(UserDTO.infoDTO dto) {
-        return userRepository.findUserSchool(dto);
+    public List<School> findUserSchoolList(int id) {
+        return userRepository.findUserSchool(id);
     }
 
     // 학교 데이터가 있는지 검사
@@ -165,6 +165,15 @@ public class UserService {
     // 유저 프로필 삽입
     public void insertUserProfile(User user) {
         userRepository.insertUserProfile(user);
+    }
+
+    // 온라인 상태로 업데이트
+    public void updateOnline(int id) {
+        userRepository.updateOnline(id);
+    }
+    // 오프라인 상태로 업데이트
+    public void updateOffline(int id) {
+        userRepository.updateOffline(id);
     }
 }
 
