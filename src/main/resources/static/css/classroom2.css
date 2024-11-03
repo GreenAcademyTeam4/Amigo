@@ -12,6 +12,23 @@
     border-radius: 10px;
     justify-items: center;
     align-items: center;
+    background-image: url('/image/classroom.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 학생 좌석 컨테이너: 3열 2행 그리드 */
+.students {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    grid-template-rows: repeat(2, 1fr);    /* 2행 */
+    gap: 20px;                             /* 좌석 간격 */
+    width: 100%;
+    max-width: 600px;                      /* 컨테이너 최대 너비 */
+    margin: 270 290;
+    align-items: center;
+    border-radius: 10px;
 }
 
 /* 좌석 스타일 */
@@ -23,6 +40,8 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    justify-content: flex-start;
+    padding-left: 17px;
 }
 
 /* 닉네임 스타일 */
@@ -44,7 +63,6 @@
 .user-avatar {
     width: 60px;
     height: 60px;
-    background-color: #4CAF50;
     border-radius: 50%;
     object-fit: cover;
     margin-top: 10px;
@@ -70,15 +88,17 @@
 
 /* 채팅 입력 박스 스타일 */
 .chat-box {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    background-color: #ffffff;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+        position: fixed;
+        bottom: 0;
+        width: 60%;
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: #a27e71;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
 }
 
 /* 채팅 입력 필드 */
@@ -152,8 +172,8 @@
 
 /* 이모티콘 이미지 스타일 */
 .bubble-emoticon {
-    width: 40px; /* 기존의 절반 크기 */
-    height: 40px; /* 기존의 절반 크기 */
+    width: 40px;
+    height: 40px;
     object-fit: contain;
     vertical-align: middle;
 }
