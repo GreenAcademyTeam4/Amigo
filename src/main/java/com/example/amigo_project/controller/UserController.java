@@ -220,10 +220,12 @@ public class UserController {
             byte[]profile = user.convertFileToBytes("static/image/avator/male_head.png");
             user.setProfile(profile);
             userService.insertUserProfile(user);
+            userService.insertDefaultAvatar(user.getId(),11);
         } else {
             byte[]profile = user.convertFileToBytes("static/image/avator/female_head.png");
             user.setProfile(profile);
             userService.insertUserProfile(user);
+            userService.insertDefaultAvatar(user.getId(),12);
         }
         userService.updateOnline(user.getId());
         String profile = user.base64Encoding(user.getProfile());

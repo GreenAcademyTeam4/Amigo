@@ -1,5 +1,6 @@
 package com.example.amigo_project.repository.interfaces;
 
+import com.example.amigo_project.dto.EquipAvatarDTO;
 import com.example.amigo_project.repository.model.School;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -62,5 +63,9 @@ public interface UserRepository {
     public void updateOffline(int id);
     // 학교 정보 가져오기
     public School findSchoolData(int id);
+    // 회원가입시 기본 아바타 삽입
+    public void insertDefaultAvatar(@Param("userId")int userId,@Param("avatarId")int avatarId);
+    // 유저가 장착한 아바타 정보 가져오기
+    public EquipAvatarDTO equipUserAvatar(int id);
 }
 
