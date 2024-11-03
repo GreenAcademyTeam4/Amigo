@@ -1,13 +1,10 @@
-{{>layout/header}}
 <!DOCTYPE html>
-<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>비밀번호 확인</title>
+    <link rel="stylesheet" type="text/css" href="/css/mypage/changePassword.css">
 </head>
 <body>
-<h1>비밀번호 확인</h1>
-<p>비밀번호 변경을 위해 기존 비밀번호를 입력해 주세요.</p>
 <form action="/my-page/pwdValid" method="get">
     <label for="password">기존 비밀번호:</label>
     <input type="password" id="password" name="password" required>
@@ -16,5 +13,3 @@
 <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
-</html>
-{{>layout/footer}}
