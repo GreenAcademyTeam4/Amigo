@@ -1,4 +1,6 @@
-const socket = new WebSocket("ws://192.168.123.100:8080/chat");
+
+const socket = new WebSocket("ws://192.168.219.110:8080/chat");
+
 const messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;
 // 10개의 좌석 생성
