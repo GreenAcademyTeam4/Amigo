@@ -311,10 +311,10 @@ create table alarm_tb (
 	id int primary key auto_increment,
 	type varchar(20) not null,
 	sender_id int not null,
-  receiver_id int,
+    receiver_id int,
 	content varchar(255),
-  created_at timestamp default now(),
-  status int default 0
+    created_at timestamp default now(),
+    status int default 0
 );
 
 create table prodHistory_tb(

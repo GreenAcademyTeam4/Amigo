@@ -25,7 +25,6 @@ $(document).ready(function() {
         const messageData = JSON.parse(event.data); // JSON 문자열을 JS 객체로 변환
         console.log(messageData);
 
-
         // "chat-area" 요소를 선택 (메시지가 추가될 컨테이너)
         const chatContainer = document.getElementById("chat-area");
 
@@ -98,7 +97,6 @@ $(document).ready(function() {
             messageWrapper.appendChild(timestampElement);
             chatContainer.appendChild(messageWrapper);
         }
-
     };
 
     // 전송 버튼 클릭 이벤트 처리
