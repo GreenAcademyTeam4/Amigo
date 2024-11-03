@@ -1,0 +1,157 @@
+/* 전체 컨테이너 스타일 */
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fffaf0;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* 제목 스타일 */
+h1 {
+    color: #5c4b37;
+    font-weight: bold;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #e6c6a6;
+    padding-bottom: 10px;
+}
+
+/* 검색 바 스타일 */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 18px;
+    border: 2px solid #e6c6a6;
+    border-radius: 10px;
+    margin-right: 10px;
+    color: #5c4b37;
+}
+
+#searchBtn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fffaf0;
+    background-color: #f0d9b5;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#searchBtn:hover {
+    background-color: #e6c6a6;
+}
+
+/* 아바타 아이템 스타일 */
+#avatarList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.avatar-item {
+    width: calc(33.333% - 20px);
+    background-color: #fff8e1;
+    border: 1px solid #e6c6a6;
+    border-radius: 10px;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.avatar-item h3 {
+    color: #5c4b37;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.avatar-item p {
+    color: #5c4b37;
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* 버튼 스타일 */
+.buy-btn, .owned {
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fffaf0;
+    background-color: #f0d9b5;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.buy-btn:hover {
+    background-color: #e6c6a6;
+}
+
+.owned {
+    background-color: #d1b897;
+    cursor: not-allowed;
+}
+
+/* 장바구니 스타일 */
+.cart-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff8e1;
+    border: 1px solid #e6c6a6;
+    border-radius: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.cart-container h2 {
+    color: #5c4b37;
+    font-size: 24px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e6c6a6;
+    padding-bottom: 8px;
+}
+
+.cart-item {
+    color: #5c4b37;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* 장바구니 구매 버튼 */
+#purchaseBtn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fffaf0;
+    background-color: #f0d9b5;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#purchaseBtn:hover {
+    background-color: #e6c6a6;
+}
+
+/* 'No Results' 메시지 스타일 */
+#noResults {
+    color: #bf8364;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
