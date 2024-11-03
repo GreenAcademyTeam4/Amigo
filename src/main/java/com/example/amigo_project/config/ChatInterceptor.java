@@ -1,6 +1,5 @@
 package com.example.amigo_project.config;
 
-import com.example.amigo_project.dto.chat.RoomDataDTO;
 import com.example.amigo_project.repository.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,8 +22,10 @@ public class ChatInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
 
+        //ServerHttpRequest를 ServletServerHttpRequest로 변환하여 세션과 같은 HTTP 관련 정보를 가져옴.
         HttpServletRequest req = ((ServletServerHttpRequest)request).getServletRequest();
         HttpSession session = req.getSession(false); // 세션이 없으면 null 반환
+        // true를 반환하면 WebSocket 연결이 허용되고, false를 반환하면 연결이 거부됨.
         if (session != null) {
             User user = (User)session.getAttribute("principal");
         }

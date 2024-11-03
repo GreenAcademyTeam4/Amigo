@@ -49,7 +49,7 @@ function handleRefundRequest(id) {
             if (xhr.status == 400) {
                 alert(xhr.responseText);
             } else {
-                alert("포인트가 부족하여 환불을 신청할 수 없습니다.");
+                alert("포인트가 부족하여 환불 신청할 수 없습니다.");
             }
         }
     });

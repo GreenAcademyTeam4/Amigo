@@ -11,9 +11,8 @@ import java.time.LocalDate;
 @ToString
 public class ChatRoom {
 
-    private int id;
+    private int id; // PK(roomId)
     private int userId;
     private int friendId;
-    private LocalDate lastMessageDate;
-
+    private LocalDate lastMessageDate; // 마지막 메시지 날짜
 }
