@@ -18,10 +18,6 @@
             <div id="nicknameMessage"></div>
 
             <div id="input-container">
-                <input type="text" id="gender" name="gender" placeholder="성별">
-            </div>
-
-            <div id="input-container">
                 <input type="text" id="name" name="name" placeholder="이름">
             </div>
 
@@ -40,6 +36,14 @@
             <div class="input-container">
                 <input type="text" id="school" name="school" placeholder="학교" readonly>
                 <button type="button" class="select-school">선택</button>
+            </div>
+
+            <div class="gender-options">
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male" class="gender-label">남자</label>
+
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female" class="gender-label">여자</label>
             </div>
 
             <!-- 숨겨진 input 필드 추가 -->
