@@ -2,6 +2,9 @@ package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.chat.ChatLogDTO;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.dto.chat.MessageDTO;
+import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.repository.model.chat.ChatLog;
 import com.example.amigo_project.repository.model.chat.ChatRoom;
 import com.example.amigo_project.repository.model.chat.Emoticon;
 import com.example.amigo_project.service.ChatService;
@@ -9,6 +12,7 @@ import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller

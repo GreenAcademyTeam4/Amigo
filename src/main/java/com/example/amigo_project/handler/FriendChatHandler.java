@@ -3,6 +3,7 @@ package com.example.amigo_project.handler;
 import com.example.amigo_project.dto.chat.FriendChatDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.chat.ChatLog;
+import com.example.amigo_project.repository.model.chat.Emoticon;
 import com.example.amigo_project.service.ChatService;
 import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,6 +57,7 @@ public class FriendChatHandler extends TextWebSocketHandler {
             // 기존 방에서 세션 제거
             // 세션이 기존 방에 연결되어 있다면, 먼저 해당 세션을 기존 방에서 제거하고 새 방에 추가함
             // 사용자가 방을 이동할 때, 이전 방에 더 이상 연결되지 않도록 하기 위함
+
             Integer oldRoomId = sessionRoomMap.get(session);
             if (oldRoomId != null && oldRoomId != roomId) {
                 Set<WebSocketSession> oldSessions = roomSessions.get(oldRoomId);

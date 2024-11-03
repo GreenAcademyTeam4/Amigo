@@ -1,5 +1,6 @@
 package com.example.amigo_project.config;
 
+import com.example.amigo_project.dto.chat.RoomDataDTO;
 import com.example.amigo_project.repository.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

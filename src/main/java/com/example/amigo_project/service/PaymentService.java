@@ -22,13 +22,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
-
     private final PaymentRepository paymentRepository;
     private final HttpSession session;
 
@@ -52,7 +52,6 @@ public class PaymentService {
                 .method("POST", HttpRequest.BodyPublishers.ofString(String.format("{\"paymentKey\":\"%s\",\"orderId\":\"%s\",\"amount\":%d}", paymentKey, orderId, amount)))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
         // 결제 요청 승인 후 받은 JSON으로 온 데이터를 모델에 담음
         ObjectMapper objectMapper = new ObjectMapper();
         ChargeHistory chargeHistory = objectMapper.readValue(response.body(), ChargeHistory.class);
@@ -177,7 +176,6 @@ public class PaymentService {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
         Refund refund = objectMapper.readValue(response.body(), Refund.class); //JSON 데이터를 Refund model에 담음
-        System.out.println("refund: " + refund);
 
         // Toss Payments API의 응답을 확인하여 이미 취소된 상태인지 체크
         if (response.body().contains("\"code\":\"ALREADY_CANCELED_PAYMENT\"")) {

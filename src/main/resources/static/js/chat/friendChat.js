@@ -89,7 +89,6 @@ $(document).ready(function() {
             const timestampElement = document.createElement("div");
             timestampElement.className = "timestamp";
             timestampElement.textContent = formatTimestamp(messageData.date); // 포맷된 시간(시, 분)
-
             // 메시지와 타임스탬프 위치 설정
             messageWrapper.appendChild(messageElement);
             messageWrapper.appendChild(timestampElement);
@@ -195,7 +194,6 @@ $(document).ready(function() {
 
         // 채팅 영역에 추가
         chatContainer.appendChild(messageWrapper);
-
         } else if(log.type === 'emoticon'){
             // 메시지 래퍼
             const messageWrapper = document.createElement("div");
@@ -236,7 +234,6 @@ $(document).ready(function() {
             }).replace(/. /g, '-').replace('.', '');  // "YYYY-MM-DD" 형식으로 변환
             // replace(/. /g, '-'): 마침표(.)와 공백을 찾아 하이픈(-)으로 변환
             // replace('.', ''): 위에서 처리되지 않은 마지막 마침표를 제거
-
             // 날짜와 선을 함께 추가
             const dateWrapper = document.createElement("div");
             dateWrapper.className = "chat-date-wrapper";

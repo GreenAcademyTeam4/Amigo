@@ -93,7 +93,7 @@ public class PaymentController {
     public String getFailPage() {
         return "/views/payment/fail";
     }
-
+  
     /**
      * 환불 상태 변경
      * @param requestRefund
@@ -191,6 +191,11 @@ public class PaymentController {
         // 환불 요청중(request) 일때만 환불 신청 버튼 활성화
         for (RequestRefundListDTO history : filteredList) {
             history.setRefundable("request".equals(history.getRefundStatus()));
+            if ("request".equals(history.getRefundStatus())) {
+                history.setRefundable(true);
+            } else {
+                history.setRefundable(false);
+            }
         }
 
         int totalCount = paymentService.countRequestRefundHistory();
