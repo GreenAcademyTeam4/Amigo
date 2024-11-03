@@ -1,10 +1,10 @@
 
-const socket = new WebSocket("ws://192.168.219.110:8080/chat");
+const socket = new WebSocket("ws://192.168.219.45:8080/chat");
 
 const messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;
 // 10개의 좌석 생성
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 6; i++) {
     const seat = $('<div>').addClass('user-seat').attr('id', 'user-seat-' + i);
 
     // 닉네임과 아바타 이미지 요소 생성
@@ -19,7 +19,7 @@ for (let i = 0; i < 10; i++) {
     seat.append(bubble);
     seat.append(nickname);
     seat.append(img);
-    $('.background').append(seat);
+    $('.students').append(seat);
 }
 // 엔터키 감지 함수
 function handleKeyPress(event) {

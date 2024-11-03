@@ -1,39 +1,79 @@
-/* Selection Box */
-.selection-box {
-    background-color: rgba(255, 255, 255, 0.9);
+.selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f3f0;
     border: 1px solid #d4b7aa;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 300px;
+    padding: 40px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    min-width: 690px;
+    max-width: 800px;
+    margin: 20px auto;
 }
 
-.selection-box h3 {
-    font-size: 1.5em;
+.selection-container h1 {
+    font-size: 2em;
+    color: #333333;
     margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.form-group label {
+    font-size: 1.1em;
+    color: #555555;
+    margin-bottom: 8px;
 }
 
 .select-box {
-    width: 100%;
-    padding: 10px;
+    width: 80%;
+    max-width: 300px;
+    padding: 12px;
     font-size: 1em;
-    border-radius: 5px;
     border: 1px solid #d4b7aa;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
     margin-bottom: 15px;
+    text-align: center;
+    color: #333333;
 }
 
-.btn-submit {
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
+.submit-button {
+    width: 60%;
+    max-width: 200px;
+    padding: 12px;
+    font-size: 1.1em;
     color: white;
     background-color: #d98264;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.btn-submit:hover {
+.submit-button:hover {
     background-color: #ce9178;
+}
+
+@media (max-width: 768px) {
+    .selection-container {
+        min-width: auto;
+        padding: 20px;
+    }
+
+    .select-box,
+    .submit-button {
+        width: 100%;
+    }
 }
