@@ -21,6 +21,9 @@
     </div>
 </div>
 
-<script>let userId = {{user}}</script>
+<script>
+    (function(global) {
+        global.userId ={{principal.id}}
+    })(window); </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/chat/classroom2.js"></script>

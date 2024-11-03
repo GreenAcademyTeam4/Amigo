@@ -4,6 +4,9 @@
     let peerConnection;
     let cameraEnabled = true;
     let microphoneEnabled = true;
+    let enterSound = $('#enterSound');
+    let exitSound = $('#exitSound');
+    enterSound.play();
     tryCall = true;
     const screen = $('.screen-area');
     const servers = {
@@ -166,6 +169,7 @@
         peerConnection.close();
         document.querySelector(".user-video").srcObject = null;
         document.querySelector(".remote-video").srcObject = null;
+        exitSound.play();
         fetch("/board/list")
             .then(response => response.text())
             .then(data => {
