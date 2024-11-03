@@ -1,3 +1,4 @@
+/* 초기 설정 */
 * {
     margin: 0;
     padding: 0;
@@ -29,6 +30,7 @@ body {
     flex-direction: column;
 }
 
+/* 전체 컨테이너 스타일 */
 .selecter-container {
     display: flex;
     background-color: rgba(255, 255, 255, 0.8);
@@ -43,6 +45,7 @@ body {
     width: 100%;
 }
 
+/* 제목 스타일 */
 h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -51,22 +54,44 @@ h2 {
     color: #333;
 }
 
+/* 폼 스타일 */
 form {
     display: flex;
     flex-direction: column;
 }
 
-.input-container {
+/* 입력 필드 컨테이너 */
+.input-container,
+#input-container {
     position: relative;
     margin-bottom: 15px;
     display: flex;
     align-items: center;
 }
 
-.input-container input[type="text"] {
+#input-container input[type="text"],
+#input-container input[type="number"],
+#input-container input[type="password"] {
     width: 100%;
     padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #fff;
     padding-right: 60px; /* 버튼 공간 확보 */
+}
+
+#input-container input:focus {
+    border-color: #c05720;
+    background-color: #fae1d7;
+}
+
+/* name, phoneNumber, birth 필드의 스타일을 통일하여 학교 선택 및 닉네임과 일관되게 설정 */
+.input-container input[type="text"],
+.input-container input[type="number"] {
+    width: 100%;
+    padding: 12px;
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -79,7 +104,10 @@ form {
     background-color: #fae1d7;
 }
 
-.input-container .select-btn,.select-school,.repetition {
+/* 버튼 스타일 */
+.input-container .select-btn,
+.input-container .select-school,
+.input-container .repetition {
     position: absolute;
     right: 5px;
     height: 70%;
@@ -92,10 +120,40 @@ form {
     font-size: 14px;
 }
 
-.input-container .select-btn:hover {
+.input-container .select-btn:hover,
+.input-container .select-school:hover,
+.input-container .repetition:hover {
     background-color: #c05720;
 }
 
+/* 성별 선택 스타일 */
+.gender-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.gender-options input[type="radio"] {
+    display: none;
+}
+
+.gender-options label {
+    font-size: 16px;
+    color: #333;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.gender-options input[type="radio"]:checked + .gender-label {
+    background-color: #ce9178;
+    color: white;
+}
+
+/* 추가 버튼 스타일 */
 button.insert-btn {
     padding: 12px;
     background-color: #ce9178;
@@ -109,4 +167,19 @@ button.insert-btn {
 
 button.insert-btn:hover {
     background-color: #c05720;
+}
+
+/* 메시지 스타일 */
+#nicknameMessage {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#nicknameMessage.error {
+    color: red;
+}
+
+#nicknameMessage.success {
+    color: green;
 }

@@ -189,7 +189,7 @@ public class MainController {
         model.addAttribute("offlineFriendList", offlineFriends);
 
         return "views/board/boardMultiList";
-
+    }
     @GetMapping("/enter")
     public String enterSchool(Model model,HttpSession session) {
         int schoolId = (Integer)session.getAttribute("schoolId");
