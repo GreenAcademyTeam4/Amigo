@@ -4,6 +4,7 @@ import com.example.amigo_project.dto.chat.FriendChatDTO;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.chat.ChatLog;
 import com.example.amigo_project.service.ChatService;
+import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class FriendChatHandler extends TextWebSocketHandler {
     // 특정 세션이 연결된 방을 추적하여, 세션 종료 시 해당 세션을 방에서 제거할 때 사용
     private final Map<WebSocketSession, Integer> sessionRoomMap = new ConcurrentHashMap<>();
 
+    private final UserService userService;
     private final ChatService chatService;
     private final ObjectMapper mapper;
 
@@ -127,6 +129,7 @@ public class FriendChatHandler extends TextWebSocketHandler {
             // 전송할 메시지의 실제 데이터(messageJson)
             String messageJson = mapper.writeValueAsString(messageDTO);
             // 세션이 존재하면, 반복문을 통해 각 세션에 대해 메시지를 전송함.
+            int isreceiver = 0;
             if (sessions != null) {
                 for (WebSocketSession s : sessions) {
                     // 현재 순회 중인 세션 s가 메시지를 보낸 사용자(발신자)의 세션과 같은지 확인
@@ -137,7 +140,12 @@ public class FriendChatHandler extends TextWebSocketHandler {
                         // 채팅방의 다른 사용자에게는 messageJson을 전송
                         s.sendMessage(new TextMessage(messageJson));
                     }
+                    isreceiver++;
                 }
+            }
+            // 만약 채팅방에 나 혼자면
+            if(isreceiver == 1) {
+
             }
         } else if("emoticon".equals(messageDTO.getType())){
             int roomId = sessionRoomMap.get(session);

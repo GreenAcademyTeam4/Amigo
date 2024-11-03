@@ -22,7 +22,8 @@ $(document).ready(function() {
     // 서버로부터 메시지가 도착하면 onmessage 이벤트가 발생
     window.socket.onmessage = function (event) {
         // 수신된 메시지를 JSON 형식으로 파싱하고, 각 메시지 타입(date, chat, emoticon)에 따라 다르게 처리
-        const messageData = JSON.parse(event.data);
+        const messageData = JSON.parse(event.data); // JSON 문자열을 JS 객체로 변환
+        console.log(messageData);
 
         // "chat-area" 요소를 선택 (메시지가 추가될 컨테이너)
         const chatContainer = document.getElementById("chat-area");
@@ -119,6 +120,7 @@ $(document).ready(function() {
             type: 'chat',
             message: messageContent,
             sender: 'self', // 보낸 사람을 'self'로 설정
+            receiver: friendId,
             date: Date.now()// 현재 날짜
         });
         window.socket.send(messageJSON); // 서버에 메시지 전송

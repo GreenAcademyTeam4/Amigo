@@ -9,4 +9,5 @@ public class SeatDataDTO {
 
     private int id;
     private String nickname;
+    private String avatar;
 }

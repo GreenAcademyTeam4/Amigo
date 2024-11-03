@@ -27,7 +27,6 @@ alarmSocket.onmessage = (event) => {
             if (callStatus === false) {
                 createRequest(alarm); // 통화 요청 UI 생성
                 alarmSound.play();
-
                 // 사운드가 종료될 때마다 반복 재생
                 alarmSound.addEventListener("ended", function() {
                     alarmSound.currentTime = 0; // 시작 위치로 이동

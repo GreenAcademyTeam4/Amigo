@@ -7,12 +7,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.UUID;
 
-import com.example.amigo_project.dto.UserDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.dto.UserDTO.NaverDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
 import com.example.amigo_project.repository.model.User;

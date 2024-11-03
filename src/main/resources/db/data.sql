@@ -404,8 +404,6 @@ INSERT INTO inventory_tb (user_id, avatar_id) VALUES
 
 -- 현재 아바타 정보 테이블에 샘플 데이터 삽입
 INSERT INTO now_avatar_tb (user_id, head, top, bottom, shoes) VALUES
-(1, 1, 8, 3, 4),
-(2, 2, 8, 3, 4),
 (3, 5, 8, 6, 4),
 (4, 2, 8, 6, 4);
 
@@ -425,3 +423,13 @@ values (1,1),
        (2,1),
         (1,2),
         (2,2);
+
+-- 기본 아바타 삽입
+INSERT INTO avatar_tb (id, type, price, name, url) VALUES
+      (11,1,0,'남자 기본 아바타','/image/avator/male_body.png'),
+      (12,1,0,'여자 기본 아바타','/image/avator/female_body.png');
+
+-- 유저가 장착한 아바타
+INSERT INTO now_avatar_tb (user_id,head, top, bottom, shoes) VALUES
+      (1,11,1,2,3),
+      (2,12,1,2,3);

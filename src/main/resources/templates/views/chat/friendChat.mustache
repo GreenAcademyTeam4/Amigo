@@ -49,6 +49,7 @@
         // global.roomId: 모든 JavaScript 코드에서 접근 가능한 전역 변수
         global.roomId = {{roomKey}};
         global.currentUserId = {{user.id}}
+        global.friendId = {{opponent.id}}
     })(window);
     // (window): 함수 내부의 global은 window 객체를 참조하게 되며, window에 roomId와 currentUserId가 전역 변수로 추가
     // 즉, roomId와 currentUserId를 전역 변수로 설정하여 다른 JavaScript 코드에서도 접근 가능하게 하고, 콘솔에 이 두 값을 출력
