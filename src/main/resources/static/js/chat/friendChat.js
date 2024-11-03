@@ -122,6 +122,7 @@ $(document).ready(function() {
             type: 'chat',
             message: messageContent,
             sender: 'self', // 보낸 사람을 'self'로 설정
+            receiver: friendId,
             date: Date.now()// 현재 날짜 포함
         });
 

@@ -12,6 +12,6 @@ public class FriendChatDTO {
     private String message;
     private String sender;
     private Timestamp date;
-
+    private int receiver;
 
 }

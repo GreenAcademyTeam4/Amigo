@@ -150,4 +150,12 @@
     <select id="findSchoolData" resultType="com.example.amigo_project.repository.model.School">
         select * from school_tb where id = #{id}
     </select>
+
+    <!-- 해당 유저가  온라인인지 오프라인인지 알아내기 -->
+    <select id="isUserOnline" resultType="Boolean">
+        SELECT online_status
+        FROM user_tb
+        WHERE user_id = #{userId}
+    </select>
+
 </mapper>
