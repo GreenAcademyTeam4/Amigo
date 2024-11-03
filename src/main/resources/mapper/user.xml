@@ -158,4 +158,19 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 회원가입시 기본 아바타 삽입 -->
+    <insert id="insertDefaultAvatar">
+        INSERT INTO now_avatar_tb (user_id,head) VALUES
+            (#{userId},#{avatarId})
+    </insert>
+
+    <!-- 유저가 장착한 아바타 정보 가져오기 -->
+    <select id="equipUserAvatar" resultType="com.example.amigo_project.dto.EquipAvatarDTO">
+        SELECT n.user_id as user_id, a.url as url
+        from now_avatar_tb as n
+        join avatar_tb as a
+        on n.head = a.id
+        where n.user_id = #{id}
+    </select>
+
 </mapper>

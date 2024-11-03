@@ -1,5 +1,4 @@
-
-const socket = new WebSocket("ws://192.168.219.45:8080/chat");
+const classSocket = new WebSocket("ws://192.168.123.100:8080/chat");
 
 const messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;
@@ -21,6 +20,7 @@ for (let i = 0; i < 6; i++) {
     seat.append(img);
     $('.students').append(seat);
 }
+
 // 엔터키 감지 함수
 function handleKeyPress(event) {
     if (event.key === "Enter") { // 엔터키를 감지
@@ -37,30 +37,33 @@ chatInput.on('blur', () => {
     chatInput.off('keydown', handleKeyPress); // 포커스가 해제될 때 keydown 이벤트 제거
 });
 
-socket.onmessage = (event) => {
+classSocket.onmessage = (event) => {
     let message = JSON.parse(event.data);
 
     if (message.type === 'seat') {
         const data = JSON.parse(message.message);
         console.log(data);
         for (let i = 0; i < data.length; i++) {
-            if(data[i] !== null) {
-            if (data[i].id === userId) {
-                console.log(currentSeatNum);
-                if(currentSeatNum !== null) {
-                    const bubble = $('#user-seat-' + currentSeatNum + ' .user-bubble');
-                    bubble.css('opacity',0);
+            if (data[i] !== null) {
+                if (data[i].id === userId) {
+                    console.log(currentSeatNum);
+                    if (currentSeatNum !== null) {
+                        const bubble = $('#user-seat-' + currentSeatNum + ' .user-bubble');
+                        bubble.css('opacity', 0);
+                    }
+                    $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
+                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar); // 이미지 src 설정
+                    currentSeatNum = i;
+                } else {
+                    $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
+                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar); // 이미지 src 설정
                 }
-                $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
-                currentSeatNum = i;
-            } else {
-                $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
-            }
             } else {
                 $('#user-seat-' + i + ' .user-nickname').text('');
+                $('#user-seat-' + i + ' .user-avatar').attr('src', ''); // 아바타 이미지 초기화
             }
         }
-    } else if(message.type === 'chat') {
+    } else if (message.type === 'chat') {
         // 말풍선에 새로운 메시지 설정
         const data = JSON.parse(message.message);
         const bubble = $('#user-seat-' + data.id + ' .user-bubble');
@@ -97,7 +100,7 @@ socket.onmessage = (event) => {
             bubble.css('opacity', 0);
         }, 3000);
     }
-}
+};
 
 function changeSeat(num) {
     let message = JSON.stringify({
@@ -105,28 +108,28 @@ function changeSeat(num) {
         message: num
     });
     console.log(num);
-    socket.send(message);
+    classSocket.send(message);
 }
 
 function send() {
     let chatInput = $('.chat-input');
     let chat = chatInput.val();
     console.log(chat);
-    if(chat !== ''){
+    if (chat !== '') {
         let message = JSON.stringify({
             type: 'chat',
             message: chat
         });
         chatInput.val('');
-        socket.send(message);
+        classSocket.send(message);
     }
 }
 
-socket.onclose = (event) => {
+classSocket.onclose = (event) => {
     console.log("WebSocket closed:", event);
 };
 
-socket.onerror = (error) => {
+classSocket.onerror = (error) => {
     console.error("WebSocket error:", error);
 };
 
@@ -141,6 +144,6 @@ function sendEmoticon(url) {
         type: 'emoticon',
         message: url
     });
-    socket.send(message);
+    classSocket.send(message);
     $('.emoticon-box').hide(); // 이모티콘 창 숨김
 }
