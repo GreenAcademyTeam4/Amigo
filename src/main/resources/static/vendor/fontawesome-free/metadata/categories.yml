@@ -279,7 +279,7 @@ buildings:
     - monument
     - mosque
     - place-of-worship
-    - school
+    - schoolId
     - store
     - store-alt
     - synagogue
@@ -458,7 +458,7 @@ childhood:
     - ice-cream
     - mitten
     - robot
-    - school
+    - schoolId
     - shapes
     - snowman
   label: Childhood
@@ -782,7 +782,7 @@ education:
     - laptop-code
     - microscope
     - music
-    - school
+    - schoolId
     - shapes
     - theater-masks
     - user-graduate
@@ -1844,7 +1844,7 @@ objects:
     - satellite
     - satellite-dish
     - save
-    - school
+    - schoolId
     - screwdriver
     - scroll
     - sd-card

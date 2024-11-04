@@ -1,11 +1,13 @@
 package com.example.amigo_project.handler;
 
+import com.example.amigo_project.dto.EquipAvatarDTO;
 import com.example.amigo_project.dto.chat.ChatRoomDTO;
 import com.example.amigo_project.dto.chat.ChatMessageDTO;
 import com.example.amigo_project.dto.chat.MessageDTO;
 import com.example.amigo_project.dto.chat.RoomDataDTO;
 import com.example.amigo_project.dto.chat.SeatDataDTO;
 import com.example.amigo_project.repository.model.User;
+import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ public class ChatHandler extends TextWebSocketHandler {
     // 현재 좌석 기록
     private Map<Integer,Integer> currentSeat = new ConcurrentHashMap<>();
 
+    private final UserService userService;
     // 메시지 처리하는 메서드
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -112,15 +115,15 @@ public class ChatHandler extends TextWebSocketHandler {
         }
     }
 
-
-
     // 입장 시 처리하는 메서드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("사람 입장!!!!");
         ObjectMapper objectMapper = new ObjectMapper();
         RoomDataDTO data = (RoomDataDTO)session.getAttributes().get("roomData");
         User principal = (User)session.getAttributes().get("principal");
-        SeatDataDTO seatDataDTO = SeatDataDTO.builder().id(principal.getId()).nickname(principal.getNickname()).build();
+        EquipAvatarDTO equip = userService.equipUserAvatar(principal.getId());
+        SeatDataDTO seatDataDTO = SeatDataDTO.builder().id(principal.getId()).nickname(principal.getNickname()).avatar(equip.getUrl()).build();
         // 처음 들어올때 유저 관리 매니저에 저장
         userManage.put(session,data);
         // 방이 없으면 새로생성하고 좌석을 빈 상태로 초기화

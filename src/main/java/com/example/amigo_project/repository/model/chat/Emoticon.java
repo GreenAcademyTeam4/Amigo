@@ -14,5 +14,4 @@ public class Emoticon {
     private Integer id;
     private String url;
     private String name;
-
 }

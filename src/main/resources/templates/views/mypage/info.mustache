@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +6,16 @@
     <link rel="stylesheet" type="text/css" href="/css/user/mypage.css">
 </head>
 <div class="mypage-container">
-    <div class="top-blanck"></div>
+   
+
+    <div class="top-blanck">
+     <span class="chage-info">
+          <div class="info-href" id="my-inventory">인벤토리</div> 
+          <div class="info-href" id="my-friend">친구</div>
+          <div class="info-href" id="my-chargeHistory">충전 내역</div>
+          <div class="info-href" id="my-passwordChange">비밀번호 변경</div>
+    </span>
+    </div>
     <div class="top-profile">
         <div class="profile-charactor">
             <div class="charactor-box"></div>
@@ -36,31 +44,22 @@
             </div>
         </div>
     </div>
-    <a href="/my-page/inventory">인벤토리</a> 
-          <a href="/my-page/friend-list">친구 관리</a> 
-          <a href="javascript:void(0)" onClick="javascript:goPost()">포인트 충전 내역</a> 
-          <a href="/my-page/pwdcheck">비밀번호 변경</a>
-    
+
   
-      <div>
-          <p>이름: {{#dto.name}}{{dto.name}}{{/dto.name}}{{^dto.name}}N/A{{/dto.name}}</p>
-          <p>전화번호: {{#dto.phoneNumber}}{{dto.phoneNumber}}{{/dto.phoneNumber}}{{^dto.phoneNumber}}N/A{{/dto.phoneNumber}}</p>
-          <p>성별: {{#dto.gender}}{{dto.gender}}{{/dto.gender}}{{^dto.gender}}N/A{{/dto.gender}}</p>
-          <p>생년월일: {{#dto.birth}}{{dto.birth}}{{/dto.birth}}{{^dto.birth}}N/A{{/dto.birth}}</p>
-      </div>
+      <span class="note-look">
+          <p>이름: {{principal.name}}</p>
+          <p>전화번호: {{principal.phoneNumber}}</p>
+          <p>성별: {{principal.gender}}</p>
+          <p>생년월일: {{principal.birth}}</p>
+      </span>
 
 </div>
   
 </div>
-
+ <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="/js/mypage.js"></script>
 <script>
-    function goGet(){
-        let f = document.createElement('form');
-        f.setAttribute('method', 'get');
-        f.setAttribute('action', '/pay/paymentList');
-        document.body.appendChild(f);
-        f.submit();
-    }
 
     function editNickname() {
         const nicknameText = document.getElementById('nickname-text').innerText;
@@ -87,8 +86,8 @@
     }
 
     function editSchool() {
-        const schoolText = document.getElementById('school-text').innerText;
-        document.getElementById('school-container').innerHTML = `
+        const schoolText = document.getElementById('schoolId-text').innerText;
+        document.getElementById('schoolId-container').innerHTML = `
             <label for="school-input">학교:</label>
             <input type="text" id="school-input" value="${schoolText}">
             <button onclick="saveSchool()">변경</button>
@@ -96,11 +95,11 @@
     }
 
     function saveSchool() {
-        const newSchool = document.getElementById('school-input').value;
+        const newSchool = document.getElementById('schoolId-input').value;
         fetch(`/my-page/chSchool?school=${newSchool}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('school-container').innerHTML = `
+                document.getElementById('schoolId-container').innerHTML = `
                     <p>학교: <span id="school-text">${data.school}</span> <button onclick="editSchool()">✏️</button></p>
                 `;
             })

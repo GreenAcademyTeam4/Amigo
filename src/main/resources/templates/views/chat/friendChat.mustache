@@ -19,9 +19,9 @@
                 <!-- 메시지들이 여기에 표시됨 -->
             </div>
             <!-- 키보드로 대화 내용 입력하는 공간 -->
-            <!-- 키보드로 대화 내용 입력하는 공간 -->
             <div class="keyboard-area">
                 <input type="text" id="content" name="content" placeholder="메시지 입력" autocomplete="off">
+                <!-- 이모티콘 버튼 -->
                 <button id="emojiButton" onclick="openEmoticonBox()">😊</button>
                 <button class="btn" id="sendButton">전송</button>
                 <!-- 이모티콘 박스 -->
@@ -35,17 +35,24 @@
             </div>
         </div>
     </div>
-
 </main>
 
 <!-- Mustache 템플릿에서 roomId 설정 -->
 <script>
+    // 즉시 실행 함수(IIFE)
+    // IIFE: 정의와 동시에 실행되는 함수
+    // JavaScript 코드가 전역 네임스페이스를 더럽히지 않도록 보호해주는 역할
+    // global이라는 이름으로 전역 객체에 접근할 수 있음
+    // global이라는 매개변수를 통해 window 객체가 전달
     (function(global) {
-        global.roomId = {{roomKey}};// roomId 변수를 글로벌로 설정
+        // window.roomId를 전역 변수로 정의하고 여기에 roomKey의 값을 할당
+        // global.roomId: 모든 JavaScript 코드에서 접근 가능한 전역 변수
+        global.roomId = {{roomKey}};
         global.currentUserId = {{user.id}}
-        console.log("Current roomId:", global.roomId);
-        console.log("CurrentId:", global.currentUserId);
+        global.friendId = {{opponent.id}}
     })(window);
+    // (window): 함수 내부의 global은 window 객체를 참조하게 되며, window에 roomId와 currentUserId가 전역 변수로 추가
+    // 즉, roomId와 currentUserId를 전역 변수로 설정하여 다른 JavaScript 코드에서도 접근 가능하게 하고, 콘솔에 이 두 값을 출력
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

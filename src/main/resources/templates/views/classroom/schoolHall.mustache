@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/css/chat/schoolHall.css">
+<div class="selection-container">
+    <h1>{{schoolName}}</h1>
+    <div class="form-group">
+        <label for="gradeSelect">학년:</label>
+        <select id="gradeSelect" class="select-box">
+            <option value="" disabled selected>학년을 선택해주세요</option>
+            {{#grades}}
+                <option value="{{.}}">{{.}} 학년</option>
+            {{/grades}}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="classSelect">반:</label>
+        <select id="classSelect" class="select-box">
+            <option value="" disabled selected>반을 선택해주세요</option>
+            {{#classes}}
+                <option value="{{.}}">{{.}} 반</option>
+            {{/classes}}
+        </select>
+    </div>
+    <button id="submit-selection" class="submit-button">입장</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/chat/schoolHall.js"></script>

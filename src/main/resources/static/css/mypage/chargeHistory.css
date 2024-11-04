@@ -1,0 +1,125 @@
+/* 전체 배경 스타일 */
+.chargeHistoryList {
+    width: 100%;
+    padding: 20px;
+    background-color: #fffaf0;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-sizing: border-box;
+        min-width: 690px;
+        max-width: 800px;
+}
+
+/* 제목 스타일 */
+h1 {
+    color: #5c4b37;
+    font-weight: bold;
+    font-size: 28px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e6c6a6;
+    padding-bottom: 10px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #e6c6a6;
+    color: #5c4b37;
+    font-size: 18px;
+}
+
+table th {
+    background-color: #f0d9b5;
+    font-weight: bold;
+}
+
+table td {
+    background-color: #fff8e1;
+}
+
+/* 테이블에서 데이터가 없을 때 */
+.no-data {
+    text-align: center;
+    color: #bf8364;
+    font-size: 18px;
+    padding: 20px;
+    background-color: #fff8e1;
+    border: 1px solid #e6c6a6;
+}
+
+/* 환불 신청 버튼 스타일 */
+.refund-btn {
+    background-color: #f0d9b5;
+    color: #5c4b37;
+    border: 1px solid #e6c6a6;
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.refund-btn:disabled {
+    background-color: #e6c6a6;
+    color: #fffaf0;
+    cursor: not-allowed;
+}
+
+.refund-btn:hover:not(:disabled) {
+    background-color: #e6c6a6;
+    color: #fffaf0;
+}
+
+/* 링크 스타일 */
+a {
+    color: #bf8364;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+a:hover {
+    color: #5c4b37;
+    text-decoration: underline;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    display: block;
+    padding: 8px 12px;
+    color: #5c4b37;
+    background-color: #f0d9b5;
+    border: 1px solid #e6c6a6;
+    border-radius: 6px;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.page-link:hover {
+    background-color: #e6c6a6;
+    color: #fffaf0;
+}
+
+.page-item.active .page-link {
+    background-color: #e6c6a6;
+    color: #fffaf0;
+    cursor: default;
+}

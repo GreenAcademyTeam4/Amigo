@@ -116,6 +116,7 @@
         insert into user_school_tb (user_id,school_id)
             VALUES  (#{id},#{schoolId})
     </insert>
+
     <!--유저가 가진 학교 찾아오기 -->
     <select id="findUserSchool" resultType="com.example.amigo_project.repository.model.School">
         select * from user_school_tb as u
@@ -144,5 +145,32 @@
         set online_status = false
         where id = #{id}
     </update>
+
+    <!-- 학교 정보 가져오기 -->
+    <select id="findSchoolData" resultType="com.example.amigo_project.repository.model.School">
+        select * from school_tb where id = #{id}
+    </select>
+
+    <!-- 해당 유저가  온라인인지 오프라인인지 알아내기 -->
+    <select id="isUserOnline" resultType="Boolean">
+        SELECT online_status
+        FROM user_tb
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 회원가입시 기본 아바타 삽입 -->
+    <insert id="insertDefaultAvatar">
+        INSERT INTO now_avatar_tb (user_id,head) VALUES
+            (#{userId},#{avatarId})
+    </insert>
+
+    <!-- 유저가 장착한 아바타 정보 가져오기 -->
+    <select id="equipUserAvatar" resultType="com.example.amigo_project.dto.EquipAvatarDTO">
+        SELECT n.user_id as user_id, a.url as url
+        from now_avatar_tb as n
+        join avatar_tb as a
+        on n.head = a.id
+        where n.user_id = #{id}
+    </select>
 
 </mapper>

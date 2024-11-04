@@ -1,4 +1,159 @@
-﻿(function() {
+﻿
+
+    // 좋아요 버튼 클릭 시 작동하는 스크립트
+    function toggleLike() {
+        const boardId = {{board.id}};
+            const likeIcon = document.getElementById('like-icon');
+            const likeCountSpan = document.getElementById('like-count');
+
+            const isLiked = likeIcon.classList.contains('liked');
+            const url = `/board/like/${boardId}`;
+            const method = isLiked ? 'DELETE' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update like count
+                        likeCountSpan.textContent = data.likeCount;
+
+                        if (isLiked) {
+                            likeIcon.classList.remove('liked');
+                            likeIcon.src = '/image/board/empty.png';
+                        } else {
+                            likeIcon.classList.add('liked');
+                            likeIcon.src = '/image/board/full.png';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // 댓글 "수정" 버튼 클릭 시 작동하는 함수
+        function showEditForm(commentId) {
+            const editForm = document.getElementById(`edit-form-${commentId}`);
+            const contentElement = document.getElementById(`content-${commentId}`);
+
+            if (editForm && contentElement) {
+                editForm.style.display = 'block';
+                contentElement.style.display = 'none';
+            } else {
+                console.error("Edit form or content element not found for comment ID:", commentId);
+            }
+        }
+
+        // 댓글 "수정 완료" 버튼 클릭 시 비동기 처리 함수
+        function updateComment(commentId) {
+            const updatedContent = document.getElementById(`edit-content-${commentId}`).value;
+
+            fetch(`/board/reply/update/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: updatedContent })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('댓글이 성공적으로 수정되었습니다.');
+                        document.getElementById(`content-${commentId}`).innerText = updatedContent;
+                        document.getElementById(`edit-form-${commentId}`).style.display = 'none';
+                        document.getElementById(`content-${commentId}`).style.display = 'block';
+                    } else {
+                        alert('댓글 수정에 실패했습니다.');
+                    }
+                });
+        }
+
+        // 댓글 삭제 아이콘 클릭 시 비동기 처리 함수
+         function confirmDeleteComment(commentId) {
+        // confirm 창으로 삭제 확인
+        const userConfirmed = confirm("댓글을 삭제하시겠습니까?");
+        if (userConfirmed) {
+            deleteComment(commentId);  // 예를 누른 경우에만 삭제 함수 호출
+        }
+    }
+
+    function deleteComment(commentId) {
+        fetch(`/board/reply/delete/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('댓글이 성공적으로 삭제되었습니다.');
+                    const commentElement = document.getElementById(`comment-${commentId}`);
+                    if (commentElement) {
+                        commentElement.remove();
+                    }
+                } else {
+                    alert('댓글 삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버 오류로 댓글 삭제에 실패했습니다.');
+            });
+    }
+
+
+// 서버에서 받은 Mustache 변수들을 JavaScript 변수로 할당
+window.totalPages = {{totalPages}};
+window.initialPage = {{currentPage}};
+
+// 비동기 페이지 이동 함수
+function fetchBoardPage(page) {
+    fetch(`/board/detail/{{board.id}}?page=${page}&size=5`)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.board-container').innerHTML = html;
+            updatePagination(page);
+        })
+        .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
+}
+
+// 페이지네이션 버튼 생성 함수
+function updatePagination(currentPage) {
+    console.log('함수 발동');
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = '';
+
+    for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i + 1;
+        button.classList.add('page-button');
+        console.log('버튼 생성');
+
+        if (i === currentPage - 1) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', () => fetchBoardPage(i + 1));
+        paginationContainer.appendChild(button);
+    }
+}
+
+// 초기 페이지네이션 설정
+$(document).ready(function() {
+    console.log('페이지 네이션');
+    updatePagination(initialPage);
+});
+
+
+
+
+(function() {
     let screen = $('.screen-area');
     // 폼 제출 함수
     function submitPost() {
@@ -25,7 +180,6 @@
 
     // 게시판에서 <a> 태그를 처리하는 함수
     function screenChanger(data) {
-    console.log("화면 전환!~!");
         fetch(data)
             .then(response => response.text())
             .then(data => {
@@ -107,13 +261,41 @@
             method: 'POST',
             body: formData // FormData 객체를 전송
         })
-        .then(response => response.text())
-        .then(data => {
-            screen.html(data);
+        .then(response => {
+            if (response.ok) {
+                addCommentToPage(commentContent); // 페이지에 새 댓글 추가
+                document.getElementById('commentContent').value = ''; // 입력 필드 초기화
+            } else {
+                throw new Error('댓글 등록에 실패했습니다.');
+            }
         })
         .catch(error => {
             console.error('게시판 댓글 오류 발생:', error);
         });
+    }
+
+    // 페이지에 새 댓글을 추가하는 함수
+    function addCommentToPage(content) {
+        const commentSection = document.querySelector('.comments');
+
+        const newComment = document.createElement('div');
+        newComment.className = 'comment';
+        newComment.innerHTML = `
+            <div class="comment-header">
+                <p><strong>작성자:</strong> 나</p>
+                <p><small>작성일자: 지금</small></p>
+            </div>
+            <div class="comment-body">
+                <p>${content}</p>
+            </div>
+            <div class="comment-actions">
+                <button onclick="confirmDeleteComment(-1)" class="btn btn-danger btn-sm">🗑</button>
+                <button onclick="showEditForm(-1)" class="btn btn-link btn-sm">수정</button>
+            </div>
+            <hr>
+        `;
+
+        commentSection.prepend(newComment); // 새 댓글을 최상단에 추가
     }
 
     // 폼 수정 제출 함수

@@ -10,6 +10,7 @@ import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
 import com.example.amigo_project.repository.model.*;
 import com.example.amigo_project.service.BoardService;
+import com.example.amigo_project.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,7 @@ public class BoardController {
 
     private final HttpSession session;
     private final BoardService boardService;
+    private final UserService userService;
 
 
     /**
@@ -69,12 +71,12 @@ public class BoardController {
         System.out.println("principal.getId() : " + principal.getId());
 
 
-        int user_id = 1; // 유저 아이디 (나중에 유저 세션에서 가져옴)
-        int school_id = 1; // 학교 아이디 (나중에 유저 세션에서 가져옴)
+        User user = (User)session.getAttribute("principal");
+        int user_id = user.getId();
+        int school_id = (Integer)session.getAttribute("schoolId");
 
         System.out.println();
         model.addAttribute("userId", user_id);
-        model.addAttribute("schoolId", school_id);
 
         System.out.println("userId : " + user_id);
         System.out.println("schoolId : " + school_id);
@@ -116,8 +118,6 @@ public class BoardController {
         return "redirect:/board/list";  // 등록 후 목록 페이지로 리다이렉트
     }
 
-
-
     /**
      * 학교에 속한 게시글 모두 출력
      * @param
@@ -138,8 +138,7 @@ public class BoardController {
 
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
-
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardsBySchoolId2(schoolId, page - 1, size); // Service에서 페이징된 게시글 목록 가져옴
         int totalCount = boardService.getBoardBySchoolCount(schoolId); // 학교에 대한 게시글 갯수 = 12개
@@ -156,7 +155,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
         System.out.println("총 페이지 수 : " + totalPages);
         System.out.println("현재 페이지 : " + page);
         model.addAttribute("currentPage", page);
@@ -176,11 +174,8 @@ public class BoardController {
                                  @RequestParam(name = "page", defaultValue = "1") int page,
                                  @RequestParam(name = "size", defaultValue = "5") int size) {
 
-     //   int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
-
         System.out.println("page : " + page);
         System.out.println("size : " + size);
-
 
         // 세션에서 현재 로그인된 사용자 정보 가져오기
         User principal = (User) session.getAttribute("principal");
@@ -257,50 +252,49 @@ public class BoardController {
      */
     @ResponseBody
     @GetMapping("/nested-comment")
-    public ResponseEntity<?>findNestedComment(@RequestParam("boardId") int boardId,
-                                              @RequestParam("parentId") int parendId){
-        List<CommentDTO> replyList = boardService.findNestedComment(boardId, parendId);
+    public ResponseEntity<?> findNestedComment(@RequestParam("boardId") int boardId,
+                                               @RequestParam("parentId") int parentId) {
+        List<CommentDTO> replyList = boardService.findNestedComment(boardId, parentId);
         if (replyList.isEmpty()) {
-            return ResponseEntity.ok("현재 작성된 답글이 없습니다.");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "현재 작성된 답글이 없습니다.");
+            return ResponseEntity.ok(response); // 답글이 없을 때 메시지 반환
         }
         return ResponseEntity.ok(replyList);
     }
 
 
+
+
     /**
-     *  대댓글 작성 기능 -> 대댓글 정보 db 삽입 후 새로운 대댓글 정보 조회 후 리턴
+     *  답글 작성 기능 -> 답글 정보 db 삽입 후 새로운 답글 정보 조회 후 리턴
      */
     @ResponseBody
     @PostMapping("/post-nested-comment")
-    public ResponseEntity<?>postNestedComment(@RequestParam("boardId") int boardId,
-                                              @RequestParam("parentId") int parentId,
-                                              @RequestParam("content") String content,
-                                              HttpSession session){
+    public ResponseEntity<?> postNestedComment(@RequestParam("boardId") int boardId,
+                                               @RequestParam("parentId") int parentId,
+                                               @RequestParam("content") String content,
+                                               HttpSession session) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 답글 작성이 가능합니다.");
-        } else {
-            Comment dto = Comment.builder()
-                    .boardId(boardId)
-                    .userId(principal.getId())
-                    .parentId(parentId)
-                    .contentLocation(content)
-                    .build();
-            List<CommentDTO> replyList = boardService.insertNestedComment(dto);
-            if(replyList == null){
-                return ResponseEntity.ok("댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다.");
-            }
-            return ResponseEntity.ok(replyList);
         }
-
-
+        
+        Comment reply = Comment.builder()
+                .boardId(boardId)
+                .userId(principal.getId())
+                .parentId(parentId)
+                .contentLocation(content)
+                .build();
+        
+        List<CommentDTO> replyList = boardService.insertNestedComment(reply);
+        return ResponseEntity.ok(replyList == null ? "댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다." : replyList);
     }
 
 
     /**
-     * 댓글 전송 (비동기 처리)
+     * 댓글 전송 (비동기 처리) 
      */
-    @ResponseBody
     @PostMapping("/comment")
     public ResponseEntity<?> insertComment(@RequestParam(name = "boardId") int boardId,
                                            @RequestParam(name = "content") String content,
@@ -318,9 +312,17 @@ public class BoardController {
                 .build();
 
         boardService.insertComment(dto);
-        System.out.println("commentDTO : " + dto);
+        
 
-        return ResponseEntity.ok("댓글이 성공적으로 등록되었습니다!");
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, 0, 5);
+        List<CommentDTO> replyList = boardService.findCommentsByBoardId(boardId);
+        
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("comment", comment);
+        responseData.put("replyList", replyList);
+        
+        
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     /**
@@ -356,12 +358,10 @@ public class BoardController {
 
         BoardDTO boardDTO = boardService.findBoardId(boardId);
         System.out.println("updateDTO : " + boardDTO);
-
-        int userId = 1; // 나중에 세션으로 가져와야 하는 것
-        int schoolId = 1; // 나중에 세션으로 가져와야 하는 것
+        User user = (User)session.getAttribute("principal");
+        int userId = user.getId();
 
         model.addAttribute("userId", userId);
-        model.addAttribute("schoolId", schoolId);
         model.addAttribute("board", boardDTO);
 
         return "views/board/boardUpdateForm";
@@ -467,10 +467,12 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable("commentId") int commentId) {
         Map<String, Object> response = new HashMap<>();
+        System.out.println("댓글 삭제 처리중!!!!!");
         try {
             // 댓글 삭제 처리
             boardService.deleteCommentById(commentId);
             response.put("success", true);
+            System.out.println("댓글 삭제 처리완료!!!!!!!!");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -514,21 +516,9 @@ public class BoardController {
     public String multiBoard(Model model, HttpSession session) {
         User user = (User) session.getAttribute("principal");
         System.out.println("유저 아이디 : " + user.getUserId());
-
-//        if(user == null) {
-//            model.setAttribute("msg", "alert 창에 띄울 메세지");
-//            model.setAttribute("url", "리다이렉트 시킬 url 주소");
-//            return "alert";
-//        }
-        // 이런 식으로 예외처리 할 수 있음  - 로그인 하지 않은 유저 걸러내기 , 필요시 적용
-        
-//        School school = (School)session.getAttribute("school");
-//
-//        int userId = user.getId(); // 세션에서 가져온 userId
-//        int schoolId = school.getSchoolId(); // 세션에서 가져온 schoolId
-        int schoolId = 1;
-
-
+        int schoolId = (Integer)session.getAttribute("schoolId");
+        List<School> schoolList = userService.findUserSchoolList(user.getId());
+        schoolId = schoolList.get(0).getId();
         List<BoardDTO> Heart = boardService.findHeartBoard(schoolId);
         List<BoardDTO> Recomend = boardService.findRecomendBoard(schoolId);
         List<BoardDTO> Search = boardService.findSearchBoard(schoolId);
@@ -571,16 +561,16 @@ public class BoardController {
     /**
      * 게시판에서 검색했을 시 작동하는 기능
      */
-    @GetMapping("/search")
-    public String searchBoard(@RequestParam("keyword") String keyword ,
-                              @RequestParam("searchType") String searchType,
+    @PostMapping("/search")
+    public String searchBoard(@RequestBody Map<String, String> params,
                               @RequestParam(name = "page", defaultValue = "0") Integer page,
                               @RequestParam(name = "size", defaultValue = "4") Integer size,
                               Model model) {
-
+        String keyword = params.get("keyword");
+        String searchType = params.get("searchType");
         int totalCount = 0;
         List<BoardDTO> searchResults = new ArrayList<>();
-        int schoolId = 1; // 예시로 유저 세션에서 학교 번호를 가져오는 것처럼 설정
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         try {
             if (page < 0) {
@@ -618,7 +608,6 @@ public class BoardController {
             }
 
             model.addAttribute("boardList", searchResults);
-            model.addAttribute("schoolId", schoolId);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("currentPage", page);
             model.addAttribute("keyword", keyword.trim()); // 추가: 검색어를 모델에 추가
@@ -706,7 +695,7 @@ public class BoardController {
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardfindBoardView(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
@@ -724,8 +713,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
-
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)
 
@@ -750,7 +737,7 @@ public class BoardController {
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardfindBoardCommend(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
@@ -768,7 +755,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
@@ -795,7 +781,7 @@ public class BoardController {
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardfindBoardNew(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
@@ -841,7 +827,7 @@ public class BoardController {
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
-        int schoolId = 1; // 나중에 유저 세션에서 학교 번호를 가져온다.
+        int schoolId = (Integer)session.getAttribute("schoolId");
 
         List<BoardDTO> boardList = boardService.getBoardfindBoardHeart(schoolId, page-1, size); // Service에서 페이징된 게시글 목록 가져옴
         System.out.println("view view view : " + boardList);
@@ -859,7 +845,6 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)

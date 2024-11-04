@@ -1,11 +1,12 @@
 $(document).ready(function() {
-    const enter = $('.enter');
+    const enter = $('#enter');
     const post = $('#post');
     window.screen = $('.screen-area');
     const logout = $('.logout');
-    const school = $('.other-school');
+    const school = $('.other-schoolId');
     const friends = $('.friends');
     const mypage = $('#my-page'); // 올바르게 선언
+    
     window.tryCall = false;
 
     // 화상 채팅 버튼 활성화/비활성화 설정 함수
@@ -58,7 +59,7 @@ $(document).ready(function() {
                 console.error('등교하기 중 오류 발생:', error);
             });
     });
-
+ 
    mypage.on('click', function() {
        fetch("/my-page/info")
            .then(response => response.text())
@@ -66,6 +67,17 @@ $(document).ready(function() {
                screen.html(data);
 
 
+           })
+           .catch(error => {
+               console.error('마이 페이지 로딩 중 오류 발생:', error);
+           });
+   });
+
+   enter.on('click', function() {
+       fetch("/enter")
+           .then(response => response.text())
+           .then(data => {
+               screen.html(data);
            })
            .catch(error => {
                console.error('마이 페이지 로딩 중 오류 발생:', error);
@@ -194,8 +206,6 @@ $(document).ready(function() {
             const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
 
             // 팝업 창 띄우기 (위치 설정 포함)
-            window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+           window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
         });
-
-});
-});
+    });

@@ -27,7 +27,7 @@ public interface MypageRepository {
     public void changeNickname(@Param("userId")Integer userId, @Param("nickname")String nickname);
 
     // 마이페이지에서 닉네임 변경
-    public void changeSchool(@Param("userId")Integer userId, @Param("school")String school);
+    public void changeSchool(@Param("userId")Integer userId, @Param("schoolId")String school);
 
     // 내 친구 목록 조회
     public List<MypageDTO.myFriendListDTO> findMyFriendListByUserId(Integer userId);

@@ -1,14 +1,17 @@
 package com.example.amigo_project.service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.example.amigo_project.repository.model.School;
+import com.example.amigo_project.dto.EquipAvatarDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.interfaces.UserRepository;
+import com.example.amigo_project.repository.model.School;
 import com.example.amigo_project.repository.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -154,6 +157,7 @@ public class UserService {
 
     // 유저가 가진 학교 찾기
     public List<School> findUserSchoolList(int id) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+id);
         return userRepository.findUserSchool(id);
     }
 
@@ -174,6 +178,18 @@ public class UserService {
     // 오프라인 상태로 업데이트
     public void updateOffline(int id) {
         userRepository.updateOffline(id);
+    }
+    // 학교 정보 가져오기
+    public School findSchoolData(int id) {
+        return userRepository.findSchoolData(id);
+    }
+    // 회원 가입시 기본 아바타 삽입
+    public void insertDefaultAvatar(int userId,int avatarId) {
+        userRepository.insertDefaultAvatar(userId,avatarId);
+    }
+    // 유저가 가지고있는 아바타 정보 가져오기
+    public EquipAvatarDTO equipUserAvatar(int id) {
+        return userRepository.equipUserAvatar(id);
     }
 }
 

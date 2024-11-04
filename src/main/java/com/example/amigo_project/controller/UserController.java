@@ -1,25 +1,33 @@
 package com.example.amigo_project.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.example.amigo_project.dto.SchoolDTO;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.model.School;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -49,11 +57,10 @@ public class UserController {
             session.setAttribute("principal", principal);
             if (principal.getNickname() != null) {
                 userService.updateOnline(principal.getId());
-                List<School> schoolList = userService.findUserSchoolList(principal.getId());
-                model.addAttribute("schoolList",schoolList);
-                String profile = principal.base64Encoding(principal.getProfile());
-                session.setAttribute("profile",profile);
-                session.setAttribute("schoolId",schoolList.get(0).getId());
+                if(principal.getProfile() != null) {
+                    String profile = principal.base64Encoding(principal.getProfile());
+                    session.setAttribute("profile",profile);
+                }
                 return "redirect:/";
             }
 
@@ -213,10 +220,12 @@ public class UserController {
             byte[]profile = user.convertFileToBytes("static/image/avator/male_head.png");
             user.setProfile(profile);
             userService.insertUserProfile(user);
+            userService.insertDefaultAvatar(user.getId(),11);
         } else {
             byte[]profile = user.convertFileToBytes("static/image/avator/female_head.png");
             user.setProfile(profile);
             userService.insertUserProfile(user);
+            userService.insertDefaultAvatar(user.getId(),12);
         }
         userService.updateOnline(user.getId());
         String profile = user.base64Encoding(user.getProfile());
