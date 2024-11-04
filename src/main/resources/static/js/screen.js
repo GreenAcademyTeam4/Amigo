@@ -206,7 +206,6 @@ $(document).ready(function() {
             const popupTop = (screenHeight - popupHeight) / 2 + window.screenY;
 
             // 팝업 창 띄우기 (위치 설정 포함)
-            window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
+           window.open(url, "openPaymentWindow", `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop}`);
         });
-
-});
+    });
