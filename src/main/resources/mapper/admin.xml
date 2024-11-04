@@ -20,6 +20,22 @@
         WHERE active_status = '탈퇴'
     </select>
 
+    <!-- 탈퇴 사유 조회 -->
+    <select id="findWithdrawalReason" parameterType="int" resultType="com.example.amigo_project.dto.WithdrawalReasonDTO">
+        SELECT
+        u.id,
+        u.name AS user_name,
+        wr.reason,
+        wr.details,
+        wr.created_at
+        FROM
+        withdrawal_reason_tb wr
+        JOIN
+        user_tb u ON wr.user_id = u.id
+        WHERE
+        wr.user_id = #{id}
+    </select>
+
     <select id="findById" resultType="com.example.amigo_project.repository.model.User">
         SELECT * FROM user_tb WHERE id = #{id}
     </select>
@@ -31,12 +47,19 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 탈퇴 해지 -->
+    <update id="restoreUserStatus" parameterType="int">
+        UPDATE user_tb
+        SET active_status = '활동중'
+        WHERE id = #{id}
+    </update>
+
     <!-- 결제 조회 -->
     <select id="findChargeHistoryList" resultType="com.example.amigo_project.dto.PayListDTO">
         select c.id, u.user_id, u.name, c.order_name, c.order_id, c.total_amount, c.approved_at, c.method, c.refund_status
         from charge_history_tb c
         join user_tb u on c.user_id = u.id
-        order by c.approved_at desc
+        order by c.id ASC
     </select>
 
     <!-- 유저 게시글수 받아오기 -->
@@ -128,14 +151,13 @@
 
     <!-- 가장 유저가 많은 학교 순위 -->
     <select id="topUserCountSchool" resultType="com.example.amigo_project.dto.SchoolUserCountDTO">
-        SELECT school_tb.name AS schoolName, COUNT(user_tb.id) AS userCount
-        FROM user_tb
-        JOIN school_tb ON (user_tb.elementary_school = school_tb.school
-        OR user_tb.middle_school = school_tb.school
-        OR user_tb.high_school = school_tb.school)
-        GROUP BY school_tb.name
-        ORDER BY userCount DESC
+        SELECT s.id AS school_id, s.name AS school_name, COUNT(us.user_id) AS user_count
+        FROM school_tb s
+        JOIN user_school_tb us ON s.id = us.school_id
+        GROUP BY s.id, s.name
+        ORDER BY user_count DESC
         LIMIT 3
+
     </select>
 
 
@@ -161,12 +183,14 @@
     <!-- 유저 신고 리스트 -->
     <select id="findReportUser" resultType="com.example.amigo_project.dto.UserReportDTO">
         SELECT
-        ur.id AS report_id,
-        sender.name AS sender_name,
-        receiver.name AS receiver_name,
+        ur.id AS reportId,
+        sender.nickname AS senderNickname,
+        sender.id AS senderId,            -- 신고자 ID
+        receiver.nickname AS receiverNickname,
+        receiver.id AS receiverId,        -- 피신고자 ID
         ur.category,
         ur.content,
-        ur.created_at
+        ur.created_at AS createdAt
         FROM
         user_report_tb ur
         JOIN
@@ -175,10 +199,99 @@
         user_tb receiver ON ur.receiver_user = receiver.id
         ORDER BY
         ur.created_at DESC
+
     </select>
 
     <!-- 게시글 신고 리스트 -->
     <select id="findReportBoard" resultType="com.example.amigo_project.dto.BoardReportDTO">
-        SELECT * FROM BOARD_REPORT_TB
+        SELECT
+        br.id AS report_id,
+        su.nickname AS sender_nickname,
+        br.category AS report_category,
+        br.content AS report_content,
+        br.created_at AS report_date
+        FROM
+        board_report_tb br
+        LEFT JOIN
+        user_tb su ON br.sender_user = su.id
+        LEFT JOIN
+        board_tb b ON br.board_id = b.id
+        ORDER BY
+        br.created_at DESC
     </select>
+
+    <delete id="deleteBoardReportByBoardId" parameterType="int">
+        DELETE FROM board_report_tb
+        WHERE id = #{reportId}
+    </delete>
+
+    <!-- 신고 한 사람, 받은 사람 조회 -->
+    <select id="findUserReport" resultType="com.example.amigo_project.dto.UserReportDTO">
+        SELECT
+        ur.id AS reportId,
+        ur.category,
+        ur.content,
+        ur.created_at AS createdAt,
+        sender.nickname AS senderNickname,   -- 신고한 사람 닉네임
+        sender.id AS senderId,               -- 신고한 사람 ID
+        receiver.nickname AS receiverNickname, -- 신고받은 사람 닉네임
+        receiver.id AS receiverId            -- 신고받은 사람 ID
+        FROM
+        user_report_tb ur
+        JOIN
+        user_tb sender ON ur.sender_user = sender.id
+        JOIN
+        user_tb receiver ON ur.receiver_user = receiver.id
+        WHERE
+        ur.id = #{reportId}
+
+    </select>
+
+
+    <!-- 신고 횟수 조회 -->
+    <select id="userReportStatistics" resultType="Integer">
+        SELECT COUNT(ur.id) AS report_count
+        FROM user_report_tb ur
+        WHERE ur.receiver_user = #{id}
+    </select>
+
+<!--    &lt;!&ndash; 광고 &ndash;&gt;-->
+<!--    <insert id="insertAd" parameterType="com.example.amigo_project.dto.AdDTO">-->
+<!--        INSERT INTO ad_tb (title, image_location, view_count, created_at)-->
+<!--        VALUES (#{title}, #{imageLocation,jdbcType=BLOB}, #{viewCount}, #{createdAt})-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 광고 &ndash;&gt;-->
+<!--    <select id="findAd" resultType="com.example.amigo_project.dto.AdDTO">-->
+<!--        SELECT * FROM ad_tb;-->
+<!--    </select>-->
+<!--    -->
+<!--    &lt;!&ndash; 광고 삽입 &ndash;&gt;-->
+<!--    <insert id="insertAd" parameterType="com.example.amigo_project.dto.AdDTO">-->
+<!--        INSERT INTO ad_tb (title, image_location, view_count)-->
+<!--        VALUES (#{title}, #{imageLocation}, #{viewCount})-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 광고 조회 &ndash;&gt;-->
+<!--    <select id="selectAdById" parameterType="int" resultType="com.example.amigo_project.dto.AdDTO">-->
+<!--        SELECT id, title, image_location, view_count, created_at-->
+<!--        FROM ad_tb-->
+<!--        WHERE id = #{id}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 광고 수정 &ndash;&gt;-->
+<!--    <update id="updateAd" parameterType="com.example.amigo_project.dto.AdDTO">-->
+<!--        UPDATE ad_tb-->
+<!--        SET title = #{title},-->
+<!--        image_location = #{imageLocation},-->
+<!--        view_count = #{viewCount}-->
+<!--        WHERE id = #{id}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 광고 삭제 &ndash;&gt;-->
+<!--    <delete id="deleteAd" parameterType="int">-->
+<!--        DELETE FROM ad_tb-->
+<!--        WHERE id = #{id}-->
+<!--    </delete>-->
+
 </mapper>

@@ -1,0 +1,49 @@
+{{>layout/admin/adminSidebar}}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>광고 목록</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
+<main class="container">
+    <h1>광고 목록</h1>
+
+    <!-- Mustache 템플릿 시작 -->
+    <div id="ad-list">
+        {{#ads}}
+            <article>
+                <h2>{{title}}</h2>
+                <figure>
+                    <img src="data:image/jpeg;base64,{{Image_location}}" alt="{{title}} 이미지">
+                    <figcaption>조회수: {{view_count}}</figcaption>
+                </figure>
+                <p>생성 날짜: {{created_at}}</p>
+            </article>
+        {{/ads}}
+    </div>
+    <!-- Mustache 템플릿 끝 -->
+</main>
+
+<!-- Mustache.js 라이브러리 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.2.0/mustache.min.js"></script>
+<script>
+    // JSON 형식으로 서버에서 데이터를 받아오는 예제입니다.
+    // 실제 데이터는 서버에서 가져와야 합니다.
+    const data = {
+      "ads": [
+        // 서버에서 받아온 데이터를 여기에 넣습니다.
+        // 예: {"id": 1, "title": "광고 제목", "Image_location": "이미지 파일의 base64 인코딩", "view_count": 100, "created_at": "2023-01-01 12:00:00"}
+      ]
+    };
+
+    // Mustache로 템플릿 렌더링
+    const template = document.getElementById('ad-list').innerHTML;
+    const rendered = Mustache.render(template, data);
+    document.getElementById('ad-list').innerHTML = rendered;
+</script>
+</body>
+</html>

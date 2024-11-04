@@ -17,6 +17,7 @@ create table user_tb (
   created_at timestamp default CURRENT_TIMESTAMP
 );
 
+
 -- 탈퇴 사유 조회 테이블
 create table withdrawal_reason_tb (
   id int primary key auto_increment,

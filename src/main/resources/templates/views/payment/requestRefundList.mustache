@@ -1,76 +1,288 @@
+{{>layout/admin/adminSidebar}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>환불 요청 내역</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 기본 설정 */
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            font-family: Arial, sans-serif;
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 레이아웃 설정 */
+        .wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-left: 220px; /* 사이드바 크기에 맞추어 조절 */
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3b5998;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 페이징 및 버튼 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .pagination li {
+            margin: 0 4px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #34495e;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #3b5998;
+            color: #fff;
+        }
+
+        .page-item.active a {
+            background-color: #3b5998;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        /* 버튼 스타일 */
+        .refundSuccess-btn, .refundFail-btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .refundSuccess-btn {
+            background-color: #28a745;
+        }
+
+        .refundSuccess-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .refundFail-btn {
+            background-color: #e74c3c;
+        }
+
+        .refundFail-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .refundSuccess-btn:disabled, .refundFail-btn:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+
+        /* 검색 결과가 없을 때 표시할 메시지 */
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            padding: 20px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<h1>환불 요청 목록</h1>
-<div>
-    <div class="requestRefundList">
-        <table>
-            <thead>
-            <tr>
-                <th>결제 내역 번호</th>
-                <th>주문 번호</th>
-                <th>주문 이름</th>
-                <th>환불 요청 금액</th>
-                <th>환불 요청 사유</th>
-                <th>환불 요청 시간</th>
-                <th>환불 상태</th>
-            </tr>
-            </thead>
-            <tbody id="refundList">
-            {{#requestRefundList}}
+<div class="wrapper">
+    <div class="content-container">
+        <h1>환불 요청 목록</h1>
+
+        <div class="requestRefundList">
+            <table>
+                <thead>
                 <tr>
-                    <td>{{chargeHistoryId}}</td>
-                    <td>{{orderId}}</td>
-                    <td>{{orderName}}</td>
-                    <td>{{cancelAmount}}</td>
-                    <td> <a href="javascript:void(0);" onclick="openCancelReasonWindow({{id}})">상세보기</a></td>
-                    <td>{{requestAt}}</td>
-                    <td>{{cancelStatus}}</td>
-                    <td>
-                        {{#isRefundable}}
-                            <button class="refundSuccess-btn" data-id="{{id}}" onclick="updateRefundSuccessButton({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">승인</button>
-                            <button class="refundFail-btn" data-id="{{id}}" onclick="openRefuseWindow({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">반려</button>
-                        {{/isRefundable}}
-                        {{^isRefundable}}
-                            <button class="refundSuccess-btn" disabled>승인 완료</button>
-                            <button class="refundFail-btn" disabled>반려 완료</button>
-                        {{/isRefundable}}
-                    </td>
+                    <th>결제 내역 번호</th>
+                    <th>주문 번호</th>
+                    <th>주문 이름</th>
+                    <th>환불 요청 금액</th>
+                    <th>환불 요청 사유</th>
+                    <th>환불 요청 시간</th>
+                    <th>환불 상태</th>
+                    <th>조치</th>
                 </tr>
-            {{/requestRefundList}}
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="refundList">
+                {{#requestRefundList}}
+                    <tr>
+                        <td>{{chargeHistoryId}}</td>
+                        <td>{{orderId}}</td>
+                        <td>{{orderName}}</td>
+                        <td>{{cancelAmount}}</td>
+                        <td><a href="javascript:void(0);" onclick="openCancelReasonWindow({{id}})">상세보기</a></td>
+                        <td>{{requestAt}}</td>
+                        <td>{{cancelStatus}}</td>
+                        <td>
+                            {{#isRefundable}}
+                                <button class="refundSuccess-btn" data-id="{{id}}" onclick="updateRefundSuccessButton('{{id}}', '{{chargeHistoryId}}', '{{cancelReason}}')">승인</button>
+                                <button class="refundFail-btn" data-id="{{id}}" onclick="openRefuseWindow({{id}}, {{chargeHistoryId}}, '{{cancelReason}}')">반려</button>
+                            {{/isRefundable}}
+                            {{^isRefundable}}
+                                <button class="refundSuccess-btn" disabled>승인 완료</button>
+                                <button class="refundFail-btn" disabled>반려 완료</button>
+                            {{/isRefundable}}
+                        </td>
+                    </tr>
+                {{/requestRefundList}}
+                </tbody>
+            </table>
 
-        <div id="paginationContainer">
-            <ul class="pagination">
-                {{#showPrevious}}
-                    <li class="page-item">
-                        <a class="page-link" href="/pay/requestRefundList?page={{previousPage}}&size={{pageSize}}">&lt;</a>
-                    </li>
-                {{/showPrevious}}
+            <!-- 검색 결과가 없을 때 표시할 메시지 -->
+            <div class="no-results" id="noResultsMessage">결과가 없습니다.</div>
 
-                {{#pages}}
-                    <li class="page-item {{active}}">
-                        <a class="page-link" href="/pay/requestRefundList?page={{number}}&size={{pageSize}}">{{number}}</a>
-                    </li>
-                {{/pages}}
-
-                {{#showNext}}
-                    <li class="page-item">
-                        <a class="page-link" href="/pay/requestRefundList?page={{nextPage}}&size={{pageSize}}">&gt;</a>
-                    </li>
-                {{/showNext}}
-            </ul>
+            <!-- 페이징 섹션 -->
+            <ul class="pagination" id="pagination"></ul>
         </div>
     </div>
 </div>
 
 <script src="/js/payment/requestRefundList.js"></script>
+<script>
+    $(document).ready(function () {
+        const rowsPerPage = 10;
+        const $tableBody = $("#refundList");
+        const rows = $tableBody.find("tr");
+        const $pagination = $("#pagination");
+        const $noResultsMessage = $("#noResultsMessage");
 
+        // 요청이 없을 경우, 메시지 표시
+        if (rows.length === 0) {
+            $noResultsMessage.show();
+            $tableBody.hide();
+            $pagination.hide();
+        } else {
+            $noResultsMessage.hide();
+            renderPagination();
+            displayRows(0, rowsPerPage);
+        }
+
+        function updateRefundSuccessButton(id, chargeHistoryId, cancelReason) {
+            $.ajax({
+                url: "/pay/modifyRefundStatus", // 서버의 URL
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    chargeHistoryId: chargeHistoryId,
+                    refundStatus: "승인",
+                    cancelReason: cancelReason
+                }),
+                success: function (response) {
+                    alert("환불 요청이 승인되었습니다.");
+                    $(`[data-id='${id}']`).attr("disabled", true);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error occurred: ", xhr.responseText);
+                    alert("환불 요청 승인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
+            });
+        }
+
+        // 행 표시 함수
+        function displayRows(startIndex, endIndex) {
+            rows.hide();
+            rows.slice(startIndex, endIndex).show();
+        }
+
+        // 페이징 버튼 생성 및 렌더링 함수
+        function renderPagination() {
+            const pageCount = Math.ceil(rows.length / rowsPerPage);
+            $pagination.empty();
+
+            if (pageCount > 0) {
+                for (let i = 1; i <= pageCount; i++) {
+                    $pagination.append(`<li class="page-item"><a href="#" class="page-link">${i}</a></li>`);
+                }
+                $pagination.find("li").first().addClass("active");
+            }
+        }
+
+        // 페이지 클릭 시 표시할 행 설정
+        $pagination.on("click", "a", function(e) {
+            e.preventDefault();
+            const pageIndex = $(this).text() - 1;
+            const start = pageIndex * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            displayRows(start, end);
+
+            $pagination.find("li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        // 초기 설정
+        renderPagination();
+        displayRows(0, rowsPerPage);
+    });
+</script>
 </body>
 </html>

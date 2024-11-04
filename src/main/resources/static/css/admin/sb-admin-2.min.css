@@ -190,7 +190,7 @@ img {
 }
 
 .sidebar-logo {
-    width: 90px;  /* 원하는 크기로 너비 설정 */
+    width: 115%;  /* 원하는 크기로 너비 설정 */
     height: auto; /* 자동으로 높이 비율 유지 */
 }
 

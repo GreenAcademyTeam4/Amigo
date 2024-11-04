@@ -4,7 +4,10 @@ import com.example.amigo_project.dto.*;
 import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -16,6 +19,12 @@ public interface AdminRepository {
 
     // 탈퇴 회원 조회
     public List<User> findDeletedUsers();
+
+    // 탈퇴 사유 조회
+    public WithdrawalReasonDTO findWithdrawalReason(int id);
+
+    // 탈퇴 해지
+    public int restoreUserStatus(UserDTO userDTO);
 
     // 유저 상세보기 (Detail)
     public User findById(int id);
@@ -38,8 +47,25 @@ public interface AdminRepository {
     // 유저 신고 조회
     public List<UserReportDTO> findReportUser();
 
+    // 특정 유저 신고 조회
+    public UserReportDTO findUserReport(int id);
+
+    // 특정 유저 신고 받은 횟수
+    public int userReportStatistics(int id);
     // 게시글 신고 조회
     public List<BoardReportDTO> findReportBoard();
+
+    // 게시글 신고 목록 삭제
+    public int deleteBoardReportByBoardId(int reportId);
+
+    /**
+     * 광고
+     */
+//    // 광고 생성
+//    public int insertAd(AdDTO adDTO);
+//
+//    // 광고 조회
+//    public List<AdDTO> findAd();
 
     /**
      * chart

@@ -1,19 +1,109 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-
 <style>
-    .status-icon {
-        width: 24px;
-        height: 24px;
+    /* 체크박스 크기 조정 */
+    .delete-checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    /* 테이블과 페이징 부분 여백 추가 */
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 20px; /* 페이징과 테이블 사이의 여백 */
+        text-align: center;
+    }
+
+    /* 테이블과 페이징 사이 여백 */
+    .table-responsive {
+        margin-bottom: 20px;
+    }
+
+    /* 기본 스타일 설정 */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fc;
+    }
+
+    /* 카드 스타일 */
+    .card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #4e73df;
+        color: white;
+        padding: 10px 20px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    /* 테이블 스타일 */
+    .table {
+        font-size: 14px;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table th, .table td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .table th {
+        background-color: #f1f3f5;
+        color: #4e73df;
+    }
+
+    /* 선택 삭제 버튼 스타일 */
+    #deleteSelectedReports {
+        display: block;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        float: right; /* 버튼을 오른쪽에 배치 */
+        margin-top: 20px;
+    }
+
+    #deleteSelectedReports:hover {
+        background-color: #c82333;
+    }
+
+    /* 반응형 디자인 설정 */
+    @media (max-width: 768px) {
+        .card-header h6 {
+            font-size: 1rem;
+        }
+
+        #deleteSelectedReports {
+            width: 100%;
+            text-align: center;
+            float: none;
+            margin: 20px auto 0;
+        }
     }
 </style>
+
 
 <body id="page-top">
 
 {{>layout/admin/adminSidebar}}
-<!-- Content Wrapper -->
+<!-- 콘텐츠 래퍼 -->
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-        <!-- Main Content -->
+        <!-- 메인 콘텐츠 -->
         <div class="container-fluid">
             <h1 class="h3 mb-2 text-gray-800">게시글 신고 조회</h1><br>
             <div class="card shadow mb-4">
@@ -22,43 +112,53 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="boardReportTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>이름</th>
-                                <th>아이디</th>
-                                <th>활성상태</th>
+                                <th>ID</th>
+                                <th>신고자 닉네임</th>
+                                <th>신고 유형</th>
+                                <th>신고 내용</th>
+                                <th>신고 시간</th>
                                 <th>상세보기</th>
+                                <th>선택</th>
                             </tr>
                             </thead>
                             <tbody>
                             {{#boardReport}}
                                 <tr>
-                                    <td>{{name}}</td>
-                                    <td>{{userId}}</td>
+                                    <td>{{reportId}}</td>
+                                    <td>{{senderNickname}}</td>
+                                    <td>{{reportCategory}}</td>
+                                    <td>{{reportContent}}</td>
+                                    <td data-timestamp="{{reportDate}}"></td>
                                     <td>
-                                        {{activeStatus}}
+                                        <a class="btn btn-primary btn-sm" href="/admin/board-list/detail/{{reportId}}">상세보기</a>
                                     </td>
-                                    <!--                                    <td><a href="/admin/user/detail/{{id}}" class="btn btn-primary btn-sm">탈퇴 해지</a></td>-->
+                                    <td>
+                                        <input type="checkbox" class="delete-checkbox" data-report-id="{{reportId}}">
+                                    </td>
                                 </tr>
                             {{/boardReport}}
-                            {{^userReport}}
+                            {{^boardReport}}
                                 <tr>
-                                    <td colspan="5" class="text-center">신고된 게시글이 없습니다.</td>
+                                    <td colspan="7" class="text-center">신고된 게시글이 없습니다.</td>
                                 </tr>
-                            {{/userReport}}
+                            {{/boardReport}}
                             </tbody>
                         </table>
                     </div>
+                    <!-- 선택 삭제 버튼 -->
+                    <button id="deleteSelectedReports" class="btn btn-danger mt-3">선택 삭제</button>
                 </div>
             </div>
         </div>
-        <!-- End of Main Content -->
+        <!-- 메인 콘텐츠 끝 -->
     </div>
 </div>
-<!-- End of Content Wrapper -->
+<!-- 콘텐츠 래퍼 끝 -->
 
-<!-- JavaScript Files Load -->
+<!-- JavaScript 파일 로드 -->
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -68,16 +168,16 @@
 <!-- DataTables JavaScript -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
-<!-- Custom scripts for all pages-->
+<!-- 모든 페이지에 대한 사용자 지정 스크립트 -->
 <script src="/vendor/js/sb-admin-2.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        var table = $('#userTable').DataTable({
+        var table = $('#boardReportTable').DataTable({
             "language": {
                 "search": "검색:",
                 "lengthMenu": "_MENU_ 개씩 보기",
-                "info": "총 _TOTAL_명의 회원 중 _START_에서 _END_까지 표시",
+                "info": "총 _TOTAL_개의 신고 중 _START_에서 _END_까지 표시",
                 "paginate": {
                     "previous": "이전",
                     "next": "다음"
@@ -85,15 +185,31 @@
             }
         });
 
-        // 전체 검색 필드를 특정 열로만 제한하는 커스텀 검색 기능 추가
+     // 신고 시간 포맷팅 처리
+$('#boardReportTable tbody tr').each(function() {
+    var timestamp = $(this).find('td[data-timestamp]').data('timestamp');
+    if (timestamp) {
+        var formattedDate = new Date(timestamp).toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false  // 24시간 형식으로 설정
+        });
+        $(this).find('td[data-timestamp]').text(formattedDate);
+    }
+});
+
+        // 검색 필드를 특정 열로 제한하는 기능
         $.fn.dataTable.ext.search.push(
             function(settings, data, dataIndex) {
-                var searchTerm = $('#userTable_filter input').val().toLowerCase();
-                var name = data[0].toLowerCase();  // 이름 열
-                var userId = data[1].toLowerCase();  // 아이디 열
+                var searchTerm = $('#boardReportTable_filter input').val().toLowerCase();
+                var senderNickname = data[1].toLowerCase();  // 신고자 닉네임 열
+                var reportCategory = data[2].toLowerCase();  // 신고 유형 열
 
-                // 이름이나 아이디 열에 검색어가 포함되어 있는 경우에만 결과로 포함
-                if (name.includes(searchTerm) || userId.includes(searchTerm)) {
+                // 검색어가 신고자 닉네임이나 신고 유형에 포함된 경우에만 결과로 포함
+                if (senderNickname.includes(searchTerm) || reportCategory.includes(searchTerm)) {
                     return true;
                 }
                 return false;
@@ -101,13 +217,40 @@
         );
 
         // 검색 필드에 입력될 때마다 테이블 다시 그리기
-        $('#userTable_filter input').on('keyup change', function() {
+        $('#boardReportTable_filter input').on('keyup change', function() {
             table.draw();
         });
     });
+
+ $('#deleteSelectedReports').on('click', function() {
+    var selectedReports = [];
+    $('.delete-checkbox:checked').each(function() {
+        selectedReports.push($(this).data('report-id'));
+    });
+
+    if (selectedReports.length === 0) {
+        alert('삭제할 신고를 선택해주세요.');
+        return;
+    }
+
+    if (confirm('정말로 선택된 신고를 삭제하시겠습니까?')) {
+        $.ajax({
+            url: '/admin/deleteReports',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(selectedReports),
+            success: function(result) {
+                alert(result); // 서버에서 전송된 메시지를 알림으로 표시
+                window.location.reload(); // 삭제 후 페이지 새로고침
+            },
+            error: function(err) {
+                alert('삭제에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    }
+});
+
+
 </script>
-
-
 </body>
-
 </html>

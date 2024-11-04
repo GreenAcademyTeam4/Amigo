@@ -1,16 +1,16 @@
 {{>layout/admin/adminSidebar}}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>결제 관리</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: 'Roboto', Arial, sans-serif;
             background-color: #f4f6f9;
             color: #333;
             margin: 0;
@@ -34,6 +34,19 @@
             border-bottom: 2px solid #34495e;
             padding-bottom: 10px;
             margin-bottom: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .search-bar input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
 
         table {
@@ -91,46 +104,13 @@
             color: #fff;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .refundSuccess-btn,
-        .refundFail-btn {
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .refundSuccess-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .refundSuccess-btn:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-
-        .refundFail-btn {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .refundFail-btn:hover {
-            background-color: #c0392b;
-            transform: scale(1.05);
-        }
-
-        .refundSuccess-btn:disabled,
-        .refundFail-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        /* 검색 결과가 없을 때 표시될 메시지 스타일 */
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            padding: 20px;
+            display: none; /* 기본적으로 숨김 */
         }
     </style>
 </head>
@@ -138,20 +118,23 @@
 <body>
 <div class="content-container">
     <h1>결제 조회</h1>
+
+    <!-- 검색바 -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+    </div>
+
     <div class="requestRefundList">
         <table>
             <thead>
             <tr>
-                <th>결제 내역 번호</th> <!-- c.id -->
-                <th>주문 번호</th> <!-- c.order_id -->
-                <th>주문 이름</th> <!-- c.order_name -->
-                <th>금액</th> <!-- c.total_amount -->
-                <th>시간</th> <!-- c.approved_at -->
-                <th>상태</th> <!-- c.refund_status -->
-                <th>조치</th> <!-- 관리자의 액션 버튼 -->
-                <th>조치</th> <!-- 관리자의 액션 버튼 -->
-                <th>조치</th> <!-- 관리자의 액션 버튼 -->
-                <th>조치</th> <!-- 관리자의 액션 버튼 -->
+                <th>결제 내역 번호</th>
+                <th>이름</th>
+                <th>주문 이름</th>
+                <th>주문 번호</th>
+                <th>금액</th>
+                <th>시간</th>
+                <th>결제 방법</th>
             </tr>
             </thead>
             <tbody id="refundList">
@@ -162,48 +145,108 @@
                     <td>{{orderName}}</td>
                     <td>{{orderId}}</td>
                     <td>{{totalAmount}}</td>
-                    <td>{{point}}</td>
                     <td>{{approvedAt}}</td>
                     <td>{{method}}</td>
-                    <td>{{refundStatus}}</td>
-
                 </tr>
             {{/chargeHistoryList}}
             </tbody>
+        </table>
 
+        <!-- 검색 결과가 없을 때 표시할 메시지 -->
+        <div class="no-results" id="noResultsMessage">결과가 없습니다.</div>
 
+        <!-- 페이징 섹션 -->
+        <ul class="pagination" id="pagination"></ul>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        // 모든 requestAt 셀을 선택하여 날짜 포맷팅
+        const rowsPerPage = 10;
+        const $tableBody = $("#refundList");
+        const rows = $tableBody.find("tr");
+        let filteredRows = rows;
+        const $pagination = $("#pagination");
+        const $noResultsMessage = $("#noResultsMessage");
+
+        // 검색 기능
+        $("#searchInput").on("keyup", function() {
+            const searchText = $(this).val().toLowerCase();
+
+            // 입력한 검색어에 따라 행 필터링
+            filteredRows = rows.filter(function() {
+                const rowText = $(this).text().toLowerCase();
+                return rowText.includes(searchText);
+            });
+
+            // 검색 결과가 없을 때 메시지 표시
+            if (filteredRows.length === 0) {
+                $tableBody.hide();
+                $noResultsMessage.show(); // 결과가 없을 때만 표시
+                $pagination.hide(); // 페이지네이션 숨기기
+            } else {
+                $tableBody.show();
+                $noResultsMessage.hide(); // 결과가 있을 때 메시지 숨기기
+                renderPagination();
+                displayRows(0, rowsPerPage);
+            }
+        });
+
+        // 행 표시 함수
+        function displayRows(startIndex, endIndex) {
+            rows.hide(); // 모든 행을 숨김
+            filteredRows.slice(startIndex, endIndex).show(); // 필터링된 행만 표시
+        }
+
+        // 페이징 버튼 생성 및 렌더링 함수
+        function renderPagination() {
+            const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
+            $pagination.empty();
+
+            if (pageCount > 0) { // 페이징 버튼이 있을 때만 추가
+                for (let i = 1; i <= pageCount; i++) {
+                    $pagination.append(`<li class="page-item"><a href="#" class="page-link">${i}</a></li>`);
+                }
+                $pagination.find("li").first().addClass("active");
+                $pagination.show(); // 페이지네이션 표시
+            }
+        }
+
+        // 페이지 클릭 시 표시할 행 설정
+        $pagination.on("click", "a", function(e) {
+            e.preventDefault();
+            const pageIndex = $(this).text() - 1;
+            const start = pageIndex * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            displayRows(start, end);
+
+            $pagination.find("li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        // 초기화
+        renderPagination();
+        displayRows(0, rowsPerPage);
         $('#refundList tr').each(function () {
-            const $cell = $(this).find('td').eq(5); // 5번째 컬럼이 requestAt이라고 가정
-            const originalTime = $cell.text().trim(); // 원본 텍스트 가져오기
-
+            const $cell = $(this).find('td').eq(5);
+            const originalTime = $cell.text().trim();
             if (originalTime) {
-                // Date 객체로 변환
                 const date = new Date(originalTime);
-
-                // 포맷팅 함수 정의
                 const formattedTime = formatDate(date);
-
-                // 포맷된 시간으로 텍스트 변경
                 $cell.text(formattedTime);
             }
         });
     });
 
-    // 날짜를 YY-MM-DD HH:mm:ss 형식으로 포맷하는 함수
+    // 날짜를 YY-MM-DD HH:mm:ss 형식으로 포맷팅하는 함수
     function formatDate(date) {
-        const year = String(date.getFullYear()).slice(2); // 연도에서 마지막 두 자리를 사용
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로 패딩
-        const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로 패딩
-        const hours = String(date.getHours()).padStart(2, '0'); // 시간을 2자리로 패딩
-        const minutes = String(date.getMinutes()).padStart(2, '0'); // 분을 2자리로 패딩
-        const seconds = String(date.getSeconds()).padStart(2, '0'); // 초를 2자리로 패딩
-
+        const year = String(date.getFullYear()).slice(2);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 </script>

@@ -12,6 +12,9 @@ import lombok.*;
  * 관리자 - 학교 순위
  */
 public class SchoolUserCountDTO {
+    private Integer schoolId;
     private String schoolName; // 학교 이름
     private int userCount;     // 유저 수
+
+
 }

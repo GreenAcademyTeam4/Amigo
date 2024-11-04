@@ -1,0 +1,143 @@
+{{>layout/admin/adminSidebar}}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>신고 상세 보기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        /* 컨테이너 스타일 */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* 세부 정보 섹션 스타일 */
+        .details {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .details p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 강조된 텍스트 스타일 */
+        .details p strong {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        /* 세부 정보 섹션의 행 사이 간격 */
+        .details p {
+            margin-bottom: 8px;
+        }
+
+        /* 컨테이너 내부 요소 간의 간격 */
+        .details > p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 뒤로 가기 버튼 스타일 */
+        .back-button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 30px auto 0;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #2c3e50;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>유저 신고 상세 보기</h1>
+
+    <!-- 피신고자 정보 섹션 -->
+    <section class="details">
+        <h2>피신고자 정보</h2>
+        <p><strong>피신고자 닉네임:</strong> {{userReportDetail.receiverNickname}}</p>
+        <p><strong>피신고자가 받은 총 신고 횟수:</strong> {{reportCount}}</p>
+    </section>
+
+    <!-- 신고 정보 섹션 -->
+    <section class="details">
+        <h2>신고 정보</h2>
+        <p><strong>신고 ID:</strong> {{userReportDetail.reportId}}</p>
+        <p><strong>카테고리:</strong> {{userReportDetail.category}}</p>
+        <p><strong>신고 내용:</strong> {{userReportDetail.content}}</p>
+        <p><strong>신고 날짜:</strong> <span id="formattedDate">{{userReportDetail.createdAt}}</span></p>
+    </section>
+
+    <!-- 신고자 정보 섹션 -->
+    <section class="details">
+        <h2>신고자 정보</h2>
+        <p><strong>신고자 닉네임:</strong> {{userReportDetail.senderNickname}}</p>
+    </section>
+
+    <!-- 뒤로 가기 버튼 -->
+    <button class="back-button" onclick="window.history.back();">뒤로 가기</button>
+</div>
+
+<script>
+    // 날짜 포맷팅 함수
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+    }
+
+    // 페이지 로드 시 날짜 포맷팅 적용
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateElement = document.getElementById('formattedDate');
+        const originalDate = dateElement.textContent;
+        dateElement.textContent = formatDate(originalDate);
+    });
+</script>
+
+</body>
+</html>

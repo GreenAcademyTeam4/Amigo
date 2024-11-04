@@ -16,13 +16,13 @@
         overflow: auto;
         background-color: rgba(0, 0, 0, 0.4);
     }
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 45% !important; /* 이 부분에 !important 추가 */
-}
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 45% !important;
+    }
     .close {
         color: #aaa;
         float: right;
@@ -59,6 +59,7 @@
                                 <th>아이디</th>
                                 <th>활성상태</th>
                                 <th>상세보기</th>
+                                <th>탈퇴 해지</th> <!-- 탈퇴 해지 버튼 열 -->
                             </tr>
                             </thead>
                             <tbody>
@@ -66,10 +67,9 @@
                                 <tr>
                                     <td>{{name}}</td>
                                     <td>{{userId}}</td>
-                                    <td>
-                                        {{activeStatus}}
-                                    </td>
+                                    <td>{{activeStatus}}</td>
                                     <td><button class="btn btn-primary btn-sm detail-btn" data-id="{{id}}">상세보기</button></td>
+                                    <td><button class="btn btn-success btn-sm restore-btn" data-id="{{id}}">탈퇴 해지</button></td> <!-- 탈퇴 해지 버튼 -->
                                 </tr>
                             {{/deletedUser}}
                             </tbody>
@@ -88,7 +88,9 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>탈퇴 사유</h2>
-        <p id="withdrawReason">탈퇴 사유를 불러오는 중...</p>
+        <p><strong>사유:</strong> <span id="withdrawReason">탈퇴 사유를 불러오는 중...</span></p>
+        <p><strong>상세 내용:</strong> <span id="withdrawDetails">상세 내용을 불러오는 중...</span></p>
+        <p><strong>탈퇴 날짜:</strong> <span id="withdrawDate">날짜를 불러오는 중...</span></p>
     </div>
 </div>
 
@@ -126,7 +128,6 @@
                 var name = data[0].toLowerCase();  // 이름 열
                 var userId = data[1].toLowerCase();  // 아이디 열
 
-                // 이름이나 아이디 열에 검색어가 포함되어 있는 경우에만 결과로 포함
                 if (name.includes(searchTerm) || userId.includes(searchTerm)) {
                     return true;
                 }
@@ -146,17 +147,41 @@
         // 상세보기 버튼 클릭 시
         $('.detail-btn').on('click', function() {
             var userId = $(this).data('id');
-            // AJAX를 사용해 탈퇴 사유를 가져옵니다
+
+            // AJAX를 사용해 특정 유저의 탈퇴 사유를 가져옵니다
             $.ajax({
-                url: '/admin/user/withdrawReason/' + userId,
+                url: '/admin/deletedUsers/withdrawalReason/' + userId,
                 method: 'GET',
                 success: function(response) {
+                    const withdrawalDate = response.createdAt.replace(" ", "T");
                     $('#withdrawReason').text(response.reason);
+                    $('#withdrawDetails').text(response.details);
+                    $('#withdrawDate').text(new Date(withdrawalDate).toLocaleDateString());
                     modal.show();
                 },
                 error: function() {
                     $('#withdrawReason').text('탈퇴 사유를 불러오지 못했습니다.');
+                    $('#withdrawDetails').text('');
+                    $('#withdrawDate').text('');
                     modal.show();
+                }
+            });
+        });
+
+        // 탈퇴 해지 버튼 클릭 시
+        $('.restore-btn').on('click', function() {
+            var userId = $(this).data('id');
+            $.ajax({
+                url: '/admin/restoreUser',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: userId }),
+                success: function(response) {
+                    alert(response); // 성공 메시지 표시
+                    location.reload(); // 페이지 새로고침으로 변경된 상태 반영
+                },
+                error: function() {
+                    alert('탈퇴 해지에 실패했습니다.');
                 }
             });
         });
@@ -176,5 +201,4 @@
 </script>
 
 </body>
-
 </html>

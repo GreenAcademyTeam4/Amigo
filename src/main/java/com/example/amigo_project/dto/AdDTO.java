@@ -12,10 +12,10 @@ import java.sql.Timestamp;
 @ToString
 public class AdDTO {
 
-    private Integer id;
+    private int id;
     private String title;
-    private Blob imageLocation;
-    private Integer viewCount;
+    private byte[] imageLocation;
+    private int viewCount;
     private Timestamp createdAt;
 
 }

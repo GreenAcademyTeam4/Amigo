@@ -1,12 +1,56 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
-<style>
-    .status-icon {
-        width: 24px;
-        height: 24px;
-    }
-</style>
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 조회</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fc;
+        }
+        h1.h3, h6.m-0 {
+            color: #4e73df;
+        }
+        /* 테이블 스타일 */
+        .table thead th {
+            background-color: #4e73df;
+            color: white;
+            text-align: center;
+        }
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        /* 상태 아이콘 */
+        .status-icon {
+            width: 24px;
+            height: 24px;
+        }
+        /* DataTable 검색 및 페이지네이션 커스터마이징 */
+        .dataTables_filter {
+            float: right;
+            text-align: right;
+        }
+        .dataTables_length {
+            float: left;
+        }
+        .dataTables_info {
+            float: left;
+            margin-top: 10px;
+        }
+        .dataTables_paginate {
+            float: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
 <body id="page-top">
 
 {{>layout/admin/adminSidebar}}
@@ -45,9 +89,7 @@
                                             <img src="/image/admin/free-icon-delete.png" class="status-icon" alt="오프라인 상태">
                                         {{/onlineStatus}}
                                     </td>
-                                    <td>
-                                        {{activeStatus}}
-                                    </td>
+                                    <td>{{activeStatus}}</td>
                                     <td><a href="/admin/user/detail/{{id}}" class="btn btn-primary btn-sm">상세보기</a></td>
                                 </tr>
                             {{/userList}}
@@ -63,24 +105,19 @@
 <!-- End of Content Wrapper -->
 
 <!-- JavaScript Files Load -->
-<!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap JS CDN -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-<!-- DataTables JavaScript -->
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-<!-- Custom scripts for all pages-->
 <script src="/vendor/js/sb-admin-2.min.js"></script>
 
 <script>
     $(document).ready(function() {
         var table = $('#userTable').DataTable({
+            "paging": true, // 페이지네이션 활성화
+            "pageLength": 10, // 한 페이지에 표시할 행 수
             "language": {
                 "search": "검색:",
-                "lengthMenu": "_MENU_ 개씩 보기",
+                "lengthMenu": "페이지당 _MENU_ 개 보기",
                 "info": "총 _TOTAL_명의 회원 중 _START_에서 _END_까지 표시",
                 "paginate": {
                     "previous": "이전",
@@ -89,7 +126,7 @@
             }
         });
 
-        // 전체 검색 필드를 특정 열로만 제한하는 커스텀 검색 기능 추가
+        // 전체 검색 필드를 이름, 아이디 열로 제한하는 커스텀 검색 기능 추가
         $.fn.dataTable.ext.search.push(
             function(settings, data, dataIndex) {
                 var searchTerm = $('#userTable_filter input').val().toLowerCase();
@@ -111,7 +148,5 @@
     });
 </script>
 
-
 </body>
-
 </html>

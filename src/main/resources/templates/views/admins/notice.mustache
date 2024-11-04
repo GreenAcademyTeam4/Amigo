@@ -84,6 +84,28 @@
                  });
              }
          });
+
+         // 날짜 포맷팅 처리
+         $('#dataTable tbody tr').each(function() {
+             var dateCell = $(this).find('td:eq(3)'); // 작성일시가 있는 4번째 열 선택
+             var dateStr = dateCell.text(); // 현재 텍스트 값 가져오기
+
+             if (dateStr) {
+                 var date = new Date(dateStr); // 문자열을 날짜 객체로 변환
+
+                 // 원하는 날짜 포맷으로 변환 (예: YYYY/MM/DD HH:MM)
+                 var formattedDate = date.toLocaleString('ko-KR', {
+                     year: 'numeric',
+                     month: '2-digit',
+                     day: '2-digit',
+                     hour: '2-digit',
+                     minute: '2-digit',
+                     hour12: false  // 24시간 형식
+                 });
+
+                 dateCell.text(formattedDate); // 포맷된 날짜로 셀 업데이트
+             }
+         });
      });
 
      function toggleAll(source) {
