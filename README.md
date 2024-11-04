@@ -60,6 +60,6 @@ Amigo는 동창회와 친구 관리에 특화된 소셜 커뮤니티 플랫폼�
 
 ## 📊 프로젝트 주요 링크
 
-- [프로젝트 발표 자료 (PPT)](https://www.miricanvas.com/v2/design/13updo3)
+- [프로젝트 발표 자료 (PPT)]https://www.miricanvas.com/v/13updo3
 
 Amigo 프로젝트는 학창 시절의 추억을 되살리고 새로운 추억을 쌓을 수 있는 소셜 커뮤니티입니다.
