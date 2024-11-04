@@ -5,6 +5,7 @@ import com.example.amigo_project.repository.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -26,4 +27,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
+
+
 }

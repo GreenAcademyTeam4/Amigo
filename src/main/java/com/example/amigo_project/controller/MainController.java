@@ -46,6 +46,9 @@ public class MainController {
     public String firstPage(Model model, HttpSession session) {
         // 필요한 변수를 모델에 추가
         User user = (User) session.getAttribute("principal");
+        if(user == null){
+            return "index2";
+        }
         model.addAttribute("content", "Welcome to the first page!");
         List<User> onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<User> offlineFriends = userRepository.findOfflineFriends(user.getId());
@@ -54,6 +57,7 @@ public class MainController {
         model.addAttribute("userSchool", schoolList);
         model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("offlineFriendList", offlineFriends);
+
         return "index";
     }
 
