@@ -2,7 +2,7 @@ insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth, p
 values('thddnjstjr','1234','원석','고죠 사토루','010-1234-5678','male','19980115', 50000 ,true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth,online_status)
-values('test',1234,'정훈','게토 스구루','010-1234-5678','male','19980225',true);
+values('test','1234','정훈','게토 스구루','010-1234-5678','male','19980225',true);
 
 insert into user_tb (user_id,password,name,nickname,phone_number,gender,birth)
 values('test','1234','가을','정훈','010-1234-5678','male','27');
@@ -42,6 +42,27 @@ INSERT INTO user_report_tb (sender_user, receiver_user, category, content)
 VALUES
 (1, 2, '부적절한 언행', '도라에몽이 게임에서 비매너 발언을 했습니다.');
 
+---- 게시글 신고 임시 데이터
+INSERT INTO board_report_tb (sender_user, category, content)
+VALUES
+  (1, '욕설', '게시글에 부적절한 언어가 사용되었습니다.');
+
+-- 임시 데이터 탈퇴 사유 (나중에 삭제)
+INSERT INTO withdrawal_reason_tb (user_id, reason, details)
+VALUES (1, '서비스 불만족', '원하는 기능이 부족합니다.');
+
+-- user_tb 테이블에 탈퇴 중인 유저 데이터 삽입
+INSERT INTO user_tb (user_id, name, password, nickname, phone_number, gender, birth, active_status, created_at)
+VALUES
+    ('kkk', '홍길동', '1234', '얍얍', '010-1234-5678', 'male', 25, '탈퇴', CURRENT_TIMESTAMP),
+    ('mmm', '뿡뿡', '1234', '뿡뿡', '010-8765-4321', 'female', 30, '탈퇴', CURRENT_TIMESTAMP);
+-- 탈퇴 사유 임시 데이터
+INSERT INTO withdrawal_reason_tb (user_id, reason, details, created_at)
+VALUES
+    (12, '서비스 불만족', '기능이 부족하고 개선이 필요합니다.', CURRENT_TIMESTAMP),
+    (13, '개인정보 보호 우려', '데이터 보안에 대한 불안감이 있습니다.', CURRENT_TIMESTAMP);
+
+
 -- 결제 임시 데이터
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (1, '포인트 충전1,000원', 'MC4yMjkyMzc5MTMyMDA3', 1000, 1000, '2024-10-21 12:50:31', '휴대폰', 'tviva20241021124957fLyI0', 'none');
@@ -50,13 +71,13 @@ insert into charge_history_tb(user_id, order_name, order_id, point, total_amount
         VALUES (2, '포인트 충전1,000원', 'MC4yNTM2NTY3NjQzODc3', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182058fESt7', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (2, '포인트 충전1,000원', 'MC4yNjcxMTU1ODY1NTIw', 1000, 1000, '2024-10-25 18:21:23', '휴대폰', 'tviva20241025182937rTWv7', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4yNjcxMTU1ODY1NTIw', 1000, 1000, '2024-10-26 18:21:23', '휴대폰', 'tviva20241025182937rTWv7', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (2, '포인트 충전1,000원', 'MC4xNzQ5NzM4MTQwMDE0', 1000, 1000, '2024-10-28 18:21:23', '휴대폰', 'tviva20241028093632rKXj1', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (2, '포인트 충전1,000원', 'MC4wMzY5MTA2MDk5MTIy', 1000, 1000, '2024-10-28 14:39:01', '휴대폰', 'tviva20241028143745iHv15', 'none');
+        VALUES (2, '포인트 충전1,000원', 'MC4wMzY5MTA2MDk5MTIy', 1000, 1000, '2024-10-29 14:39:01', '휴대폰', 'tviva20241028143745iHv15', 'none');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
         VALUES (1, '포인트 충전1,000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
@@ -77,7 +98,7 @@ insert into refund_tb(payment_key, order_name, order_id, cancel_amount, cancel_r
         VALUES ('tviva20241030162248JlTT9', '포인트 충전3,000원', 'MC44NTA2MzM1MDc4MDQ1', 3000, '단순 변심', '2024-10-30 16:22:48', '2024-10-30 16:25:37', 'DONE');
 
 insert into charge_history_tb(user_id, order_name, order_id, point, total_amount, approved_at, method, payment_key, refund_status)
-        VALUES (1, '포인트 충전1000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-10-28 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
+        VALUES (1, '포인트 충전1000원', 'MC40MTk1MzczMzQzMDI5', 1000, 1000, '2024-11-02 14:39:01', '간편결제', 'tviva20241028164844i11C4', 'none');
 
 ---- 임시 데이터 게시글
 

@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Date;
 
 /**
  * onlineStatus 접속상태 default 0
@@ -37,6 +39,7 @@ public class User {
     private String school; 
     private Timestamp createdAt;
     private String createdAtFormat;
+    private LocalDate suspensionEndDate;  // 정지 종료 날짜
 
     public void getFormattedCreatedAt() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

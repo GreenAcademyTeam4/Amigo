@@ -7,6 +7,7 @@
     font-size: 25px;
     color: #5c4b37;
     font-weight: bold;
+
 }
 .chage-info{
     width: 100%;
@@ -31,8 +32,7 @@
 }
 /*내가 추가한곳 */
 .container {
-    max-width: 750px;
-    width: 100%;
+
     padding: 20px;
     margin-top: 20px;
     background-color: #fff8e1;
@@ -40,6 +40,8 @@
     border-radius: 15px;
     border: 2px solid #e6c6a6;
     overflow: hidden;
+     min-width: 690px;
+        max-width: 800px;
 }
 
 /* Title Styles */

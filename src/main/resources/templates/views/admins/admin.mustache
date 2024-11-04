@@ -1,397 +1,361 @@
+{{>layout/admin/adminSidebar}}
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>관리자 대시보드</title>
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <style>
+        /* 기본 설정 */
+        body {
 
-    <title>아미고 - Dashboard</title>
+            background-color: #e9ecef;
+            overflow-x: hidden;
+        }
 
-    <!-- Custom fonts for this template-->
-    <link href="/css/admin/fontawesome-free/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease;
+        }
 
-    <!-- Custom styles for this template-->
-    <link href="/css/admin/sb-admin-2.min.css" rel="stylesheet">
+        /* 통계 카드 스타일 */
+        .stats-cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .card {
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: bounceIn 0.6s ease;
+        }
+        .card h4 {
+            font-size: 16px;
+            color: #6c757d;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .card h4 i {
+            font-size: 20px;
+            color: #007bff;
+        }
+        .card p {
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            margin: 10px 0;
+            font-family: 'Arial', sans-serif;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+            background-color: #e2e6ea;
+        }
 
+        /* 카드 색상 */
+        .card:nth-child(1) { border-left-color: #007bff; }
+        .card:nth-child(2) { border-left-color: #ffc107; }
+        .card:nth-child(3) { border-left-color: #17a2b8; }
+        .card:nth-child(4) { border-left-color: #28a745; }
+
+        /* 차트와 리스트 가로 정렬 */
+        .charts-and-list {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            align-items: stretch;
+        }
+
+        /* 가장 잘 팔린 상품 스타일 */
+        .best-selling-products-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+            flex: 1;
+            overflow: hidden;
+        }
+        .best-selling-products-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+            background-color: #e2e6ea;
+        }
+        .best-selling-products-container h6 {
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        .best-selling-products-container ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .best-selling-products-container li {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #5a5a5a;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s, color 0.3s ease;
+            animation: slideIn 0.4s ease forwards;
+            opacity: 0;
+        }
+        .best-selling-products-container li:hover {
+            transform: translateX(8px);
+            color: #007bff;
+        }
+        .best-selling-products-container li::before {
+            content: "🏆";
+            margin-right: 8px;
+            color: #ffc107;
+            animation: bounce 1.5s infinite alternate;
+        }
+
+        /* 차트 스타일 */
+        .chart-container {
+            display: flex;
+            gap: 20px;
+            flex: 2;
+        }
+        .small-chart {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .small-chart:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+            background-color: #e2e6ea;
+        }
+        canvas {
+            width: 100%;
+            height: 180px;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
 </head>
+<body>
 
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-        {{>layout/admin/adminSidebar}}
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-<!--                &lt;!&ndash; Topbar &ndash;&gt;-->
-<!--                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">-->
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-<!--                        &lt;!&ndash; Nav Item - Search Dropdown (Visible Only XS) &ndash;&gt;-->
-<!--                        <li class="nav-item dropdown no-arrow d-sm-none">-->
-<!--                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"-->
-<!--                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                                <i class="fas fa-search fa-fw"></i>-->
-<!--                            </a>-->
-<!--                            &lt;!&ndash; Dropdown - Messages &ndash;&gt;-->
-<!--                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"-->
-<!--                                aria-labelledby="searchDropdown">-->
-<!--                                <form class="form-inline mr-auto w-100 navbar-search">-->
-<!--                                    <div class="input-group">-->
-<!--                                        <input type="text" class="form-control bg-light border-0 small"-->
-<!--                                            placeholder="Search for..." aria-label="Search"-->
-<!--                                            aria-describedby="basic-addon2">-->
-<!--                                        <div class="input-group-append">-->
-<!--                                            <button class="btn btn-primary" type="button">-->
-<!--                                                <i class="fas fa-search fa-sm"></i>-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </form>-->
-<!--                            </div>-->
-<!--                        </li>-->
-
-                        <!-- Nav Item - User Information -->
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">관리자</span>
-                                    <i class="fas fa-user fa-sm fa-fw text-gray-400"></i>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        로그아웃
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-
-
-                        </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">대시보드</h1>
-
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                수입(월간)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                수익(연간)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">방문자 현황(임시 - 날짜별로 차트 변경)
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">80%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                              일자별 요약(임시 - 차트 변경)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">2024-10-15 [방문자] 1</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">새 회원</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-<!--                                        <canvas id="myAreaChart"></canvas>-->
-                                        <a> 회원1 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원2 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원3 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원4 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원5 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원6 :  2024-10-15 가입</a><br><br>
-                                        <a> 회원7 :  2024-10-15 가입</a><br><br>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">임시 차트</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-<!--                            &lt;!&ndash; Project Card Example &ndash;&gt;-->
-<!--                            <div class="card shadow mb-4">-->
-<!--                                <div class="card-header py-3">-->
-<!--                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>-->
-<!--                                </div>-->
-<!--                                <div class="card-body">-->
-<!--                                    <h4 class="small font-weight-bold">Server Migration <span-->
-<!--                                            class="float-right">20%</span></h4>-->
-<!--                                    <div class="progress mb-4">-->
-<!--                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"-->
-<!--                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4 class="small font-weight-bold">Sales Tracking <span-->
-<!--                                            class="float-right">40%</span></h4>-->
-<!--                                    <div class="progress mb-4">-->
-<!--                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"-->
-<!--                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4 class="small font-weight-bold">Customer Database <span-->
-<!--                                            class="float-right">60%</span></h4>-->
-<!--                                    <div class="progress mb-4">-->
-<!--                                        <div class="progress-bar" role="progressbar" style="width: 60%"-->
-<!--                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4 class="small font-weight-bold">Payout Details <span-->
-<!--                                            class="float-right">80%</span></h4>-->
-<!--                                    <div class="progress mb-4">-->
-<!--                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"-->
-<!--                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4 class="small font-weight-bold">Account Setup <span-->
-<!--                                            class="float-right">Complete!</span></h4>-->
-<!--                                    <div class="progress">-->
-<!--                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"-->
-<!--                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-
-
-
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Amigo &copy; coming soon</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
+<div class="container">
+    <!-- 통계 카드 섹션 -->
+    <div class="stats-cards">
+        <div class="card">
+            <h4><i class="icon">👥</i>유저 수</h4>
+            <p id="totalUserCount">0명</p>
         </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">정말 로그아웃 하시겠습니까?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">종료하시려면 아래의 "로그아웃" 버튼을 클릭해 주세요.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                    <a class="btn btn-primary" href="/login">로그아웃</a>
-                </div>
-            </div>
+        <div class="card">
+            <h4><i class="icon">📝</i>가입자 수</h4>
+            <p id="totalMembers">0명</p>
+        </div>
+        <div class="card">
+            <h4><i class="icon">🌐</i>하루 방문 수</h4>
+            <p id="dailyVisits">0명</p>
+        </div>
+        <div class="card">
+            <h4><i class="icon">💰</i>총 매출 금액</h4>
+            <p id="totalRevenueAmount">₩0</p>
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <!--<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- 메인 콘텐츠 (차트와 리스트) -->
+    <div class="charts-and-list">
+        <!-- 가장 잘 팔린 상품 리스트 -->
+        <div class="best-selling-products-container">
+            <h6>가장 인기 많은 상품 TOP 3</h6>
+            <ol id="bestSellingProductList">
+                <li>로딩 중...</li>
+            </ol>
+        </div>
 
-    <!-- Core plugin JavaScript-->
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- 차트 섹션 (남녀 성비, 나이 분포) -->
+        <div class="chart-container">
+            <div class="small-chart">
+                <h4>남녀 성비</h4>
+                <canvas id="genderChart"></canvas>
+            </div>
+            <div class="small-chart">
+                <h4>나이 분포</h4>
+                <canvas id="ageDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Custom scripts for all pages-->
-    <script src="/vendor/js/sb-admin-2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        getTotalUserCount();
+        getTotalMemberCount();
+        getTotalRevenue();
+        getDailyVisits();
+        getBestSellingProducts();
+        loadGenderData();
+        loadAgeData();
+    });
 
-    <!-- Page level plugins -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    function getTotalUserCount() {
+        fetch('/admin/totalUsers')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load user data'))
+            .then(data => document.getElementById('totalUserCount').textContent = `${data}명`)
+            .catch(error => console.error('Error fetching total user count:', error));
+    }
 
+    function getTotalMemberCount() {
+        fetch('/admin/totalMembers')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load member data'))
+            .then(data => document.getElementById('totalMembers').textContent = `${data}명`)
+            .catch(error => console.error('Error fetching total member count:', error));
+    }
 
-    <!-- Page level custom scripts -->
-    <script src="/vendor/js/demo/chart-area-demo.js"></script>
-    <script src="/vendor/js/demo/chart-pie-demo.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+    // 천 단위 콤마 포맷 적용
+    function formatNumberWithComma(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
 
+    function getTotalRevenue() {
+        fetch('/admin/totalRevenue')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load revenue data'))
+            .then(data => document.getElementById('totalRevenueAmount').textContent = `₩${formatNumberWithComma(data)}`)
+            .catch(error => console.error('Error fetching revenue amount:', error));
+    }
+
+    function getDailyVisits() {
+        fetch('/admin/dailyVisits')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load daily visits'))
+            .then(data => document.getElementById('dailyVisits').textContent = `${data}명`)
+            .catch(error => console.error('Error fetching daily visits:', error));
+    }
+
+    function getBestSellingProducts() {
+        fetch('/admin/bestSellingProducts')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load top selling products'))
+            .then(data => {
+                const bestSellingProductList = document.getElementById('bestSellingProductList');
+                bestSellingProductList.innerHTML = '';
+                if (Array.isArray(data)) {
+                    data.forEach((product, index) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${index + 1}. ${product.productName}`;
+                        bestSellingProductList.appendChild(listItem);
+                    });
+                } else {
+                    bestSellingProductList.innerHTML = '<li>상품 데이터가 없습니다.</li>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching best selling products:', error);
+                document.getElementById('bestSellingProductList').innerHTML = '<li>오류</li>';
+            });
+    }
+
+    function loadGenderData() {
+        fetch('/admin/gender')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load gender data'))
+            .then(data => {
+                const labels = data.map(item => item.gender);
+                const userCountData = data.map(item => item.count);
+                const ctx = document.getElementById('genderChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: userCountData,
+                            backgroundColor: ['#36A2EB', '#FF6384']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching gender data:', error));
+    }
+
+    function loadAgeData() {
+        fetch('/admin/age')
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to load age data'))
+            .then(data => {
+                const labels = data.map(item => item.ageGroup);
+                const ageData = data.map(item => item.userCount);
+                const ctx = document.getElementById('ageDistributionChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '사용자 수',
+                            data: ageData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching age data:', error));
+    }
+</script>
 
 </body>
-
 </html>

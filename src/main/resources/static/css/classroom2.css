@@ -26,7 +26,7 @@
     gap: 20px;                             /* 좌석 간격 */
     width: 100%;
     max-width: 600px;                      /* 컨테이너 최대 너비 */
-    margin: 270 290;
+    margin: 255 290;
     align-items: center;
     border-radius: 10px;
 }
@@ -62,11 +62,10 @@
 /* 아바타 이미지 스타일 */
 .user-avatar {
     width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    height: 80px;
     object-fit: cover;
     margin-top: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
 }
 
 /* 채팅 말풍선 스타일 */

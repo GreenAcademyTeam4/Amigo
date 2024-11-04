@@ -17,6 +17,7 @@ create table user_tb (
   created_at timestamp default CURRENT_TIMESTAMP
 );
 
+
 -- 탈퇴 사유 조회 테이블
 create table withdrawal_reason_tb (
   id int primary key auto_increment,
@@ -283,7 +284,7 @@ create table point_history_tb(
     foreign key (user_id) references user_tb(id)
 );
 
--- 채팅에 참가한 유저 리스트
+-- 채팅에 참가한 유저 테이블
 create table chat_room_tb (
     id int primary key auto_increment, -- roomId(PK)
     user_id int,
@@ -317,6 +318,7 @@ create table alarm_tb (
     status int default 0
 );
 
+-- 아이템 구매 기록
 create table prodHistory_tb(
     id int primary key auto_increment,
     avatar_id int,

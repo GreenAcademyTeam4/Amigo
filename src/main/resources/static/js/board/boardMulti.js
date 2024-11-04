@@ -180,7 +180,6 @@ $(document).ready(function() {
 
     // 게시판에서 <a> 태그를 처리하는 함수
     function screenChanger(data) {
-    console.log("화면 전환!~!");
         fetch(data)
             .then(response => response.text())
             .then(data => {

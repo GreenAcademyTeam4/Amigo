@@ -1,7 +1,7 @@
 package com.example.amigo_project.controller;
 
 import com.example.amigo_project.dto.payment.*;
-import com.example.amigo_project.repository.model.*;
+import com.example.amigo_project.repository.model.User;
 import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import com.example.amigo_project.repository.model.payment.Refund;
 import com.example.amigo_project.repository.model.payment.RefundRefuse;
@@ -38,14 +38,13 @@ public class PaymentController {
     public String getPaymentPage(Model model) {
         User user = (User) session.getAttribute("principal");
 
-        String phoneNumber = user.getPhoneNumber(); // TODO - 주석 해제 예정
+        String phoneNumber = user.getPhoneNumber();
 
         // 전화번호에서 '-' 제거
         if (phoneNumber != null) {
             phoneNumber = phoneNumber.replaceAll("[^0-9]", ""); // 숫자가 아닌 모든 문자 제거
         }
         model.addAttribute("phoneNumber", phoneNumber);
-        System.out.println("phoneNumber : " + phoneNumber); // TODO - 삭제 예정
         return "/views/payment/pointCharge"; // Mustache 파일 이름
     }
 
@@ -58,14 +57,10 @@ public class PaymentController {
 
         // orderId, paymentKey, amount를 서버에 저장해야 함.
         // paymentKey는 토스 페이먼츠에서 각 주문에 발급하는 고유 키 값이다. 결제 승인, 취소, 조회에 사용된다.
-        System.out.println("orderId : " + approvedDTO.getOrderId() + " paymentKey : "
-                + approvedDTO.getPaymentKey() + " amount : " + approvedDTO.getAmount()); // TODO - 삭제 예정
 
         // 결제 승인 요청
         ChargeHistory result = paymentService.requestPayment(approvedDTO);
-        System.out.println("result : " + result);
         paymentService.createChargeHistory(result); // 결제 내역 저장 완료
-
 
         // 구매내역(포인트 충전) update
         paymentService.chargePoint(result);
@@ -75,7 +70,7 @@ public class PaymentController {
         // ChargeHistory에 담긴 값을 ChargeHistoryDTO에 담음
         ChargeHistoryDTO dto = ChargeHistoryDTO.builder()
                 .name(user.getName())
-                .userId(result.getUserId())
+                .userId(user.getId())
                 .orderName(result.getOrderName())
                 .totalAmount(result.getTotalAmount())
                 .approvedAt(result.getApprovedAt())
@@ -84,8 +79,6 @@ public class PaymentController {
                 .paymentKey(result.getPaymentKey())
                 .refundStatus(result.getRefundStatus())
                 .build();
-
-        System.out.println("DTO 값 들어옴???????" + dto.toString()); // TODO - 삭제 예정
 
         // 결제 내역 보여주기 위해 model에 값 담기
         model.addAttribute("payment", dto);
@@ -98,10 +91,9 @@ public class PaymentController {
      */
     @GetMapping("/fail")
     public String getFailPage() {
-        return "/payment/fail";
+        return "/views/payment/fail";
     }
-
-
+  
     /**
      * 환불 상태 변경
      * @param requestRefund
@@ -110,11 +102,9 @@ public class PaymentController {
     @PostMapping("/modifyRefundStatus")
     @ResponseBody
     public ResponseEntity<String> updateRefundStatus(RequestRefundDTO requestRefund) {
-        System.out.println("controller의 modifyRefundStatus의 requestRefund : " + requestRefund); // TODO - 삭제 예정
         // DTO에 담긴 값을 model에 담음
         try {
-            paymentService.modifyRefundStatus(requestRefund.getChargeHistoryId(),requestRefund.getRefundStatus()); // 환불 상태를 update
-            // refundStatus에 따라 추가적인 처리 (ex: 반려 시 추가 로직 등)
+            paymentService.modifyRefundStatus(requestRefund.getChargeHistoryId(),requestRefund.getRefundStatus()); // 환불 상태 update
             RequestRefund refund = RequestRefund.builder().chargeHistoryId(requestRefund.getChargeHistoryId())
                     .cancelReason(requestRefund.getCancelReason())
                     .build();
@@ -140,22 +130,15 @@ public class PaymentController {
 
         User user = (User) session.getAttribute("principal");
 
-        // TODO - user.getId(); 넣기
         // 결제 내역 조회
-        List<ChargeHistoryDTO> paymentList = paymentService.readChargeHistory(page, size, 1);
-        System.out.println("controller에서 paymentList!!!!! : " + paymentList.toString()); // TODO - 삭제 예정
+        List<ChargeHistoryDTO> paymentList = paymentService.readChargeHistory(page, size, user.getId());
 
         // 결제 완료 일때만 버튼 활성화
         for (ChargeHistoryDTO history2 : paymentList) {
-            if ("결제 완료".equals(history2.getRefundStatus())) {
-                history2.setRefundable(true);
-            } else {
-                history2.setRefundable(false);
-            }
+            history2.setRefundable("결제 완료".equals(history2.getRefundStatus()));
         }
 
-        // TODO - user.getId(); 넣기
-        int totalCount = paymentService.countChargeHistory(1);
+        int totalCount = paymentService.countChargeHistory(user.getId());
         int totalPages = (int) Math.ceil((double) totalCount / size);
 
         model.addAttribute("paymentList", paymentList);
@@ -195,7 +178,6 @@ public class PaymentController {
 
         // 결제 내역 조회
         List<RequestRefundListDTO> requestRefundList = paymentService.readAllRequestRefund(page, size);
-        System.out.println("controller에서 requestRefundList: " + requestRefundList.toString()); // TODO - 삭제 예정
 
         // refundStatus가 환불 요청 상태일 때만 조회가 가능하도록 필터링
         List<RequestRefundListDTO> filteredList = requestRefundList.stream()
@@ -208,6 +190,7 @@ public class PaymentController {
 
         // 환불 요청중(request) 일때만 환불 신청 버튼 활성화
         for (RequestRefundListDTO history : filteredList) {
+            history.setRefundable("request".equals(history.getRefundStatus()));
             if ("request".equals(history.getRefundStatus())) {
                 history.setRefundable(true);
             } else {
@@ -223,7 +206,6 @@ public class PaymentController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
-
 
         // 페이지네이션 관련 데이터 추가
         model.addAttribute("showPrevious", page > 1);
@@ -252,8 +234,7 @@ public class PaymentController {
     @ResponseBody
     public ResponseEntity<String> checkPoint(@RequestParam(name = "id") int id) {
         User user = (User) session.getAttribute("principal");
-        //int userPoint = user.getPoint(); // TODO - 주석 해제
-        int userPoint = 5000000;
+        int userPoint = user.getPoint(); 
 
         // 결제 내역 조회
         ChargeHistory chargeHistory = paymentService.readChargeHistoryById(id);
@@ -263,7 +244,6 @@ public class PaymentController {
         if (userPoint < refundAmount) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("포인트가 부족하여 환불을 신청할 수 없습니다.");
         }
-
         return ResponseEntity.ok("환불 사유를 입력해주세요.");
     }
 
@@ -306,16 +286,17 @@ public class PaymentController {
      public ResponseEntity<String> createRefund(@RequestBody RequestRefundListDTO dto) throws IOException, InterruptedException {
 
         // 결제 취소 처리
-        Refund refund = paymentService.refundCharge(dto); // 승인 요청 보냄 ---> refundStatus가 success 임
+        Refund refund = paymentService.refundCharge(dto);
 
         ChargeHistory chargeHistory = ChargeHistory.builder()
-                .id(dto.getChargeHistoryId()) // DTO에서 ChargeHistory의 ID 사용
-                .refundStatus(dto.getRefundStatus()) // DTO에서 가져온 refundStatus 사용
+                .id(dto.getChargeHistoryId())
+                .refundStatus(dto.getRefundStatus()) 
                 .build();
 
         // 데이터베이스 업데이트 수행
         paymentService.modifyRefundStatus(chargeHistory.getId(), chargeHistory.getRefundStatus());
 
+        // id로 결제 내역 조회
         ChargeHistory readChargeHistory = paymentService.readChargeHistoryById(chargeHistory.getId());
 
         // 구매내역(포인트 차감) update
@@ -336,7 +317,7 @@ public class PaymentController {
      }
 
     /**
-     * 환불 거절( 관리자가 반려 버튼 누를 시)
+     * 환불 거절(관리자가 반려 버튼 누를 시)
      */
     @PostMapping("/requestRefuse")
     @ResponseBody
@@ -371,12 +352,6 @@ public class PaymentController {
     @ResponseBody
     public ResponseEntity<String> createRefuseReason(@RequestBody RefundRefuseDTO refundRefuseDTO) {
         try {
-            // 반려 사유를 DB에 저장하는 로직
-
-            // refundRefuseDTO를 통해 전달된 데이터 확인
-            System.out.println("반려 사유: " + refundRefuseDTO.getRefundRefuseReason());
-            System.out.println("refundRefuseDTO: " + refundRefuseDTO); //여기 이제는 id가 6으로 들어옴
-
             // 현재 시간을 "yyyy-MM-dd HH:mm:ss" 형식으로 포맷된 문자열로 저장
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedCreatedAt = format.format(new Date());
@@ -384,12 +359,11 @@ public class PaymentController {
             // 관리자가 입력한 값을 dto에 담아서 데이터를 model에 담아주기
             RefundRefuse refundRefuse = RefundRefuse.builder()
                     .id(refundRefuseDTO.getId())
-                    .chargeHistoryId(refundRefuseDTO.getChargeHistoryId()) // 여기서
+                    .chargeHistoryId(refundRefuseDTO.getChargeHistoryId())
                     .refundRefuseReason(refundRefuseDTO.getRefundRefuseReason())
                     .createdAt(Timestamp.valueOf(formattedCreatedAt)) // createdAt을 Timestamp가 아닌 포맷된 문자열로 전달
                     .build();
 
-            // 서비스 메서드 호출하여 데이터베이스에 저장
             paymentService.createRefuseReason(refundRefuse);
 
             return ResponseEntity.ok("반려 사유 저장 성공");
@@ -425,5 +399,4 @@ public class PaymentController {
 
         return "/views/payment/cancelReasonForAdmin";
     }
-
 }
