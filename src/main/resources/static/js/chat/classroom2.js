@@ -1,4 +1,4 @@
-const classSocket = new WebSocket("ws://192.168.123.100:8080/chat");
+const classSocket = new WebSocket("ws://192.168.0.113:8080/chat");
 
 const messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;
@@ -59,6 +59,7 @@ classSocket.onmessage = (event) => {
                     $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar); // 이미지 src 설정
                 }
             } else {
+                console.log(i,'번째 자리 비어있음');
                 $('#user-seat-' + i + ' .user-nickname').text('');
                 $('#user-seat-' + i + ' .user-avatar').attr('src', ''); // 아바타 이미지 초기화
             }
