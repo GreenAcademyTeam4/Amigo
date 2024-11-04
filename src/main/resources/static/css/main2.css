@@ -1,0 +1,31 @@
+.content-box{
+    display: flex;
+    background-image: url(/image/firstPage.png);
+    width: 1200px;
+    height: 100vh;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+}
+.btn-login{
+    padding: 9px;
+    color: white;
+    height: 25px;
+    width: 40px;
+    font-size: 23px;
+    background-color: green;
+    border-radius: 10px;
+    border: 3px solid gray;
+}
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+}
+.btn-login:hover{
+    
+    background-color: white;
+    color: green;
+   
+}

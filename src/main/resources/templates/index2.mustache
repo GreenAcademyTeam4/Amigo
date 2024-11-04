@@ -1,17 +1,10 @@
 {{>layout/header}}
-<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/main2.css">
 
 <section class="content-box">
-    <img src="/image/firstPage.png">
-        
-        <script>(function(global) {
-            global.userId = {{principal.id}}; 
-        })(window);</script>
-        <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="/js/screen.js"></script>
-           <script src="/js/schoolPart.js"></script>
-
+    <a href="/login">
+        <span class="btn-login">입장하기</span>
+    </a>
 </section>
 
 {{>layout/footer}}
