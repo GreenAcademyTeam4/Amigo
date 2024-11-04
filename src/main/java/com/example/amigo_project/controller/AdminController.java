@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -74,6 +75,25 @@ public class AdminController {
         return "views/admins/deletedUsers";
     }
 
+    // 특정 유저의 탈퇴 사유 조회
+    @GetMapping("/deletedUsers/withdrawalReason/{id}")
+    @ResponseBody
+    public WithdrawalReasonDTO findWithdrawalReason(@PathVariable("id") int id) {
+        WithdrawalReasonDTO reason = adminService.findWithdrawalReason(id);
+        System.out.println("조회된 탈퇴 사유: " + reason); // 탈퇴 사유 데이터 출력
+        return adminService.findWithdrawalReason(id);
+    }
+
+    // 탈퇴 해지 요청
+    @PostMapping("/restoreUser")
+    public ResponseEntity<String> restoreUserStatus(@RequestBody UserDTO userDTO) {
+        int result = adminService.restoreUserStatus(userDTO);
+        if (result > 0) {
+            return ResponseEntity.ok("탈퇴 해지 되었습니다.");
+        } else {
+            return ResponseEntity.status(400).body("탈퇴 해지에 실패했습니다.");
+        }
+    }
 
 
 
@@ -170,10 +190,11 @@ public class AdminController {
     /**
      * 결제
      */
-    // 결제 내역 조회
+// 결제 내역 조회
     @GetMapping("/chargeHistoryList")
-    public String chargeHistoryList(Model model){
+    public String chargeHistoryList(Model model) {
         List<PayListDTO> chargeHistoryList = adminService.findChargeHistoryList();
+        System.out.println(chargeHistoryList); // 데이터 확인용 로그 추가
 
         model.addAttribute("chargeHistoryList", chargeHistoryList);
         return "views/admins/chargeHistoryList"; // 임시
@@ -184,7 +205,15 @@ public class AdminController {
 
 
 
-    // 광고 관리
+
+//    // 광고 관리
+//    @GetMapping("/ad")
+//    public String adPage(Model model){
+//        List<AdDTO> ad = adminService.findAd();
+//        model.addAttribute("ad", ad);
+//    return "views/admins/ad";
+//    }
+
 
 
     /**
@@ -251,13 +280,13 @@ public class AdminController {
         return "redirect:/admin/notice/detail/" + id;
     }
 
-    // 문의 관리
 
     // 신고 관리
     // 유저 신고 조회
     @GetMapping("/userReport")
     public String findReportUser(Model model){
         List<UserReportDTO> userReport = adminService.findReportUser();
+        System.out.println("유저 신고 리스트: " + userReport);
         model.addAttribute("userReport", userReport);
         return "views/admins/userReport";
     }
@@ -268,9 +297,45 @@ public class AdminController {
     @GetMapping("/boardReport")
     public String findReportBoard(Model model){
         List<BoardReportDTO> boardReport = adminService.findReportBoard();
+        if (boardReport == null || boardReport.isEmpty()) {
+            System.out.println("boardReport 데이터가 비어 있습니다.");
+        }
         model.addAttribute("boardReport", boardReport);
         return "views/admins/boardReport";
     }
+
+    @GetMapping("/userReportList/{reportId}")
+    public String findUserReportDetail(Model model, @PathVariable(name = "reportId") int reportId) {
+        // 신고 상세 정보 가져오기
+        UserReportDTO userReportDetail = adminService.findUserReport(reportId);
+
+        // 피신고자 ID를 이용해 신고 횟수 조회
+        Integer reportCount = adminService.userReportStatistics(userReportDetail.getReceiverId());
+
+        // 모델에 데이터 추가
+        model.addAttribute("userReportDetail", userReportDetail);
+        model.addAttribute("reportCount", reportCount);  // 신고 횟수 추가
+
+        return "views/admins/userReportList";  // 상세보기 페이지
+    }
+
+
+    @PostMapping("/deleteReports")
+    public ResponseEntity<String> deleteReports(@RequestBody List<Integer> reportIds) {
+        for (Integer id : reportIds) {
+            adminService.deleteBoardReportByBoardId(id);
+        }
+        return ResponseEntity.ok("선택된 신고가 삭제되었습니다.");
+    }
+
+
+//    // 특정 유저 신고 받은 횟수 조회
+//    @GetMapping("/reportCount/{userId}")
+//    public String userReportStatistics(Model model, @PathVariable(name = "userId") int userId){
+//        UserReportDTO reportCount = adminService.userReportStatistics(userId);
+//        model.addAttribute("reportCount", reportCount);
+//        return "views/admins/reportCount";
+//    }
 
 
 

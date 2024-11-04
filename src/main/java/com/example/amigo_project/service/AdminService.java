@@ -8,6 +8,8 @@ import com.example.amigo_project.repository.model.payment.ChargeHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,11 +48,25 @@ public class AdminService {
         return adminRepository.findDeletedUsers();
     }
 
+    // 탈퇴 사유 조회
+    public WithdrawalReasonDTO findWithdrawalReason(int id) {
+       WithdrawalReasonDTO reason = adminRepository.findWithdrawalReason(id);
+        return reason;
+    }
+
+    // 탈퇴 해지
+    public int restoreUserStatus(UserDTO userDTO) {
+        return adminRepository.restoreUserStatus(userDTO);
+    }
+
+
+    // 게시글 개수 조회
    public AdminDTO findBoardCount(int id) {
         AdminDTO adminDTO = adminRepository.findBoardCount(id);
         return adminDTO;
    }
 
+   // 댓글 개수 조회
    public CommentDTO findCommentCount(int id){
         CommentDTO commentDTO = adminRepository.findCommentCount(id);
         return commentDTO;
@@ -74,6 +90,32 @@ public class AdminService {
         return adminRepository.findReportBoard();
     }
 
+    // 게시글 신고 목록 삭제
+    public void deleteBoardReportByBoardId(Integer reportId) {
+        adminRepository.deleteBoardReportByBoardId(reportId);
+    }
+
+    // 특정 유저 신고 조회 (상세보기)
+    public UserReportDTO findUserReport(int id){
+        UserReportDTO userReport = adminRepository.findUserReport(id);
+        return userReport;
+    }
+
+    // 신고 횟수 조회
+    public Integer userReportStatistics(int id) {
+        return adminRepository.userReportStatistics(id);  // 신고 횟수를 Integer로 반환
+    }
+
+    /**
+     * 광고
+     */
+//    // 광고 생성
+//    public int insertAd(AdDTO adDTO){return adminRepository.insertAd(adDTO);}
+//    // 광고 조회
+//    public List<AdDTO> findAd(){
+//        List<AdDTO> ad = adminRepository.findAd();
+//        return ad;
+//    }
 
     /**
      * chart

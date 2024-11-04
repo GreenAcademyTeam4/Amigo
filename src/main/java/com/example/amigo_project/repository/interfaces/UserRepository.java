@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.example.amigo_project.dto.UserDTO;
 import com.example.amigo_project.repository.model.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -60,6 +61,7 @@ public interface UserRepository {
     public void updateOnline(int id);
     // 오프라인 상태로 업데이트
     public void updateOffline(int id);
+
 
 }
 

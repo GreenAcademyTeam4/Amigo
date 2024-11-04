@@ -1,15 +1,11 @@
 {{>layout/admin/adminSidebar}}
 
-
-<!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-        <!-- Main Content -->
         <div class="container-fluid">
             <h1 class="h3 mb-2 text-gray-800">회원 상세보기</h1>
             <br><br>
             <div class="row align-items-stretch">
-                <!-- 회원 정보 영역 -->
                 <div class="col-lg-6 d-flex mb-4">
                     <div class="card w-100 border-0">
                         <div class="card-header py-3 bg-light">
@@ -20,27 +16,27 @@
                             <table class="table table-sm table-borderless">
                                 <tbody>
                                 <tr>
-                                    <th>아이디 : </th>
+                                    <th>아이디 :</th>
                                     <td>{{user.userId}}</td>
                                 </tr>
                                 <tr>
-                                    <th>비밀번호 : </th>
-                                    <td>********</td> <!--TODO 암호화 하기-->
+                                    <th>비밀번호 :</th>
+                                    <td>********</td>
                                 </tr>
                                 <tr>
-                                    <th>이름 : </th>
+                                    <th>이름 :</th>
                                     <td>{{user.nickname}}</td>
                                 </tr>
                                 <tr>
-                                    <th>휴대폰 번호 : </th>
+                                    <th>휴대폰 번호 :</th>
                                     <td>{{user.phoneNumber}}</td>
                                 </tr>
                                 <tr>
-                                    <th>성별 : </th>
+                                    <th>성별 :</th>
                                     <td>{{user.gender}}</td>
                                 </tr>
                                 <tr>
-                                    <th>나이 : </th>
+                                    <th>나이 :</th>
                                     <td>{{user.birth}}살</td>
                                 </tr>
                                 </tbody>
@@ -50,9 +46,7 @@
                     </div>
                 </div>
 
-                <!-- 활동 정보 및 학교 정보 영역 -->
                 <div class="col-lg-6 d-flex mb-4">
-                    <!-- 활동 정보 카드 -->
                     <div class="card w-100 border-0">
                         <div class="card-header py-3 bg-light">
                             <h6 class="m-0 font-weight-bold text-secondary">활동 정보</h6>
@@ -61,23 +55,19 @@
                             <table class="table table-sm table-borderless">
                                 <tbody>
                                 <tr>
-                                    <th>가입일 : </th>
-                                    <td>{{user.createdAtFormat}}</td>
+                                    <th>가입일 :</th>
+                                    <td data-created-at>{{user.createdAtFormat}}</td>
                                 </tr>
                                 <tr>
-                                    <th>게시글 수 : </th>
+                                    <th>게시글 수 :</th>
                                     <td>{{boardCount}}개</td>
                                 </tr>
                                 <tr>
-                                    <th>댓글 수 : </th>
+                                    <th>댓글 수 :</th>
                                     <td>{{commentCount}}개</td>
                                 </tr>
                                 <tr>
-                                    <th>문의 : </th>
-                                    <td>0개</td> <!-- 이 부분은 사용자가 남긴 문의 수 -->
-                                </tr>
-                                <tr>
-                                    <th>포인트 : </th>
+                                    <th>포인트 :</th>
                                     <td>{{user.point}}</td>
                                 </tr>
                                 </tbody>
@@ -85,61 +75,51 @@
                         </div>
                     </div>
                 </div>
-                <!-- 뒤로가기 버튼 -->
                 <div class="d-flex justify-content-end w-100 mt-3">
                     <a href="/admin/user" class="btn btn-secondary btn-sm">뒤로가기</a>
                 </div>
             </div>
         </div>
-        <!-- End of Main Content -->
     </div>
 </div>
-<!-- End of Content Wrapper -->
-</div>
 
-<!-- Bootstrap core JavaScript-->
+<!-- JavaScript -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
 <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
 <script src="/vendor/js/sb-admin-2.min.js"></script>
 
-<!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#userTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
+    $(document).ready(function () {
+        const createdAtElement = document.querySelector('td[data-created-at]');
+        if (createdAtElement) {
+            createdAtElement.textContent = formatDate(createdAtElement.textContent);
+        }
     });
-function deletePost(postId) {
-    if (confirm('정말로 탈퇴하시겠습니까?')) {
-        $.ajax({
-            url: '/admin/deleteUsers/' + postId,
-            type: 'POST', // 또는 'DELETE' 메서드로 변경 가능 (서버에서 처리 방식에 맞게)
-            success: function (result) {
-                alert('탈퇴 완료 되었습니다.');
-                // 탈퇴 후 목록 페이지로 리다이렉트하여 최신 사용자 목록 표시
-                window.location.href = "/admin/user";
-            },
-            error: function (err) {
-                alert('삭제에 실패했습니다. 다시 시도해주세요.');
-            }
-        });
-    }
-}
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function deletePost(postId) {
+        if (confirm('정말로 탈퇴하시겠습니까?')) {
+            $.ajax({
+                url: '/admin/deleteUsers/' + postId,
+                type: 'POST',
+                success: function () {
+                    alert('탈퇴 완료되었습니다.');
+                    window.location.href = "/admin/user";
+                },
+                error: function () {
+                    alert('삭제에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+        }
+    }
 </script>
 
 </body>

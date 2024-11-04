@@ -9,11 +9,21 @@ import java.sql.Timestamp;
 @Data
 public class BoardReportDTO {
 
-    private Integer id;
-    private Integer senderUser;
+    // 신고 ID
+    private Integer reportId;
+
+    // 신고자 정보
+    private String senderNickname;
+
+    private String reportNickname;
+
+    // 게시글 정보
     private Integer boardId;
-    private String category;
-    private String content;
-    private Timestamp createdAt;
+    private String boardTitle;
+
+    // 신고 내용
+    private String reportCategory;
+    private String reportContent;
+    private Timestamp reportDate;
 
 }
