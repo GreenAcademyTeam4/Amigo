@@ -43,6 +43,7 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         RoomDataDTO data = (RoomDataDTO)session.getAttributes().get("roomData");
         User principal = (User)session.getAttributes().get("principal");
+        EquipAvatarDTO equip = userService.equipUserAvatar(principal.getId());
         ObjectMapper objectMapper = new ObjectMapper();
         MessageDTO messageDTO = objectMapper.readValue(message.getPayload(),MessageDTO.class);
         // 클라이언트의 메세지가 자리요청일때 처리
@@ -52,12 +53,8 @@ public class ChatHandler extends TextWebSocketHandler {
             // 이동하려는 자리가 빈 자리면 이동 처리
             if(seats.get(num) == null) {
             // 현재 사용자의 기존 자리 찾기
-            SeatDataDTO userData = SeatDataDTO.builder().nickname(principal.getNickname()).id(principal.getId()).build();
-            int currentSeatIndex = seats.indexOf(userData);
-            if (currentSeatIndex != -1) {
-                // 기존 자리를 null로 초기화
-                seats.set(currentSeatIndex, null);
-            }
+            SeatDataDTO userData = SeatDataDTO.builder().nickname(principal.getNickname()).id(principal.getId()).avatar(equip.getUrl()).build();
+            seats.set(currentSeat.get(principal.getId()),null);
             // 새로운 자리로 이동
             seats.set(num, userData);
             // 좌석 정보 업데이트
@@ -128,7 +125,7 @@ public class ChatHandler extends TextWebSocketHandler {
         userManage.put(session,data);
         // 방이 없으면 새로생성하고 좌석을 빈 상태로 초기화
         if(seatManage.get(data) == null) {
-            List<SeatDataDTO> seats = new ArrayList<>(Collections.nCopies(30, null));
+            List<SeatDataDTO> seats = new ArrayList<>(Collections.nCopies(6, null));
             // 첫번째 좌석에 유저를 배치
             seats.set(0,seatDataDTO);
             // 좌석정보 업데이트

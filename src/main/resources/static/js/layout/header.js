@@ -11,7 +11,7 @@ $(window).on('scroll', function () {
     }
 });
 
-const alarmSocket = new WebSocket("ws://192.168.112.46:8080/alarm");
+const alarmSocket = new WebSocket("ws://192.168.0.113:8080/alarm");
 let callStatus = false;
 const alarmSound = document.getElementById("alarmSound");
 
