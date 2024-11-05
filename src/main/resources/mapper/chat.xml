@@ -47,4 +47,21 @@
         UPDATE chat_room_tb SET last_message_date = #{lastMessageDate} WHERE id = #{id}
     </update>
 
+    <!-- 사람이 없으면 알람 등록 -->
+    <insert id="insertChatAlarm">
+        insert into alarm_tb (type,sender_id,receiver_id,content)
+        VALUES (#{type},#{senderId},#{receiverId},#{content})
+    </insert>
+
+    <!-- 알람 리스트 가져오기 -->
+    <select id="findAlarmList" resultType="com.example.amigo_project.dto.AlarmDTO">
+        select a.sender_id as senderId,a.receiver_id as receiverId,
+               u.nickname as senderName, u.profile as senderProfile,
+               a.content as content, a.created_at as createdAt
+               from alarm_tb as a
+        join user_tb as u
+        on a.sender_id = u.id
+        where a.sender_id = #{id}
+    </select>
+
 </mapper>

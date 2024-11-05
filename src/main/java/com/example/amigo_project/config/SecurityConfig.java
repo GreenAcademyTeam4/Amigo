@@ -16,14 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  
+
     @Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().disable()			//cors 방지
 			.csrf().disable()			//csrf 방지
 			.formLogin().disable()		//기본 로그인페이지 없애기
 			.headers().frameOptions().disable();
- 
+
 		return http.build();
 	}
 
@@ -31,5 +31,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

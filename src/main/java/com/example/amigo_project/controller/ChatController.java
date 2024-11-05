@@ -61,8 +61,9 @@ public class ChatController {
         if (friend.getProfile() == null) {
             // friend.setProfile(""); // 기본 프로필 이미지 설정 로직
         }
-
+        String profileImg = user.base64Encoding(friend.getProfile());
         // 방 번호와 상대방 정보, 사용자 정보, 이모티콘 목록 설정
+        model.addAttribute("opponentProfile",profileImg);
         model.addAttribute("roomKey", room.getId());
         model.addAttribute("opponent", friend);
         model.addAttribute("user", user);

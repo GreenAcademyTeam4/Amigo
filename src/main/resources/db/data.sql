@@ -34,8 +34,8 @@ values ('test7', '1234', '겨울6', '테스트7', '010-1234-5678', 'male', '27')
 
 -- 임시 데이터 학교
 INSERT INTO school_tb (id, name, region) VALUES
-(1,'ABC', 'Seoul'),
-(2,'XYZ', 'Busan');
+(1,'용문중학교', 'Seoul'),
+(2,'용호초등학교', 'Busan');
 
 -- 임시 데이터 유저 신고 (나중에 삭제하기)
 INSERT INTO user_report_tb (sender_user, receiver_user, category, content)
@@ -103,91 +103,172 @@ insert into charge_history_tb(user_id, order_name, order_id, point, total_amount
 ---- 임시 데이터 게시글
 
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트1', '테스트123123', 1);
+values (1, '궁금한게 있는데 물어봐도 되나요?', '채팅은 어디서 하나요?', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트2', '테스트124124', 1);
+values (1, '이거 점검이 언제인가요?', '점검 이후에 상점 이용할 수 있나요?', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트3', '테스트125125', 1);
+values (1, '채팅 기능 사용해 보신분?', '채팅 작동이 잘 되나요?', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트4', '테스트126126', 1);
+values (1, '기능 업데이트는 언제 하나요?', '곧 추가된다고 한거 같아서요', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트5', '테스트127127', 1);
+values (1, '게시글에 어떻게 문의하나요?', '문의 방법을 알려주세요', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트6', '테스트128128', 1);
+values (1, '혹시 ABC SCHOOL 맞나요', '반갑습니다.', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트7', '테스트129129', 1);
+values (1, '동창회 일정이 있나요?', '일정이 있나요?', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트8', '테스트120120', 1);
+values (1, '정기 모임도 하나요?', '모임이 있는지 궁금해서 질문합니다.', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테스트9', '테스트12121212', 1);
+values (1, '혹시 55회 졸업생분들 계신가요?', '55회 졸업생 분들?', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테', '테스트127127', 1);
+values (1, '가을 축제 리스트 올려요', '가을 축제 리스트는 1. XXX ', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '비가온다주륵주륵주륵주륵주륵', '주르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르르', 1);
+values (1, '등산 동호회 만들면 가입하실분 계신가요?', '동호회 만들기', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '오늘의 테스트', '얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍얍', 1);
+values (1, '혹시 xxx 선생님 은퇴하셨나요?', '궁금해서 물어봅니다.', 1);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테1', '테스트1271527', 2);
+values (1, 'ooo 선생님 담임이었던 분들 계신가요?', '옛날생각나서 게시글을 올립니다.', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테2', '테스트1427127', 2);
+values (1, '결제는 어디서 할수 있나요?', '결제를 어디서 하는지 몰라서 물어봅니다.', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테3', '테스트1278127', 2);
+values (1, '학교 주변 맛집 추천 부탁해요!!', '다음 모임 때 가볼까 해요!', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테4', '테스트1271278', 3);
+values (1, '이번 추억 사진 앨범 공유합니다.', '다들 함께 찍었던 사진들 있어요', 3);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테5', '테스트1271727', 3);
+values (1, '혹시 학교 운동장 개방 시간 아시나요?', '가끔 운동하러 가고 싶어서요.', 3);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테1', '테스트1276127', 2);
+values (1, '이제 다들 어떤 일 하시나요?', '각자 하는 일 공유해 봐요.', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테12', '테스트1271527', 2);
+values (1, '우리 반 추억의 선생님들 기억나세요?', '정말 즐거웠던 추억이었죠', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테13', '테스트1274127', 2);
+values (1, '55회 졸업생들 동창회 모임 만들까요?', '참여하실 분들 의견 부탁드려요.', 2);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테14', '테스트1273127', 3);
+values (1, '다음 모임 장소로 좋은 곳 추천 부탁드립니다.', '다음 모임에서 만날 장소로 어디가 좋을까요?', 3);
 
 ---- 임시 데이터 게시글
 insert into board_tb (school_id, title, content_location, user_id)
-values (1, '테테테테텥테15', '테스트1271272', 3);
+values (1, '추억 여행 겸 여행지 추천 부탁해요.', '옛 친구들과 가기 좋은 여행지 있으면 추천해 주세요.', 3);
+
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '동창회 일정 확정됐나요?', '모임 날짜 어떻게 됐는지 궁금합니다.', 1);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '졸업한 지 벌써 몇 년이네요!', '다들 어떻게 지내시나요?', 1);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '55회 졸업생 모임 있나요?', '참여하실 분들 있으신가요?', 1);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '학교 근처 맛집 추천 부탁드립니다.', '다음 모임 때 가볼까 해요!', 1);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '옛날 선생님들 소식 아시는 분?', '특히 ooo 선생님이 그립네요.', 1);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '이번 동창회 사진 모아봤어요.', '사진첩 공유합니다. 추억이네요!', 2);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '학교 운동장 개방 시간 아시나요?', '운동하러 가보고 싶어서요.', 2);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '졸업 후 첫 모임 계획해 볼까요?', '모두 모여서 즐거운 시간 가져요!', 2);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '이번에 동창회 회비는 얼마인가요?', '회비 정보 부탁드립니다.', 2);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '자녀분들 근황도 궁금하네요.', '다들 자녀들 이야기 좀 해요!', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '다음 모임 장소로 괜찮은 곳 있을까요?', '추천할 만한 장소 있으면 알려주세요.', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '추억 여행지 추천 부탁드려요.', '옛 친구들과 갈 만한 곳 알려주세요.', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '우리 반 추억의 이야기들 기억나세요?', '정말 즐거운 시간들이었죠.', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '동창 모임에서 있었던 에피소드', '정말 재밌었던 순간들 공유해요!', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '모임 후 뒷풀이 장소로 좋은 곳 추천해주세요.', '마무리 장소로 괜찮은 곳 아시는 분?', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '55회 졸업생 모임 만들까요?', '참여하고 싶으신 분들 알려주세요!', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '다음 모임에 참여하실 분들 모집합니다.', '같이 즐거운 시간 보내요!', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '졸업한 지 꽤 됐네요. 다들 보고 싶어요.', '오랜만에 모일 생각하니 설레네요.', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '혹시 우리 학교 근처 카페 추천해 주세요.', '모임 후 가볼 만한 곳 찾고 있어요.', 3);
+
+-- 임시 데이터 게시글
+insert into board_tb (school_id, title, content_location, user_id)
+values (2, '새로 생긴 동호회에 가입하실 분 있나요?', '같이 활동할 사람들 모아요!', 3);
 
 -- 댓글 테이블에 임시 데이터 삽입
 
@@ -368,17 +449,17 @@ INSERT INTO friend_tb (user_id, friend_id) VALUES
 (3, 1);
 
 -- 아바타 테이블에 샘플 데이터 삽입
-INSERT INTO avatar_tb (id, type, price, name) VALUES
-(1, 1, 500, '아프로 헤어'),
-(2, 1, 300, '양머리'),
-(3, 3, 700, '배기팬츠'),
-(4, 4, 400, '운동화'),
-(5, 1, 600, '롱 헤어'),
-(6, 3, 800, '정장 바지'),
-(7, 1, 400, '폭풍간지컷'),
-(8, 2, 700, '탱크톱'),
-(9, 3, 1200, '돌핀팬츠'),
-(10, 4, 600, '캔버스화');
+INSERT INTO avatar_tb (id, type, price, name,url) VALUES
+(1, 1, 500, '아프로 헤어','/image/avator/avatar1.jpg'),
+(2, 1, 300, '우주해적','/image/avator/avatar2.jpg'),
+(3, 1, 700, '하츠네미쿠','/image/avator/avatar3.png'),
+(4, 4, 400, '운동화',null),
+(5, 1, 600, '롱 헤어',null),
+(6, 3, 800, '정장 바지',null),
+(7, 1, 400, '폭풍간지컷',null),
+(8, 2, 700, '탱크톱',null),
+(9, 3, 1200, '돌핀팬츠',null),
+(10, 4, 600, '캔버스화',null);
 
 -- 유저 아이템 인벤토리 테이블에 샘플 데이터 삽입
 INSERT INTO inventory_tb (user_id, avatar_id) VALUES
@@ -453,4 +534,4 @@ INSERT INTO avatar_tb (id, type, price, name, url) VALUES
 -- 유저가 장착한 아바타
 INSERT INTO now_avatar_tb (user_id,head, top, bottom, shoes) VALUES
       (1,11,1,2,3),
-      (2,12,1,2,3);
+      (2,11,1,2,3);
