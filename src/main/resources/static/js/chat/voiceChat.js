@@ -6,7 +6,6 @@
     let microphoneEnabled = true;
     let enterSound = $('#enterSound');
     let exitSound = $('#exitSound');
-    enterSound.play();
     tryCall = true;
     const screen = $('.screen-area');
     const servers = {
@@ -15,7 +14,7 @@
         ]
     };
 
-    const voiceSocket = new WebSocket("ws://192.168.112.46:8080/signaling");
+    const voiceSocket = new WebSocket("ws://192.168.0.113:8080/signaling");
 
     global.friendId = friendId; // friendId를 전역 스코프에 설정
 
@@ -169,7 +168,6 @@
         peerConnection.close();
         document.querySelector(".user-video").srcObject = null;
         document.querySelector(".remote-video").srcObject = null;
-        exitSound.play();
         fetch("/board/list")
             .then(response => response.text())
             .then(data => {

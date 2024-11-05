@@ -138,7 +138,6 @@ function acceptInvitation(senderId) {
         });
     callStatus = true;
     $('.voice-chat').addClass('hide');
-    alarmSound.removeEventListener();
     alarmSound.pause();
     alarmSound.currentTime = 0;
 }
@@ -151,7 +150,6 @@ function declineInvitation(senderId) {
         content: 'refuse'
     }));
     $('.voice-chat').addClass('hide');
-    alarmSound.removeEventListener();
     alarmSound.pause();
     alarmSound.currentTime = 0;
 }

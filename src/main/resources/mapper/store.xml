@@ -6,7 +6,7 @@
 
     <!-- 기본 값, 전체 아바타 조회 -->
     <select id="readAllAvatarList" resultType="com.example.amigo_project.dto.StoreDTO$avatarListDTO">
-        SELECT a.id AS avatarId, a.type, a.name AS avatarName, a.price,
+        SELECT a.id AS avatarId, a.type, a.name AS avatarName, a.price, a.url,
         CASE WHEN i.avatar_id IS NOT NULL THEN true ELSE false END AS owned
         FROM avatar_tb a
         LEFT JOIN inventory_tb i ON a.id = i.avatar_id AND i.user_id = #{userId}

@@ -13,6 +13,9 @@
         {{#avatarList}}
             <div class="avatar-item">
                 <h3>{{avatarName}}</h3>
+                {{#url}}
+                <img src="{{url}}">
+                {{/url}}
                 <p>Type: {{type}}</p>
                 <p>Price: {{price}} points</p>
                 {{#owned}}

@@ -26,6 +26,7 @@ public class StoreDTO {
         private String avatarName;
         private boolean owned;
         private Integer price;
+        private String url;
     }
 
     @NoArgsConstructor

@@ -155,3 +155,13 @@ h1 {
     text-align: center;
     margin-top: 20px;
 }
+
+/* 이미지 크기 조절 */
+.avatar-item img {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px; /* 이미지 높이를 제한하여 카드에 맞게 조절 */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover; /* 이미지가 잘 맞도록 비율을 유지 */
+}

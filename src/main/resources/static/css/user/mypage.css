@@ -114,3 +114,25 @@
     border-bottom: 1px dashed #e6c6a6;
     padding-bottom: 5px;
 }
+
+/* 프로필 캐릭터 박스 */
+.charactor-box {
+    width: 100px; /* 고정된 너비 */
+    height: 100px; /* 고정된 높이 */
+    background-color: #fff8e1;
+    border: 3px solid #e6c6a6;
+    border-radius: 10px;
+    overflow: hidden; /* 컨테이너를 벗어나지 않도록 설정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* 프로필 이미지 스타일 */
+.charactor-box img {
+    width: 100%; /* 컨테이너에 맞춰 이미지 너비 조정 */
+    height: 100%; /* 컨테이너에 맞춰 이미지 높이 조정 */
+    object-fit: cover; /* 비율을 유지하면서 컨테이너에 맞게 자르기 */
+    border-radius: 5px; /* 이미지에 약간의 라운드 효과 */
+}

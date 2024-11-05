@@ -1,5 +1,6 @@
 package com.example.amigo_project.controller;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,26 +93,38 @@ public class MainController {
     }
 
     @GetMapping("/test2")
-    public String test2(Model model, HttpSession session) {
+    public String test2(Model model, HttpSession session) throws IOException {
         User user = userService.findUser(1);
+        byte[]profile = user.convertFileToBytes("static/image/avator/gojo.jpg");
+        user.setProfile(profile);
+        userService.insertUserProfile(user);
         session.setAttribute("principal", user);
+        String profileImg = user.base64Encoding(user.getProfile());
         List<User> onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<User> offlineFriends = userRepository.findOfflineFriends(user.getId());
         List<School> schoolList = userRepository.findUserSchool(user.getId());
         session.setAttribute("schoolId", schoolList.get(0).getId());
+        session.setAttribute("profile",profileImg);
+        model.addAttribute("userSchool", schoolList);
         model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("offlineFriendList", offlineFriends);
         return "index";
     }
 
     @GetMapping("/test3")
-    public String test3(Model model, HttpSession session) {
+    public String test3(Model model, HttpSession session) throws IOException {
         User user = userService.findUser(2);
+        byte[]profile = user.convertFileToBytes("static/image/avator/geto.jpg");
+        user.setProfile(profile);
+        userService.insertUserProfile(user);
         session.setAttribute("principal", user);
+        String profileImg = user.base64Encoding(user.getProfile());
         List<User> onlineFriends = userRepository.findOnlineFriends(user.getId());
         List<User> offlineFriends = userRepository.findOfflineFriends(user.getId());
         List<School> schoolList = userRepository.findUserSchool(user.getId());
         session.setAttribute("schoolId", schoolList.get(0).getId());
+        session.setAttribute("profile",profileImg);
+        model.addAttribute("userSchool", schoolList);
         model.addAttribute("onlineFriendList", onlineFriends);
         model.addAttribute("offlineFriendList", offlineFriends);
         return "index";
