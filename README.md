@@ -92,15 +92,15 @@ https://github.com/user-attachments/assets/1f6652ed-a614-459d-bd9d-e0fa3c752e71
 ### 화상채팅 (송원석)
 https://github.com/user-attachments/assets/78d61d22-c869-4a37-8138-c47d2f30c541
 
-### 어드민 (김민경)
- 용량이 커서 영상 업로드 x
- 
+### 관리자페이지 (김민경)
+https://github.com/user-attachments/assets/a61ddcd8-a491-4d5d-981c-0c4341671ad7
 
+https://github.com/user-attachments/assets/1a510171-f534-4686-bec3-df6f5077a908
 
 ---
 
 ## 📊 프로젝트 주요 링크
+[Amigo 프로젝트.pptx](https://github.com/user-attachments/files/17628260/Amigo.pptx)
 
-- [프로젝트 발표 자료 (PPT)]https://www.miricanvas.com/v/13updo3
 
 Amigo 프로젝트는 학창 시절의 추억을 되살리고 새로운 추억을 쌓을 수 있는 소셜 커뮤니티입니다.
