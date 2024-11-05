@@ -58,6 +58,15 @@ Amigo는 동창회와 친구 관리에 특화된 소셜 커뮤니티 플랫폼�
 
 ---
 
+<h2>영상</h2>
+
+<b>토스페이먼츠 결제 & 환불</b>
+![결제](https://github.com/user-attachments/assets/ccd4dfe4-d8ec-40e0-b7d9-ae1c0ab9ecf6)
+
+<b>1:1채팅</b>
+![대화](https://github.com/user-attachments/assets/ec066e79-cbed-4a1f-803d-c1aff836b30a)
+
+
 ## 📊 프로젝트 주요 링크
 
 - [프로젝트 발표 자료 (PPT)]https://www.miricanvas.com/v/13updo3
