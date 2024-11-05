@@ -58,14 +58,37 @@ Amigo는 동창회와 친구 관리에 특화된 소셜 커뮤니티 플랫폼�
 
 ---
 
-<h2>영상</h2>
+<h2>기능 영상</h2>
 
-### 토스페이먼츠 결제 & 환불 (이윤서)
-![결제](https://github.com/user-attachments/assets/ccd4dfe4-d8ec-40e0-b7d9-ae1c0ab9ecf6)
+### 로컬 회원가입 (박준수)
+https://github.com/user-attachments/assets/42e04fcb-5570-4dc7-a623-20ac4a23048c
+
+### 소셜 회원가입 (박준수)
+https://github.com/user-attachments/assets/76d1f595-06ef-46d7-b840-2c9946fbe5d7
+
+### 게시판 기능 (박정훈)
+https://github.com/user-attachments/assets/727c4811-d33a-4917-a76f-0abe57b83895
+
+### 마이페이지 상점, 친구 (도준영)
+https://github.com/user-attachments/assets/eb8545ee-18f1-41ba-8e38-a610aa8fb5ed
+
+### 토스페이먼츠 결제 및 환불 (이윤서)
+https://github.com/user-attachments/assets/466d66d3-88d3-452d-9f03-01ddd82df424
 
 ### 친구와의 1:1채팅 (이윤서)
-![대화](https://github.com/user-attachments/assets/ec066e79-cbed-4a1f-803d-c1aff836b30a)
+https://github.com/user-attachments/assets/45a13299-b447-43a2-bbd1-d3a9c0d8485d
 
+### 단체채팅 (송원석)
+https://github.com/user-attachments/assets/1f6652ed-a614-459d-bd9d-e0fa3c752e71
+
+### 화상채팅 (송원석)
+https://github.com/user-attachments/assets/78d61d22-c869-4a37-8138-c47d2f30c541
+
+### 어드민 (감민경)
+
+
+
+---
 
 ## 📊 프로젝트 주요 링크
 
