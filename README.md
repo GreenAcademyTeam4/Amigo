@@ -84,8 +84,8 @@ https://github.com/user-attachments/assets/1f6652ed-a614-459d-bd9d-e0fa3c752e71
 ### 화상채팅 (송원석)
 https://github.com/user-attachments/assets/78d61d22-c869-4a37-8138-c47d2f30c541
 
-### 어드민 (감민경)
-
+### 어드민 (김민경)
+ 용량이 커서 영상 업로드 x
 
 
 ---
