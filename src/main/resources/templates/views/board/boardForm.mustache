@@ -6,96 +6,103 @@
 </head>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-        padding: 20px;
-    }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
 
-    #boardForm {
-        max-width: 600px;
-        margin: 0 auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+#boardForm {
+    max-width: 6800px; /* 폭을 더 넓게 설정 900 */
+    width: 100%; /* 반응형으로 90%까지 차지 */
+    margin: 0 auto; /* 중앙 정렬 */
+    background: white;
+    padding: 20px; /* 내부 여백 확대 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+}
 
-    #boardForm h3 {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-    }
+#boardForm h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
 
-    #boardForm input[type="text"],
-    #boardForm textarea,
-    #boardForm input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        font-size: 1rem;
-    }
+#boardForm input[type="text"],
+#boardForm textarea,
+#boardForm input[type="file"] {
+    width: 100%; /* 입력 필드가 전체 너비를 차지 */
+    padding: 12px; /* 입력 필드 여백 확대 */
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* 패딩 포함한 크기 계산 */
+}
 
-    #boardForm button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+#boardForm button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    #boardForm button:hover {
-        background-color: #0056b3;
-    }
+#boardForm button:hover {
+    background-color: #0056b3;
+}
 
-    #uploadedImage {
-        margin-top: 15px;
-        text-align: center;
-    }
+#uploadedImage {
+    margin-top: 15px;
+    text-align: center;
+}
 
-    #uploadedImage img {
-        max-width: 100%;
-        height: auto;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
+#uploadedImage img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
 
-    #cancelButton, #submitButton {
-        width: 48%;
-        padding: 10px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+#cancelButton,
+#submitButton {
+    width: 48%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    #cancelButton {
-        background-color: #6c757d;
-        color: white;
-    }
+#cancelButton {
+    background-color: #6c757d;
+    color: white;
+}
 
-    #cancelButton:hover {
-        background-color: #5a6268;
-    }
+#cancelButton:hover {
+    background-color: #5a6268;
+}
 
-    #submitButton {
-        background-color: #28a745;
-        color: white;
-    }
+#submitButton {
+    background-color: #28a745;
+    color: white;
+}
 
-    #submitButton:hover {
-        background-color: #218838;
-    }
+#submitButton:hover {
+    background-color: #218838;
+}
 
-    .form-footer {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-    }
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+
 </style>
 
 
@@ -133,7 +140,7 @@
 <!--        <a href="/board/list">돌아가기</a>-->
 <!--    </div>-->
 <script>
-    let oEditors = [];
+    window.oEditors = [];
 
 // 스마트 에디터 초기화 함수
 function smartEditor() {

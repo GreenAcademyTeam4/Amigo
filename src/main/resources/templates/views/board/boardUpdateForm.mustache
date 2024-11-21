@@ -1,73 +1,148 @@
-<!-- Mustache 템플릿 예시 -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
     <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-    <!-- jQuery 라이브러리 추가 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        #boardForm {
+            max-width: 6800px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        #boardForm h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        #boardForm input[type="text"],
+        #boardForm textarea,
+        #boardForm input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        #boardForm button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #boardForm button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        #cancelButton {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        #cancelButton:hover {
+            background-color: #5a6268;
+        }
+
+        #submitButton {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #submitButton:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-
-<h3>Naver SmartEditor</h3>
-<form id="boardForm">
+<form id="boardForm" action="/board/update/{{board.id}}" method="post">
+    <h3>게시글 수정</h3>
     <div>
-        <h3>제목</h3>
+        <label for="title">제목</label>
         <input type="text" name="title" id="title" value="{{board.title}}" required>
         <input type="hidden" name="school_id" id="school_id" value="{{schoolId}}">
         <input type="hidden" name="user_id" id="user_id" value="{{userId}}">
     </div>
-    <div id="smarteditor">
-        <textarea name="content_location" id="editorText" rows="20" cols="10" placeholder="내용을 입력해주세요" style="width: 500px">
-            {{board.contentLocation}}
-        </textarea>
-    </div>
-
-<!--    <div>-->
-<!--        <button type="button" onclick="submitPost()">수정하기</button>-->
-<!--    </div>-->
-    <button type="button" id="submitButton" onclick="modifyPost('/board/update/{{board.id}}', 'boardForm')">수정 하기</button>
-
-</form>
 
     <div>
-        <a onclick="screenChanger('/board/list')">돌아가기</a>
+        <label for="editorText">내용</label>
+        <textarea name="content_location" id="editorText" rows="20" placeholder="내용을 입력해주세요">{{board.contentLocation}}</textarea>
     </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/board/boardMulti.js"> </script>
+
+    <div class="form-footer">
+        <button type="button" id="submitButton" onclick="modifyPost('/board/update/{{board.id}}', 'boardForm')">수정 완료</button>
+        <button type="button" id="cancelButton" onclick="screenChanger('/board/list')">목록으로 돌아가기</button>
+    </div>
+</form>
 
 <script>
-    let oEditors = [];
+    window.oEditors = [];
 
-    (function() {
-    // 스마트 에디터 초기화 함수
     function smartEditor() {
         nhn.husky.EZCreator.createInIFrame({
             oAppRef: oEditors,
-            elPlaceHolder: "editorText", // HTML의 textarea ID와 일치하도록 수정
+            elPlaceHolder: "editorText",
             sSkinURI: "/smarteditor/SmartEditor2Skin.html",
             fCreator: "createSEditor2"
         });
     }
 
-    // 문서가 준비되면 에디터를 초기화
-    $(document).ready(function() {
+    $(document).ready(function () {
         smartEditor();
     });
 
-
+    function modifyPost(url, formId) {
         oEditors.getById["editorText"].exec("UPDATE_CONTENTS_FIELD", []);
-        let content = $("#editorText").val();
+        const form = document.getElementById(formId);
 
-        if (content.trim() === '') {
+        const content = $("#editorText").val();
+        if (!content.trim()) {
             alert("내용을 입력해주세요.");
             oEditors.getById["editorText"].exec("FOCUS");
             return;
-        } else {
-            console.log(content);
         }
 
-    // 함수를 전역으로 노출
-    window.smartEditor = smartEditor;
-    window.modifyPost = modifyPost;
-})();
+        // 폼 데이터를 AJAX로 제출
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: $(form).serialize(),
+            success: function (response) {
+                alert("게시글이 성공적으로 수정되었습니다.");
+                screenChanger('/board/list');
+            },
+            error: function (error) {
+                console.error("게시글 수정 중 오류 발생:", error);
+                alert("게시글 수정에 실패했습니다.");
+            }
+        });
+    }
 </script>
-
 </body>
+</html>

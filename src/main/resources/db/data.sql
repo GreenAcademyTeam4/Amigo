@@ -281,44 +281,45 @@ VALUES ('공지사항 2', '두 번째 공지사항 내용입니다.', 0);
 
 
 -- 게시글 데이터 삽입
-INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
-VALUES (1, '첫11 번째 게시글', '첫 번째 게시글 내용 위치', 1, 100, 2, NOW()); -- 23
 
-INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
-VALUES (1, '두22 번째 게시글', '두 번째 게시글 내용 위치', 2, 150, 3, NOW()); -- 24
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes)
+VALUES (1, '첫11 번째 게시글', '첫 번째 게시글 내용 위치', 1, 100, 2); -- 23 43
 
-INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
-VALUES (1, '세33 번째 게시글', '세 번째 게시글 내용 위치', 3, 200, 4, NOW()); -- 25
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes)
+VALUES (1, '두22 번째 게시글', '두 번째 게시글 내용 위치', 2, 150, 3); -- 24 44
 
-INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
-VALUES (1, '네44 번째 게시글', '세 번째 게시글 내용 위치', 3, 300, 6, NOW()); -- 26
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes)
+VALUES (1, '세33 번째 게시글', '세 번째 게시글 내용 위치', 3, 200, 4); -- 25 45
 
-INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes, created_at)
-VALUES (1, '다섯55 번째 게시글', '세 번째 게시글 내용 위치', 4, 250, 7, NOW()); -- 27
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes)
+VALUES (1, '네44 번째 게시글', '세 번째 게시글 내용 위치', 3, 300, 6); -- 26
+
+INSERT INTO board_tb (school_id, title, content_location, user_id, view_count, likes)
+VALUES (1, '다섯55 번째 게시글', '세 번째 게시글 내용 위치', 4, 250, 7); -- 27
 
 -- like_tb 데이터 삽입
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 23, NOW()); -- 첫 번째 게시글을 좋아요한 유저 1
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 23, NOW()); -- 첫 번째 게시글을 좋아요한 유저 2
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 3
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 4
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 24, NOW()); -- 두 번째 게시글을 좋아요한 유저 1
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 1
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 2
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 3
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 25, NOW()); -- 세 번째 게시글을 좋아요한 유저 4
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 1
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 2
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 3
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 4
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 5
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 26, NOW()); -- 네 번째 게시글을 좋아요한 유저 6
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 1
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 2
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 3
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 4
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 5
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 6
-INSERT INTO like_tb (user_id, board_id, created_at) VALUES (7, 27, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 7
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 43, NOW()); -- 첫 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 43, NOW()); -- 첫 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 44, NOW()); -- 두 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 44, NOW()); -- 두 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 44, NOW()); -- 두 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 45, NOW()); -- 세 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 45, NOW()); -- 세 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 45, NOW()); -- 세 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 45, NOW()); -- 세 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 5
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 46, NOW()); -- 네 번째 게시글을 좋아요한 유저 6
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (1, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 1
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (2, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 2
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (3, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 3
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (4, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 4
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (5, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 5
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (6, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 6
+INSERT INTO like_tb (user_id, board_id, created_at) VALUES (7, 47, NOW()); -- 다섯 번째 게시글을 좋아요한 유저 7
 
 
 
