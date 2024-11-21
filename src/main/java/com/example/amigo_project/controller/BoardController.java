@@ -31,7 +31,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.amigo_project.dto.BoardDTO;
 import com.example.amigo_project.dto.CommentDTO;
-import com.example.amigo_project.repository.model.Comment;
 import com.example.amigo_project.service.BoardService;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.Blob;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,7 +163,8 @@ public class BoardController {
 
         return "views/board/boardList";  // boardList.mustache를 반환
     }
-    /**
+    
+   /**
      * 게시글 상세 보기
      * @param boardId
      * @param model
@@ -171,11 +172,10 @@ public class BoardController {
      */
     @GetMapping("/detail/{id}")
     public String getBoardDetail(@PathVariable("id") int boardId, Model model,
-                                 @RequestParam(name = "page", defaultValue = "1") int page,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
                                  @RequestParam(name = "size", defaultValue = "5") int size) {
 
-        System.out.println("page : " + page);
-        System.out.println("size : " + size);
+     //   int userId = 1; // 나중에 세션에서 사용자 ID를 가져옴
 
         // 세션에서 현재 로그인된 사용자 정보 가져오기
         User principal = (User) session.getAttribute("principal");
@@ -211,6 +211,8 @@ public class BoardController {
         int likeCount = boardService.getLikeCount(boardId);
         model.addAttribute("likeCount", likeCount);
 
+
+
         // 게시글 id를 기준으로 정보 가져오기
         BoardDTO board = boardService.getBoardById(boardId);
         board.getFormattedCreatedAt();
@@ -218,34 +220,35 @@ public class BoardController {
 
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
-        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, page-1, size);
-        int totalComments = boardService.getTotalCommentsByBoardId(boardId); // 게시글 댓글 총 갯수
-        int totalPages = (int) Math.ceil((double) totalComments / size); // 댓글 총 갯수 / 4
+        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
+        int totalComments = boardService.getTotalCommentsByBoardId(boardId);
+        int totalPages = (int) Math.ceil((double) totalComments / size);
 
         System.out.println("comment 게시글 상세보기 : " + comment);
 
-        // timestamp 전부 포맷시켜주기
-        for(CommentDTO a : comment) {
-            a.getFormattedCreatedAt();
-           if(a.getUserId() == userId) {
-               System.out.println("게시글 판별 작동 Controller");
-               a.setCommentAuthor(true);
-           }
-        }
 
-        model.addAttribute("board", board);
-        model.addAttribute("comment", comment);
-        model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
-        model.addAttribute("board", board);
-        model.addAttribute("comment", comment);
-        System.out.println("총 페이지 수 : " + totalPages);
-        System.out.println("현재 페이지 : " + page);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+       // 댓글 작성자 여부 확인
+    for (CommentDTO c : comment) {
+        c.setCommentAuthor(c.getUserId() == userId); // 본인 여부 설정
+        
+        c.getFormattedCreatedAt(); // 포맷팅된 날짜 설정
+        System.out.println("Comment ID: " + c.getId() + ", User ID: " + c.getUserId() + ", isCommentAuthor: " + isAuthor);
+    }
+    
+
+    model.addAttribute("board", board);
+    model.addAttribute("comment", comment);
+    model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
+    System.out.println("총 페이지 수 : " + totalPages);
+    System.out.println("현재 페이지 : " + page);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+
+        System.out.println("totalPages : " + totalPages);
+        System.out.println("currentPage : " + page);
 
         return "views/board/boardDetail";
     }
-
 
     /**
      * 뷰에서 답글 버튼 선택시 비동기적으로 답글 조회
@@ -291,19 +294,24 @@ public class BoardController {
         return ResponseEntity.ok(replyList == null ? "댓글이 삭제되었거나 답글 작성 중 오류가 발생하였습니다." : replyList);
     }
 
-
-    /**
-     * 댓글 전송 (비동기 처리) 
+/**
+     * 댓글 전송
      */
     @PostMapping("/comment")
-    public ResponseEntity<?> insertComment(@RequestParam(name = "boardId") int boardId,
-                                           @RequestParam(name = "content") String content,
-                                           HttpSession session) {
+    public String insertComment(
+            @RequestParam(name = "boardId") int boardId,
+            @RequestParam(name = "content") String content,
+            RedirectAttributes redirectAttributes) {
+
+       // int userId = 1; // 나중에 유저 세션에서 가져옴
 
         // 세션에서 현재 로그인된 사용자 정보 가져오기
         User principal = (User) session.getAttribute("principal");
         int userId = principal.getId();
         System.out.println("principal : " + userId);
+
+
+
         Comment dto = Comment
                 .builder()
                 .boardId(boardId)
@@ -312,17 +320,12 @@ public class BoardController {
                 .build();
 
         boardService.insertComment(dto);
-        
+        System.out.println("commentDTO : " + dto);
 
-        List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, 0, 5);
-        List<CommentDTO> replyList = boardService.findCommentsByBoardId(boardId);
-        
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("comment", comment);
-        responseData.put("replyList", replyList);
-        
-        
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
+        redirectAttributes.addFlashAttribute("message", "댓글이 성공적으로 등록되었습니다!");
+
+        // 댓글 등록 후 해당 게시글 상세 페이지로 리다이렉트
+        return "redirect:/board/detail/" + boardId;
     }
 
     /**
@@ -467,12 +470,10 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable("commentId") int commentId) {
         Map<String, Object> response = new HashMap<>();
-        System.out.println("댓글 삭제 처리중!!!!!");
         try {
             // 댓글 삭제 처리
             boardService.deleteCommentById(commentId);
             response.put("success", true);
-            System.out.println("댓글 삭제 처리완료!!!!!!!!");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -585,17 +586,17 @@ public class BoardController {
             // option 에서 선택된 것이 있다면
             switch (searchType) {
                 case "nickname": // "닉네임" 검색
-                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, offset, size);
+                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page, size);
                     totalCount = boardService.countSearchBoardsByNickname(schoolId, keyword);
                     break;
 
                 case "titleContent": // "제목 + 내용" 검색
-                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, offset, size);
+                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page, size);
                     totalCount = boardService.countSearchBoardsByTitleContent(schoolId, keyword);
                     break;
 
                 case "title": // "제목" 검색
-                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, offset, size);
+                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page, size);
                     totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
                     break;
                
@@ -623,59 +624,97 @@ public class BoardController {
     }
 
     /**
-     * 좋아요 추가 하기
-     * @param boardId
-     * @return
+     * 페이징 처리해서 Get방식으로 리스트 확인 
+     * 게시판에서 검색했을 시 작동하는 기능
      */
-    @PostMapping("/like/{boardId}")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> addLike(@PathVariable int boardId) {
-
-        // 세션에서 현재 로그인된 사용자 정보 가져오기
-        User principal = (User) session.getAttribute("principal");
-        int userId = principal.getId();
-        System.out.println("principal : " + userId);
-
-
-//        int userId = 1; // 세션에서 가져올 예정
-        boardService.addLike(userId, boardId);
-
-        int likeCount = boardService.getLikeCount(boardId);
-        boardService.updateLikesCount(boardId, likeCount);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("likeCount", likeCount);
-
-        return ResponseEntity.ok(response);
+    @GetMapping("/search")
+    public String searchBoardGet(
+            @RequestParam(name = "searchType") String searchType,
+            @RequestParam(name = "keyword") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "4") Integer size,
+            Model model) {
+        int totalCount = 0;
+        List<BoardDTO> searchResults = new ArrayList<>();
+        int schoolId = (Integer) session.getAttribute("schoolId");
+    
+        try {
+            if (page < 0) page = 0;
+    
+            // 검색 로직
+            switch (searchType) {
+                case "nickname":
+                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page, size);
+                    totalCount = boardService.countSearchBoardsByNickname(schoolId, keyword);
+                    break;
+                case "titleContent":
+                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page, size);
+                    totalCount = boardService.countSearchBoardsByTitleContent(schoolId, keyword);
+                    break;
+                case "title":
+                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page, size);
+                    totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
+                    break;
+            }
+    
+            int totalPages = (int) Math.ceil((double) totalCount / size);
+    
+            for (BoardDTO a : searchResults) {
+                a.getFormattedCreatedAt();
+            }
+    
+            model.addAttribute("boardList", searchResults);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("keyword", keyword.trim());
+            model.addAttribute("searchType", searchType);
+    
+            return "views/board/boardSearch";
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "검색 중 오류가 발생했습니다. 다시 시도해주세요.");
+            return "views/board/error";
+        }
     }
 
-    /**
-     * 좋아요 삭제 하기
-     * @param boardId
-     * @return
-     */
-    @DeleteMapping("/like/{boardId}")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> removeLike(@PathVariable int boardId) {
 
-        // 세션에서 현재 로그인된 사용자 정보 가져오기
-        User principal = (User) session.getAttribute("principal");
-        int userId = principal.getId();
-        System.out.println("principal : " + userId);
+  /**
+ * 좋아요 상태 토글
+ * @param boardId 게시글 ID
+ * @return 좋아요 상태 및 개수
+ */
+@PostMapping("/like/{boardId}")
+@ResponseBody
+public ResponseEntity<Map<String, Object>> toggleLike(@PathVariable int boardId) {
+    // 세션에서 현재 로그인된 사용자 정보 가져오기
+    User principal = (User) session.getAttribute("principal");
+    int userId = principal.getId();
 
-//        int userId = 1; // 세션에서 가져올 예정
-        boardService.removeLike(userId, boardId);
+    // 현재 좋아요 상태 가져오기
+    boolean hasLiked = boardService.existsLike(userId, boardId);
 
-        int likeCount = boardService.getLikeCount(boardId);
-        boardService.updateLikesCount(boardId, likeCount);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("likeCount", likeCount);
-
-        return ResponseEntity.ok(response);
+    // 좋아요 상태 토글
+    if (hasLiked) {
+        boardService.removeLike(userId, boardId); // 좋아요 제거
+    } else {
+        boardService.addLike(userId, boardId); // 좋아요 추가
     }
+
+    // 현재 좋아요 개수 가져오기
+    int likeCount = boardService.getLikeCount(boardId);
+
+    // 응답 데이터 생성
+    Map<String, Object> response = new HashMap<>();
+    response.put("success", true);
+    response.put("hasLiked", !hasLiked); // 변경된 상태
+    response.put("likeCount", likeCount);
+
+    return ResponseEntity.ok(response);
+}
+
+
+
 
     /**
      * "조회가 많은 게시글" 을 클릭했을 시 조회가 많은 순서대로 게시글이 나열된다.
@@ -776,8 +815,6 @@ public class BoardController {
                                @RequestParam(name = "size", defaultValue = "4") Integer size // 몇번째 부터 끊을 건지
     ) {
 
-        System.out.println("1212");
-
         User principal = (User) session.getAttribute("principal");
         System.out.println("Principal : " + principal);
 
@@ -799,7 +836,7 @@ public class BoardController {
         }
 
         model.addAttribute("boardList", boardList);
-        model.addAttribute("schoolId", schoolId);
+        model.addAttribute("schoolSessionId", schoolId);
 
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page); // 현재 페이지 (0부터 시작이므로 +1)

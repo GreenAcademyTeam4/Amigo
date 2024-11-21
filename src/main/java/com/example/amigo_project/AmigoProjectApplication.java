@@ -9,6 +9,4 @@ public class AmigoProjectApplication {
     public static void main(String[] args) {
         SpringApplication.run(AmigoProjectApplication.class, args);
     }
-
-
 }

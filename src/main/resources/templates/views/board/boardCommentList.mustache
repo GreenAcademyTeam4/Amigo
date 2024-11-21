@@ -13,19 +13,18 @@
     </div>
 
     <div class="content mt-5">
-        <!-- 글쓰기 버튼과 검색창 -->
+      <!-- 글쓰기 버튼과 검색창 -->
         <div class="search-bar mb-4">
-            <form action="/board/search" method="get" class="input-group" style="max-width: 600px;">
-                <select name="searchType" class="form-select" required>
+            <form id="searchForm" class="input-group" style="max-width: 600px;">
+                <select name="searchType" id="searchType" class="form-select" style="max-width: 100px;" required>
                     <option value="title">제목</option>
                     <option value="nickname">닉네임</option>
                     <option value="titleContent">제목 + 내용</option>
                 </select>
-                <input type="search" name="keyword" class="form-control" placeholder="검색어를 입력하세요">
-                <button class="btn btn-outline-secondary" type="submit">
+                <input type="search" name="keyword" id="keyword" class="form-control" placeholder="검색어를 입력하세요" aria-label="Search">
+                <button class="btn-search" type="button" id="searchButton">
                     <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="검색 아이콘" style="width: 20px;">
                 </button>
-                <button class="btn btn-outline-secondary ml-2" type="button" onclick="window.location.href='/board/list';">닫기</button>
             </form>
         </div>
 
@@ -75,47 +74,63 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/board/boardMulti.js"></script>
+<script src="/js/board/boardList.js"></script>
 
 <script>
-    let totalPages = {{totalPages}};
-    let initialPage = {{currentPage}};
+   // Pagination 데이터 저장 객체
+window.paginationData = {
+    totalPages: {{totalPages}}, // Mustache에서 받아오는 totalPages 값
+    currentPage: {{currentPage}} // Mustache에서 받아오는 currentPage 값
+};
 
-    function fetchBoardPage(page) {
-        console.log("Fetching board page:", page);
-        fetch(`/board/bestcomment?offset=${page}&size=4`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('.board-container').innerHTML = html;
-                updatePagination(page);
-            })
-            .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
-    }
+function fetchBoardPage(page) {
+    console.log("Fetching board page:", page);
+    fetch(`/board/bestcomment?offset=${page}&size=4`)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.board-container').innerHTML = html;
 
-    function updatePagination(currentPage) {
-        const paginationContainer = document.getElementById('pagination-container');
-        paginationContainer.innerHTML = '';
+            // 현재 페이지 업데이트
+            window.paginationData.currentPage = page;
+            updatePagination(page);
+        })
+        .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
+}
 
-        for (let i = 0; i < totalPages; i++) {
-            const button = document.createElement('button');
-            button.textContent = i + 1;
-            button.classList.add('page-button');
-            console.log('버튼 생성');
+function updatePagination(currentPage) {
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = '';
 
-            if (i === currentPage - 1) {
-                button.classList.add('active');
-            }
+    // Total Pages 가져오기
+    const totalPages = window.paginationData.totalPages;
 
-            button.addEventListener('click', () => fetchBoardPage(i + 1));
-            paginationContainer.appendChild(button);
+    for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i + 1;
+        button.classList.add('page-button');
+        console.log('버튼 생성');
+
+        if (i === currentPage - 1) {
+            button.classList.add('active');
         }
+
+        button.addEventListener('click', () => fetchBoardPage(i + 1));
+        paginationContainer.appendChild(button);
     }
+}
 
-    $(document).ready(function() {
-        console.log('페이지네이션 초기화');
-        console.log("Total Pages:", totalPages, "Initial Page:", initialPage);
-        updatePagination(initialPage);
-    });
+$(document).ready(function () {
+    console.log('페이지네이션 초기화');
+    console.log(
+        "Total Pages:",
+        window.paginationData.totalPages,
+        "Initial Page:",
+        window.paginationData.currentPage
+    );
 
+    // 초기 페이지네이션 세팅
+    updatePagination(window.paginationData.currentPage);
+});
 
 </script>
 
