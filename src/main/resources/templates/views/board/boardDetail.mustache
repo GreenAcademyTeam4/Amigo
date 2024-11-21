@@ -5,333 +5,240 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세보기</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/board/boardDetail.css">
+
 </head>
 
 <body>
 <div class="container">
-    <!-- 상단 버튼 섹션 -->
-    <div class="top-buttons d-flex justify-content-between mb-3">
-        <a class="btn btn-primary" onclick="screenChanger('/board/list')" >목록으로 돌아가기</a>
-        <div>
-
-        <!-- 작성자만 삭제/수정 버튼을 볼 수 있음 -->
-        {{#isAuthor}}
-            <button type="button" class="btn btn-danger" onclick="screenDelete('/board/delete/{{board.id}}')">게시글 삭제</button>
-            <!--            <form action="/board/delete/{{board.id}}" method="post" class="d-inline">-->
-            <!--                <button type="submit" class="btn btn-danger">게시글 삭제</button>-->
-            <!--            </form>-->
-
-            <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
-
-            <!--            <form onclick = "screenChanger('/board/update/{{board.id}}')" method="get" >-->
-            <!--                <button type="submit" class="btn btn-secondary">게시글 수정하기</button>-->
-            <!--            </form>-->
-
-            <!-- 게시글 본문 아래 신고 버튼 추가 -->
-           <button> <a onclick = "screenChanger('/board/update/{{board.id}}')" class="d-inline">게시글 수정하기</a> </button>
-        {{/isAuthor}}
-
-        <!-- 게시글 본문 아래 신고 버튼 추가 -->
-        {{^isAuthor}}
-            <div class="report-section text-center mt-3">
-                <button id="report-button" class="btn btn-warning" onclick="reportPost({{board.id}})">신고하기</button>
-            </div>
-        {{/isAuthor}}
-        </div>
-    </div>
-
-    <!-- 게시글 본문 -->
-    <div class="board-card board-header text-center">
-        <h1>{{board.title}}</h1>
-        <p class="board-info">
-            <strong>작성자 ID:</strong> {{board.userId}} |
-            <strong>학교 ID:</strong> {{board.schoolId}} |
-            <strong>닉네임:</strong> {{board.nickname}} |
-            <strong>작성일자:</strong> {{board.createdAtFormat}}
-        </p>
-
-        <div class="board-content">
-
-            {{#board.image}}
-                <img src="data:image/jpeg;base64,{{board.image}}" style="width: 300px; height: auto; object-fit: contain;"  alt="Board Image">
-            {{/board.image}}
-
-            {{^board.image}}
-            {{/board.image}}
-
-            <p><strong>내용:</strong> {{board.contentLocation}}</p>
-
-        </div>
-    </div>
-
-    <!-- 좋아요 섹션 -->
-    <div class="like-section text-center mt-3">
-        <img id="like-icon" class="like-icon {{#hasLiked}}liked{{/hasLiked}}" src="{{#hasLiked}}/image/board/full.png{{/hasLiked}}{{^hasLiked}}/image/board/empty.png{{/hasLiked}}"
-             alt="좋아요 아이콘" onclick="toggleLike()">
-        <!--        <span><strong>좋아요:</strong> <span id="like-count">{{likeCount}}</span></span>-->
-        <span><strong>좋아요:</strong> <span id="like-count">{{board.likes}}</span></span>
-    </div>
-
-
-<div class="comments mt-5" id="comments-section">
-    <h3>댓글 목록</h3>
-    {{#comment}}
-        <div class="comment" id="comment-{{id}}">
-            <div class="comment-header">
-                <p><strong>작성자:</strong> {{nickname}}</p>
-                <p><small>작성일자: {{createdAtFormat}}</small></p>
-            </div>
-
-            <div class="comment-body">
-                <p id="content-{{id}}">{{content}}</p>
-            </div>
-
-            {{#CommentAuthor}}
-                <div class="comment-actions">
-                    <button onclick="confirmDeleteComment({{id}})" class="btn btn-danger btn-sm">🗑</button>
-                    <button onclick="showEditForm({{id}})" class="btn btn-link btn-sm">수정</button>
-                </div>
-            {{/CommentAuthor}}
-
-            <!-- 답글 보기 버튼 -->
-            <div class="replies-toggle">
-                <button class="btn btn-link" onclick="toggleReplies({{id}})">
-                    답글보기 ({{replyCount}})
-                </button>
-            </div>
-
-            <!-- 답글 섹션 -->
-            <div class="replies" id="replies-{{id}}" style="display: none;">
-                <!-- 답글 리스트 -->
-                <div id="reply-list-{{id}}"></div>
-
-                <!-- 답글 작성 폼 -->
-                <div class="reply-form mt-3">
-                    <textarea class="form-control" id="replyContent-{{id}}" rows="2" placeholder="답글을 입력하세요..."></textarea>
-                    <button class="btn btn-success mt-2" onclick="submitReply({{boardId}}, {{id}})">답글 등록</button>
+    <div class="content-wrapper">
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- 상단 버튼 섹션 -->
+            <div class="top-buttons d-flex justify-content-between mb-3">
+                <a class="btn btn-primary" onclick="screenChanger('/board/list')">목록으로 돌아가기</a>
+                <div>
+                    {{#isAuthor}}
+                        <button type="button" class="btn btn-danger" onclick="screenDelete('/board/delete/{{board.id}}')">게시글 삭제</button>
+                        <button onclick="screenChanger('/board/update/{{board.id}}')" class="btn btn-secondary">게시글 수정하기</button>
+                    {{/isAuthor}}
+                    {{^isAuthor}}
+                        <div class="report-section text-center mt-3">
+                            <button id="report-button" class="btn btn-warning" onclick="reportPost({{board.id}})">신고하기</button>
+                        </div>
+                    {{/isAuthor}}
                 </div>
             </div>
-        </div>
-        <hr>
-    {{/comment}}
-    {{^comment}}
-        <p>댓글이 없습니다.</p>
-    {{/comment}}
-</div>
 
-<!-- 댓글 작성 폼 -->
-<div class="comment-form">
-    <h3>댓글 달기</h3>
-    <form id="comment-form" onsubmit="submitComment(event, {{board.id}});">
-        <input type="hidden" name="boardId" value="{{board.id}}">
-        <div class="form-group">
-            <label for="commentContent">댓글 내용</label>
-            <textarea class="form-control" id="commentContent" name="content" rows="3" required></textarea>
+            <!-- 게시글 본문 -->
+            <div class="board-card">
+                <h1 class="board-title">{{board.title}}</h1>
+                <p class="board-meta">
+                    <strong>닉네임:</strong> {{board.nickname}} |
+                    <strong>작성일자:</strong> {{board.createdAtFormat}}
+                </p>
+
+                <div class="board-content">
+                    {{#board.image}}
+                        <div class="board-image">
+                            <img src="data:image/jpeg;base64,{{board.image}}" alt="Board Image">
+                        </div>
+                    {{/board.image}}
+
+                    <p>{{board.contentLocation}}</p>
+                </div>
+            </div>
+
+            <!-- 좋아요 섹션 -->
+            <div class="like-section">
+                <img id="like-icon" class="like-icon {{#hasLiked}}liked{{/hasLiked}}" 
+                     src="{{#hasLiked}}/image/board/full.png{{/hasLiked}}{{^hasLiked}}/image/board/empty.png{{/hasLiked}}" 
+                     alt="좋아요 아이콘" onclick="toggleLike()">
+                <span><strong>좋아요:</strong> <span id="like-count">{{board.likes}}</span></span>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div class="comments">
+                <h3>댓글 목록</h3>
+                {{#comment}}
+                <div class="comment" id="comment-{{id}}">
+                    <div class="comment-header">
+                        <p><strong>작성자:</strong> {{nickname}}</p>
+                        <p><small>작성일자: {{createdAtFormat}}</small></p>
+                    </div>
+                    <div class="comment-body">
+                        <p id="content-{{id}}">{{content}}</p>
+                    </div>
+
+                    <!-- 본인 댓글일 경우 수정/삭제 버튼 표시 -->
+                    {{#isCommentAuthor}}
+                    <div class="comment-actions">
+                        <button onclick="confirmDeleteComment({{id}})" class="btn btn-danger btn-sm">🗑</button>
+                        <button onclick="showEditForm({{id}})" class="btn btn-link btn-sm">수정</button>
+                    </div>
+                    <div id="edit-form-{{id}}" style="display: none; margin-top: 10px;">
+                        <textarea id="edit-content-{{id}}" rows="3" class="form-control">{{content}}</textarea>
+                        <button onclick="updateComment({{id}})" class="btn btn-success mt-2">수정 완료</button>
+                    </div>
+                    {{/isCommentAuthor}}
+                </div>
+                <hr>
+                {{/comment}}
+                {{^comment}}
+                <p>댓글이 없습니다.</p>
+                {{/comment}}
+            </div>
+
+            <!-- 댓글 작성 폼 -->
+            <div class="comment-form">
+                <form id="comment-form" onsubmit="submitComment(event, {{board.id}});">
+                    <input type="hidden" name="boardId" value="{{board.id}}">
+                    <div class="form-group">
+                        <label for="commentContent"></label>
+                        <textarea class="form-control" id="commentContent" name="content" rows="3" required></textarea>
+                    </div>
+                    <div class="form-footer text-right">
+                        <button type="submit" class="btn btn-success">댓글 등록</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-footer text-right">
-            <button type="submit" class="btn btn-success">댓글 등록</button>
-        </div>
-    </form>
+    </div>
 </div>
+</body>
 
 <script>
-  // 댓글 등록 함수 (비동기)
 
+   // 좋아요 버튼 클릭 시 작동하는 함수
+function toggleLike() {
+    const boardId = {{board.id}}; // Mustache에서 board.id 값 가져옴
+    const likeIcon = document.getElementById('like-icon');
+    const likeCountSpan = document.getElementById('like-count');
 
-function submitComment(event, boardId) {
-    event.preventDefault(); // 폼의 기본 제출 동작을 막음
-
-    const commentContent = document.getElementById("commentContent").value;
-
-    if (!commentContent.trim()) {
-        alert('댓글 내용을 입력해주세요.');
+    if (!likeIcon || !likeCountSpan) {
+        console.error('Like icon or like count span not found in the DOM.');
         return;
     }
 
-    const formData = new FormData();
-    formData.append('boardId', boardId);
-    formData.append('content', commentContent);
-
-    fetch('/board/comment', {
+    const url = `/board/like/${boardId}`;
+    fetch(url, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
-    .then(response => response.json())
-    .then(data => {
-        if (Array.isArray(data.comment)) {  // data.comment 배열을 확인
-            const commentsSection = document.getElementById('comments-section');
-            commentsSection.innerHTML = ''; // 기존 댓글 목록 초기화
-
-            // 새로운 댓글 목록 렌더링
-            data.comment.forEach(comment => {
-                const commentElement = `
-                    <div class="comment" id="comment-${comment.id}">
-                        <div class="comment-header">
-                            <p><strong>작성자:</strong> ${comment.nickname}</p>
-                            <p><small>작성일자: ${comment.createdAtFormat}</small></p>
-                        </div>
-                        <div class="comment-body">
-                            <p id="content-${comment.id}">${comment.content}</p>
-                        </div>
-                        ${comment.isAuthor ? `
-                        <div class="comment-actions">
-                            <button onclick="confirmDeleteComment(${comment.id})" class="btn btn-danger btn-sm">🗑</button>
-                            <button onclick="showEditForm(${comment.id})" class="btn btn-link btn-sm">수정</button>
-                        </div>` : ''}
-                        <!-- 답글 보기 버튼 -->
-                        ${comment.replyCount >= 0 ? `
-                        <div class="replies-toggle">
-                            <button class="btn btn-link" onclick="toggleReplies(${comment.id})">
-                                답글보기 (${comment.replyCount})
-                            </button>
-                        </div>` : ''}
-                        <!-- 답글 섹션 -->
-                        <div class="replies" id="replies-${comment.id}" style="display: none;">
-                            <!-- 답글 리스트 -->
-                            <div id="reply-list-${comment.id}"></div>
-                            <!-- 답글 작성 폼 -->
-                            <div class="reply-form mt-3">
-                                <textarea class="form-control" id="replyContent-${comment.id}" rows="2" placeholder="답글을 입력하세요..."></textarea>
-                                <button class="btn btn-success mt-2" onclick="submitReply(${boardId}, ${comment.id})">답글 등록</button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                `;
-                commentsSection.innerHTML += commentElement;
-    function deleteComment(commentId) {
-        fetch(`/board/reply/delete/${commentId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('댓글이 성공적으로 삭제되었습니다.');
-                    const commentElement = document.getElementById(`comment-${commentId}`);
-                    if (commentElement) {
-                        console.log("댓글 삭제완료!!!!!");
-                        commentElement.remove();
-                    }
-                } else {
-                    alert('댓글 삭제에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버 오류로 댓글 삭제에 실패했습니다.');
-            });
-
-            document.getElementById("commentContent").value = ''; // 입력 필드 초기화
-        } else {
-            alert('댓글 등록에 실패했습니다.');
-        }
-    })
-    .catch(error => {
-        console.error('댓글 등록 중 오류 발생:', error);
-        alert('서버 오류로 인해 댓글 등록에 실패했습니다.');
-    });
-}
-
-
-
-
-
-// 답글 보기 토글 함수
-function toggleReplies(commentId) {
-    const repliesSection = document.getElementById(`replies-${commentId}`);
-    const isHidden = repliesSection.style.display === 'none';
-    
-    // 답글 가져오기
-    if (isHidden) {
-        fetchReplies(commentId);
-    }
-    
-    // 답글 섹션 표시 토글
-    repliesSection.style.display = isHidden ? 'block' : 'none';
-}
-
-// 댓글에 대한 답글 가져오기
-function fetchReplies(commentId) {
-    fetch(`/board/nested-comment?boardId={{board.id}}&parentId=${commentId}`)
         .then(response => response.json())
         .then(data => {
-            const replyList = document.getElementById(`reply-list-${commentId}`);
-            replyList.innerHTML = ''; // 기존 답글 목록 초기화
-
-            // 답글이 있을 경우 답글 렌더링
-            if (Array.isArray(data) && data.length > 0) {
-                data.forEach(reply => {
-                    const replyElement = `
-                        <div class="reply" id="reply-${reply.id}">
-                            <p><strong>작성자:</strong> ${reply.nickname}</p>
-                            <p>${reply.content}</p>
-                            <p><small>작성일자: ${reply.createdAtFormat}</small></p>
-                        </div>
-                        <hr>
-                    `;
-                    replyList.innerHTML += replyElement;
-                });
+            if (data.success) {
+                // 서버에서 반환된 좋아요 상태와 개수로 UI 업데이트
+                likeCountSpan.textContent = data.likeCount;
+                if (data.hasLiked) {
+                    likeIcon.classList.add('liked');
+                    likeIcon.src = '/image/board/full.png'; // 좋아요 활성화 아이콘 변경
+                } else {
+                    likeIcon.classList.remove('liked');
+                    likeIcon.src = '/image/board/empty.png'; // 좋아요 비활성화 아이콘 변경
+                }
             } else {
-                // 답글이 없을 때도 답글 작성 폼이 표시되도록 빈 메시지를 추가
-                replyList.innerHTML = `<p>답글이 없습니다. 첫 답글을 작성해보세요!</p>`;
+                console.error('좋아요 상태 변경 실패');
             }
         })
-        .catch(error => console.error('답글 가져오기 중 오류 발생:', error));
+        .catch(error => {
+            console.error('좋아요 상태 변경 중 오류 발생:', error);
+        });
 }
 
+     // 댓글 "수정" 버튼 클릭 시 작동하는 함수
+function showEditForm(commentId) {
+    const editForm = document.getElementById(`edit-form-${commentId}`);
+    const contentElement = document.getElementById(`content-${commentId}`);
 
-// 답글 등록 함수 (비동기)
-function submitReply(boardId, parentId) {
-    const replyContent = document.getElementById(`replyContent-${parentId}`).value;
-
-    if (!replyContent.trim()) {
-        alert('답글 내용을 입력해주세요.');
+    if (!editForm || !contentElement) {
+        console.error("Edit form or content element not found for comment ID:", commentId);
         return;
     }
 
-    const formData = new FormData();
-    formData.append('boardId', boardId);
-    formData.append('parentId', parentId);
-    formData.append('content', replyContent);
-
-    fetch('/board/post-nested-comment', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (Array.isArray(data)) {
-            const replyList = document.getElementById(`reply-list-${parentId}`);
-            replyList.innerHTML = ''; // 기존 답글 목록 초기화
-
-            // 새로운 답글 목록 렌더링
-            data.forEach(reply => {
-                const replyElement = `
-                    <div class="reply" id="reply-${reply.id}">
-                        <p><strong>작성자:</strong> ${reply.nickname}</p>
-                        <p>${reply.content}</p>
-                        <p><small>작성일자: ${reply.createdAtFormat}</small></p>
-                    </div>
-                    <hr>
-                `;
-                replyList.innerHTML += replyElement;
-            });
-
-            document.getElementById(`replyContent-${parentId}`).value = ''; // 답글 입력 필드 초기화
-        } else {
-            alert(data.message || '답글 등록에 실패했습니다.');
-        }
-    })
-    .catch(error => {
-        console.error('답글 등록 중 오류 발생:', error);
-        alert('서버 오류로 인해 답글 등록에 실패했습니다.');
-    });
+    editForm.style.display = 'block';
+    contentElement.style.display = 'none';
 }
 
+// 댓글 "수정 완료" 버튼 클릭 시 비동기 처리 함수
+function updateComment(commentId) {
+    const updatedContent = document.getElementById(`edit-content-${commentId}`).value;
+
+    if (!updatedContent.trim()) {
+        alert("댓글 내용을 입력해주세요.");
+        return;
+    }
+
+    fetch(`/board/reply/update/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ content: updatedContent })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 댓글 내용을 업데이트
+                document.getElementById(`content-${commentId}`).innerText = updatedContent;
+                document.getElementById(`edit-form-${commentId}`).style.display = 'none';
+                document.getElementById(`content-${commentId}`).style.display = 'block';
+                alert('댓글이 성공적으로 수정되었습니다.');
+            } else {
+                console.error('댓글 수정 실패:', data.error);
+                alert('댓글 수정에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('댓글 수정 중 오류 발생:', error);
+            alert('서버 오류로 댓글 수정에 실패했습니다.');
+        });
+}
+
+// 댓글 삭제 확인 창 호출
+function confirmDeleteComment(commentId) {
+    const userConfirmed = confirm("댓글을 삭제하시겠습니까?");
+    if (userConfirmed) {
+        deleteComment(commentId); // 확인 시 삭제 처리
+    }
+}
+
+// 댓글 삭제 비동기 처리 함수
+function deleteComment(commentId) {
+    const commentElement = document.getElementById(`comment-${commentId}`);
+
+    if (!commentElement) {
+        console.error('Comment element not found for ID:', commentId);
+        return;
+    }
+
+    fetch(`/board/reply/delete/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                commentElement.remove(); // 댓글 요소 제거
+                alert('댓글이 성공적으로 삭제되었습니다.');
+            } else {
+                console.error('댓글 삭제 실패:', data.error);
+                alert('댓글 삭제에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('댓글 삭제 중 오류 발생:', error);
+            alert('서버 오류로 댓글 삭제에 실패했습니다.');
+        });
+}
 
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/board/boardMulti.js"></script>
+
+</html>

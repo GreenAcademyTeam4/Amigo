@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/board/board.css">
+    <link rel="stylesheet" type="text/css" href="/css/board/board.css">.
     <title>게시글 목록</title>
 </head>
-
-
 <body>
-
 <div class="board-container">
     <div class="board-header">
         <h2>학교 번호: {{schoolId}} 게시글 목록</h2>
@@ -33,7 +30,7 @@
 
         <!-- 글쓰기 버튼 -->
         <div class="action-buttons mb-3">
-            <a onclick="screenChanger('/board/form')" class="btn btn-primary">글쓰기 HEART</a>
+            <a class="btn btn-primary" onclick="screenChanger('/board/form')">글쓰기</a>
             <a class="btn btn-secondary ml-2" onclick="screenChanger('/board/multiBoard')">게시판 여러개 띄우기</a>
         </div>
 
@@ -74,14 +71,68 @@
         </div>
     </div>
 </div>
-<script>
-    // 서버에서 받은 Mustache 변수들을 JavaScript 변수로 할당
-    let totalPages = {{totalPages}};
-    let initialPage = {{currentPage}};
-    </script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/board/boardMulti.js"></script>
 <script src="/js/board/boardList.js"></script>
+
+<script>
+    // Pagination 데이터 저장 객체
+window.paginationData = {
+    totalPages: {{totalPages}}, // Mustache에서 받아오는 totalPages 값
+    currentPage: {{currentPage}} // Mustache에서 받아오는 currentPage 값
+};
+
+function fetchBoardPage(page) {
+    console.log("Fetching board page:", page);
+    fetch(`/board/newHeart?offset=${page}&size=4`)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.board-container').innerHTML = html;
+
+            // 현재 페이지 업데이트
+            window.paginationData.currentPage = page;
+            updatePagination(page);
+        })
+        .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
+}
+
+function updatePagination(currentPage) {
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = '';
+
+    // Total Pages 가져오기
+    const totalPages = window.paginationData.totalPages;
+
+    for (let i = 0; i < totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i + 1;
+        button.classList.add('page-button');
+        console.log('버튼 생성');
+
+        if (i === currentPage - 1) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', () => fetchBoardPage(i + 1));
+        paginationContainer.appendChild(button);
+    }
+}
+
+$(document).ready(function () {
+    console.log('페이지네이션 초기화');
+    console.log(
+        "Total Pages:",
+        window.paginationData.totalPages,
+        "Initial Page:",
+        window.paginationData.currentPage
+    );
+
+    // 초기 페이지네이션 세팅
+    updatePagination(window.paginationData.currentPage);
+});
+
+</script>
 
 </body>
 </html>
