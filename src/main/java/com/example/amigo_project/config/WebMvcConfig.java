@@ -18,12 +18,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    //     registry.addInterceptor(loginInterceptor)
-    //             .addPathPatterns("/**")
-    //             .excludePathPatterns("/","/google/callback","/login","/user/login","/user/join","/test","/css/**","/image/**","/naver/callback, /admin/**, /js/**, /vendor/**, /board/**,/smarteditor/**");
+        // registry.addInterceptor(loginInterceptor)
+        //         .addPathPatterns("/**")
+        //         .excludePathPatterns("/","/google/callback","/login","/user/login","/user/join","/test","/css/**","/image/**","/naver/callback, /admin/**, /js/**, /vendor/**, /board/**,/smarteditor/**");
 
-    //     registry.addInterceptor(adminInterceptor)
-    //             .addPathPatterns("/admin/**")
-    //             .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
+        // registry.addInterceptor(adminInterceptor)
+        //         .addPathPatterns("/admin/**")
+        //         .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
      }
 }
