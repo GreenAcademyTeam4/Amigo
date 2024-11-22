@@ -25,5 +25,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(adminInterceptor)
 //                .addPathPatterns("/admin/**")
 //                .excludePathPatterns("/css/**", "/image/**", "/vendor/**", "/js/**");
+
     }
 }
