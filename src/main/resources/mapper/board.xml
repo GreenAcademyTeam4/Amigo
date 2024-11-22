@@ -186,7 +186,7 @@
         FROM board_tb b
         JOIN user_tb u ON b.user_id = u.id
         WHERE b.school_id = #{schoolId} AND b.title LIKE CONCAT('%', #{keyword}, '%')
-        ORDER BY b.created_at DESC
+        ORDER BY b.created_at DESC, b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -204,7 +204,7 @@
         FROM board_tb b
         JOIN user_tb u ON b.user_id = u.id
         WHERE b.school_id = #{schoolId} AND u.nickname LIKE CONCAT('%', #{keyword}, '%')
-        ORDER BY b.created_at DESC
+        ORDER BY b.created_at DESC, b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -215,7 +215,7 @@
         FROM board_tb b
         JOIN user_tb u ON b.user_id = u.id
         WHERE b.school_id = #{schoolId} AND (b.title LIKE CONCAT('%', #{keyword}, '%') OR b.content_location LIKE CONCAT('%', #{keyword}, '%'))
-        ORDER BY b.created_at DESC
+        ORDER BY b.created_at DESC, b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
