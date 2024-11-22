@@ -13,6 +13,7 @@ import com.example.amigo_project.repository.model.payment.RequestRefund;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+
+    @Value("${payments.toss.test_secret_api_key}")
+    private String secretKey;
+
     private final PaymentRepository paymentRepository;
     private final HttpSession session;
 
@@ -163,8 +168,7 @@ public class PaymentService {
         String paymentKey = readChargeHistory.getPaymentKey();
 
         // 인증 토큰 생성
-        String apiKey = "test_sk_4yKeq5bgrpP7eWgWzq4xrGX0lzW6"; // 시크릿키
-        String encodedAuth = Base64.getEncoder().encodeToString((apiKey + ":").getBytes(StandardCharsets.UTF_8));
+        String encodedAuth = Base64.getEncoder().encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
 
         // 결제 취소 API
         HttpRequest request = HttpRequest.newBuilder()

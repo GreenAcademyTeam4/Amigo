@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.amigo_project.repository.model.User;
 
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -15,11 +16,11 @@ public class JwtUtil {
 
     public static String create(User user) {
 
-        /**
-         * 주어진 사용자 정보(USER)로 JWT 토근을 생성한다.
-         *
-         * return 생성된 JWT String
-         */
+        String profileBase64 = null;
+        if (user.getProfile() != null) {
+            profileBase64 = Base64.getEncoder().encodeToString(user.getProfile()); // byte[] -> Base64 String
+        }
+
         return JWT.create()
                 // 헤더
                 .withSubject("web")
@@ -27,6 +28,7 @@ public class JwtUtil {
                 // 페이로드 - 데이터 조각 클래임(사용자 id, 사용자 이름)(민감한 정보 넣지 않음)
                 .withClaim("id", user.getId())
                 .withClaim("username", user.getName())
+                .withClaim("profile", profileBase64)
                 // 서명
                 .sign(Algorithm.HMAC512("amigo"));
 
@@ -42,8 +44,14 @@ public class JwtUtil {
         // 검증된 JWT 에서 사용자 ID와 이름 추출해보자
         int id = decodedJWT.getClaim("id").asInt(); // int로 형변환
         String username = decodedJWT.getClaim("username").asString(); // String 으로 형변환
+        String profileBase64  = decodedJWT.getClaim("profile").asString();
 
-        return User.builder().id(id).name(username).build();
+        byte[] profile = null;
+        if (profileBase64 != null) {
+            profile = Base64.getDecoder().decode(profileBase64); // Base64 String -> byte[]
+        }
+
+        return User.builder().id(id).name(username).profile(profile).build();
 
     }
 

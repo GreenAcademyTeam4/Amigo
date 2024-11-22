@@ -9,8 +9,6 @@ import com.example.amigo_project.utils.Define;
 import com.example.amigo_project.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,9 +18,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        System.out.println("Intercepted URL: " + request.getRequestURI());
+
         String jwt = request.getHeader(Define.AUTHORIZATION);
 
-        if(jwt == null || ! jwt.startsWith(Define.BEARER)) {
+        if (jwt == null || !jwt.startsWith(Define.BEARER)) {
             throw new Exception401("JWT 토큰을 전달해주세요");
         }
 
@@ -31,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             User sessionUser = JwtUtil.verify(jwt);
             request.setAttribute(Define.SESSION_USER, sessionUser);
-            return  true;
+            return true;
 
         } catch (TokenExpiredException e) {
             throw new Exception401("토큰 만료 시간이 지났습니다. 다시 로그인 하세요");
@@ -41,7 +41,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             throw new Exception500("서버 오류 : " + e.getMessage());
         }
     }
-
 
 
 }

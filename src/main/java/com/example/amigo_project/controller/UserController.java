@@ -1,11 +1,15 @@
 package com.example.amigo_project.controller;
 
 import java.io.IOException;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.example.amigo_project.errors.Exception401;
+import com.example.amigo_project.utils.ApiUtil;
+import com.example.amigo_project.utils.Define;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,25 +53,54 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(HttpSession session, UserDTO.loginDTO dto,Model model) {
-        User principal = userService.findUserById(dto);
 
-        if (principal != null) {
-            System.out.println(dto);
-            System.out.println(principal);
-            session.setAttribute("principal", principal);
+
+//        if (principal != null) {
+//            System.out.println(dto);
+//            System.out.println(principal);
+//            session.setAttribute("principal", principal);
+//            if (principal.getNickname() != null) {
+//                userService.updateOnline(principal.getId());
+//                if(principal.getProfile() != null) {
+//                    String profile = principal.base64Encoding(principal.getProfile());
+//                    session.setAttribute("profile",profile);
+//                }
+//                return "redirect:/";
+//            }
+//
+//            return "views/login/schoolSelect";
+//        }
+//
+//        return "views/login/login";
+
+
+        // 1. 사용자 인증 및 JWT 생성
+        try {
+            // 유저 정보 가져오기
+            User principal = userService.findUserById(dto);
+            int id = principal.getId();
+            // 1. 사용자 인증 및 JWT 생성
+            String jwt = userService.signIn(dto, id);
+
+
+            // 3. Mustache 뷰로 사용자 정보와 JWT 전달
+            model.addAttribute("user", principal); // 사용자 정보
+            model.addAttribute("jwt", jwt);        // JWT 토큰
+
+            // 4. 리다이렉트 또는 뷰 반환
             if (principal.getNickname() != null) {
                 userService.updateOnline(principal.getId());
-                if(principal.getProfile() != null) {
-                    String profile = principal.base64Encoding(principal.getProfile());
-                    session.setAttribute("profile",profile);
-                }
+
                 return "redirect:/";
             }
 
             return "views/login/schoolSelect";
+
+        } catch (Exception401 e) {
+            model.addAttribute("error", "로그인 실패: " + e.getMessage());
+            return "views/login/login";
         }
 
-        return "views/login/login";
     }
 
     /**

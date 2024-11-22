@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.amigo_project.dto.EquipAvatarDTO;
+import com.example.amigo_project.errors.Exception401;
+import com.example.amigo_project.utils.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -191,5 +193,25 @@ public class UserService {
     public EquipAvatarDTO equipUserAvatar(int id) {
         return userRepository.equipUserAvatar(id);
     }
+
+    public String signIn(UserDTO.loginDTO reqDTO, int id) {
+
+        if (!isValidUser(reqDTO.getUserId(), reqDTO.getPassword())) {
+            throw new Exception401("인증되지 않았습니다");
+        }
+
+        User sessionUser = User.builder()
+                .id(id)
+                .name(reqDTO.getUserId())
+                .profile("profile-image".getBytes())
+                .build();
+
+        return JwtUtil.create(sessionUser);
+    }
+
+    private boolean isValidUser(String username, String password) {
+        return "user".equals(username) && "password".equals(password);
+    }
+
 }
 
