@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/board/board.css">.
+    <link rel="stylesheet" type="text/css" href="/css/board/board.css">
     <title>게시글 목록</title>
 </head>
 <body>
 <div class="board-container">
 
     <div class="board-header">
-        <h2>학교 번호: {{schoolId}} 게시글 목록 boardSearch</h2>
+        <h2>학교 번호: {{schoolId}} 게시글 목록 (검색 결과)</h2>
     </div>
 
     <div class="content mt-5">
@@ -18,13 +18,12 @@
         <div class="search-bar mb-4">
             <form id="searchForm" class="input-group" style="max-width: 600px;">
                 <select name="searchType" id="searchType" class="form-select" style="max-width: 100px;" required>
-                    <option value="title">제목</option>
-                    <option value="nickname">닉네임</option>
-                    <option value="titleContent">제목 + 내용</option>
+                    <option value="title" {{#isTitleSelected}}selected{{/isTitleSelected}}>제목</option>
+                    <option value="nickname" {{#isNicknameSelected}}selected{{/isNicknameSelected}}>닉네임</option>
+                    <option value="titleContent" {{#isTitleContentSelected}}selected{{/isTitleContentSelected}}>제목 + 내용</option>
                 </select>
-                <input type="search" name="keyword" id="keyword" class="form-control" placeholder="검색어를 입력하세요" aria-label="Search">
+                <input type="search" name="keyword" id="keyword" class="form-control" placeholder="검색어를 입력하세요" value="{{keyword}}">
                 <button class="btn-search" type="button" id="searchButton">
-
                     <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="검색 아이콘" style="width: 20px;">
                 </button>
             </form>
@@ -87,6 +86,33 @@
         keyword: "{{keyword}}"
     };
 
+    // 검색 버튼 클릭 이벤트
+    document.getElementById('searchButton').addEventListener('click', () => {
+        const searchType = document.getElementById('searchType').value;
+        const keyword = document.getElementById('keyword').value.trim();
+
+        if (!keyword) {
+            alert('검색어를 입력하세요!');
+            return;
+        }
+
+        fetch(`/board/search?searchType=${searchType}&keyword=${keyword}&page=1&size=4`)
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.board-container').innerHTML = html;
+
+                // 검색 데이터 갱신
+                window.paginationData.searchType = searchType;
+                window.paginationData.keyword = keyword;
+                window.paginationData.currentPage = 1;
+
+                // 페이지네이션 업데이트
+                updatePagination(1);
+            })
+            .catch(error => console.error('검색 요청 중 오류 발생:', error));
+    });
+
+    // 페이지네이션 처리 함수
     function fetchBoardPage(page) {
         const { searchType, keyword } = window.paginationData;
 
@@ -102,6 +128,7 @@
             .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
     }
 
+    // 페이지네이션 버튼 업데이트
     function updatePagination(currentPage) {
         const paginationContainer = document.getElementById('pagination-container');
         paginationContainer.innerHTML = '';
@@ -113,20 +140,18 @@
             button.textContent = i + 1;
             button.classList.add('page-button');
 
-            if (i === currentPage) {
+            if (i + 1 === currentPage) {
                 button.classList.add('active');
             }
 
-            button.addEventListener('click', () => fetchBoardPage(i));
+            button.addEventListener('click', () => fetchBoardPage(i + 1));
             paginationContainer.appendChild(button);
         }
     }
 
     $(document).ready(function () {
-        console.log('페이지네이션 초기화');
         updatePagination(window.paginationData.currentPage);
     });
-
 </script>
 
 </body>
