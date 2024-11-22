@@ -5,7 +5,10 @@ import com.example.amigo_project.handler.ChatHandler;
 import com.example.amigo_project.handler.FriendChatHandler;
 import com.example.amigo_project.handler.SignalingHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -23,11 +26,14 @@ public class WebConfig implements WebSocketConfigurer {
     private final ChatInterceptor chatInterceptor;
     private final AlarmHandler alarmHandler;
 
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chatHandler, "/chat").addInterceptors(new HttpSessionHandshakeInterceptor(),socketInterceptor).setAllowedOrigins("*");
         registry.addHandler(friendChatHandler, "/friendChat" ).addInterceptors(new HttpSessionHandshakeInterceptor(), chatInterceptor).setAllowedOrigins("*");
         registry.addHandler(signalingHandler,"/signaling" ).addInterceptors(socketInterceptor).setAllowedOrigins("*");
         registry.addHandler(alarmHandler,"/alarm").addInterceptors(socketInterceptor).setAllowedOrigins("*");
+
     }
+
 }
