@@ -109,8 +109,9 @@ $(document).ready(function () {
 });
 
 function createRequest(alarm) {
+    console.log(alarm.senderProfile);
     const requestContent = `
-        <div class="sender-profile" id="sender-profile"></div>
+        <div class="sender-profile" id="sender-profile"><img src="data:image/png;base64, ${alarm.senderProfile}"></div>
         <div class="sender-nickname" id="sender-nickname">${alarm.senderNickname} <br>님의 통화 요청</div>
         <div class="button-container">
             <button class="accept-btn" onclick="acceptInvitation(${alarm.senderId})">✔</button>

@@ -22,6 +22,7 @@ public class SignalingHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        System.out.println("sdp 교환!!!!!");
         ObjectMapper mapper = new ObjectMapper();
         User user = (User)session.getAttributes().get("principal");
         MessageDTO messageDTO = mapper.readValue(message.getPayload(), MessageDTO.class);

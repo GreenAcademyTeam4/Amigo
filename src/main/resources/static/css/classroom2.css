@@ -150,7 +150,6 @@
     width: 150px;
     max-height: 150px;
     overflow-y: auto;
-    display: flex;
     flex-wrap: wrap;
     gap: 8px;
     z-index: 20;
@@ -175,4 +174,8 @@
     height: 40px;
     object-fit: contain;
     vertical-align: middle;
+}
+
+.hidden {
+    display: none;
 }
