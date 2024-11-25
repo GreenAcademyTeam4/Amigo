@@ -36,7 +36,6 @@ public class FriendChatHandler extends TextWebSocketHandler {
     // 특정 세션이 연결된 방을 추적하여, 세션 종료 시 해당 세션을 방에서 제거할 때 사용
     private final Map<WebSocketSession, Integer> sessionRoomMap = new ConcurrentHashMap<>();
 
-    private final UserService userService;
     private final ChatService chatService;
     private final ObjectMapper mapper;
 
