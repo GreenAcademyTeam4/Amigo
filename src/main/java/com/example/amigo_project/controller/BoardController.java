@@ -221,11 +221,6 @@ public class BoardController {
         // 게시글 id를 기준으로 댓글 전부 가져오기
         int offset = page * size;
         List<CommentDTO> comment = boardService.findCommentsByBoardIdWithPaging(boardId, offset, size);
-        int totalComments = boardService.getTotalCommentsByBoardId(boardId);
-        int totalPages = (int) Math.ceil((double) totalComments / size);
-
-        System.out.println("comment 게시글 상세보기 : " + comment);
-
 
        // 댓글 작성자 여부 확인
     for (CommentDTO c : comment) {
@@ -239,13 +234,7 @@ public class BoardController {
     model.addAttribute("board", board);
     model.addAttribute("comment", comment);
     model.addAttribute("isAuthor", userId == board.getUserId()); // 게시글 작성자인지 여부
-    System.out.println("총 페이지 수 : " + totalPages);
-    System.out.println("현재 페이지 : " + page);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", totalPages);
 
-        System.out.println("totalPages : " + totalPages);
-        System.out.println("currentPage : " + page);
 
         return "views/board/boardDetail";
     }
@@ -564,7 +553,7 @@ public class BoardController {
      */
     @PostMapping("/search")
     public String searchBoard(@RequestBody Map<String, String> params,
-                              @RequestParam(name = "page", defaultValue = "0") Integer page,
+                              @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "size", defaultValue = "4") Integer size,
                               Model model) {
         String keyword = params.get("keyword");
@@ -574,29 +563,20 @@ public class BoardController {
         int schoolId = (Integer)session.getAttribute("schoolId");
 
         try {
-            if (page < 0) {
-                page = 0;  // page가 음수인 경우 0으로 설정
-            }
-
-            int offset = page * size;
-            if (offset < 0) {
-                offset = 0;
-            }
-
             // option 에서 선택된 것이 있다면
             switch (searchType) {
                 case "nickname": // "닉네임" 검색
-                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByNickname(schoolId, keyword);
                     break;
 
                 case "titleContent": // "제목 + 내용" 검색
-                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByTitleContent(schoolId, keyword);
                     break;
 
                 case "title": // "제목" 검색
-                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
                     break;
                
@@ -631,7 +611,7 @@ public class BoardController {
     public String searchBoardGet(
             @RequestParam(name = "searchType") String searchType,
             @RequestParam(name = "keyword") String keyword,
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "4") Integer size,
             Model model) {
         int totalCount = 0;
@@ -639,20 +619,19 @@ public class BoardController {
         int schoolId = (Integer) session.getAttribute("schoolId");
     
         try {
-            if (page < 0) page = 0;
     
             // 검색 로직
             switch (searchType) {
                 case "nickname":
-                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByNickname(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByNickname(schoolId, keyword);
                     break;
                 case "titleContent":
-                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByTitleContent(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByTitleContent(schoolId, keyword);
                     break;
                 case "title":
-                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page, size);
+                    searchResults = boardService.searchBoardsByKeyword(schoolId, keyword, page - 1, size);
                     totalCount = boardService.countSearchBoardsByKeyword(schoolId, keyword);
                     break;
             }

@@ -87,19 +87,27 @@
     };
 
     // 검색 버튼 클릭 이벤트
-    document.getElementById('searchButton').addEventListener('click', () => {
-        const searchType = document.getElementById('searchType').value;
-        const keyword = document.getElementById('keyword').value.trim();
+    $(document).on('click', '#searchButton', function () {
+        const searchType = $('#searchType').val();
+        const keyword = $('#keyword').val().trim();
 
         if (!keyword) {
             alert('검색어를 입력하세요!');
             return;
         }
 
-        fetch(`/board/search?searchType=${searchType}&keyword=${keyword}&page=1&size=4`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('.board-container').innerHTML = html;
+        // AJAX를 통해 검색 요청
+        $.ajax({
+            url: '/board/search',
+            type: 'GET',
+            data: {
+                searchType: searchType,
+                keyword: keyword,
+                page: 1,
+                size: 4
+            },
+            success: function (html) {
+                $('.board-container').html(html);
 
                 // 검색 데이터 갱신
                 window.paginationData.searchType = searchType;
@@ -108,47 +116,61 @@
 
                 // 페이지네이션 업데이트
                 updatePagination(1);
-            })
-            .catch(error => console.error('검색 요청 중 오류 발생:', error));
+            },
+            error: function (xhr, status, error) {
+                console.error('검색 요청 중 오류 발생:', error);
+            }
+        });
     });
 
     // 페이지네이션 처리 함수
     function fetchBoardPage(page) {
         const { searchType, keyword } = window.paginationData;
 
-        fetch(`/board/search?searchType=${searchType}&keyword=${keyword}&page=${page}&size=4`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('.board-container').innerHTML = html;
+        // AJAX를 통해 페이지네이션 요청
+        $.ajax({
+            url: '/board/search',
+            type: 'GET',
+            data: {
+                searchType: searchType,
+                keyword: keyword,
+                page: page,
+                size: 4
+            },
+            success: function (html) {
+                $('.board-container').html(html);
 
                 // 현재 페이지 업데이트
                 window.paginationData.currentPage = page;
                 updatePagination(page);
-            })
-            .catch(error => console.error('페이지 로딩 중 오류 발생:', error));
+            },
+            error: function (xhr, status, error) {
+                console.error('페이지 로딩 중 오류 발생:', error);
+            }
+        });
     }
 
     // 페이지네이션 버튼 업데이트
     function updatePagination(currentPage) {
-        const paginationContainer = document.getElementById('pagination-container');
-        paginationContainer.innerHTML = '';
+        const paginationContainer = $('#pagination-container');
+        paginationContainer.empty();
 
         const totalPages = window.paginationData.totalPages;
 
-        for (let i = 0; i < totalPages; i++) {
-            const button = document.createElement('button');
-            button.textContent = i + 1;
-            button.classList.add('page-button');
+        for (let i = 1; i <= totalPages; i++) {
+            const button = $('<button>')
+                    .text(i)
+                    .addClass('page-button')
+                    .toggleClass('active', i === currentPage)
+                    .on('click', function () {
+                        fetchBoardPage(i);
+                    });
 
-            if (i + 1 === currentPage) {
-                button.classList.add('active');
-            }
-
-            button.addEventListener('click', () => fetchBoardPage(i + 1));
-            paginationContainer.appendChild(button);
+            paginationContainer.append(button);
         }
     }
 
+    // 초기화
     $(document).ready(function () {
         updatePagination(window.paginationData.currentPage);
     });

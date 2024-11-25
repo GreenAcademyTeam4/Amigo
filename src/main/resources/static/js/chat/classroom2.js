@@ -1,4 +1,4 @@
-window.classSocket = new WebSocket("ws://192.168.0.113:8080/chat");
+window.classSocket = new WebSocket("ws://localhost:8080/chat");
 
 window.messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;

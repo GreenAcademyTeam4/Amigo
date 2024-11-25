@@ -6,7 +6,7 @@ $(document).ready(function() {
         window.socket.close();
     }
     // 새로운 WebSocket 인스턴스를 생성하고 서버에 연결
-    window.socket = new WebSocket("ws://192.168.0.113:8080/friendChat");
+    window.socket = new WebSocket("ws://localhost:8080/friendChat");
 
     // WebSocket 연결이 성공했을 때 실행
     // 연결이 성공하면 서버로 roomKey 정보를 JSON 형식으로 전송해 사용자가 접속한 방의 ID를 서버에 알림
