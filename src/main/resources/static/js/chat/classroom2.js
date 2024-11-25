@@ -1,6 +1,6 @@
-const classSocket = new WebSocket("ws://192.168.0.113:8080/chat");
+window.classSocket = new WebSocket("ws://192.168.0.113:8080/chat");
 
-const messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
+window.messageTimers = {}; // 각 좌석별 타이머를 저장할 객체
 let currentSeatNum = null;
 // 10개의 좌석 생성
 for (let i = 0; i < 6; i++) {
@@ -52,16 +52,16 @@ classSocket.onmessage = (event) => {
                         bubble.css('opacity', 0);
                     }
                     $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
-                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar); // 이미지 src 설정
+                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar).removeClass('hidden'); // 이미지 src 설정
                     currentSeatNum = i;
                 } else {
                     $('#user-seat-' + i + ' .user-nickname').text(data[i].nickname);
-                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar); // 이미지 src 설정
+                    $('#user-seat-' + i + ' .user-avatar').attr('src', data[i].avatar).removeClass('hidden'); // 이미지 src 설정
                 }
             } else {
                 console.log(i,'번째 자리 비어있음');
                 $('#user-seat-' + i + ' .user-nickname').text('');
-                $('#user-seat-' + i + ' .user-avatar').attr('src', ''); // 아바타 이미지 초기화
+                $('#user-seat-' + i + ' .user-avatar').attr('src', '').addClass('hidden'); // 아바타 이미지 초기화
             }
         }
     } else if (message.type === 'chat') {

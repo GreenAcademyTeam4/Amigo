@@ -3,17 +3,15 @@ header {
     background-color: #F0DCD5;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-around; /* Spread items evenly */
     position: sticky;
     top: 0;
     width: 100%;
-    padding: 10px 20px;
+    padding: 15px 30px; /* Adjust padding for better proportions */
     z-index: 1000;
     border-bottom: 1px solid #d4b7aa;
-    margin-bottom: 10px;
     font-family: 'Bazzi', sans-serif;
     transition: box-shadow 0.3s ease;
-
 }
 header.scrolled {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -21,11 +19,11 @@ header.scrolled {
 }
 /* 로고 스타일 */
 .logo img {
-    height: auto;
-    width: 180px;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-
+    height: 50px; /* Adjust logo size */
+    width: auto;
+    margin-right: 20px; /* Add spacing between logo and nav */
 }
+
 .hide {
     opacity: 0;
     visibility: hidden;
@@ -48,17 +46,22 @@ header.scrolled {
 
 /* 네비게이션 영역 스타일 */
 .nav-area {
-    padding: 15px;
+    width: auto; /* Auto width to fit content */
     display: flex;
+    flex-direction: row; /* Ensure horizontal layout */
     align-items: center;
+    gap: 20px; /* Add spacing between items */
+    justify-content: center;
 }
 
 .nav-area a {
-    padding-left: 15px;
     color: #ce9178;
     text-decoration: none;
+    font-size: 26px;
     font-family: 'Bazzi', sans-serif;
     font-weight: bolder;
+    padding: 5px 10px; /* Adjust padding for better spacing */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
 }
 
 a:hover {
@@ -73,12 +76,10 @@ a:hover {
 }
 
 #alarm-icon {
-    width: 20px;
-    height: auto;
-    vertical-align: middle;
-    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+    margin-left: 15px;
     cursor: pointer;
-    transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 #alarm-icon:hover {
@@ -120,11 +121,22 @@ a:hover {
 }
 
 .sender-profile {
-    width: 40px;
-    height: 40px;
-    background-color: #ce9178;
-    border-radius: 50%;
+    width: 40px; /* 프로필 크기 */
+    height: 40px; /* 프로필 높이 */
+    background-color: #ce9178; /* 이미지가 없을 때 배경색 */
+    border-radius: 50%; /* 원형으로 만듦 */
     margin-right: 10px;
+    overflow: hidden; /* 이미지를 부모 요소 크기에 맞게 자름 */
+    display: flex; /* 이미지 정렬을 위해 flexbox 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+}
+
+.sender-profile img {
+    width: 100%; /* 부모 요소의 너비에 맞춤 */
+    height: 100%; /* 부모 요소의 높이에 맞춤 */
+    object-fit: cover; /* 이미지가 찌그러지지 않고 부모 크기를 꽉 채우도록 함 */
+    border-radius: 50%; /* 이미지도 원형으로 */
 }
 
 .sender-nickname {

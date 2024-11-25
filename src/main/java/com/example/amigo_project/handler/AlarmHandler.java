@@ -34,8 +34,9 @@ public class AlarmHandler extends TextWebSocketHandler {
                 if(receiver == alarmDTO.getReceiverId()) {
                     // alarmDTO 안에 담긴 받는이 에게  실시간 메세지 전달
                     User sender = userService.findUser(alarmDTO.getSenderId());
+                    String profile = sender.base64Encoding(sender.getProfile());
                     alarmDTO.setSenderNickname(sender.getNickname());
-                    // alarmDTO.setSenderProfile(sender.getProfile()); TODO 프로필 추가
+                    alarmDTO.setSenderProfile(profile);
                     String alarm = mapper.writeValueAsString(alarmDTO);
                     userManage.get(receiver).sendMessage(new TextMessage(alarm));
                 }
