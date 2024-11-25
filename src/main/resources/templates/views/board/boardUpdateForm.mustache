@@ -6,32 +6,30 @@
     <title>게시글 수정</title>
     <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            padding: 20px;
+            margin: 0; /* Remove default margin */
         }
 
         #boardForm {
-            max-width: 6800px;
             width: 100%;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 0;
+            background: none;
             box-sizing: border-box;
         }
 
         #boardForm h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
+            text-align: center;
         }
 
         #boardForm input[type="text"],
-        #boardForm textarea,
-        #boardForm input[type="file"] {
+        #boardForm textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -41,18 +39,11 @@
             box-sizing: border-box;
         }
 
-        #boardForm button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #boardForm button:hover {
-            background-color: #0056b3;
+        /* Adjust the smart editor container */
+        #editorText {
+            width: 100%;
+            height: 500px; /* Adjust the height as needed */
+            box-sizing: border-box;
         }
 
         .form-footer {
@@ -61,24 +52,31 @@
             margin-top: 15px;
         }
 
-        #cancelButton {
-            background-color: #6c757d;
+        #cancelButton, #submitButton {
+            background-color: #007bff;
             color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        #cancelButton:hover {
-            background-color: #5a6268;
+        #cancelButton:hover, #submitButton:hover {
+            background-color: #0056b3;
         }
 
-        #submitButton {
-            background-color: #28a745;
-            color: white;
+        /* 스마트 에디터의 iframe을 직접 스타일링 */
+        iframe {
+            width: 100%;
+            max-width: 1100px;
+            height: 500px;
+            box-sizing: border-box;
         }
 
-        #submitButton:hover {
-            background-color: #218838;
-        }
+
     </style>
+
+
 </head>
 <body>
 <form id="boardForm" action="/board/update/{{board.id}}" method="post">
@@ -107,9 +105,18 @@
     function smartEditor() {
         nhn.husky.EZCreator.createInIFrame({
             oAppRef: oEditors,
-            elPlaceHolder: "editorText",
+            elPlaceHolder: "editorText", // 에디터가 삽입될 요소 ID
             sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-            fCreator: "createSEditor2"
+            fCreator: "createSEditor2",
+            // 에디터 로드 후 크기 설정
+            fOnAppLoad: function () {
+                const iframe = document.querySelector('iframe'); // iframe을 선택
+                if (iframe) {
+                    iframe.style.width = "100%"; // 부모 컨테이너에 맞춤
+                    iframe.style.maxWidth = "1100px"; // 최대 너비 설정
+                    iframe.style.height = "500px"; // 고정 높이 설정
+                }
+            }
         });
     }
 
@@ -118,6 +125,7 @@
     });
 
     function modifyPost(url, formId) {
+        // 에디터 내용 업데이트
         oEditors.getById["editorText"].exec("UPDATE_CONTENTS_FIELD", []);
         const form = document.getElementById(formId);
 
@@ -128,7 +136,7 @@
             return;
         }
 
-        // 폼 데이터를 AJAX로 제출
+        // AJAX를 통해 폼 데이터 전송
         $.ajax({
             url: url,
             type: "POST",
@@ -143,6 +151,7 @@
             }
         });
     }
+
 </script>
 </body>
 </html>
